@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.model.world.gameobject;
 
-public class Base extends GameObject {
+public class Base implements Renderable {
   private int health;
 
   public int getHealth() {

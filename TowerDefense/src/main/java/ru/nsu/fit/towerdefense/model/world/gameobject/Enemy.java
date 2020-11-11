@@ -4,7 +4,7 @@ import ru.nsu.fit.towerdefense.model.world.Vector2;
 import ru.nsu.fit.towerdefense.model.world.Wave;
 import ru.nsu.fit.towerdefense.model.world.types.EnemyType;
 
-public class Enemy extends GameObject {
+public class Enemy implements Renderable {
   private int health;
   private EnemyType type;
   private float velocity; // TODO link with trajectory somehow

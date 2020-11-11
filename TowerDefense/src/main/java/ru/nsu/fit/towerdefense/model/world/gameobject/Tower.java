@@ -3,7 +3,7 @@ package ru.nsu.fit.towerdefense.model.world.gameobject;
 import ru.nsu.fit.towerdefense.model.world.Vector2;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
-public class Tower extends GameObject {
+public class Tower implements Renderable {
   private TowerType type;
   private int cooldown = 0;
   private double rotation = 0;
