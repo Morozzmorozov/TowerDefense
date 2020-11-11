@@ -38,6 +38,16 @@ public class Projectile implements Renderable {
     return position;
   }
 
+  @Override
+  public Vector2<Double> getSize() {
+    return type.getSize();
+  }
+
+  @Override
+  public String getImageName() {
+    return type.getImage();
+  }
+
   public void setPosition(Vector2<Double> position) {
     this.position = position;
   }

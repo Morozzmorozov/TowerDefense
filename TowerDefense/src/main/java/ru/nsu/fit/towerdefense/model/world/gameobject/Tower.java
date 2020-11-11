@@ -10,7 +10,7 @@ public class Tower implements Renderable {
   private Enemy target;
   private Vector2<Integer> position;
 
-  public Vector2<Integer> getPosition() {
+  public Vector2<Integer> getCell() {
     return position;
   }
 
@@ -44,5 +44,20 @@ public class Tower implements Renderable {
 
   public void setCooldown(int cooldown) {
     this.cooldown = cooldown;
+  }
+
+  @Override
+  public Vector2<Double> getPosition() {
+    return new Vector2<>((double)position.getX(), (double)position.getY());
+  }
+
+  @Override
+  public Vector2<Double> getSize() {
+    return new Vector2<>(1d, 1d);
+  }
+
+  @Override
+  public String getImageName() {
+    return type.getImage();
   }
 }

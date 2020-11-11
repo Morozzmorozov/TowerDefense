@@ -9,6 +9,11 @@ public class TowerType {
   private int fireRate;
   private FireType fireType;
   private ProjectileType projectileType;
+  private String image;
+
+  public String getImage() {
+    return image;
+  }
 
   public int getPrice() {
     return price;

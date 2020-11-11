@@ -66,7 +66,7 @@ public class WorldControl implements Iterable<Renderable> {
           world.getProjectiles().add(new Projectile(
               tower.getTarget(), tower.getType().getRange(), projectileType,
               new Vector2<>(
-                  tower.getPosition().getX() + 0.5, tower.getPosition().getY() + 0.5),
+                  tower.getCell().getX() + 0.5, tower.getCell().getY() + 0.5),
               new Vector2<>(projectileType.getSpeed() * Math.cos(tower.getRotation()),
                   projectileType.getSpeed() * Math.sin(tower.getRotation()))));
           tower.setCooldown(tower.getType().getFireRate());

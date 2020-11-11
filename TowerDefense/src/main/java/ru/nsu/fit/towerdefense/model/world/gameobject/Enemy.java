@@ -12,7 +12,7 @@ public class Enemy implements Renderable {
   private boolean isDead = false;
   private Vector2<Double> position;
 
-  public Vector2<Double> getPosition() {
+  public Vector2<Double> getCell() {
     return position;
   }
 
@@ -46,5 +46,20 @@ public class Enemy implements Renderable {
 
   public float getVelocity() {
     return velocity;
+  }
+
+  @Override
+  public Vector2<Double> getPosition() {
+    return position;
+  }
+
+  @Override
+  public Vector2<Double> getSize() {
+    return type.getSize();
+  }
+
+  @Override
+  public String getImageName() {
+    return type.getImage();
   }
 }
