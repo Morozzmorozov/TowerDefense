@@ -1,55 +1,14 @@
 package ru.nsu.fit.towerdefense.model.world;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
-import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
-public class WorldControl implements Iterable<Renderable> {
+public class WorldControl {
   private World world;
 
   public World getWorld() {
     return world;
-  }
-
-  private class WorldControlIterator implements Iterator<Renderable> {
-    private List<Iterator<? extends Renderable>> iterators;
-
-    public WorldControlIterator() {
-      iterators = new ArrayList<>();
-      iterators.add(world.getEnemies().iterator());
-      iterators.add(world.getProjectiles().iterator());
-      iterators.add(world.getTowers().iterator());
-    }
-
-    @Override
-    public boolean hasNext() {
-      for (Iterator<? extends Renderable> iterator : iterators) {
-        if (iterator.hasNext()) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    @Override
-    public Renderable next() {
-      for (Iterator<? extends Renderable> iterator : iterators) {
-        if (iterator.hasNext()) {
-          return iterator.next();
-        }
-      }
-      throw new NoSuchElementException();
-    }
-  }
-
-  @Override
-  public Iterator<Renderable> iterator() {
-    return new WorldControlIterator();
   }
 
   public void simulateTick() {
