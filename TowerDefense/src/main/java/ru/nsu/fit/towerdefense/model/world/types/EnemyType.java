@@ -8,6 +8,7 @@ public class EnemyType {
   private float hitBox;
   private Vector2<Double> size;
   private String image;
+  private int damage;
 
   public String getImage() {
     return image;
@@ -27,5 +28,9 @@ public class EnemyType {
 
   public float getHitBox() {
     return hitBox;
+  }
+
+  public int getDamage() {
+    return damage;
   }
 }

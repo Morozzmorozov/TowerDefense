@@ -4,16 +4,49 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 
 public class World {
+
+  public int getCountdown() {
+    return countdown;
+  }
+
+  public void setCountdown(int countdown) {
+    this.countdown = countdown;
+  }
+
   private int countdown;
   private List<Enemy> enemies = new ArrayList<>();
   private List<Tower> towers = new ArrayList<>();
   private List<Projectile> projectiles = new ArrayList<>();
+  private Base base;
+  private int money;
+  private int currentWaveNumber;
+
+  public int getCurrentWaveNumber() {
+    return currentWaveNumber;
+  }
+
+  public void setCurrentWaveNumber(int currentWaveNumber) {
+    this.currentWaveNumber = currentWaveNumber;
+  }
+
+  public Base getBase() {
+    return base;
+  }
+
+  public int getMoney() {
+    return money;
+  }
+
+  public void setMoney(int money) {
+    this.money = money;
+  }
 
   public List<Enemy> getEnemies() {
     return enemies;
