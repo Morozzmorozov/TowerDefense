@@ -9,7 +9,7 @@ import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 
-public class World implements Iterable<Renderable> {
+public class World {
   private int countdown;
   private List<Enemy> enemies = new ArrayList<>();
   private List<Tower> towers = new ArrayList<>();
@@ -27,6 +27,14 @@ public class World implements Iterable<Renderable> {
     return projectiles;
   }
 
+  public Iterable<Renderable> getRenderables() {
+    return new Iterable<Renderable>() {
+      @Override
+      public Iterator<Renderable> iterator() {
+        return new WorldIterator();
+      }
+    };
+  }
 
   private class WorldIterator implements Iterator<Renderable> {
     private List<Iterator<? extends Renderable>> iterators;
@@ -57,10 +65,5 @@ public class World implements Iterable<Renderable> {
       }
       throw new NoSuchElementException();
     }
-  }
-
-  @Override
-  public Iterator<Renderable> iterator() {
-    return new WorldIterator();
   }
 }
