@@ -17,15 +17,73 @@ public class GameMap {
 
     private Iterator<WaveDescription> descriptionIterator;
 
-    public GameMap()
+    private GameMap(Vector2<Integer> size, Integer scienceReward, BaseDescription baseDescription,
+                    TowerBuildingPositions positions, RoadDescription roads, List<WaveDescription> waves)
     {
-        waves = new LinkedList<>();
-        descriptionIterator = waves.listIterator();
+        this.size = size;
+        this.scienceReward = scienceReward;
+        this.baseDescription = baseDescription;
+        this.positions = positions;
+        this.roads = roads;
+        this.waves = waves;
+        descriptionIterator = waves.iterator();
+    }
+
+    public static class Builder
+    {
+        private Vector2<Integer> size;
+        private Integer scienceReward;
+
+        private BaseDescription baseDescription;
+        private TowerBuildingPositions positions;
+        private RoadDescription roads;
+        private List<WaveDescription> waves;
+
+        public Builder()
+        {
+            waves = new LinkedList<>();
+            size = new Vector2<>(0, 0);
+        }
+
+        public void addWave(WaveDescription wave)
+        {
+            this.waves.add(wave);
+        }
+
+        public void setSize(int x, int y)
+        {
+            this.size.setX(x);
+            this.size.setY(y);
+        }
+
+        public void setScienceReward(Integer scienceReward)
+        {
+            this.scienceReward = scienceReward;
+        }
+
+        public void setRoads(RoadDescription roads)
+        {
+            this.roads = roads;
+        }
+
+        public void setPositions(TowerBuildingPositions positions)
+        {
+            this.positions = positions;
+        }
+
+        public void setBaseDescription(BaseDescription baseDescription)
+        {
+            this.baseDescription = baseDescription;
+        }
+
+        public GameMap build()
+        {
+            return new GameMap(size, scienceReward, baseDescription, positions, roads, waves);
+        }
     }
 
 
-
-    public WaveDescription getDesctiprtion()
+    public WaveDescription getDescription()
     {
         if (descriptionIterator.hasNext())
         {
@@ -65,7 +123,7 @@ public class GameMap {
         return roads;
     }
 
-    public void setPositions(TowerBuildingPositions positions) {
+   /* public void setPositions(TowerBuildingPositions positions) {
         this.positions = positions;
     }
 
@@ -92,4 +150,5 @@ public class GameMap {
     public void setWaves(List<WaveDescription> waves) {
         this.waves = waves;
     }
+    */
 }

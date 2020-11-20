@@ -6,9 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TowerBuildingPositions {
-    List<Vector2<Integer>> positions;
+    private List<Vector2<Integer>> positions;
 
-    public TowerBuildingPositions()
+    private TowerBuildingPositions()
     {
         positions = new LinkedList<>();
     }
@@ -17,12 +17,26 @@ public class TowerBuildingPositions {
         return positions;
     }
 
-    public void setPositions(List<Vector2<Integer>> positions) {
-        this.positions = positions;
+    public static class Builder
+    {
+        List<Vector2<Integer>> positions;
+        public Builder()
+        {
+            positions = new LinkedList<>();
+
+        }
+
+        public void addPosition(int x, int y)
+        {
+            positions.add(new Vector2<Integer>(x, y));
+        }
+
+        public TowerBuildingPositions build()
+        {
+            TowerBuildingPositions pos = new TowerBuildingPositions();
+            pos.positions = positions;
+            return pos;
+        }
     }
 
-    public void addPosition(Vector2<Integer> pos)
-    {
-        positions.add(pos);
-    }
 }

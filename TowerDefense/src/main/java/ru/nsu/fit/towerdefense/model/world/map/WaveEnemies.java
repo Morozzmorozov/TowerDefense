@@ -8,14 +8,14 @@ public class WaveEnemies {
 
     private Integer count;
 
-    private EnemyType type;
+    private String type;
 
     public WaveEnemies()
     {
         type = null;
     }
 
-    public EnemyType getType() {
+    public String getType() {
         return type;
     }
 
@@ -27,7 +27,38 @@ public class WaveEnemies {
         return spawnPosition;
     }
 
-    public void setCount(Integer count) {
+    public static class Builder
+    {
+        private int spawnPosition;
+        private int count;
+        private String type;
+        public Builder(){}
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public void setSpawnPosition(int spawnPosition)
+        {
+            this.spawnPosition = spawnPosition;
+        }
+
+        public void setCount(int count)
+        {
+            this.count = count;
+        }
+
+        public WaveEnemies build()
+        {
+            WaveEnemies enemies = new WaveEnemies();
+            enemies.type = type;
+            enemies.count = count;
+            enemies.spawnPosition = spawnPosition;
+            return enemies;
+        }
+    }
+
+    /*public void setCount(Integer count) {
         this.count = count;
     }
 
@@ -37,5 +68,5 @@ public class WaveEnemies {
 
     public void setType(EnemyType type) {
         this.type = type;
-    }
+    }*/
 }
