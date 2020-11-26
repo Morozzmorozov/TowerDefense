@@ -20,8 +20,20 @@ public class WorldControl {
   public void simulateTick() {
 
     for (Tower tower : world.getTowers()) {
-      if (tower.getTarget() == null || tower.getTarget().isDead()) {
-        // generate target
+      if (tower.getTarget() == null || tower.getTarget().isDead()
+          || distance(tower.getPosition(), tower.getTarget().getPosition()) > tower.getType().getRange()) {
+        tower.setTarget(null);
+        // finds the closest enemy for now
+        for (Enemy enemy : world.getEnemies()) {
+          double dist = distance(tower.getPosition(), enemy.getPosition());
+          if (dist > tower.getType().getRange()) {
+            continue;
+          }
+          if (tower.getTarget() == null
+              || dist < distance(tower.getPosition(), tower.getTarget().getPosition())) {
+            tower.setTarget(enemy);
+          }
+        }
       }
 
 
@@ -111,5 +123,9 @@ public class WorldControl {
 
   private void finish() {
 
+  }
+
+  private double distance(Vector2<Double> a, Vector2<Double> b) {
+    return Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY() , 2));
   }
 }
