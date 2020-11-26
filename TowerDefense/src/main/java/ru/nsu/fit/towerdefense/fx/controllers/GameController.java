@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Oleg Markelov
  */
-public class WorldController implements Controller {
+public class GameController implements Controller {
 
-    private static final String FXML_FILE_NAME = "world.fxml";
+    private static final String FXML_FILE_NAME = "game.fxml";
     private static final long SIMULATION_DELAY = 1000 / 60;
 
     @FXML private Button menuButton;
@@ -40,7 +40,7 @@ public class WorldController implements Controller {
      *
      * @param sceneManager scene manager.
      */
-    public WorldController(SceneManager sceneManager) {
+    public GameController(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
 
         worldControl = new WorldControl();
