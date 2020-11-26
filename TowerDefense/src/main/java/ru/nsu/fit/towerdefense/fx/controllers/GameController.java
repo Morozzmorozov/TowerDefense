@@ -1,16 +1,18 @@
 package ru.nsu.fit.towerdefense.fx.controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.model.world.Vector2;
 import ru.nsu.fit.towerdefense.model.world.World;
 import ru.nsu.fit.towerdefense.model.world.WorldControl;
-import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,14 +28,15 @@ public class GameController implements Controller {
     private static final String FXML_FILE_NAME = "game.fxml";
     private static final long SIMULATION_DELAY = 1000 / 60;
 
+    @FXML private AnchorPane worldAnchorPane;
     @FXML private Button menuButton;
 
     private final SceneManager sceneManager;
 
     private ScheduledExecutorService worldSimulationExecutor;
 
-    private final WorldControl worldControl;
-    private final WorldRenderer worldRenderer;
+    private WorldControl worldControl;
+    private WorldRenderer worldRenderer;
 
     /**
      * Creates new MenuController with specified SceneManager.
@@ -42,14 +45,14 @@ public class GameController implements Controller {
      */
     public GameController(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
-
-        worldControl = new WorldControl();
-        worldRenderer = new WorldRenderer();
     }
 
     @FXML
     private void initialize() {
         menuButton.setOnAction(actionEvent -> sceneManager.switchToMenu());
+
+        worldControl = new WorldControl();
+        worldRenderer = new WorldRenderer(worldAnchorPane.getChildren());
 
         WorldStub worldStub = new WorldStub();
 
@@ -57,8 +60,14 @@ public class GameController implements Controller {
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
 //                worldControl.simulateTick();
-//                worldRenderer.render(worldControl.getWorld().getRenderables());
-                worldRenderer.render(worldStub.getRenderables());
+//                worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
+//                    worldControl.getWorld().getRenderables()));
+                worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
+                    worldStub.getRenderables()));
+
+                Platform.runLater(() -> {
+                    worldRenderer.render();
+                });
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
@@ -88,13 +97,14 @@ public class GameController implements Controller {
     private static class WorldStub {
 
         private final List<GameObjectStub> gameObjectStubs = new ArrayList<>();
+        private int i;
 
         public WorldStub() {
             for (int i = 0; i < 2; i++) {
-                int finalI = i;
+                double doubleI = i;
                 gameObjectStubs.add(
                     new GameObjectStub() {{
-                        getPosition().setY((double) (3 * finalI + 1));
+                        getPosition().setY(200 * doubleI + 100);
                     }}
                 );
             }
@@ -102,9 +112,34 @@ public class GameController implements Controller {
 
         @SuppressWarnings("unchecked")
         public Iterable<Renderable> getRenderables() {
-            gameObjectStubs.get(0).getPosition().setX(gameObjectStubs.get(0).getPosition().getX() + 0.1d);
-            gameObjectStubs.get(1).getPosition().setX(gameObjectStubs.get(1).getPosition().getX() + 0.05d);
+            if (i == 120) {
+                gameObjectStubs.add(
+                    new GameObjectStub() {{
+                        getPosition().setY(500d);
+                    }}
+                );
+            }
 
+            if (i == 240) {
+                gameObjectStubs.remove(1);
+            }
+
+            if (i == 360) {
+                gameObjectStubs.remove(0);
+            }
+
+            if (i == 480) {
+                gameObjectStubs.remove(0);
+            }
+
+            if (gameObjectStubs.size() > 0)
+                gameObjectStubs.get(0).getPosition().setX(gameObjectStubs.get(0).getPosition().getX() + 1);
+            if (gameObjectStubs.size() > 1)
+                gameObjectStubs.get(1).getPosition().setX(gameObjectStubs.get(1).getPosition().getX() + 1);
+            if (gameObjectStubs.size() > 2)
+                gameObjectStubs.get(2).getPosition().setX(gameObjectStubs.get(2).getPosition().getX() + 1);
+
+            System.out.println(i++);
             return (List<Renderable>) (List<? extends Renderable>) gameObjectStubs;
         }
     }
