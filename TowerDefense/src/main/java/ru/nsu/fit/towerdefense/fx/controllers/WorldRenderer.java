@@ -47,8 +47,9 @@ public class WorldRenderer {
                 gameNodes.add(gameNode);
             }
 
-            gameNode.setLayoutX(renderable.getPosition().getX() * PIXELS_PER_GAME_CELL);
-            gameNode.setLayoutY(renderable.getPosition().getY() * PIXELS_PER_GAME_CELL);
+            gameNode.relocate(
+                renderable.getPosition().getX() * PIXELS_PER_GAME_CELL,
+                renderable.getPosition().getY() * PIXELS_PER_GAME_CELL);
 
             System.out.println(renderable.getPosition());
         }
