@@ -14,6 +14,8 @@ public class WorldControl {
 
   private World world;
 
+  private GameMetaData gameMetaData;
+
   public World getWorld() {
     return world;
   }
@@ -40,7 +42,8 @@ public class WorldControl {
 
       if (tower.getTarget() != null) {
         if (tower.getCooldown() == 0) {
-          ProjectileType projectileType = tower.getType().getProjectileType();
+
+          ProjectileType projectileType = gameMetaData.getProjectileType(tower.getType().getProjectileType());
           world.getProjectiles().add(new Projectile(
               tower.getTarget(), tower.getType().getRange(), projectileType,
               new Vector2<>(
