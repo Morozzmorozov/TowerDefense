@@ -10,6 +10,7 @@ import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
 public class WorldControl {
   private static final double DELTA = 0.1;
+  private static final double DISTANCE_DELTA = 0.001;
 
   private World world;
 
@@ -99,9 +100,25 @@ public class WorldControl {
     for (Enemy enemy : world.getEnemies()) {
       if (enemy.isDead()) continue;
 
-      // get effects & update health
+      // TODO get effects & update health
 
-      // Trajectory!
+      double remainingDistance = enemy.getVelocity();
+      while (remainingDistance > DISTANCE_DELTA && !enemy.getTrajectory().isEmpty()) {
+        double dist = distance(enemy.getPosition(), enemy.getTrajectory().get(0));
+        if (Double.compare(remainingDistance, dist) >= 0) {
+          // enemy reaches next vertex
+          remainingDistance -= dist;
+          enemy.setPosition(enemy.getTrajectory().get(0));
+          enemy.getTrajectory().remove(0);
+        } else {
+          // enemy does not reach next vertex
+          enemy.getPosition().setX(
+              enemy.getPosition().getX() + (enemy.getTrajectory().get(0).getX() - enemy.getPosition().getX()) * remainingDistance / dist);
+          enemy.getPosition().setY(
+              enemy.getPosition().getX() + (enemy.getTrajectory().get(0).getY() - enemy.getPosition().getY()) * remainingDistance / dist);
+          remainingDistance = 0;
+        }
+      }
 
       if (Math.abs(enemy.getPosition().getX() - world.getBase().getPosition().getX()) < DELTA &&
           Math.abs(enemy.getPosition().getY() - world.getBase().getPosition().getY()) < DELTA) {
