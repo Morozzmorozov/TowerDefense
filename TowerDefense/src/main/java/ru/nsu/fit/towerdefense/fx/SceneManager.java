@@ -7,7 +7,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
-import ru.nsu.fit.towerdefense.fx.controllers.GameController;
+import ru.nsu.fit.towerdefense.fx.controllers.WorldController;
 import ru.nsu.fit.towerdefense.fx.controllers.MenuController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 
@@ -89,7 +89,7 @@ public class SceneManager {
      * Creates new GameController and switches the scene to a game.
      */
     public void switchToGame() {
-        switchScene(new GameController(this));
+        switchScene(new WorldController(this));
     }
 
     /**

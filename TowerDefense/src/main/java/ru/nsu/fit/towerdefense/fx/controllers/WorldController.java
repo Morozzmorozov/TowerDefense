@@ -5,13 +5,13 @@ import javafx.scene.control.Button;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 
 /**
- * MenuController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a menu scene.
+ * WorldController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a world scene.
  *
  * @author Oleg Markelov
  */
-public class GameController implements Controller {
+public class WorldController implements Controller {
 
-    private static final String FXML_FILE_NAME = "game.fxml";
+    private static final String FXML_FILE_NAME = "world.fxml";
 
     @FXML private Button menuButton;
 
@@ -22,7 +22,7 @@ public class GameController implements Controller {
      *
      * @param sceneManager scene manager.
      */
-    public GameController(SceneManager sceneManager) {
+    public WorldController(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
     }
 
