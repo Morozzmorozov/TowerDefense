@@ -100,6 +100,13 @@ public class GameController implements Controller {
         private int i;
 
         public WorldStub() {
+            gameObjectStubs.add(
+                new GameObjectStub() {{
+                    getPosition().setX(900d);
+                    getPosition().setY(300d);
+                }}
+            );
+
             for (int i = 0; i < 2; i++) {
                 double doubleI = i;
                 gameObjectStubs.add(
@@ -121,23 +128,23 @@ public class GameController implements Controller {
             }
 
             if (i == 240) {
-                gameObjectStubs.remove(1);
+                gameObjectStubs.remove(2);
             }
 
             if (i == 360) {
-                gameObjectStubs.remove(0);
+                gameObjectStubs.remove(1);
             }
 
             if (i == 480) {
-                gameObjectStubs.remove(0);
+                gameObjectStubs.remove(1);
             }
 
-            if (gameObjectStubs.size() > 0)
-                gameObjectStubs.get(0).getPosition().setX(gameObjectStubs.get(0).getPosition().getX() + 1);
             if (gameObjectStubs.size() > 1)
                 gameObjectStubs.get(1).getPosition().setX(gameObjectStubs.get(1).getPosition().getX() + 1);
             if (gameObjectStubs.size() > 2)
                 gameObjectStubs.get(2).getPosition().setX(gameObjectStubs.get(2).getPosition().getX() + 1);
+            if (gameObjectStubs.size() > 3)
+                gameObjectStubs.get(3).getPosition().setX(gameObjectStubs.get(3).getPosition().getX() + 1);
 
             System.out.println(i++);
             return (List<Renderable>) (List<? extends Renderable>) gameObjectStubs;
