@@ -64,10 +64,7 @@ public class GameController implements Controller {
 //                    worldControl.getWorld().getRenderables()));
                 worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
                     worldStub.getRenderables()));
-
-                Platform.runLater(() -> {
-                    worldRenderer.render();
-                });
+                Platform.runLater(() -> worldRenderer.render());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
