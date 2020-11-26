@@ -58,10 +58,15 @@ public class WorldControl {
     List<Projectile> removedProjectiles = new ArrayList<>();
     for (Projectile projectile : world.getProjectiles()) {
       if (projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
-        Vector2<Double> heh = new Vector2<>(
+        Vector2<Double> newDirection = new Vector2<>(
             projectile.getTarget().getPosition().getX() - projectile.getPosition().getX(),
             projectile.getTarget().getPosition().getY() - projectile.getPosition().getY());
-        // rotate the bullet
+
+        double length = distance(projectile.getPosition(), projectile.getTarget().getPosition());
+        newDirection.setX(newDirection.getX() / length * projectile.getType().getSpeed());
+        newDirection.setY(newDirection.getY() / length * projectile.getType().getSpeed());
+
+        projectile.setVelocity(newDirection);
       }
 
       Enemy collidedEnemy = null;
