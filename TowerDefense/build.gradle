@@ -24,4 +24,16 @@ dependencies {
     )
 }
 
+jar {
+    archivesBaseName = 'TowerDefense'
+
+    manifest {
+        attributes 'Main-Class': 'ru.nsu.fit.towerdefense.fx.Main'
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 mainClassName = 'ru.nsu.fit.towerdefense.fx.Main'
