@@ -99,8 +99,8 @@ public class GameController implements Controller {
         public WorldStub() {
             gameObjectStubs.add(
                 new GameObjectStub() {{
-                    getPosition().setX(900d);
-                    getPosition().setY(300d);
+                    getPosition().setX(9d);
+                    getPosition().setY(3d);
                 }}
             );
 
@@ -108,7 +108,7 @@ public class GameController implements Controller {
                 double doubleI = i;
                 gameObjectStubs.add(
                     new GameObjectStub() {{
-                        getPosition().setY(200 * doubleI + 100);
+                        getPosition().setY(2 * doubleI + 1);
                     }}
                 );
             }
@@ -119,7 +119,7 @@ public class GameController implements Controller {
             if (i == 120) {
                 gameObjectStubs.add(
                     new GameObjectStub() {{
-                        getPosition().setY(500d);
+                        getPosition().setY(5d);
                     }}
                 );
             }
@@ -137,11 +137,11 @@ public class GameController implements Controller {
             }
 
             if (gameObjectStubs.size() > 1)
-                gameObjectStubs.get(1).getPosition().setX(gameObjectStubs.get(1).getPosition().getX() + 1);
+                gameObjectStubs.get(1).getPosition().setX(gameObjectStubs.get(1).getPosition().getX() + 0.01d);
             if (gameObjectStubs.size() > 2)
-                gameObjectStubs.get(2).getPosition().setX(gameObjectStubs.get(2).getPosition().getX() + 1);
+                gameObjectStubs.get(2).getPosition().setX(gameObjectStubs.get(2).getPosition().getX() + 0.01d);
             if (gameObjectStubs.size() > 3)
-                gameObjectStubs.get(3).getPosition().setX(gameObjectStubs.get(3).getPosition().getX() + 1);
+                gameObjectStubs.get(3).getPosition().setX(gameObjectStubs.get(3).getPosition().getX() + 0.01d);
 
             System.out.println(i++);
             return (List<Renderable>) (List<? extends Renderable>) gameObjectStubs;
@@ -150,7 +150,7 @@ public class GameController implements Controller {
 
     private static class GameObjectStub implements Renderable {
 
-        private final Vector2<Double> position = new Vector2<>(1d, 1d);
+        private final Vector2<Double> position = new Vector2<>(-1d, 0d);
         private final Vector2<Double> size = new Vector2<>(1d, 1d);
 
         @Override

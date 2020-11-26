@@ -12,6 +12,8 @@ import java.util.Set;
 
 public class WorldRenderer {
 
+    private static final double PIXELS_PER_GAME_CELL = 100;
+
     private final ObservableList<Node> gameNodes;
     private final Map<Renderable, Node> renderableToGameNodeMap = new HashMap<>();
 
@@ -22,7 +24,10 @@ public class WorldRenderer {
     public void update(Set<Renderable> newRenderableSet) {
         for (Renderable renderable : newRenderableSet) {
             if (!renderableToGameNodeMap.containsKey(renderable)) {
-                Rectangle rectangle = new Rectangle(100, 100, Color.DODGERBLUE);
+                Rectangle rectangle = new Rectangle(
+                    renderable.getSize().getX() * PIXELS_PER_GAME_CELL,
+                    renderable.getSize().getY() * PIXELS_PER_GAME_CELL,
+                    Color.DODGERBLUE);
                 rectangle.setUserData(renderable);
                 renderableToGameNodeMap.put(renderable, rectangle);
             }
@@ -42,8 +47,8 @@ public class WorldRenderer {
                 gameNodes.add(gameNode);
             }
 
-            gameNode.setLayoutX(renderable.getPosition().getX());
-            gameNode.setLayoutY(renderable.getPosition().getY());
+            gameNode.setLayoutX(renderable.getPosition().getX() * PIXELS_PER_GAME_CELL);
+            gameNode.setLayoutY(renderable.getPosition().getY() * PIXELS_PER_GAME_CELL);
 
             System.out.println(renderable.getPosition());
         }
