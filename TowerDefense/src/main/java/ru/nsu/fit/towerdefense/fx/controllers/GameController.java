@@ -19,7 +19,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * WorldController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a world scene.
+ * GameController class is used by JavaFX in javafx.fxml.FXMLLoader for showing the game scene.
  *
  * @author Oleg Markelov
  */
@@ -39,7 +39,7 @@ public class GameController implements Controller {
     private WorldRenderer worldRenderer;
 
     /**
-     * Creates new MenuController with specified SceneManager.
+     * Creates new GameController with specified SceneManager.
      *
      * @param sceneManager scene manager.
      */

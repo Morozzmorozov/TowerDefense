@@ -10,6 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * WorldRenderer class is used for rendering game objects on the game scene.
+ *
+ * @author Oleg Markelov
+ */
 public class WorldRenderer {
 
     private static final double PIXELS_PER_GAME_CELL = 100;
@@ -17,10 +22,20 @@ public class WorldRenderer {
     private final ObservableList<Node> gameNodes;
     private final Map<Renderable, Node> renderableToGameNodeMap = new HashMap<>();
 
+    /**
+     * Creates new WorldRenderer with specified game nodes.
+     *
+     * @param gameNodes list of game nodes.
+     */
     public WorldRenderer(ObservableList<Node> gameNodes) {
         this.gameNodes = gameNodes;
     }
 
+    /**
+     * Updates a map (Renderable -> game node) with new renderables.
+     *
+     * @param newRenderableSet updated renderables.
+     */
     public void update(Set<Renderable> newRenderableSet) {
         for (Renderable renderable : newRenderableSet) {
             if (!renderableToGameNodeMap.containsKey(renderable)) {
@@ -36,6 +51,11 @@ public class WorldRenderer {
         renderableToGameNodeMap.entrySet().removeIf(entry -> !newRenderableSet.contains(entry.getKey()));
     }
 
+    /**
+     * Renders previously updated renderables.
+     *
+     * Must be called in JavaFX Application thread!
+     */
     public void render() {
         gameNodes.removeIf(node -> !renderableToGameNodeMap.containsKey(node.getUserData()));
 
