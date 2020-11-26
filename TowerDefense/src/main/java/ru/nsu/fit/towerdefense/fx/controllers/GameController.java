@@ -136,14 +136,17 @@ public class GameController implements Controller {
                 gameObjectStubs.remove(1);
             }
 
-            if (gameObjectStubs.size() > 1)
+            if (gameObjectStubs.size() > 1) {
                 gameObjectStubs.get(1).getPosition().setX(gameObjectStubs.get(1).getPosition().getX() + 0.01d);
+                gameObjectStubs.get(1).getSize().setX(gameObjectStubs.get(1).getSize().getX() - 0.0025d);
+                gameObjectStubs.get(1).getSize().setY(gameObjectStubs.get(1).getSize().getY() - 0.0025d);
+            }
             if (gameObjectStubs.size() > 2)
                 gameObjectStubs.get(2).getPosition().setX(gameObjectStubs.get(2).getPosition().getX() + 0.01d);
             if (gameObjectStubs.size() > 3)
                 gameObjectStubs.get(3).getPosition().setX(gameObjectStubs.get(3).getPosition().getX() + 0.01d);
 
-            System.out.println(i++);
+            i++;
             return (List<Renderable>) (List<? extends Renderable>) gameObjectStubs;
         }
     }

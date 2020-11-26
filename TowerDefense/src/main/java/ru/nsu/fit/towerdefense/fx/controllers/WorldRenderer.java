@@ -41,18 +41,18 @@ public class WorldRenderer {
 
         for (Map.Entry<Renderable, Node> entry : renderableToGameNodeMap.entrySet()) {
             Renderable renderable = entry.getKey();
-            Node gameNode = entry.getValue();
+            Rectangle rectangle = (Rectangle) entry.getValue();
 
-            if (!gameNodes.contains(gameNode)) {
-                gameNodes.add(gameNode);
+            if (!gameNodes.contains(rectangle)) {
+                gameNodes.add(rectangle);
             }
 
-            gameNode.relocate(
+            rectangle.relocate(
                 renderable.getPosition().getX() * PIXELS_PER_GAME_CELL,
                 renderable.getPosition().getY() * PIXELS_PER_GAME_CELL);
 
-            System.out.println(renderable.getPosition());
+            rectangle.setWidth(renderable.getSize().getX() * PIXELS_PER_GAME_CELL);
+            rectangle.setHeight(renderable.getSize().getY() * PIXELS_PER_GAME_CELL);
         }
-        System.out.println();
     }
 }
