@@ -1,5 +1,7 @@
 package ru.nsu.fit.towerdefense.model.world.gameobject;
 
+import java.util.ArrayList;
+import java.util.List;
 import ru.nsu.fit.towerdefense.model.world.Vector2;
 import ru.nsu.fit.towerdefense.model.world.Wave;
 import ru.nsu.fit.towerdefense.model.world.types.EnemyType;
@@ -7,10 +9,11 @@ import ru.nsu.fit.towerdefense.model.world.types.EnemyType;
 public class Enemy implements Renderable {
   private int health;
   private EnemyType type;
-  private float velocity; // TODO link with trajectory somehow
+  private float velocity;
   private Wave wave;
   private boolean isDead = false;
   private Vector2<Double> position;
+  private List<Vector2<Double>> trajectory = new ArrayList<>();
 
   public Vector2<Double> getCell() {
     return position;
@@ -61,5 +64,9 @@ public class Enemy implements Renderable {
   @Override
   public String getImageName() {
     return type.getImage();
+  }
+
+  public List<Vector2<Double>> getTrajectory() {
+    return trajectory;
   }
 }

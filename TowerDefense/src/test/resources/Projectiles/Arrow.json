@@ -1,0 +1,12 @@
+{
+    "Speed" : 2.0,
+    "SelfGuided" : false,
+    "BasicDamage" : 9,
+    "EnemyTypeDamage" : [
+        ["Goblin", 10], ["Orc", 8], ["Cyclops", 6]
+    ],
+    "HitBox" : 2,
+    "SizeX" : 1.0,
+    "SizeY" : 1.0,
+    "Image" : "Arrow"
+}

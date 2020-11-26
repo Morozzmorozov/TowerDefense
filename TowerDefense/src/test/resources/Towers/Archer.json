@@ -1,0 +1,12 @@
+{
+	"Price" : 100,
+	"Upgrades": [
+		["Crossbowman", 250],
+		["Catapult", 400]
+	],
+	"Range" : 300,
+	"FireRate" : 5,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Arrow",
+	"Image" : "Archer"
+}

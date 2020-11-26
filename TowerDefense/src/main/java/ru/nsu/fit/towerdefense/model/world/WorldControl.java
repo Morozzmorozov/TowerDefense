@@ -10,8 +10,11 @@ import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
 public class WorldControl {
   private static final double DELTA = 0.1;
+  private static final double DISTANCE_DELTA = 0.001;
 
   private World world;
+
+  private GameMetaData gameMetaData;
 
   public World getWorld() {
     return world;
@@ -20,14 +23,27 @@ public class WorldControl {
   public void simulateTick() {
 
     for (Tower tower : world.getTowers()) {
-      if (tower.getTarget() == null || tower.getTarget().isDead()) {
-        // generate target
+      if (tower.getTarget() == null || tower.getTarget().isDead()
+          || distance(tower.getPosition(), tower.getTarget().getPosition()) > tower.getType().getRange()) {
+        tower.setTarget(null);
+        // finds the closest enemy for now
+        for (Enemy enemy : world.getEnemies()) {
+          double dist = distance(tower.getPosition(), enemy.getPosition());
+          if (dist > tower.getType().getRange()) {
+            continue;
+          }
+          if (tower.getTarget() == null
+              || dist < distance(tower.getPosition(), tower.getTarget().getPosition())) {
+            tower.setTarget(enemy);
+          }
+        }
       }
 
 
       if (tower.getTarget() != null) {
         if (tower.getCooldown() == 0) {
-          ProjectileType projectileType = tower.getType().getProjectileType();
+
+          ProjectileType projectileType = gameMetaData.getProjectileType(tower.getType().getProjectileType());
           world.getProjectiles().add(new Projectile(
               tower.getTarget(), tower.getType().getRange(), projectileType,
               new Vector2<>(
@@ -46,21 +62,35 @@ public class WorldControl {
     List<Projectile> removedProjectiles = new ArrayList<>();
     for (Projectile projectile : world.getProjectiles()) {
       if (projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
-        Vector2<Double> heh = new Vector2<>(
+        Vector2<Double> newDirection = new Vector2<>(
             projectile.getTarget().getPosition().getX() - projectile.getPosition().getX(),
             projectile.getTarget().getPosition().getY() - projectile.getPosition().getY());
-        // rotate the bullet
+
+        double length = distance(projectile.getPosition(), projectile.getTarget().getPosition());
+        newDirection.setX(newDirection.getX() / length * projectile.getType().getSpeed());
+        newDirection.setY(newDirection.getY() / length * projectile.getType().getSpeed());
+
+        projectile.setVelocity(newDirection);
       }
 
-      if (false /* check for collisions */) {
-        Enemy enemy = null; // get this enemy somehow
-        int damage = projectile.getType().getEnemyTypeDamageMap().get(enemy.getType());
+      Enemy collidedEnemy = null;
+      // Collision checking
+      for (Enemy enemy : world.getEnemies()) {
+        // TODO hit box size
+        if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getSize().getX()) {
+          collidedEnemy = enemy;
+          break;
+        }
+      }
+
+      if (collidedEnemy != null) {
+        int damage = projectile.getType().getEnemyTypeDamageMap().get(collidedEnemy.getType().getTypeName());
 
         removedProjectiles.add(projectile);
 
-        enemy.setHealth(enemy.getHealth() - damage);
-        if (enemy.getHealth() <= 0) {
-          enemyDeath(enemy);
+        collidedEnemy.setHealth(collidedEnemy.getHealth() - damage);
+        if (collidedEnemy.getHealth() <= 0) {
+          enemyDeath(collidedEnemy);
         }
       }
     }
@@ -73,9 +103,25 @@ public class WorldControl {
     for (Enemy enemy : world.getEnemies()) {
       if (enemy.isDead()) continue;
 
-      // get effects & update health
+      // TODO get effects & update health
 
-      // Trajectory!
+      double remainingDistance = enemy.getVelocity();
+      while (remainingDistance > DISTANCE_DELTA && !enemy.getTrajectory().isEmpty()) {
+        double dist = distance(enemy.getPosition(), enemy.getTrajectory().get(0));
+        if (Double.compare(remainingDistance, dist) >= 0) {
+          // enemy reaches next vertex
+          remainingDistance -= dist;
+          enemy.setPosition(enemy.getTrajectory().get(0));
+          enemy.getTrajectory().remove(0);
+        } else {
+          // enemy does not reach next vertex
+          enemy.getPosition().setX(
+              enemy.getPosition().getX() + (enemy.getTrajectory().get(0).getX() - enemy.getPosition().getX()) * remainingDistance / dist);
+          enemy.getPosition().setY(
+              enemy.getPosition().getX() + (enemy.getTrajectory().get(0).getY() - enemy.getPosition().getY()) * remainingDistance / dist);
+          remainingDistance = 0;
+        }
+      }
 
       if (Math.abs(enemy.getPosition().getX() - world.getBase().getPosition().getX()) < DELTA &&
           Math.abs(enemy.getPosition().getY() - world.getBase().getPosition().getY()) < DELTA) {
@@ -102,6 +148,7 @@ public class WorldControl {
   }
 
   private void enemyDeath(Enemy enemy) {
+    world.getEnemies().remove(enemy);
     Wave wave = enemy.getWave();
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
@@ -111,5 +158,9 @@ public class WorldControl {
 
   private void finish() {
 
+  }
+
+  private double distance(Vector2<Double> a, Vector2<Double> b) {
+    return Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY() , 2));
   }
 }

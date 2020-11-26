@@ -1,0 +1,9 @@
+{
+	"Health" : 10,
+	"Speed" : 20.0,
+	"HitBox" : 1.0,
+	"SizeX" : 1,
+	"SizeY" : 3,
+	"Image" : "Goblin",
+	"Damage" : 5
+}
