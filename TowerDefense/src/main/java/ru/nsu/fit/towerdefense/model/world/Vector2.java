@@ -24,4 +24,9 @@ public class Vector2<T> {
   public void setY(T y) {
     this.y = y;
   }
+
+  @Override
+  public String toString() {
+    return "(" + x + ":" + y + ")";
+  }
 }
