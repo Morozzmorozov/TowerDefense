@@ -84,7 +84,7 @@ public class WorldControl {
       }
 
       if (collidedEnemy != null) {
-        int damage = projectile.getType().getEnemyTypeDamageMap().get(collidedEnemy.getType());
+        int damage = projectile.getType().getEnemyTypeDamageMap().get(collidedEnemy.getType().getTypeName());
 
         removedProjectiles.add(projectile);
 
