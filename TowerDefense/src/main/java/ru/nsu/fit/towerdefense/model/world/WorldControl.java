@@ -64,15 +64,24 @@ public class WorldControl {
         // rotate the bullet
       }
 
-      if (false /* check for collisions */) {
-        Enemy enemy = null; // get this enemy somehow
-        int damage = projectile.getType().getEnemyTypeDamageMap().get(enemy.getType());
+      Enemy collidedEnemy = null;
+      // Collision checking
+      for (Enemy enemy : world.getEnemies()) {
+        // TODO hit box size
+        if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getSize().getX()) {
+          collidedEnemy = enemy;
+          break;
+        }
+      }
+
+      if (collidedEnemy != null) {
+        int damage = projectile.getType().getEnemyTypeDamageMap().get(collidedEnemy.getType());
 
         removedProjectiles.add(projectile);
 
-        enemy.setHealth(enemy.getHealth() - damage);
-        if (enemy.getHealth() <= 0) {
-          enemyDeath(enemy);
+        collidedEnemy.setHealth(collidedEnemy.getHealth() - damage);
+        if (collidedEnemy.getHealth() <= 0) {
+          enemyDeath(collidedEnemy);
         }
       }
     }
@@ -114,6 +123,7 @@ public class WorldControl {
   }
 
   private void enemyDeath(Enemy enemy) {
+    world.getEnemies().remove(enemy);
     Wave wave = enemy.getWave();
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
