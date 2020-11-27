@@ -1,6 +1,4 @@
-package ru.nsu.fit.towerdefense.model.world.map;
-
-import ru.nsu.fit.towerdefense.model.world.types.EnemyType;
+package ru.nsu.fit.towerdefense.model.map;
 
 public class WaveEnemies {
 

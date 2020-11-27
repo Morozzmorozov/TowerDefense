@@ -10,7 +10,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.GameController;
 import ru.nsu.fit.towerdefense.fx.controllers.MenuController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
-import ru.nsu.fit.towerdefense.model.world.GameMetaData;
+import ru.nsu.fit.towerdefense.model.GameMetaData;
 
 import java.io.IOException;
 

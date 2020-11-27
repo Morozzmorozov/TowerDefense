@@ -1,6 +1,6 @@
-package ru.nsu.fit.towerdefense.model.world.map;
+package ru.nsu.fit.towerdefense.model.map;
 
-import ru.nsu.fit.towerdefense.model.world.Vector2;
+import ru.nsu.fit.towerdefense.model.util.Vector2;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

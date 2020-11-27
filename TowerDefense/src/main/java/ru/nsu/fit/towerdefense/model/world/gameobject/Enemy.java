@@ -2,7 +2,7 @@ package ru.nsu.fit.towerdefense.model.world.gameobject;
 
 import java.util.ArrayList;
 import java.util.List;
-import ru.nsu.fit.towerdefense.model.world.Vector2;
+import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.Wave;
 import ru.nsu.fit.towerdefense.model.world.types.EnemyType;
 

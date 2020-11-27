@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.model.world.map;
+package ru.nsu.fit.towerdefense.model.map;
 
 import java.util.LinkedList;
 import java.util.List;

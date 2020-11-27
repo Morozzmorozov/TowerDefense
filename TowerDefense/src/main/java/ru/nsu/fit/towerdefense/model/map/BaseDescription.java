@@ -1,7 +1,6 @@
-package ru.nsu.fit.towerdefense.model.world.map;
+package ru.nsu.fit.towerdefense.model.map;
 
-import ru.nsu.fit.towerdefense.model.world.Vector2;
-import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
+import ru.nsu.fit.towerdefense.model.util.Vector2;
 
 /**
  * This object should be immutable (read-only).

@@ -1,12 +1,15 @@
-package ru.nsu.fit.towerdefense.model.world;
+package ru.nsu.fit.towerdefense.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import ru.nsu.fit.towerdefense.model.util.Vector2;
+import ru.nsu.fit.towerdefense.model.world.Wave;
+import ru.nsu.fit.towerdefense.model.world.World;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
-import ru.nsu.fit.towerdefense.model.world.map.GameMap;
-import ru.nsu.fit.towerdefense.model.world.map.WaveDescription;
+import ru.nsu.fit.towerdefense.model.map.GameMap;
+import ru.nsu.fit.towerdefense.model.map.WaveDescription;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
 public class WorldControl {

@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.model.world.gameobject;
 
-import ru.nsu.fit.towerdefense.model.world.Vector2;
+import ru.nsu.fit.towerdefense.model.util.Vector2;
 
 public class RoadTile implements Renderable {
   private String image;

@@ -6,11 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
-import ru.nsu.fit.towerdefense.model.world.Vector2;
+import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.World;
-import ru.nsu.fit.towerdefense.model.world.WorldControl;
+import ru.nsu.fit.towerdefense.model.WorldControl;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
-import ru.nsu.fit.towerdefense.model.world.map.GameMap;
+import ru.nsu.fit.towerdefense.model.map.GameMap;
 
 import java.util.ArrayList;
 import java.util.List;

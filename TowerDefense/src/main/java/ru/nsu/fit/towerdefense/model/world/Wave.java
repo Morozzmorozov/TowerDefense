@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.model.world;
 
-import ru.nsu.fit.towerdefense.model.world.map.WaveDescription;
+import ru.nsu.fit.towerdefense.model.map.WaveDescription;
 
 public class Wave {
   private int remainingEnemiesCount;

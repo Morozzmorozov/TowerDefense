@@ -1,7 +1,7 @@
 import org.junit.Assert;
 import org.junit.Test;
-import ru.nsu.fit.towerdefense.model.world.GameMetaData;
-import ru.nsu.fit.towerdefense.model.world.map.GameMap;
+import ru.nsu.fit.towerdefense.model.GameMetaData;
+import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.world.types.EnemyType;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
