@@ -13,6 +13,7 @@ import ru.nsu.fit.towerdefense.model.world.World;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -73,7 +74,8 @@ public class GameController implements Controller {
 //                    worldControl.getWorld().getRenderables())); // todo compare performance
                 Platform.runLater(() -> {
 //                    worldRenderer.render();
-                    worldRenderer.renderSimply(worldControl.getWorld().getRenderables());
+                    worldRenderer.renderSimply(new ArrayList<>((Collection<? extends Renderable>)
+                        worldControl.getWorld().getRenderables()));
                 });
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
