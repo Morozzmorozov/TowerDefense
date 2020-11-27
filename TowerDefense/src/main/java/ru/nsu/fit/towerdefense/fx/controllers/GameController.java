@@ -36,11 +36,10 @@ public class GameController implements Controller {
     @FXML private Button menuButton;
 
     private final SceneManager sceneManager;
-    private final GameMap gameMap;
 
     private ScheduledExecutorService worldSimulationExecutor;
 
-    private WorldControl worldControl;
+    private final WorldControl worldControl;
     private WorldRenderer worldRenderer;
 
     /**
@@ -51,7 +50,7 @@ public class GameController implements Controller {
      */
     public GameController(SceneManager sceneManager, GameMap gameMap) {
         this.sceneManager = sceneManager;
-        this.gameMap = gameMap;
+        worldControl = new WorldControlStub(gameMap);
     }
 
     @FXML
@@ -63,7 +62,6 @@ public class GameController implements Controller {
         worldAnchorPane.maxHeightProperty().bind(rootStackPane.heightProperty());
         worldAnchorPane.minHeightProperty().bind(rootStackPane.heightProperty());
 
-        worldControl = new WorldControlStub(gameMap);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren());
 
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
