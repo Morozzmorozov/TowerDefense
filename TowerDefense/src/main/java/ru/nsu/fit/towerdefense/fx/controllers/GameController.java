@@ -6,11 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
+import ru.nsu.fit.towerdefense.model.WorldControl;
+import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.World;
-import ru.nsu.fit.towerdefense.model.WorldControl;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
-import ru.nsu.fit.towerdefense.model.map.GameMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class GameController implements Controller {
 
     private static final String FXML_FILE_NAME = "game.fxml";
     private static final int FRAMES_PER_SECOND = 60;
-    private static final int SIMULATION_DELAY = 1000 / FRAMES_PER_SECOND;
+    private static final long DELTA_TIME = Math.round(1000d / FRAMES_PER_SECOND);
 
     @FXML private StackPane rootStackPane;
     @FXML private AnchorPane worldAnchorPane;
@@ -68,7 +68,7 @@ public class GameController implements Controller {
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
-                worldControl.simulateTick();
+                worldControl.simulateTick(DELTA_TIME);
 //                worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
 //                    worldControl.getWorld().getRenderables())); // todo compare performance
                 Platform.runLater(() -> {
@@ -78,7 +78,7 @@ public class GameController implements Controller {
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
-        }, 0, SIMULATION_DELAY, TimeUnit.MILLISECONDS);
+        }, 0, DELTA_TIME, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -115,7 +115,7 @@ public class GameController implements Controller {
         }
 
         @Override
-        public void simulateTick() {
+        public void simulateTick(double deltaTime) {
             if (frame++ % 10 == 0) {
                 if (world.getGameObjectStubs().size() > 0) {
                     world.getGameObjectStubs().remove(
@@ -127,9 +127,9 @@ public class GameController implements Controller {
 
             for (GameObjectStub gameObjectStub : world.getGameObjectStubs()) {
                 gameObjectStub.getPosition().setX(gameObjectStub.getPosition().getX() +
-                    gameObjectStub.getVelocity().getX() * SIMULATION_DELAY);
+                    gameObjectStub.getVelocity().getX() * DELTA_TIME);
                 gameObjectStub.getPosition().setY(gameObjectStub.getPosition().getY() +
-                    gameObjectStub.getVelocity().getY() * SIMULATION_DELAY);
+                    gameObjectStub.getVelocity().getY() * DELTA_TIME);
             }
         }
 

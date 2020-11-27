@@ -29,7 +29,7 @@ public class WorldControl {
     return world;
   }
 
-  public void simulateTick() {
+  public void simulateTick(double deltaTime) {
 
     for (Tower tower : world.getTowers()) {
       if (tower.getTarget() == null || tower.getTarget().isDead()
