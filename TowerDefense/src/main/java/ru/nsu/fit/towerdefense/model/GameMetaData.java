@@ -50,7 +50,7 @@ public class GameMetaData {
      * @param name - name of a map
      * @return map reference if such exists, null otherwise
      */
-    public GameMap getMapDescription(String name)
+    public GameMap getMapDescription(String name) // todo throw NoSuchElementException
     {
         if (loadedMaps.containsKey(name))
         {

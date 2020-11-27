@@ -13,8 +13,10 @@ import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.model.GameMetaData;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.LAYOUT_LOADING_ERROR_HEADER;
+import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.MAP_LOADING_ERROR_HEADER;
 
 /**
  * SceneManager class is used for managing JavaFX stage.
@@ -93,8 +95,14 @@ public class SceneManager {
      * @param gameMapName game map name.
      */
     public void switchToGame(String gameMapName) {
-        switchScene(new GameController(this,
-            GameMetaData.getInstance().getMapDescription(gameMapName))); // todo handle Exception or null
+        try {
+            switchScene(new GameController(this,
+                GameMetaData.getInstance().getMapDescription(gameMapName)));
+        } catch (NoSuchElementException e) {
+            new AlertBuilder()
+                .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
+                .build().showAndWait();
+        }
     }
 
     /**
