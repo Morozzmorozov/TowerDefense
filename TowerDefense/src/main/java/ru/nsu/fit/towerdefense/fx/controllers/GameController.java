@@ -10,6 +10,7 @@ import ru.nsu.fit.towerdefense.model.world.Vector2;
 import ru.nsu.fit.towerdefense.model.world.World;
 import ru.nsu.fit.towerdefense.model.world.WorldControl;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
+import ru.nsu.fit.towerdefense.model.world.map.GameMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class GameController implements Controller {
     @FXML private Button menuButton;
 
     private final SceneManager sceneManager;
+    private final GameMap gameMap;
 
     private ScheduledExecutorService worldSimulationExecutor;
 
@@ -41,12 +43,14 @@ public class GameController implements Controller {
     private WorldRenderer worldRenderer;
 
     /**
-     * Creates new GameController with specified SceneManager.
+     * Creates new GameController with specified SceneManager and GameMap.
      *
      * @param sceneManager scene manager.
+     * @param gameMap      game map.
      */
-    public GameController(SceneManager sceneManager) {
+    public GameController(SceneManager sceneManager, GameMap gameMap) {
         this.sceneManager = sceneManager;
+        this.gameMap = gameMap;
     }
 
     @FXML
@@ -58,7 +62,7 @@ public class GameController implements Controller {
         worldAnchorPane.maxHeightProperty().bind(rootStackPane.heightProperty());
         worldAnchorPane.minHeightProperty().bind(rootStackPane.heightProperty());
 
-        worldControl = new WorldControlStub();
+        worldControl = new WorldControlStub(gameMap);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren());
 
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
@@ -102,7 +106,9 @@ public class GameController implements Controller {
         private final WorldStub world = new WorldStub();
         private int frame;
 
-        public WorldControlStub() {
+        public WorldControlStub(GameMap gameMap) {
+            super(gameMap);
+
             for (int i = 0; i < 100; i++) {
                 world.getGameObjectStubs().add(generateRandomGameObjectStub());
             }

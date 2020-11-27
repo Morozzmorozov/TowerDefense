@@ -10,6 +10,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.GameController;
 import ru.nsu.fit.towerdefense.fx.controllers.MenuController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
+import ru.nsu.fit.towerdefense.model.world.GameMetaData;
 
 import java.io.IOException;
 
@@ -86,10 +87,14 @@ public class SceneManager {
     }
 
     /**
-     * Creates new GameController and switches the scene to a game.
+     * Creates new GameController with game map gotten by specified game map name and switches
+     * the scene to a game.
+     *
+     * @param gameMapName game map name.
      */
-    public void switchToGame() {
-        switchScene(new GameController(this));
+    public void switchToGame(String gameMapName) {
+        switchScene(new GameController(this,
+            GameMetaData.getInstance().getMapDescription(gameMapName))); // todo handle Exception or null
     }
 
     /**

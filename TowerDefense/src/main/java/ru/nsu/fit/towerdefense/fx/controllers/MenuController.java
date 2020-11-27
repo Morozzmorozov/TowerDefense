@@ -28,7 +28,7 @@ public class MenuController implements Controller {
 
     @FXML
     private void initialize() {
-        gameButton.setOnAction(actionEvent -> sceneManager.switchToGame());
+        gameButton.setOnAction(actionEvent -> sceneManager.switchToGame(""));
     }
 
     /**

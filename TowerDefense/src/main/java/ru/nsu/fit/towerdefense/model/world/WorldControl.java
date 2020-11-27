@@ -5,6 +5,7 @@ import java.util.List;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
+import ru.nsu.fit.towerdefense.model.world.map.GameMap;
 import ru.nsu.fit.towerdefense.model.world.map.WaveDescription;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
@@ -12,9 +13,14 @@ public class WorldControl {
   private static final double DELTA = 0.1;
   private static final double DISTANCE_DELTA = 0.001;
 
+  private final GameMap gameMap;
   private World world;
 
   private GameMetaData gameMetaData;
+
+  public WorldControl(GameMap gameMap) {
+    this.gameMap = gameMap;
+  }
 
   public World getWorld() {
     return world;
