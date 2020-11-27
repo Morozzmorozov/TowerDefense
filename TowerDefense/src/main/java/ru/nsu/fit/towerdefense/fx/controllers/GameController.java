@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.model.world.Vector2;
 import ru.nsu.fit.towerdefense.model.world.World;
@@ -28,6 +29,7 @@ public class GameController implements Controller {
     private static final String FXML_FILE_NAME = "game.fxml";
     private static final long SIMULATION_DELAY = 1000 / 60;
 
+    @FXML private StackPane rootStackPane;
     @FXML private AnchorPane worldAnchorPane;
     @FXML private Button menuButton;
 
@@ -53,6 +55,10 @@ public class GameController implements Controller {
 
         worldControl = new WorldControl();
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren());
+        worldAnchorPane.maxWidthProperty().bind(rootStackPane.widthProperty());
+        worldAnchorPane.minWidthProperty().bind(rootStackPane.widthProperty());
+        worldAnchorPane.maxHeightProperty().bind(rootStackPane.heightProperty());
+        worldAnchorPane.minHeightProperty().bind(rootStackPane.heightProperty());
 
         WorldStub worldStub = new WorldStub();
 
