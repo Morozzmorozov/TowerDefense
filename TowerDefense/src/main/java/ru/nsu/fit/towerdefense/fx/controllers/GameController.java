@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
+import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
+import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.model.WorldControl;
 import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
@@ -19,6 +21,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+
+import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.RENDER_WORLD_ERROR_HEADER;
 
 /**
  * GameController class is used by JavaFX in javafx.fxml.FXMLLoader for showing the game scene.
@@ -68,12 +72,19 @@ public class GameController implements Controller {
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
                 worldControl.simulateTick(DELTA_TIME);
-//                worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
-//                    worldControl.getWorld().getRenderables())); // todo compare performance
                 Platform.runLater(() -> {
-//                    worldRenderer.render();
-                    worldRenderer.renderSimply(new ArrayList<>((Collection<? extends Renderable>)
-                        worldControl.getWorld().getRenderables()));
+                    try {
+                        worldRenderer.render(new ArrayList<>((Collection<? extends Renderable>)
+                            worldControl.getWorld().getRenderables()));
+                    } catch (RenderException e) {
+                        sceneManager.switchToMenu();
+
+                        new AlertBuilder()
+                            .setHeaderText(RENDER_WORLD_ERROR_HEADER)
+                            .setException(e)
+                            .setOwner(sceneManager.getWindowOwner())
+                            .build().showAndWait();
+                    }
                 });
             } catch (Throwable throwable) {
                 throwable.printStackTrace();

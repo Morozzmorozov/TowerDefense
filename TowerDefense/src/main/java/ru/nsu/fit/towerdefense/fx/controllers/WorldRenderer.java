@@ -2,10 +2,12 @@ package ru.nsu.fit.towerdefense.fx.controllers;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.ImageView;
+import ru.nsu.fit.towerdefense.fx.Images;
+import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 
+import java.util.NoSuchElementException;
 
 /**
  * WorldRenderer class is used for rendering game objects on the game scene.
@@ -34,23 +36,25 @@ public class WorldRenderer {
      *
      * @param newRenderableSet updated renderables.
      */
-    public void renderSimply(Iterable<Renderable> newRenderableSet) {
+    public void render(Iterable<Renderable> newRenderableSet) throws RenderException {
         gameNodes.clear();
 
         for (Renderable renderable : newRenderableSet) {
-            Rectangle rectangle = new Rectangle(
-                renderable.getSize().getX() * PIXELS_PER_GAME_CELL,
-                renderable.getSize().getY() * PIXELS_PER_GAME_CELL,
-                Color.DODGERBLUE);
+            try {
+                ImageView imageView =
+                    new ImageView(Images.getInstance().getImage(renderable.getImageName()));
 
-            rectangle.relocate(
-                renderable.getPosition().getX() * PIXELS_PER_GAME_CELL,
-                renderable.getPosition().getY() * PIXELS_PER_GAME_CELL);
+                imageView.setFitWidth(renderable.getSize().getX() * PIXELS_PER_GAME_CELL);
+                imageView.setFitHeight(renderable.getSize().getY() * PIXELS_PER_GAME_CELL);
 
-            rectangle.setWidth(renderable.getSize().getX() * PIXELS_PER_GAME_CELL);
-            rectangle.setHeight(renderable.getSize().getY() * PIXELS_PER_GAME_CELL);
+                imageView.relocate(
+                    renderable.getPosition().getX() * PIXELS_PER_GAME_CELL,
+                    renderable.getPosition().getY() * PIXELS_PER_GAME_CELL);
 
-            gameNodes.add(rectangle);
+                gameNodes.add(imageView);
+            } catch (NoSuchElementException e) {
+                throw new RenderException("No image was found by name \"" + renderable.getImageName() + "\".");
+            }
         }
     }
 }
