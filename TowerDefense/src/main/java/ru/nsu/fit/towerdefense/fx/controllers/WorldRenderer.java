@@ -17,7 +17,7 @@ import java.util.Set;
  */
 public class WorldRenderer {
 
-    private static final double PIXELS_PER_GAME_CELL = 100;
+    private static final double PIXELS_PER_GAME_CELL = 10;
 
     private final ObservableList<Node> gameNodes;
     private final Map<Renderable, Node> renderableToGameNodeMap = new HashMap<>();

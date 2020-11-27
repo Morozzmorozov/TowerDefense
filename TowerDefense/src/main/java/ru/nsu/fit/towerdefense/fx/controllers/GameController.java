@@ -12,11 +12,10 @@ import ru.nsu.fit.towerdefense.model.world.WorldControl;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,7 +26,8 @@ import java.util.concurrent.TimeUnit;
 public class GameController implements Controller {
 
     private static final String FXML_FILE_NAME = "game.fxml";
-    private static final long SIMULATION_DELAY = 1000 / 60;
+    private static final int FRAMES_PER_SECOND = 60;
+    private static final int SIMULATION_DELAY = 1000 / FRAMES_PER_SECOND;
 
     @FXML private StackPane rootStackPane;
     @FXML private AnchorPane worldAnchorPane;
@@ -53,24 +53,24 @@ public class GameController implements Controller {
     private void initialize() {
         menuButton.setOnAction(actionEvent -> sceneManager.switchToMenu());
 
-        worldControl = new WorldControl();
-        worldRenderer = new WorldRenderer(worldAnchorPane.getChildren());
         worldAnchorPane.maxWidthProperty().bind(rootStackPane.widthProperty());
         worldAnchorPane.minWidthProperty().bind(rootStackPane.widthProperty());
         worldAnchorPane.maxHeightProperty().bind(rootStackPane.heightProperty());
         worldAnchorPane.minHeightProperty().bind(rootStackPane.heightProperty());
 
-        WorldStub worldStub = new WorldStub();
+        worldControl = new WorldControlStub();
+        worldRenderer = new WorldRenderer(worldAnchorPane.getChildren());
 
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
-//                worldControl.simulateTick();
+                worldControl.simulateTick();
 //                worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
-//                    worldControl.getWorld().getRenderables()));
-                worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
-                    worldStub.getRenderables()));
-                Platform.runLater(() -> worldRenderer.render());
+//                    worldControl.getWorld().getRenderables())); // todo compare performance
+                Platform.runLater(() -> {
+//                    worldRenderer.render();
+                    worldRenderer.renderSimply(worldControl.getWorld().getRenderables());
+                });
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
@@ -97,84 +97,95 @@ public class GameController implements Controller {
 
     // ---------- Stubs ----------
 
-    private static class WorldStub {
+    private static class WorldControlStub extends WorldControl {
 
-        private final List<GameObjectStub> gameObjectStubs = new ArrayList<>();
-        private int i;
+        private final WorldStub world = new WorldStub();
+        private int frame;
 
-        public WorldStub() {
-            gameObjectStubs.add(
-                new GameObjectStub() {{
-                    getPosition().setX(9d);
-                    getPosition().setY(3d);
-                }}
-            );
-
-            for (int i = 0; i < 2; i++) {
-                double doubleI = i;
-                gameObjectStubs.add(
-                    new GameObjectStub() {{
-                        getPosition().setY(2 * doubleI + 1);
-                    }}
-                );
+        public WorldControlStub() {
+            for (int i = 0; i < 100; i++) {
+                world.getGameObjectStubs().add(generateRandomGameObjectStub());
             }
-        }
-
-        @SuppressWarnings("unchecked")
-        public Iterable<Renderable> getRenderables() {
-            if (i == 120) {
-                gameObjectStubs.add(
-                    new GameObjectStub() {{
-                        getPosition().setY(5d);
-                    }}
-                );
-            }
-
-            if (i == 240) {
-                gameObjectStubs.remove(2);
-            }
-
-            if (i == 360) {
-                gameObjectStubs.remove(1);
-            }
-
-            if (i == 480) {
-                gameObjectStubs.remove(1);
-            }
-
-            if (gameObjectStubs.size() > 1) {
-                gameObjectStubs.get(1).getPosition().setX(gameObjectStubs.get(1).getPosition().getX() + 0.01d);
-                gameObjectStubs.get(1).getSize().setX(gameObjectStubs.get(1).getSize().getX() - 0.0025d);
-                gameObjectStubs.get(1).getSize().setY(gameObjectStubs.get(1).getSize().getY() - 0.0025d);
-            }
-            if (gameObjectStubs.size() > 2)
-                gameObjectStubs.get(2).getPosition().setX(gameObjectStubs.get(2).getPosition().getX() + 0.01d);
-            if (gameObjectStubs.size() > 3)
-                gameObjectStubs.get(3).getPosition().setX(gameObjectStubs.get(3).getPosition().getX() + 0.01d);
-
-            i++;
-            return (List<Renderable>) (List<? extends Renderable>) gameObjectStubs;
-        }
-    }
-
-    private static class GameObjectStub implements Renderable {
-
-        private final Vector2<Double> position = new Vector2<>(-1d, 0d);
-        private final Vector2<Double> size = new Vector2<>(1d, 1d);
-
-        @Override
-        public Vector2<Double> getPosition() {
-            return position;
         }
 
         @Override
-        public Vector2<Double> getSize() {
-            return size;
+        public void simulateTick() {
+            if (frame++ % 10 == 0) {
+                if (world.getGameObjectStubs().size() > 0) {
+                    world.getGameObjectStubs().remove(
+                        ThreadLocalRandom.current().nextInt(world.getGameObjectStubs().size()));
+                }
+
+                world.getGameObjectStubs().add(generateRandomGameObjectStub());
+            }
+
+            for (GameObjectStub gameObjectStub : world.getGameObjectStubs()) {
+                gameObjectStub.getPosition().setX(gameObjectStub.getPosition().getX() +
+                    gameObjectStub.getVelocity().getX() * SIMULATION_DELAY);
+                gameObjectStub.getPosition().setY(gameObjectStub.getPosition().getY() +
+                    gameObjectStub.getVelocity().getY() * SIMULATION_DELAY);
+            }
         }
 
         @Override
-        public String getImageName() {
-            return null;
+        public WorldStub getWorld() {
+            return world;
+        }
+
+        private GameObjectStub generateRandomGameObjectStub() {
+            return new GameObjectStub() {{
+                getPosition().setX(ThreadLocalRandom.current().nextDouble(107));
+                getPosition().setY(ThreadLocalRandom.current().nextDouble(71));
+
+                if (ThreadLocalRandom.current().nextDouble() < 0.9d) {
+                    int dirX = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
+                    int dirY = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
+                    getVelocity().setX(
+                        dirX * ThreadLocalRandom.current().nextDouble(0.001d,0.02d));
+                    getVelocity().setY(
+                        dirY * ThreadLocalRandom.current().nextDouble(0.001d,0.02d));
+                }
+            }};
+        }
+
+        private static class WorldStub extends World {
+
+            private final List<GameObjectStub> gameObjectStubs = new ArrayList<>();
+
+            public List<GameObjectStub> getGameObjectStubs() {
+                return gameObjectStubs;
+            }
+
+            @SuppressWarnings("unchecked")
+            public Iterable<Renderable> getRenderables() {
+                return (List<Renderable>) (List<? extends Renderable>) gameObjectStubs;
+            }
+        }
+
+        private static class GameObjectStub implements Renderable {
+
+            private final Vector2<Double> position = new Vector2<>(-1d, 0d);
+            private final Vector2<Double> velocity = new Vector2<>(0d, 0d);
+            private final Vector2<Double> size = new Vector2<>(1d, 1d);
+
+            @Override
+            public Vector2<Double> getPosition() {
+                return position;
+            }
+
+            @Override
+            public Vector2<Double> getSize() {
+                return size;
+            }
+
+            @Override
+            public String getImageName() {
+                return null;
+            }
+
+            public Vector2<Double> getVelocity() {
+                return velocity;
+            }
         }
     }
 }
