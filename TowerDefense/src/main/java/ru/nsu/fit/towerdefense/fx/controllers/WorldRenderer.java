@@ -83,7 +83,7 @@ public class WorldRenderer {
      *
      * @param newRenderableSet updated renderables.
      */
-    public void renderSimply(Set<Renderable> newRenderableSet) {
+    public void renderSimply(Iterable<Renderable> newRenderableSet) {
         gameNodes.clear();
 
         for (Renderable renderable : newRenderableSet) {
