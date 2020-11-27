@@ -11,6 +11,8 @@ import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
@@ -43,6 +45,15 @@ public class GameMetaData {
             instance = new GameMetaData();
         }
         return instance;
+    }
+
+    public Collection<String> getGameMapNames() // todo
+    {
+        return new ArrayList<>() {{
+            add("Level 1");
+            add("Level 2");
+            add("Level 3");
+        }};
     }
 
     /**
