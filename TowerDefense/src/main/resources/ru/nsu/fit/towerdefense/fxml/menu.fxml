@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
 <BorderPane xmlns="http://javafx.com/javafx/100.2-internal"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -11,6 +13,13 @@
         <URL value="@../css/menu.css"/>
     </stylesheets>
     <center>
-        <Button fx:id="gameButton" text="Game"/>
+        <VBox styleClass="content">
+            <Label fx:id="levelsLabel" styleClass="header">Levels</Label>
+            <ScrollPane fx:id="buttonsScrollPane" styleClass="buttons-scroll-pane">
+                <content>
+                    <VBox fx:id="buttonsVBox" styleClass="content, buttons-box"/>
+                </content>
+            </ScrollPane>
+        </VBox>
     </center>
 </BorderPane>

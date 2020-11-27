@@ -1,0 +1,8 @@
+.buttons-scroll-pane {
+    -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
+}
+
+.buttons-box {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+}

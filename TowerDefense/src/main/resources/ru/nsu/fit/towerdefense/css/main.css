@@ -3,6 +3,15 @@
     -fx-pref-height: 720px;
     -fx-min-width: 720px;
     -fx-font-size: 20px;
-    -fx-background-color: black;
 }
 
+.content {
+    -fx-alignment: top-center;
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+}
+
+.header {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
