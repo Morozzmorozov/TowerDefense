@@ -22,6 +22,7 @@ public class AlertBuilder {
             "Unknown error has occurred. Please contact the developer.";
 
     public static final String LAYOUT_LOADING_ERROR_HEADER = "Failed to load the layout";
+    public static final String RENDER_WORLD_ERROR_HEADER = "Failed to render the game map";
 
     private AlertType alertType = AlertType.ERROR;
     private ButtonType[] buttons = {};
