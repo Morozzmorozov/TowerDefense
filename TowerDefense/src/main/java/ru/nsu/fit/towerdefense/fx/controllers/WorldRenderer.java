@@ -63,16 +63,16 @@ public class WorldRenderer {
             Renderable renderable = entry.getKey();
             Rectangle rectangle = (Rectangle) entry.getValue();
 
-            if (!gameNodes.contains(rectangle)) {
-                gameNodes.add(rectangle);
-            }
-
             rectangle.relocate(
                 renderable.getPosition().getX() * PIXELS_PER_GAME_CELL,
                 renderable.getPosition().getY() * PIXELS_PER_GAME_CELL);
 
             rectangle.setWidth(renderable.getSize().getX() * PIXELS_PER_GAME_CELL);
             rectangle.setHeight(renderable.getSize().getY() * PIXELS_PER_GAME_CELL);
+
+            if (!gameNodes.contains(rectangle)) {
+                gameNodes.add(rectangle);
+            }
         }
     }
 
