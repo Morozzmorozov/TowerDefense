@@ -12,6 +12,7 @@ import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 public class GameMetaData {
 
@@ -106,6 +107,13 @@ public class GameMetaData {
             loadedProjectiles.put(name, projectileType);
         }
         return projectileType;
+    }
+
+    public String getImagePath(String imageName) // todo
+    {
+        if (imageName.equals("triangle")) return "/ru/nsu/fit/towerdefense/images/triangle.png";
+        if (imageName.equals("circle")) return "/ru/nsu/fit/towerdefense/images/circle.png";
+        throw new NoSuchElementException();
     }
 
     private ProjectileType loadProjectileType(String name)
