@@ -75,4 +75,31 @@ public class WorldRenderer {
             rectangle.setHeight(renderable.getSize().getY() * PIXELS_PER_GAME_CELL);
         }
     }
+
+    /**
+     * Removes all the current renderables and renders the new ones.
+     *
+     * Must be called in JavaFX Application thread!
+     *
+     * @param newRenderableSet updated renderables.
+     */
+    public void renderSimply(Set<Renderable> newRenderableSet) {
+        gameNodes.clear();
+
+        for (Renderable renderable : newRenderableSet) {
+            Rectangle rectangle = new Rectangle(
+                renderable.getSize().getX() * PIXELS_PER_GAME_CELL,
+                renderable.getSize().getY() * PIXELS_PER_GAME_CELL,
+                Color.DODGERBLUE);
+
+            rectangle.relocate(
+                renderable.getPosition().getX() * PIXELS_PER_GAME_CELL,
+                renderable.getPosition().getY() * PIXELS_PER_GAME_CELL);
+
+            rectangle.setWidth(renderable.getSize().getX() * PIXELS_PER_GAME_CELL);
+            rectangle.setHeight(renderable.getSize().getY() * PIXELS_PER_GAME_CELL);
+
+            gameNodes.add(rectangle);
+        }
+    }
 }
