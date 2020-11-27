@@ -121,7 +121,7 @@ public class GameController implements Controller {
             super(gameMap);
 
             for (int i = 0; i < 100; i++) {
-                world.getGameObjectStubs().add(generateRandomGameObjectStub());
+                world.getGameObjectStubs().add(generateRandomGameObject());
             }
         }
 
@@ -133,14 +133,14 @@ public class GameController implements Controller {
                         ThreadLocalRandom.current().nextInt(world.getGameObjectStubs().size()));
                 }
 
-                world.getGameObjectStubs().add(generateRandomGameObjectStub());
+                world.getGameObjectStubs().add(generateRandomGameObject());
             }
 
-            for (GameObjectStub gameObjectStub : world.getGameObjectStubs()) {
-                gameObjectStub.getPosition().setX(gameObjectStub.getPosition().getX() +
-                    gameObjectStub.getVelocity().getX() * DELTA_TIME);
-                gameObjectStub.getPosition().setY(gameObjectStub.getPosition().getY() +
-                    gameObjectStub.getVelocity().getY() * DELTA_TIME);
+            for (GameObject gameObject : world.getGameObjectStubs()) {
+                gameObject.getPosition().setX(gameObject.getPosition().getX() +
+                    gameObject.getVelocity().getX() * DELTA_TIME);
+                gameObject.getPosition().setY(gameObject.getPosition().getY() +
+                    gameObject.getVelocity().getY() * DELTA_TIME);
             }
         }
 
@@ -149,37 +149,40 @@ public class GameController implements Controller {
             return world;
         }
 
-        private GameObjectStub generateRandomGameObjectStub() {
-            return new GameObjectStub() {{
-                getPosition().setX(ThreadLocalRandom.current().nextDouble(107));
-                getPosition().setY(ThreadLocalRandom.current().nextDouble(71));
+        private GameObject generateRandomGameObject() {
+            GameObject gameObject =
+                ThreadLocalRandom.current().nextBoolean() ? new Triangle() : new Circle();
 
-                if (ThreadLocalRandom.current().nextDouble() < 0.9d) {
-                    int dirX = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
-                    int dirY = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
-                    getVelocity().setX(
-                        dirX * ThreadLocalRandom.current().nextDouble(0.001d,0.02d));
-                    getVelocity().setY(
-                        dirY * ThreadLocalRandom.current().nextDouble(0.001d,0.02d));
-                }
-            }};
+            gameObject.getPosition().setX(ThreadLocalRandom.current().nextDouble(107));
+            gameObject.getPosition().setY(ThreadLocalRandom.current().nextDouble(71));
+
+            if (ThreadLocalRandom.current().nextDouble() < 0.9d) {
+                int dirX = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
+                int dirY = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
+                gameObject.getVelocity().setX(
+                    dirX * ThreadLocalRandom.current().nextDouble(0.001d,0.02d));
+                gameObject.getVelocity().setY(
+                    dirY * ThreadLocalRandom.current().nextDouble(0.001d,0.02d));
+            }
+
+            return gameObject;
         }
 
         private static class WorldStub extends World {
 
-            private final List<GameObjectStub> gameObjectStubs = new ArrayList<>();
+            private final List<GameObject> gameObjects = new ArrayList<>();
 
-            public List<GameObjectStub> getGameObjectStubs() {
-                return gameObjectStubs;
+            public List<GameObject> getGameObjectStubs() {
+                return gameObjects;
             }
 
             @SuppressWarnings("unchecked")
             public Iterable<Renderable> getRenderables() {
-                return (List<Renderable>) (List<? extends Renderable>) gameObjectStubs;
+                return (List<Renderable>) (List<? extends Renderable>) gameObjects;
             }
         }
 
-        private static class GameObjectStub implements Renderable {
+        private static abstract class GameObject implements Renderable {
 
             private final Vector2<Double> position = new Vector2<>(-1d, 0d);
             private final Vector2<Double> velocity = new Vector2<>(0d, 0d);
@@ -196,12 +199,24 @@ public class GameController implements Controller {
             }
 
             @Override
-            public String getImageName() {
-                return null;
-            }
+            public abstract String getImageName();
 
             public Vector2<Double> getVelocity() {
                 return velocity;
+            }
+        }
+
+        private static class Triangle extends GameObject {
+            @Override
+            public String getImageName() {
+                return "triangle";
+            }
+        }
+
+        private static class Circle extends GameObject {
+            @Override
+            public String getImageName() {
+                return "circle";
             }
         }
     }
