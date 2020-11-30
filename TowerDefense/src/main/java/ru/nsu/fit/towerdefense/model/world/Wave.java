@@ -7,6 +7,14 @@ public class Wave {
   private int currentEnemyNumber = 0;
   private WaveDescription description;
 
+  public int getCurrentEnemyNumber() {
+    return currentEnemyNumber;
+  }
+
+  public void setCurrentEnemyNumber(int currentEnemyNumber) {
+    this.currentEnemyNumber = currentEnemyNumber;
+  }
+
   public int getRemainingEnemiesCount() {
     return remainingEnemiesCount;
   }

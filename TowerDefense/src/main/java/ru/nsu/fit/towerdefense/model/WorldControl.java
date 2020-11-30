@@ -2,6 +2,7 @@ package ru.nsu.fit.towerdefense.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import ru.nsu.fit.towerdefense.model.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.Wave;
 import ru.nsu.fit.towerdefense.model.world.World;
@@ -154,13 +155,44 @@ public class WorldControl {
     }
 
     if (world.getCountdown() <= 0) {
-      WaveDescription description = null;
+      WaveDescription description = gameMap.getWaves().get(world.getCurrentWaveNumber());
+      int enemyIndex = world.getCurrentWave().getCurrentEnemyNumber();
       Enemy enemy = null;
-      // resolve hpw to call from map
+      for (WaveEnemies enemies : description.getEnemiesList()) {
+        if (enemyIndex < enemies.getCount()) {
+          enemy = new Enemy(
+              gameMetaData.getEnemyType(enemies.getType()), world.getCurrentWave(), gameMap.getRoads().getRoad(enemies.getSpawnPosition()).get(0));
+          for (Vector2<Double> position : gameMap.getRoads().getRoad(enemies.getSpawnPosition())) {
+            enemy.getTrajectory().add(position);
+          }
+          break;
+        } else {
+          enemyIndex -= enemies.getCount();
+        }
+      }
+
+      world.getEnemies().add(enemy);
+
+      world.getCurrentWave().setCurrentEnemyNumber(world.getCurrentWave().getCurrentEnemyNumber() + 1);
+      int enemiesInWave = description.getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum();
+
+      if (world.getCurrentWave().getCurrentEnemyNumber() >= enemiesInWave) {
+        // next wave
+        world.setCountdown((int)Math.round(gameMap.getWaves().get(world.getCurrentWaveNumber()).getTimeTillNextWave()));
+        world.setCurrentWaveNumber(world.getCurrentWaveNumber() + 1);
+        if (world.getCurrentWaveNumber() < gameMap.getWaves().size()) {
+          world.setCurrentWave(new Wave());
+          world.getCurrentWave().setCurrentEnemyNumber(0);
+          world.getCurrentWave().setRemainingEnemiesCount(gameMap.getWaves().get(
+              world.getCurrentWaveNumber()).getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum());
+        }
+      } else {
+        // next enemy in this wave
+        world.setCountdown((int)Math.round(gameMap.getWaves().get(world.getCurrentWaveNumber()).getSpawnInterval()));
+      }
     } else {
       world.setCountdown(world.getCountdown() - deltaTime);
     }
-
   }
 
   private void enemyDeath(Enemy enemy) {

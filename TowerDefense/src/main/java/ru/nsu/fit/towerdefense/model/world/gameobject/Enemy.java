@@ -15,6 +15,14 @@ public class Enemy implements Renderable {
   private Vector2<Double> position;
   private List<Vector2<Double>> trajectory = new ArrayList<>();
 
+  public Enemy(EnemyType type, Wave wave, Vector2<Double> position) {
+    this.type = type;
+    this.wave = wave;
+    this.position = position;
+    health = type.getHealth();
+    velocity = type.getSpeed();
+  }
+
   public Vector2<Double> getCell() {
     return position;
   }

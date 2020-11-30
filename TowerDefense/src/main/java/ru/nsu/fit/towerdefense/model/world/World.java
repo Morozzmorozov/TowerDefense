@@ -27,6 +27,15 @@ public class World {
   private Base base;
   private int money;
   private int currentWaveNumber;
+  private Wave currentWave;
+
+  public Wave getCurrentWave() {
+    return currentWave;
+  }
+
+  public void setCurrentWave(Wave currentWave) {
+    this.currentWave = currentWave;
+  }
 
   public int getCurrentWaveNumber() {
     return currentWaveNumber;
