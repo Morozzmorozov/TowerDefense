@@ -28,7 +28,7 @@ public class WorldControl {
     return world;
   }
 
-  public void simulateTick(double deltaTime) {
+  public void simulateTick(int deltaTime) {
 
     for (Tower tower : world.getTowers()) {
       if (tower.getTarget() == null || tower.getTarget().isDead()
@@ -49,7 +49,7 @@ public class WorldControl {
 
 
       if (tower.getTarget() != null) {
-        if (tower.getCooldown() == 0) {
+        if (tower.getCooldown() <= 0) {
 
           ProjectileType projectileType = gameMetaData.getProjectileType(tower.getType().getProjectileType());
           world.getProjectiles().add(new Projectile(
@@ -58,12 +58,12 @@ public class WorldControl {
                   tower.getCell().getX() + 0.5, tower.getCell().getY() + 0.5),
               new Vector2<>(projectileType.getSpeed() * Math.cos(tower.getRotation()),
                   projectileType.getSpeed() * Math.sin(tower.getRotation()))));
-          tower.setCooldown(tower.getType().getFireRate());
+          tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
         }
       }
 
-      if (tower.getCooldown() != 0) {
-        tower.setCooldown(tower.getCooldown() - 1);
+      if (tower.getCooldown() > 0) {
+        tower.setCooldown(tower.getCooldown() - deltaTime);
       }
     }
 
@@ -79,6 +79,14 @@ public class WorldControl {
         newDirection.setY(newDirection.getY() / length * projectile.getType().getSpeed());
 
         projectile.setVelocity(newDirection);
+      }
+
+      projectile.getPosition().setX(projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX());
+      projectile.getPosition().setX(projectile.getPosition().getY() + deltaTime * projectile.getVelocity().getY());
+      projectile.setRemainingRange(projectile.getRemainingRange() - projectile.getType().getSpeed() * deltaTime);
+      if (projectile.getRemainingRange() <= 0) {
+        removedProjectiles.add(projectile);
+        continue;
       }
 
       Enemy collidedEnemy = null;
@@ -113,7 +121,7 @@ public class WorldControl {
 
       // TODO get effects & update health
 
-      double remainingDistance = enemy.getVelocity();
+      double remainingDistance = enemy.getVelocity() * deltaTime;
       while (remainingDistance > DELTA && !enemy.getTrajectory().isEmpty()) {
         double dist = distance(enemy.getPosition(), enemy.getTrajectory().get(0));
         if (Double.compare(remainingDistance, dist) >= 0) {
@@ -145,12 +153,12 @@ public class WorldControl {
       }
     }
 
-    if (world.getCountdown() == 0) {
+    if (world.getCountdown() <= 0) {
       WaveDescription description = null;
       Enemy enemy = null;
       // resolve hpw to call from map
     } else {
-      world.setCountdown(world.getCountdown() - 1);
+      world.setCountdown(world.getCountdown() - deltaTime);
     }
 
   }

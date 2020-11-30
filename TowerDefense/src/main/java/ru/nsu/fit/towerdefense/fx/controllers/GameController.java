@@ -71,7 +71,7 @@ public class GameController implements Controller {
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
-                worldControl.simulateTick(DELTA_TIME);
+                worldControl.simulateTick((int)DELTA_TIME);
                 Platform.runLater(() -> {
                     try {
                         worldRenderer.render(new ArrayList<>((Collection<? extends Renderable>)
@@ -126,7 +126,7 @@ public class GameController implements Controller {
         }
 
         @Override
-        public void simulateTick(double deltaTime) {
+        public void simulateTick(int deltaTime) {
             if (frame++ % 10 == 0) {
                 if (world.getGameObjectStubs().size() > 0) {
                     world.getGameObjectStubs().remove(
