@@ -13,8 +13,7 @@ import ru.nsu.fit.towerdefense.model.map.WaveDescription;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
 public class WorldControl {
-  private static final double DELTA = 0.1;
-  private static final double DISTANCE_DELTA = 0.001;
+  private static final double DELTA = 0.001;
 
   private final GameMap gameMap;
   private World world;
@@ -115,7 +114,7 @@ public class WorldControl {
       // TODO get effects & update health
 
       double remainingDistance = enemy.getVelocity();
-      while (remainingDistance > DISTANCE_DELTA && !enemy.getTrajectory().isEmpty()) {
+      while (remainingDistance > DELTA && !enemy.getTrajectory().isEmpty()) {
         double dist = distance(enemy.getPosition(), enemy.getTrajectory().get(0));
         if (Double.compare(remainingDistance, dist) >= 0) {
           // enemy reaches next vertex
