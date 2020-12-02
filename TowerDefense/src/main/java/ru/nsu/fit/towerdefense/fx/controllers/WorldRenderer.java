@@ -16,17 +16,18 @@ import java.util.NoSuchElementException;
  */
 public class WorldRenderer {
 
-    private static final double PIXELS_PER_GAME_CELL = 10;
-
     private final ObservableList<Node> gameNodes;
+    private final double pixelsPerGameCell;
 
     /**
      * Creates new WorldRenderer with specified game nodes.
      *
-     * @param gameNodes list of game nodes.
+     * @param gameNodes         list of game nodes.
+     * @param pixelsPerGameCell how many pixels fit one dimension of game cell.
      */
-    public WorldRenderer(ObservableList<Node> gameNodes) {
+    public WorldRenderer(ObservableList<Node> gameNodes, double pixelsPerGameCell) {
         this.gameNodes = gameNodes;
+        this.pixelsPerGameCell = pixelsPerGameCell;
     }
 
     /**
@@ -44,12 +45,12 @@ public class WorldRenderer {
                 ImageView imageView =
                     new ImageView(Images.getInstance().getImage(renderable.getImageName()));
 
-                imageView.setFitWidth(renderable.getSize().getX() * PIXELS_PER_GAME_CELL);
-                imageView.setFitHeight(renderable.getSize().getY() * PIXELS_PER_GAME_CELL);
+                imageView.setFitWidth(renderable.getSize().getX() * pixelsPerGameCell);
+                imageView.setFitHeight(renderable.getSize().getY() * pixelsPerGameCell);
 
                 imageView.relocate(
-                    renderable.getPosition().getX() * PIXELS_PER_GAME_CELL,
-                    renderable.getPosition().getY() * PIXELS_PER_GAME_CELL);
+                    renderable.getPosition().getX() * pixelsPerGameCell,
+                    renderable.getPosition().getY() * pixelsPerGameCell);
 
                 gameNodes.add(imageView);
             } catch (NoSuchElementException e) {

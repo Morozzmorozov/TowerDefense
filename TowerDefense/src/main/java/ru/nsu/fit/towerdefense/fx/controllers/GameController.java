@@ -44,7 +44,10 @@ public class GameController implements Controller, WorldObserver {
 
     private ScheduledExecutorService worldSimulationExecutor;
 
+    private final Vector2<Integer> worldSize;
+
     private final WorldControl worldControl;
+    private WorldCamera worldCamera;
     private WorldRenderer worldRenderer;
 
     /**
@@ -55,19 +58,16 @@ public class GameController implements Controller, WorldObserver {
      */
     public GameController(SceneManager sceneManager, GameMap gameMap) {
         this.sceneManager = sceneManager;
+        worldSize = new Vector2<>(WORLD_WIDTH, WORLD_HEIGHT); // todo worldSize = gameMap.getSize();
         worldControl = new WorldControlStub(gameMap);
     }
 
     @FXML
     private void initialize() {
+        worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
+        worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell());
+
         menuButton.setOnAction(actionEvent -> sceneManager.switchToMenu());
-
-        worldAnchorPane.maxWidthProperty().bind(rootStackPane.widthProperty());
-        worldAnchorPane.minWidthProperty().bind(rootStackPane.widthProperty());
-        worldAnchorPane.maxHeightProperty().bind(rootStackPane.heightProperty());
-        worldAnchorPane.minHeightProperty().bind(rootStackPane.heightProperty());
-
-        worldRenderer = new WorldRenderer(worldAnchorPane.getChildren());
 
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
@@ -105,12 +105,43 @@ public class GameController implements Controller, WorldObserver {
      * {@inheritDoc}
      */
     @Override
+    public void runAfterSceneSet() {
+        sceneManager.getScene().setOnScroll(scrollEvent -> {
+            if (scrollEvent.getDeltaY() == 0) {
+                return;
+            }
+
+            worldCamera.scale(scrollEvent.getDeltaY() > 0);
+        });
+
+        sceneManager.getScene().setOnMousePressed(mouseEvent ->
+            worldCamera.initMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+
+        sceneManager.getScene().setOnMouseDragged(mouseEvent ->
+            worldCamera.updateMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+
+        sceneManager.getScene().setOnMouseReleased(mouseEvent ->
+            worldCamera.finishMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void dispose() {
         if (worldSimulationExecutor != null) {
             worldSimulationExecutor.shutdownNow();
         }
+
+        sceneManager.getScene().setOnScroll(null);
+        sceneManager.getScene().setOnMousePressed(null);
+        sceneManager.getScene().setOnMouseDragged(null);
+        sceneManager.getScene().setOnMouseReleased(null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onGameLoosing() {
         System.out.println("You lose!");
@@ -120,6 +151,9 @@ public class GameController implements Controller, WorldObserver {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void onGameWinning() {
         System.out.println("You win!");
@@ -130,6 +164,10 @@ public class GameController implements Controller, WorldObserver {
     }
 
     // ---------- Stubs ----------
+
+    private static final int WORLD_WIDTH = 20;
+    private static final int WORLD_HEIGHT = 10;
+    private static final double GAME_OBJECT_SIZE = 0.25d;
 
     private class WorldControlStub extends WorldControl {
 
@@ -172,16 +210,16 @@ public class GameController implements Controller, WorldObserver {
             GameObject gameObject =
                 ThreadLocalRandom.current().nextBoolean() ? new Triangle() : new Circle();
 
-            gameObject.getPosition().setX(ThreadLocalRandom.current().nextDouble(107));
-            gameObject.getPosition().setY(ThreadLocalRandom.current().nextDouble(71));
+            gameObject.getPosition().setX(ThreadLocalRandom.current().nextDouble(WORLD_WIDTH - GAME_OBJECT_SIZE));
+            gameObject.getPosition().setY(ThreadLocalRandom.current().nextDouble(WORLD_HEIGHT - GAME_OBJECT_SIZE));
 
             if (ThreadLocalRandom.current().nextDouble() < 0.9d) {
                 int dirX = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
                 int dirY = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
                 gameObject.getVelocity().setX(
-                    dirX * ThreadLocalRandom.current().nextDouble(0.001d,0.02d));
+                    dirX * ThreadLocalRandom.current().nextDouble(0.001d * GAME_OBJECT_SIZE,0.02d * GAME_OBJECT_SIZE));
                 gameObject.getVelocity().setY(
-                    dirY * ThreadLocalRandom.current().nextDouble(0.001d,0.02d));
+                    dirY * ThreadLocalRandom.current().nextDouble(0.001d * GAME_OBJECT_SIZE,0.02d * GAME_OBJECT_SIZE));
             }
 
             return gameObject;
@@ -205,7 +243,7 @@ public class GameController implements Controller, WorldObserver {
 
             private final Vector2<Double> position = new Vector2<>(-1d, 0d);
             private final Vector2<Double> velocity = new Vector2<>(0d, 0d);
-            private final Vector2<Double> size = new Vector2<>(1d, 1d);
+            private final Vector2<Double> size = new Vector2<>(GAME_OBJECT_SIZE, GAME_OBJECT_SIZE);
 
             @Override
             public Vector2<Double> getPosition() {
