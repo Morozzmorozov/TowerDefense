@@ -34,12 +34,12 @@ public class WorldRenderer {
      *
      * Must be called in JavaFX Application thread!
      *
-     * @param newRenderableSet updated renderables.
+     * @param newRenderables updated renderables.
      */
-    public void render(Iterable<Renderable> newRenderableSet) throws RenderException {
+    public void render(Iterable<Renderable> newRenderables) throws RenderException {
         gameNodes.clear();
 
-        for (Renderable renderable : newRenderableSet) {
+        for (Renderable renderable : newRenderables) {
             try {
                 ImageView imageView =
                     new ImageView(Images.getInstance().getImage(renderable.getImageName()));
