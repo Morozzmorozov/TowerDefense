@@ -2,26 +2,13 @@ package ru.nsu.fit.towerdefense.model.world.gameobject;
 
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 
-public class Base implements Renderable {
-  private int health;
-
+public class TowerPlatform implements Renderable {
+  private Vector2<Integer> position;
   private String image;
 
-  private Vector2<Integer> position;
-
-  public Base(int health, String image,
-      Vector2<Integer> position) {
-    this.health = health;
-    this.image = image;
+  public TowerPlatform(Vector2<Integer> position, String image) {
     this.position = position;
-  }
-
-  public int getHealth() {
-    return health;
-  }
-
-  public void setHealth(int health) {
-    this.health = health;
+    this.image = image;
   }
 
   @Override

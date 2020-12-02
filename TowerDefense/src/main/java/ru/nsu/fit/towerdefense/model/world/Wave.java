@@ -26,4 +26,8 @@ public class Wave {
   public WaveDescription getDescription() {
     return description;
   }
+
+  public void setDescription(WaveDescription description) {
+    this.description = description;
+  }
 }

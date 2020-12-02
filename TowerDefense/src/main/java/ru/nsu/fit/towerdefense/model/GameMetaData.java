@@ -124,6 +124,11 @@ public class GameMetaData {
     {
         if (imageName.equals("triangle")) return "/ru/nsu/fit/towerdefense/images/triangle.png";
         if (imageName.equals("circle")) return "/ru/nsu/fit/towerdefense/images/circle.png";
+        if (imageName.equals("base")) return "/ru/nsu/fit/towerdefense/images/base.png";
+        if (imageName.equals("enemy1")) return "/ru/nsu/fit/towerdefense/images/enemy1.png";
+        if (imageName.equals("enemy2")) return "/ru/nsu/fit/towerdefense/images/enemy2.png";
+        if (imageName.equals("enemy3")) return "/ru/nsu/fit/towerdefense/images/enemy3.png";
+
         throw new NoSuchElementException();
     }
 

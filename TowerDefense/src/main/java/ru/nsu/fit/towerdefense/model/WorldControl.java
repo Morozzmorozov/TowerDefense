@@ -2,15 +2,18 @@ package ru.nsu.fit.towerdefense.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import ru.nsu.fit.towerdefense.model.map.RoadDescription;
 import ru.nsu.fit.towerdefense.model.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.Wave;
 import ru.nsu.fit.towerdefense.model.world.World;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.map.WaveDescription;
+import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
 public class WorldControl {
@@ -25,6 +28,25 @@ public class WorldControl {
   public WorldControl(GameMap gameMap, WorldObserver worldObserver) {
     this.gameMap = gameMap;
     this.worldObserver = worldObserver;
+
+    world = new World();
+
+    for (Vector2<Integer> position : gameMap.getPositions().getPositions()) {
+      Vector2<Integer> coordinates = new Vector2<>(position.getX(), position.getY());
+      world.getTowerPlatforms().add(new TowerPlatform(coordinates, "circle")); // todo image name
+    }
+
+    Wave wave = new Wave();
+    wave.setCurrentEnemyNumber(0);
+    wave.setRemainingEnemiesCount(gameMap.getWaves().get(0).getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum());
+    wave.setDescription(gameMap.getWaves().get(0));
+    world.setCurrentWave(wave);
+    world.setMoney(100); // todo starting money
+
+
+    Base base = new Base(gameMap.getBaseDescription().getHealth(), gameMap.getBaseDescription().getImage(),
+        new Vector2<>(gameMap.getBaseDescription().getPosition().getX(), gameMap.getBaseDescription().getPosition().getY()));
+    world.setBase(base);
   }
 
   public World getWorld() {
@@ -32,7 +54,11 @@ public class WorldControl {
   }
 
   public void simulateTick(int deltaTime) {
+    deltaTime = 1; // DEBUG! todo remove
 
+
+
+    //System.out.println(deltaTime);
     for (Tower tower : world.getTowers()) {
       if (tower.getTarget() == null || tower.getTarget().isDead()
           || distance(tower.getPosition(), tower.getTarget().getPosition()) > tower.getType().getRange()) {
@@ -117,10 +143,10 @@ public class WorldControl {
       world.getProjectiles().remove(projectile);
     }
 
-
-
+  //  System.out.println("---------------" + world.getEnemies().size());
     for (Enemy enemy : world.getEnemies()) {
       if (enemy.isDead()) continue;
+      //System.out.println(enemy.getPosition());
 
       // TODO get effects & update health
 
@@ -137,7 +163,7 @@ public class WorldControl {
           enemy.getPosition().setX(
               enemy.getPosition().getX() + (enemy.getTrajectory().get(0).getX() - enemy.getPosition().getX()) * remainingDistance / dist);
           enemy.getPosition().setY(
-              enemy.getPosition().getX() + (enemy.getTrajectory().get(0).getY() - enemy.getPosition().getY()) * remainingDistance / dist);
+              enemy.getPosition().getY() + (enemy.getTrajectory().get(0).getY() - enemy.getPosition().getY()) * remainingDistance / dist);
           remainingDistance = 0;
         }
       }
@@ -157,40 +183,59 @@ public class WorldControl {
     }
 
     if (world.getCountdown() <= 0) {
-      WaveDescription description = gameMap.getWaves().get(world.getCurrentWaveNumber());
-      int enemyIndex = world.getCurrentWave().getCurrentEnemyNumber();
-      Enemy enemy = null;
-      for (WaveEnemies enemies : description.getEnemiesList()) {
-        if (enemyIndex < enemies.getCount()) {
-          enemy = new Enemy(
-              gameMetaData.getEnemyType(enemies.getType()), world.getCurrentWave(), gameMap.getRoads().getRoad(enemies.getSpawnPosition()).get(0));
-          for (Vector2<Double> position : gameMap.getRoads().getRoad(enemies.getSpawnPosition())) {
-            enemy.getTrajectory().add(position);
+      if (gameMap.getWaves().size() > world.getCurrentWaveNumber()) {
+        WaveDescription description = gameMap.getWaves().get(world.getCurrentWaveNumber());
+        int enemyIndex = world.getCurrentWave().getCurrentEnemyNumber();
+        Enemy enemy = null;
+        for (WaveEnemies enemies : description.getEnemiesList()) {
+          if (enemyIndex < enemies.getCount()) {
+            //-------------------------------------------------------------
+         /* int spawnPositionIndex = enemies.getSpawnPosition();
+          RoadDescription roads = gameMap.getRoads();
+          List<Vector2<Double>> road = roads.getRoad(spawnPositionIndex);
+          Vector2<Double> pos = road.get(0);
+          Wave wave = world.getCurrentWave();
+          String enemyTypeName = enemies.getType();*/
+            //-------------------------------------------------------------
+            Vector2<Double> spawnPosition = gameMap.getRoads().getRoad(enemies.getSpawnPosition()).get(0);
+            Vector2<Double> coordinates = new Vector2<>(spawnPosition.getX(), spawnPosition.getY());
+            enemy = new Enemy(
+                GameMetaData.getInstance().getEnemyType(enemies.getType()), world.getCurrentWave(), coordinates);
+            for (Vector2<Double> position : gameMap.getRoads()
+                .getRoad(enemies.getSpawnPosition())) {
+              enemy.getTrajectory().add(new Vector2<>(position.getX(), position.getY()));
+            }
+            break;
+          } else {
+            enemyIndex -= enemies.getCount();
           }
-          break;
+        }
+
+        world.getEnemies().add(enemy);
+        System.out.println("Spawn!" + enemy.getPosition());
+
+        world.getCurrentWave()
+            .setCurrentEnemyNumber(world.getCurrentWave().getCurrentEnemyNumber() + 1);
+        int enemiesInWave = description.getEnemiesList().stream().mapToInt(WaveEnemies::getCount)
+            .sum();
+
+        if (world.getCurrentWave().getCurrentEnemyNumber() >= enemiesInWave) {
+          // next wave
+          world.setCountdown((int) Math
+              .round(gameMap.getWaves().get(world.getCurrentWaveNumber()).getTimeTillNextWave()));
+          world.setCurrentWaveNumber(world.getCurrentWaveNumber() + 1);
+          if (world.getCurrentWaveNumber() < gameMap.getWaves().size()) {
+            world.setCurrentWave(new Wave());
+            world.getCurrentWave().setCurrentEnemyNumber(0);
+            world.getCurrentWave().setRemainingEnemiesCount(gameMap.getWaves().get(
+                world.getCurrentWaveNumber()).getEnemiesList().stream()
+                .mapToInt(WaveEnemies::getCount).sum());
+          }
         } else {
-          enemyIndex -= enemies.getCount();
+          // next enemy in this wave
+          world.setCountdown((int) Math
+              .round(gameMap.getWaves().get(world.getCurrentWaveNumber()).getSpawnInterval()));
         }
-      }
-
-      world.getEnemies().add(enemy);
-
-      world.getCurrentWave().setCurrentEnemyNumber(world.getCurrentWave().getCurrentEnemyNumber() + 1);
-      int enemiesInWave = description.getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum();
-
-      if (world.getCurrentWave().getCurrentEnemyNumber() >= enemiesInWave) {
-        // next wave
-        world.setCountdown((int)Math.round(gameMap.getWaves().get(world.getCurrentWaveNumber()).getTimeTillNextWave()));
-        world.setCurrentWaveNumber(world.getCurrentWaveNumber() + 1);
-        if (world.getCurrentWaveNumber() < gameMap.getWaves().size()) {
-          world.setCurrentWave(new Wave());
-          world.getCurrentWave().setCurrentEnemyNumber(0);
-          world.getCurrentWave().setRemainingEnemiesCount(gameMap.getWaves().get(
-              world.getCurrentWaveNumber()).getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum());
-        }
-      } else {
-        // next enemy in this wave
-        world.setCountdown((int)Math.round(gameMap.getWaves().get(world.getCurrentWaveNumber()).getSpawnInterval()));
       }
     } else {
       world.setCountdown(world.getCountdown() - deltaTime);
