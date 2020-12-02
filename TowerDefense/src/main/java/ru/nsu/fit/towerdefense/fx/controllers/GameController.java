@@ -33,7 +33,7 @@ public class GameController implements Controller {
 
     private static final String FXML_FILE_NAME = "game.fxml";
     private static final int FRAMES_PER_SECOND = 60;
-    private static final long DELTA_TIME = Math.round(1000d / FRAMES_PER_SECOND);
+    private static final int DELTA_TIME = 1000 / FRAMES_PER_SECOND;
 
     @FXML private StackPane rootStackPane;
     @FXML private AnchorPane worldAnchorPane;
@@ -71,7 +71,7 @@ public class GameController implements Controller {
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
-                worldControl.simulateTick((int)DELTA_TIME);
+                worldControl.simulateTick(DELTA_TIME);
                 Platform.runLater(() -> {
                     try {
                         worldRenderer.render(new ArrayList<>((Collection<? extends Renderable>)
