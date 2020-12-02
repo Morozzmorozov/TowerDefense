@@ -17,12 +17,14 @@ public class WorldControl {
   private static final double DELTA = 0.001;
 
   private final GameMap gameMap;
+  private final WorldObserver worldObserver; // todo use it
   private World world;
 
   private GameMetaData gameMetaData;
 
-  public WorldControl(GameMap gameMap) {
+  public WorldControl(GameMap gameMap, WorldObserver worldObserver) {
     this.gameMap = gameMap;
+    this.worldObserver = worldObserver;
   }
 
   public World getWorld() {

@@ -9,6 +9,7 @@ import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.model.WorldControl;
+import ru.nsu.fit.towerdefense.model.WorldObserver;
 import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.World;
@@ -29,7 +30,7 @@ import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.RENDER_WORLD_ERROR_HE
  *
  * @author Oleg Markelov
  */
-public class GameController implements Controller {
+public class GameController implements Controller, WorldObserver {
 
     private static final String FXML_FILE_NAME = "game.fxml";
     private static final int FRAMES_PER_SECOND = 60;
@@ -110,15 +111,33 @@ public class GameController implements Controller {
         }
     }
 
+    @Override
+    public void onGameLoosing() {
+        System.out.println("You lose!");
+
+        if (worldSimulationExecutor != null) {
+            worldSimulationExecutor.shutdown();
+        }
+    }
+
+    @Override
+    public void onGameWinning() {
+        System.out.println("You win!");
+
+        if (worldSimulationExecutor != null) {
+            worldSimulationExecutor.shutdown();
+        }
+    }
+
     // ---------- Stubs ----------
 
-    private static class WorldControlStub extends WorldControl {
+    private class WorldControlStub extends WorldControl {
 
         private final WorldStub world = new WorldStub();
         private int frame;
 
         public WorldControlStub(GameMap gameMap) {
-            super(gameMap);
+            super(gameMap, GameController.this);
 
             for (int i = 0; i < 100; i++) {
                 world.getGameObjectStubs().add(generateRandomGameObject());
@@ -168,7 +187,7 @@ public class GameController implements Controller {
             return gameObject;
         }
 
-        private static class WorldStub extends World {
+        private class WorldStub extends World {
 
             private final List<GameObject> gameObjects = new ArrayList<>();
 
@@ -182,7 +201,7 @@ public class GameController implements Controller {
             }
         }
 
-        private static abstract class GameObject implements Renderable {
+        private abstract class GameObject implements Renderable {
 
             private final Vector2<Double> position = new Vector2<>(-1d, 0d);
             private final Vector2<Double> velocity = new Vector2<>(0d, 0d);
@@ -206,14 +225,14 @@ public class GameController implements Controller {
             }
         }
 
-        private static class Triangle extends GameObject {
+        private class Triangle extends GameObject {
             @Override
             public String getImageName() {
                 return "triangle";
             }
         }
 
-        private static class Circle extends GameObject {
+        private class Circle extends GameObject {
             @Override
             public String getImageName() {
                 return "circle";
