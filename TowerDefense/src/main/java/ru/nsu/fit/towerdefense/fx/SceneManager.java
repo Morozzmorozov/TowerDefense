@@ -11,6 +11,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.GameController;
 import ru.nsu.fit.towerdefense.fx.controllers.MenuController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.model.GameMetaData;
+import ru.nsu.fit.towerdefense.model.util.Vector2;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -54,6 +55,15 @@ public class SceneManager {
      */
     public Window getWindowOwner() {
         return stage;
+    }
+
+    /**
+     * Returns stage size in pixels.
+     *
+     * @return stage size in pixels.
+     */
+    public Vector2<Double> getStageSize() {
+        return new Vector2<>(stage.getWidth(), stage.getHeight());
     }
 
     /**
