@@ -6,6 +6,12 @@ public class RoadTile implements Renderable {
   private String image;
   private Vector2<Integer> position;
 
+  public RoadTile(String image,
+      Vector2<Integer> position) {
+    this.image = image;
+    this.position = position;
+  }
+
   @Override
   public Vector2<Double> getPosition() {
     return new Vector2<>((double)position.getX(), (double)position.getY());

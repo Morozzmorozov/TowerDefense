@@ -156,7 +156,6 @@ public class GameMetaData {
         if (files == null) {
             throw new NoSuchElementException();
         }
-
         for (var x : files)
         {
             if (x.getName().substring(0, imageName.length() + 1).compareTo(imageName + '.') == 0)
@@ -165,9 +164,6 @@ public class GameMetaData {
             }
         }
         throw new NoSuchElementException();
-        /*return (imageRoot + imageName);
-        if (imageName.equals("triangle")) return "/ru/nsu/fit/towerdefense/images/triangle.png";
-        if (imageName.equals("circle")) return "/ru/nsu/fit/towerdefense/images/circle.png";*/
     }
 
     public void forceLoadMap(String mapName) throws NoSuchElementException
@@ -200,7 +196,7 @@ public class GameMetaData {
             for (int i = 0; upgrades.get(i) != null; i++)
             {
                 ArrayNode upgrade = upgrades.get(i).deepCopy();
-                builder.add(upgrade.get(0).asText(), upgrade.get(0).asInt());
+                builder.add(upgrade.get(0).asText(), upgrade.get(1).asInt());
             }
             builder.setHitBox(node.get("HitBox").asInt());
             builder.setSize(node.get("SizeX").asDouble(), node.get("SizeY").asDouble());
@@ -251,7 +247,7 @@ public class GameMetaData {
             EnemyType.Builder builder = new EnemyType.Builder(name);
             builder.setHealth(node.get("Health").asInt());
             builder.setSpeed((float)node.get("Speed").asDouble());
-            builder.setHitBox((float)node.get("HitBox").asInt());
+            builder.setHitBox((float)node.get("HitBox").asDouble());
             builder.setSize(node.get("SizeX").asDouble(), node.get("SizeY").asDouble());
             builder.setImage(node.get("Image").asText());
             builder.setDamage(node.get("Damage").asInt());

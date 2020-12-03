@@ -4,9 +4,9 @@
 		["Crossbowman", 250],
 		["Catapult", 400]
 	],
-	"Range" : 300,
-	"FireRate" : 5,
+	"Range" : 30,
+	"FireRate" : 50,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Arrow",
-	"Image" : "Archer"
+	"Image" : "tower"
 }

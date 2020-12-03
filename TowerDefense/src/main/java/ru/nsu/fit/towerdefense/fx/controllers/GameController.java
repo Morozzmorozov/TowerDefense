@@ -58,8 +58,11 @@ public class GameController implements Controller, WorldObserver {
      */
     public GameController(SceneManager sceneManager, GameMap gameMap) {
         this.sceneManager = sceneManager;
-        worldSize = new Vector2<>(WORLD_WIDTH, WORLD_HEIGHT); // todo worldSize = gameMap.getSize();
-        worldControl = new WorldControlStub(gameMap);
+
+        worldControl = new WorldControl(gameMap, GameController.this);
+
+        worldSize = gameMap.getSize();
+
     }
 
     @FXML

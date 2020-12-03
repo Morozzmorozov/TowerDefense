@@ -8,7 +8,9 @@ import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
+import ru.nsu.fit.towerdefense.model.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
+import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 
 public class World {
 
@@ -24,13 +26,23 @@ public class World {
   private List<Enemy> enemies = new ArrayList<>();
   private List<Tower> towers = new ArrayList<>();
   private List<Projectile> projectiles = new ArrayList<>();
+  private List<TowerPlatform> towerPlatforms = new ArrayList<>();
+  private List<RoadTile> roadTiles = new ArrayList<>();
   private Base base;
   private int money;
-  private int currentWaveNumber;
+  private int currentWaveNumber = 0;
   private Wave currentWave;
+
+  public List<RoadTile> getRoadTiles() {
+    return roadTiles;
+  }
 
   public Wave getCurrentWave() {
     return currentWave;
+  }
+
+  public List<TowerPlatform> getTowerPlatforms() {
+    return towerPlatforms;
   }
 
   public void setCurrentWave(Wave currentWave) {
@@ -47,6 +59,10 @@ public class World {
 
   public Base getBase() {
     return base;
+  }
+
+  public void setBase(Base base) {
+    this.base = base;
   }
 
   public int getMoney() {
@@ -70,12 +86,21 @@ public class World {
   }
 
   public Iterable<Renderable> getRenderables() {
-    return new Iterable<Renderable>() {
+    // todo resolve conflict with Collection
+    List<Renderable> renderables = new ArrayList<>();
+    renderables.addAll(roadTiles);
+    renderables.addAll(towerPlatforms);
+    renderables.addAll(towers);
+    renderables.add(base);
+    renderables.addAll(enemies);
+    renderables.addAll(projectiles);
+    return renderables;
+    /*return new Iterable<Renderable>() {
       @Override
       public Iterator<Renderable> iterator() {
         return new WorldIterator();
       }
-    };
+    };*/
   }
 
   private class WorldIterator implements Iterator<Renderable> {

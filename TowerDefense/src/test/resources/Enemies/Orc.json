@@ -4,6 +4,6 @@
 	"HitBox" : 0.4,
 	"SizeX" : 1,
 	"SizeY" : 1,
-	"Image" : "enemy2",
-	"Damage" : 15
+	"Image" : "enemy3",
+	"Damage" : 30
 }
