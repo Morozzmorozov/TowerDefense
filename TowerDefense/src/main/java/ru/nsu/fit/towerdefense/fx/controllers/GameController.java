@@ -17,6 +17,7 @@ import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -76,20 +77,17 @@ public class GameController implements Controller, WorldObserver {
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
                 worldControl.simulateTick(DELTA_TIME);
-                Platform.runLater(() -> {
-                    try {
-                        worldRenderer.render(new ArrayList<>((Collection<? extends Renderable>)
-                            worldControl.getWorld().getRenderables()));
-                    } catch (RenderException e) {
-                        sceneManager.switchToMenu();
+                worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
+                    worldControl.getWorld().getRenderables()));
+                Platform.runLater(() -> worldRenderer.render());
+            } catch (RenderException e) {
+                sceneManager.switchToMenu();
 
-                        new AlertBuilder()
-                            .setHeaderText(RENDER_WORLD_ERROR_HEADER)
-                            .setContentText(e.getMessage())
-                            .setOwner(sceneManager.getWindowOwner())
-                            .build().showAndWait();
-                    }
-                });
+                new AlertBuilder()
+                    .setHeaderText(RENDER_WORLD_ERROR_HEADER)
+                    .setContentText(e.getMessage())
+                    .setOwner(sceneManager.getWindowOwner())
+                    .build().showAndWait();
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
