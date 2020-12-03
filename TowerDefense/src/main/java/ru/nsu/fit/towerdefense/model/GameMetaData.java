@@ -201,7 +201,7 @@ public class GameMetaData {
             EnemyType.Builder builder = new EnemyType.Builder(name);
             builder.setHealth(node.get("Health").asInt());
             builder.setSpeed((float)node.get("Speed").asDouble());
-            builder.setHitBox((float)node.get("HitBox").asInt());
+            builder.setHitBox((float)node.get("HitBox").asDouble());
             builder.setSize(node.get("SizeX").asDouble(), node.get("SizeY").asDouble());
             builder.setImage(node.get("Image").asText());
             builder.setDamage(node.get("Damage").asInt());
