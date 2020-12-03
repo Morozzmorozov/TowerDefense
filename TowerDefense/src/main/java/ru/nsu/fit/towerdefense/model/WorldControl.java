@@ -60,7 +60,7 @@ public class WorldControl {
     for (int i = 0; i < gameMap.getRoads().getRoadCount(); ++i) {
       List<Vector2<Double>> road = gameMap.getRoads().getRoad(i);
 
-      for (int j = 0; j < road.size() - 1; ++j) { // all tiles except last
+      for (int j = 0; j < road.size() - 1; ++j) { // all nodes except last
         int x1 = (int)Math.round(road.get(j).getX());
         int x2 = (int)Math.round(road.get(j + 1).getX());
         int y1 = (int)Math.round(road.get(j).getY());
@@ -106,14 +106,11 @@ public class WorldControl {
     deltaTime = 1; // DEBUG! todo remove
 
 
-
-    //System.out.println(deltaTime);
     for (Tower tower : world.getTowers()) {
       if (tower.getTarget() == null || tower.getTarget().isDead()
           || distance(tower.getPosition(), tower.getTarget().getPosition()) > tower.getType().getRange()) {
         tower.setTarget(null);
         // finds the closest enemy for now
-        //System.out.println("NEW TARGET");
         for (Enemy enemy : world.getEnemies()) {
           double dist = distance(tower.getPosition(), enemy.getPosition());
           if (dist > tower.getType().getRange()) {
@@ -181,12 +178,6 @@ public class WorldControl {
       Enemy collidedEnemy = null;
       // Collision checking
       for (Enemy enemy : world.getEnemies()) {
-        // TODO hit box size
-
-        if (distance(enemy.getPosition(), projectile.getPosition()) < 0.9) {
-          System.out.println(distance(enemy.getPosition(), projectile.getPosition()) + " " + enemy.getType().getHitBox());
-        }
-
         if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getType().getHitBox()) {
           collidedEnemy = enemy;
 
@@ -210,11 +201,9 @@ public class WorldControl {
       world.getProjectiles().remove(projectile);
     }
 
-  //  System.out.println("---------------" + world.getEnemies().size());
     List<Enemy> removedEnemies = new ArrayList<>();
     for (Enemy enemy : world.getEnemies()) {
       if (enemy.isDead()) continue;
-      //System.out.println(enemy.getPosition());
 
       // TODO get effects & update health
 
@@ -238,12 +227,9 @@ public class WorldControl {
 
       if (Math.abs(enemy.getPosition().getX() - world.getBase().getPosition().getX()) < DELTA &&
           Math.abs(enemy.getPosition().getY() - world.getBase().getPosition().getY()) < DELTA) {
-        //System.out.println("Hit!");
         int damage = enemy.getType().getDamage();
 
         world.getBase().setHealth(world.getBase().getHealth() - damage);
-
-        System.out.println(world.getBase().getHealth());
 
         if (world.getBase().getHealth() <= 0) {
           removedEnemies.add(enemy);
@@ -266,14 +252,6 @@ public class WorldControl {
         Enemy enemy = null;
         for (WaveEnemies enemies : description.getEnemiesList()) {
           if (enemyIndex < enemies.getCount()) {
-            //-------------------------------------------------------------
-         /* int spawnPositionIndex = enemies.getSpawnPosition();
-          RoadDescription roads = gameMap.getRoads();
-          List<Vector2<Double>> road = roads.getRoad(spawnPositionIndex);
-          Vector2<Double> pos = road.get(0);
-          Wave wave = world.getCurrentWave();
-          String enemyTypeName = enemies.getType();*/
-            //-------------------------------------------------------------
             Vector2<Double> spawnPosition = gameMap.getRoads().getRoad(enemies.getSpawnPosition()).get(0);
             Vector2<Double> coordinates = new Vector2<>(spawnPosition.getX(), spawnPosition.getY());
             enemy = new Enemy(
@@ -289,7 +267,6 @@ public class WorldControl {
         }
 
         world.getEnemies().add(enemy);
-     //   System.out.println("Spawn!" + enemy.getPosition());
 
         world.getCurrentWave()
             .setCurrentEnemyNumber(world.getCurrentWave().getCurrentEnemyNumber() + 1);
@@ -322,8 +299,6 @@ public class WorldControl {
   }
 
   private void enemyDeath(Enemy enemy) {
-   // System.out.println("REMOVE");
-    //world.getEnemies().remove(enemy);
     enemy.setDead(true);
     Wave wave = enemy.getWave();
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
