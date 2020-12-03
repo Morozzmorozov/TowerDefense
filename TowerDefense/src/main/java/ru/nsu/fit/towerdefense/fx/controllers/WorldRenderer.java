@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
  */
 public class WorldRenderer {
 
-    private static final double PIXELS_PER_GAME_CELL = 10;
+    private static final double PIXELS_PER_GAME_CELL = 50;
 
     private final ObservableList<Node> gameNodes;
 

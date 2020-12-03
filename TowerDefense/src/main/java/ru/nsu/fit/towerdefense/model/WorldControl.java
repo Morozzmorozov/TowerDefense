@@ -182,8 +182,14 @@ public class WorldControl {
       // Collision checking
       for (Enemy enemy : world.getEnemies()) {
         // TODO hit box size
-        if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getSize().getX()) {
+
+        if (distance(enemy.getPosition(), projectile.getPosition()) < 0.9) {
+          System.out.println(distance(enemy.getPosition(), projectile.getPosition()) + " " + enemy.getType().getHitBox());
+        }
+
+        if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getType().getHitBox()) {
           collidedEnemy = enemy;
+
           break;
         }
       }

@@ -131,6 +131,7 @@ public class GameMetaData {
         if (imageName.equals("platform")) return "/ru/nsu/fit/towerdefense/images/platform.png";
         if (imageName.equals("tower")) return "/ru/nsu/fit/towerdefense/images/tower.png";
         if (imageName.equals("road")) return "/ru/nsu/fit/towerdefense/images/road.png";
+        if (imageName.equals("fireball")) return "/ru/nsu/fit/towerdefense/images/fireball.png";
 
         throw new NoSuchElementException();
     }

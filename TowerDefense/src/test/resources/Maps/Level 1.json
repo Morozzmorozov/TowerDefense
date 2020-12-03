@@ -73,17 +73,17 @@
 			"Enemies" : [
 				{
 					"SpawnPosition" : 0,
-					"Count" : 20,
+					"Count" : 5,
 					"Type" : "Orc"
 				},
 				{
 					"SpawnPosition" : 1,
-					"Count" : 20,
+					"Count" : 5,
 					"Type" : "Orc"
 				},
 				{
 					"SpawnPosition" : 2,
-					"Count" : 20,
+					"Count" : 5,
 					"Type" : "Orc"
 				}
 			]
