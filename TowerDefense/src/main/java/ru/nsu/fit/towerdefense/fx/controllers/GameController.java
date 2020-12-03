@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.fx.controllers;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
@@ -116,14 +117,23 @@ public class GameController implements Controller, WorldObserver {
                 scrollEvent.getSceneX(), scrollEvent.getSceneY());
         });
 
-        sceneManager.getScene().setOnMousePressed(mouseEvent ->
-            worldCamera.initMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+        sceneManager.getScene().setOnMousePressed(mouseEvent -> {
+            if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                worldCamera.initMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+            }
+        });
 
-        sceneManager.getScene().setOnMouseDragged(mouseEvent ->
-            worldCamera.updateMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+        sceneManager.getScene().setOnMouseDragged(mouseEvent -> {
+            if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                worldCamera.updateMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+            }
+        });
 
-        sceneManager.getScene().setOnMouseReleased(mouseEvent ->
-            worldCamera.finishMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY()));
+        sceneManager.getScene().setOnMouseReleased(mouseEvent -> {
+            if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+                worldCamera.finishMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+            }
+        });
     }
 
     /**
