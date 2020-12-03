@@ -147,7 +147,7 @@ public class GameMetaData {
             for (int i = 0; upgrades.get(i) != null; i++)
             {
                 ArrayNode upgrade = upgrades.get(i).deepCopy();
-                builder.add(upgrade.get(0).asText(), upgrade.get(0).asInt());
+                builder.add(upgrade.get(0).asText(), upgrade.get(1).asInt());
             }
             builder.setHitBox(node.get("HitBox").asInt());
             builder.setSize(node.get("SizeX").asDouble(), node.get("SizeY").asDouble());
