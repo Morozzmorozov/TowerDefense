@@ -114,7 +114,8 @@ public class GameController implements Controller, WorldObserver {
                 return;
             }
 
-            worldCamera.scale(scrollEvent.getDeltaY() > 0);
+            worldCamera.scale(scrollEvent.getDeltaY() > 0,
+                scrollEvent.getSceneX(), scrollEvent.getSceneY());
         });
 
         sceneManager.getScene().setOnMousePressed(mouseEvent ->

@@ -1,6 +1,7 @@
 package ru.nsu.fit.towerdefense.fx.controllers;
 
 import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -14,9 +15,10 @@ import ru.nsu.fit.towerdefense.model.util.Vector2;
 public class WorldCamera {
 
     private static final double WORLD_TO_STAGE_INITIAL_RATIO = 0.9d;
-    private static final double MAX_SCALE = 3.0d;
+    private static final double MAX_SCALE = 4.0d;
     private static final double MIN_SCALE = 0.4d;
-    private static final double SCALE_DELTA = 0.1d;
+    private static final double SCALE_DELTA = 1.2d;
+    private static final long SCROLL_TIME = 250;
 
     private final Pane rootPane;
     private final Pane worldPane;
@@ -73,23 +75,34 @@ public class WorldCamera {
     }
 
     /**
-     * Scales the world by 20% if the scale > 100% or by 10% otherwise.
+     * Scales the world relative to the zoom point.
      *
-     * @param zoomIn zoom in if true; zoom out if false.
+     * @param zoomIn     zoom in if true; zoom out if false.
+     * @param zoomPointX zoom point x-coordinate.
+     * @param zoomPointY zoom point y-coordinate.
      */
-    public void scale(boolean zoomIn) {
+    public void scale(boolean zoomIn, double zoomPointX, double zoomPointY) {
         if (zoomIn) {
             if (scale >= MAX_SCALE) return;
-            scale += SCALE_DELTA * (scale >= 1 ? 2 : 1);
+            scale *= SCALE_DELTA;
         } else {
             if (scale <= MIN_SCALE) return;
-            scale -= SCALE_DELTA * (scale > 1 ? 2 : 1);
+            scale /= SCALE_DELTA;
         }
 
-        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(250), worldPane);
+        double f = (scale / worldPane.getScaleY()) - 1;
+        double dx = (zoomPointX - (worldPane.getBoundsInParent().getWidth() / 2 + worldPane.getBoundsInParent().getMinX()));
+        double dy = (zoomPointY - (worldPane.getBoundsInParent().getHeight() / 2 + worldPane.getBoundsInParent().getMinY()));
+
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(SCROLL_TIME), worldPane);
         scaleTransition.setToX(scale);
         scaleTransition.setToY(scale);
 
+        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(SCROLL_TIME), worldPane);
+        translateTransition.setToX(worldPane.getTranslateX() - f * dx);
+        translateTransition.setToY(worldPane.getTranslateY() - f * dy);
+
+        translateTransition.play();
         scaleTransition.play();
     }
 
