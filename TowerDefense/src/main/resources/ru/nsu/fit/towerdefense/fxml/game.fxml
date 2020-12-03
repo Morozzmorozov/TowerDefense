@@ -10,5 +10,5 @@
         <URL value="@../css/game.css" />
     </stylesheets>
     <AnchorPane fx:id="worldAnchorPane" styleClass="world-anchor-pane" />
-    <Button fx:id="menuButton" text="Menu" />
+    <Button fx:id="menuButton" text="Menu" StackPane.alignment="TOP_RIGHT" />
 </StackPane>
