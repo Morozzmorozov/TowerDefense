@@ -1,3 +1,47 @@
 .world-anchor-pane {
-    -fx-background-color: green;
+    /*-fx-background-color: rgba(255, 255, 255, 0.01);*/
+}
+
+.root {
+    -fx-background-color: rgba(0, 0, 0, 0.95);
+    -fx-background-image: url('../images/dark-level/root-background.png');
+}
+
+.progress-grid-pane > HBox {
+    -fx-padding: 8;
+    -fx-spacing: 12;
+}
+
+.progress-box {
+    -fx-background-color: linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
+}
+
+.pause-box {
+    -fx-background-color: linear-gradient(to left, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
+}
+
+.progress-unit-box > Label {
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 3);
+}
+
+.enemy-progress-icon {
+    -fx-image: url('../icons/skull.png');
+}
+
+.health-progress-icon {
+    -fx-image: url('../icons/heart.png');
+}
+
+.money-progress-icon {
+    -fx-image: url('../icons/money.png');
+}
+
+.wave-progress-icon {
+    -fx-image: url('../icons/star.png');
+}
+
+.pause-icon {
+    -fx-image: url('../icons/pause.png');
+    -fx-cursor: hand;
 }

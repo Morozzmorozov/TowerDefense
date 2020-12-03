@@ -3,6 +3,8 @@ package ru.nsu.fit.towerdefense.fx.controllers;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -40,6 +42,14 @@ public class GameController implements Controller, WorldObserver {
 
     @FXML private StackPane rootStackPane;
     @FXML private AnchorPane worldAnchorPane;
+
+    @FXML private Label waveLabel;
+    @FXML private Label healthLabel;
+    @FXML private Label enemyLabel;
+    @FXML private Label moneyLabel;
+
+    @FXML private ImageView pauseImageView;
+
     @FXML private Button menuButton;
 
     private final SceneManager sceneManager;
@@ -64,7 +74,6 @@ public class GameController implements Controller, WorldObserver {
         worldControl = new WorldControl(gameMap, GameController.this);
 
         worldSize = gameMap.getSize();
-
     }
 
     @FXML
