@@ -93,11 +93,11 @@ public class GameController implements Controller, WorldObserver {
             } catch (RenderException e) {
                 sceneManager.switchToMenu();
 
-                new AlertBuilder()
+                Platform.runLater(() -> new AlertBuilder()
                     .setHeaderText(RENDER_WORLD_ERROR_HEADER)
                     .setContentText(e.getMessage())
                     .setOwner(sceneManager.getWindowOwner())
-                    .build().showAndWait();
+                    .build().showAndWait());
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
