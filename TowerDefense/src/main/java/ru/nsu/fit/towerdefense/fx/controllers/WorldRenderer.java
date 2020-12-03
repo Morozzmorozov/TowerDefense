@@ -36,35 +36,6 @@ public class WorldRenderer {
     }
 
     /**
-     * Removes all the current renderables and renders the new ones.
-     *
-     * Must be called in JavaFX Application thread!
-     *
-     * @param newRenderables updated renderables.
-     */
-    public void render(Iterable<Renderable> newRenderables) throws RenderException {
-        gameNodes.clear();
-
-        for (Renderable renderable : newRenderables) {
-            try {
-                ImageView imageView =
-                    new ImageView(Images.getInstance().getImage(renderable.getImageName()));
-
-                imageView.setFitWidth(renderable.getSize().getX() * pixelsPerGameCell);
-                imageView.setFitHeight(renderable.getSize().getY() * pixelsPerGameCell);
-
-                imageView.relocate(
-                    renderable.getPosition().getX() * pixelsPerGameCell,
-                    renderable.getPosition().getY() * pixelsPerGameCell);
-
-                gameNodes.add(imageView);
-            } catch (NoSuchElementException e) {
-                throw new RenderException("No image was found by name \"" + renderable.getImageName() + "\".");
-            }
-        }
-    }
-
-    /**
      * Updates a map (Renderable -> game node) with new renderables.
      *
      * @param newRenderableSet updated renderables.
