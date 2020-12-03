@@ -6,6 +6,8 @@ import ru.nsu.fit.towerdefense.model.world.types.EnemyType;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
+import java.util.Collection;
+
 public class GameMetaDataTest {
     @Test
     public void testMapRead()
@@ -55,4 +57,21 @@ public class GameMetaDataTest {
         var x = data.getProjectileType(arrow.getTypeName());
         Assert.assertEquals(x, arrow);
     }
+
+    @Test
+    public void testGetGameMapNames()
+    {
+        GameMetaData data = GameMetaData.getInstance();
+        Collection<String> names = data.getGameMapNames();
+        Assert.assertEquals(1, names.size());
+        Assert.assertEquals("map1", names.iterator().next());
+    }
+
+    @Test
+    public void testGetImageName()
+    {
+        GameMetaData data = GameMetaData.getInstance();
+        Assert.assertEquals("src/main/resources/ru/nsu/fit/towerdefense/images/triangle.png", data.getImagePath("triangle"));
+    }
+
 }

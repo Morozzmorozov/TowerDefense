@@ -11,10 +11,7 @@ import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class GameMetaData {
 
@@ -29,6 +26,13 @@ public class GameMetaData {
     private final String enemiesRoot = "src/test/resources/Enemies/";
     private final String towersRoot = "src/test/resources/Towers/";
     private final String projectileRoot = "src/test/resources/Projectiles/";
+    private final String imageRoot = "src/main/resources/ru/nsu/fit/towerdefense/images/";
+
+    private final File mapDir;
+    private final File enemiesDir;
+    private final File towersDir;
+    private final File projectilesDir;
+    private final File imagesDir;
 
     private GameMetaData()
     {
@@ -36,6 +40,11 @@ public class GameMetaData {
         loadedEnemies = new HashMap<>();
         loadedProjectiles = new HashMap<>();
         loadedTowers = new HashMap<>();
+        mapDir = new File(mapRoot);
+        enemiesDir = new File(enemiesRoot);
+        towersDir = new File(towersRoot);
+        projectilesDir = new File(projectileRoot);
+        imagesDir = new File(imageRoot);
     }
 
     public static GameMetaData getInstance()
@@ -47,13 +56,30 @@ public class GameMetaData {
         return instance;
     }
 
-    public Collection<String> getGameMapNames() // todo
+    public Collection<String> getGameMapNames()
     {
-        return new ArrayList<>() {{
-            add("Level 1");
-            add("Level 2");
-            add("Level 3");
-        }};
+        File file = new File(mapRoot);
+        if (!file.isDirectory())
+        {
+            return new ArrayList<>();
+        }
+
+        File[] files = file.listFiles();
+        ArrayList<String> names = new ArrayList<>();
+        for (var x : files)
+        {
+            if (x.isFile())
+            {
+                String path = x.getName();
+                String[] name = new String[2];
+                name[0] = path.substring(0, path.length() - 5);
+                name[1] = path.substring(path.length() - 5, path.length());
+                if (name[1].compareTo(".json") == 0) {
+                    names.add(name[0]);
+                }
+            }
+        }
+        return names;
     }
 
     /**
@@ -61,7 +87,7 @@ public class GameMetaData {
      * @param name - name of a map
      * @return map reference if such exists, null otherwise
      */
-    public GameMap getMapDescription(String name) // todo throw NoSuchElementException
+    public GameMap getMapDescription(String name) throws NoSuchElementException
     {
         if (loadedMaps.containsKey(name))
         {
@@ -71,8 +97,9 @@ public class GameMetaData {
         if (map != null)
         {
             loadedMaps.put(name, map);
+            return map;
         }
-        return map;
+        throw new NoSuchElementException("Invalid map description or name");
     }
 
     /**
@@ -80,7 +107,7 @@ public class GameMetaData {
      * @param name - name of type
      * @return enemy type reference, it's exist
      */
-    public EnemyType getEnemyType(String name)
+    public EnemyType getEnemyType(String name) throws NoSuchElementException
     {
         if (loadedEnemies.containsKey(name))
         {
@@ -90,11 +117,12 @@ public class GameMetaData {
         if (type != null)
         {
             loadedEnemies.put(name, type);
+            return type;
         }
-        return type;
+        throw new NoSuchElementException("Invalid enemy type or file");
     }
 
-    public TowerType getTowerType(String name)
+    public TowerType getTowerType(String name) throws NoSuchElementException
     {
         if (loadedTowers.containsKey(name))
             return loadedTowers.get(name);
@@ -102,11 +130,12 @@ public class GameMetaData {
         if (type != null)
         {
             loadedTowers.put(name, type);
+            return type;
         }
-        return type;
+        throw new NoSuchElementException("Invalid enemy type or file");
     }
 
-    public ProjectileType getProjectileType(String name)
+    public ProjectileType getProjectileType(String name) throws NoSuchElementException
     {
         if (loadedProjectiles.containsKey(name))
         {
@@ -116,15 +145,44 @@ public class GameMetaData {
         if (projectileType != null)
         {
             loadedProjectiles.put(name, projectileType);
+            return projectileType;
         }
-        return projectileType;
+        throw new NoSuchElementException("Invalid enemy type or file");
     }
 
     public String getImagePath(String imageName) // todo
     {
-        if (imageName.equals("triangle")) return "/ru/nsu/fit/towerdefense/images/triangle.png";
-        if (imageName.equals("circle")) return "/ru/nsu/fit/towerdefense/images/circle.png";
+        File files[] = imagesDir.listFiles();
+        if (files == null) {
+            throw new NoSuchElementException();
+        }
+
+        for (var x : files)
+        {
+            if (x.getName().substring(0, imageName.length() + 1).compareTo(imageName + '.') == 0)
+            {
+                return imageRoot + x.getName();
+            }
+        }
         throw new NoSuchElementException();
+        /*return (imageRoot + imageName);
+        if (imageName.equals("triangle")) return "/ru/nsu/fit/towerdefense/images/triangle.png";
+        if (imageName.equals("circle")) return "/ru/nsu/fit/towerdefense/images/circle.png";*/
+    }
+
+    public void forceLoadMap(String mapName) throws NoSuchElementException
+    {
+        GameMap map = getMapDescription(mapName);
+        var it = map.getDescriptionIterator();
+        while (it.hasNext())
+        {
+            var x = it.next();
+            var it1 = x.getEnemiesList().iterator();
+            while (it1.hasNext())
+            {
+                getEnemyType(it1.next().getType());
+            }
+        }
     }
 
     private ProjectileType loadProjectileType(String name)
