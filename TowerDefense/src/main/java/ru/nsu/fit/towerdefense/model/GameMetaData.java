@@ -150,11 +150,6 @@ public class GameMetaData {
         throw new NoSuchElementException("Invalid enemy type or file");
     }
 
-    public String getImagePath(String imageName) // todo
-    {
-        return "ru/nsu/fit/towerdefense/images/" + imageName;
-    }
-
     public void forceLoadMap(String mapName) throws NoSuchElementException
     {
         GameMap map = getMapDescription(mapName);

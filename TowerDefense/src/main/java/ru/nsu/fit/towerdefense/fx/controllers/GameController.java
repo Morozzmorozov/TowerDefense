@@ -85,7 +85,7 @@ public class GameController implements Controller, WorldObserver {
 
                         new AlertBuilder()
                             .setHeaderText(RENDER_WORLD_ERROR_HEADER)
-                            .setException(e)
+                            .setContentText(e.getMessage())
                             .setOwner(sceneManager.getWindowOwner())
                             .build().showAndWait();
                     }

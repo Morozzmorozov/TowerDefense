@@ -1,12 +1,14 @@
 package ru.nsu.fit.towerdefense.fx;
 
 import javafx.scene.image.Image;
-import ru.nsu.fit.towerdefense.model.GameMetaData;
+import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Images {
+
+    private static final String IMAGES_DIRECTORY = "ru/nsu/fit/towerdefense/images/";
 
     private static Images instance;
 
@@ -24,12 +26,16 @@ public class Images {
         return instance;
     }
 
-    public Image getImage(String imageName) {
+    public Image getImage(String imageName) throws RenderException {
         Image image = imageNameToImageMap.get(imageName);
 
         if (image == null) {
-            image = new Image(GameMetaData.getInstance().getImagePath(imageName));
-            imageNameToImageMap.put(imageName, image);
+            try {
+                image = new Image(IMAGES_DIRECTORY + imageName);
+                imageNameToImageMap.put(imageName, image);
+            } catch (IllegalArgumentException e) {
+                throw new RenderException("Cannot open image \"" + imageName + "\".");
+            }
         }
 
         return image;
