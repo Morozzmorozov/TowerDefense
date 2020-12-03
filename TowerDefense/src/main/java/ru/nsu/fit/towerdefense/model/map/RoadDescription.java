@@ -18,6 +18,10 @@ public class RoadDescription {
         return roads.get(id);
     }
 
+    public int getRoadCount() {
+        return roads.size();
+    }
+
     public static class Builder
     {
         List<List<Vector2<Double>>> roads;

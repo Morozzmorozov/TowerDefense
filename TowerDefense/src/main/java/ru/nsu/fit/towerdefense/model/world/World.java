@@ -8,6 +8,7 @@ import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
+import ru.nsu.fit.towerdefense.model.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 
@@ -26,10 +27,15 @@ public class World {
   private List<Tower> towers = new ArrayList<>();
   private List<Projectile> projectiles = new ArrayList<>();
   private List<TowerPlatform> towerPlatforms = new ArrayList<>();
+  private List<RoadTile> roadTiles = new ArrayList<>();
   private Base base;
   private int money;
   private int currentWaveNumber = 0;
   private Wave currentWave;
+
+  public List<RoadTile> getRoadTiles() {
+    return roadTiles;
+  }
 
   public Wave getCurrentWave() {
     return currentWave;
@@ -82,11 +88,12 @@ public class World {
   public Iterable<Renderable> getRenderables() {
     // todo resolve conflict with Collection
     List<Renderable> renderables = new ArrayList<>();
+    renderables.addAll(roadTiles);
+    renderables.addAll(towerPlatforms);
+    renderables.addAll(towers);
+    renderables.add(base);
     renderables.addAll(enemies);
     renderables.addAll(projectiles);
-    renderables.addAll(towers);
-    renderables.addAll(towerPlatforms);
-    renderables.add(base);
     return renderables;
     /*return new Iterable<Renderable>() {
       @Override

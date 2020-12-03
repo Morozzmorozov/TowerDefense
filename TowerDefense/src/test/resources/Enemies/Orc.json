@@ -1,9 +1,9 @@
 {
-	"Health" : 10,
+	"Health" : 20,
 	"Speed" : 0.02,
 	"HitBox" : 1.0,
 	"SizeX" : 1,
 	"SizeY" : 1,
 	"Image" : "enemy3",
-	"Damage" : 5
+	"Damage" : 30
 }

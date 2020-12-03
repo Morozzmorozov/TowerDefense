@@ -10,6 +10,7 @@ import ru.nsu.fit.towerdefense.model.world.World;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
+import ru.nsu.fit.towerdefense.model.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.map.WaveDescription;
@@ -33,7 +34,7 @@ public class WorldControl {
 
     for (Vector2<Integer> position : gameMap.getPositions().getPositions()) {
       Vector2<Integer> coordinates = new Vector2<>(position.getX(), position.getY());
-      world.getTowerPlatforms().add(new TowerPlatform(coordinates, "circle")); // todo image name
+      world.getTowerPlatforms().add(new TowerPlatform(coordinates, "platform")); // todo image name
     }
 
     Wave wave = new Wave();
@@ -47,6 +48,54 @@ public class WorldControl {
     Base base = new Base(gameMap.getBaseDescription().getHealth(), gameMap.getBaseDescription().getImage(),
         new Vector2<>(gameMap.getBaseDescription().getPosition().getX(), gameMap.getBaseDescription().getPosition().getY()));
     world.setBase(base);
+
+    Tower tower = new Tower(); // DEBUG! todo remove
+    tower.setType(GameMetaData.getInstance().getTowerType("Archer"));
+    tower.setCooldown(0);
+    tower.setRotation(0);
+    tower.setPosition(new Vector2<>(3, 4));
+    world.getTowers().add(tower);
+
+
+    for (int i = 0; i < gameMap.getRoads().getRoadCount(); ++i) {
+      List<Vector2<Double>> road = gameMap.getRoads().getRoad(i);
+
+      for (int j = 0; j < road.size() - 1; ++j) { // all tiles except last
+        int x1 = (int)Math.round(road.get(j).getX());
+        int x2 = (int)Math.round(road.get(j + 1).getX());
+        int y1 = (int)Math.round(road.get(j).getY());
+        int y2 = (int)Math.round(road.get(j + 1).getY());
+
+
+        if (x1 == x2) { // vertical
+          for (int y = Integer.min(y1, y2); y <= Integer.max(y1, y2); ++y) {
+            boolean flag = true;
+            for (RoadTile roadTile : world.getRoadTiles()) {
+              if (Math.round(roadTile.getPosition().getX()) == x1 && Math.round(roadTile.getPosition().getY()) == y) {
+                flag = false;
+                break;
+              }
+            }
+            if (flag) {
+              world.getRoadTiles().add(new RoadTile("road", new Vector2<>(x1, y)));
+            }
+          }
+        } else if (y1 == y2) { // horizontal
+          for (int x = Integer.min(x1, x2); x <= Integer.max(x1, x2); ++x) {
+            boolean flag = true;
+            for (RoadTile roadTile : world.getRoadTiles()) {
+              if (Math.round(roadTile.getPosition().getX()) == x && Math.round(roadTile.getPosition().getY()) == y1) {
+                flag = false;
+                break;
+              }
+            }
+            if (flag) {
+              world.getRoadTiles().add(new RoadTile("road", new Vector2<>(x, y1)));
+            }
+          }
+        }
+      }
+    }
   }
 
   public World getWorld() {
@@ -64,6 +113,7 @@ public class WorldControl {
           || distance(tower.getPosition(), tower.getTarget().getPosition()) > tower.getType().getRange()) {
         tower.setTarget(null);
         // finds the closest enemy for now
+        //System.out.println("NEW TARGET");
         for (Enemy enemy : world.getEnemies()) {
           double dist = distance(tower.getPosition(), enemy.getPosition());
           if (dist > tower.getType().getRange()) {
@@ -80,13 +130,23 @@ public class WorldControl {
       if (tower.getTarget() != null) {
         if (tower.getCooldown() <= 0) {
 
-          ProjectileType projectileType = gameMetaData.getProjectileType(tower.getType().getProjectileType());
+          ProjectileType projectileType = GameMetaData.getInstance().getProjectileType(tower.getType().getProjectileType());
+
+          // Instant rotation for now
+          Vector2<Double> direction = new Vector2<>(
+              tower.getTarget().getPosition().getX() - tower.getPosition().getX(),
+              tower.getTarget().getPosition().getY() - tower.getPosition().getY());
+          direction.setX(direction.getX() * projectileType.getSpeed() / distance(tower.getTarget().getPosition(), tower.getPosition()));
+          direction.setY(direction.getY() * projectileType.getSpeed() / distance(tower.getTarget().getPosition(), tower.getPosition()));
+
           world.getProjectiles().add(new Projectile(
               tower.getTarget(), tower.getType().getRange(), projectileType,
               new Vector2<>(
-                  tower.getCell().getX() + 0.5, tower.getCell().getY() + 0.5),
-              new Vector2<>(projectileType.getSpeed() * Math.cos(tower.getRotation()),
-                  projectileType.getSpeed() * Math.sin(tower.getRotation()))));
+                  (double)tower.getCell().getX()/* + 0.5*/, (double)tower.getCell().getY() /*+ 0.5*/),
+             // new Vector2<>(projectileType.getSpeed() * Math.cos(tower.getRotation()),
+             //     projectileType.getSpeed() * Math.sin(tower.getRotation())))
+              direction
+          ));
           tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
         }
       }
@@ -111,7 +171,7 @@ public class WorldControl {
       }
 
       projectile.getPosition().setX(projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX());
-      projectile.getPosition().setX(projectile.getPosition().getY() + deltaTime * projectile.getVelocity().getY());
+      projectile.getPosition().setY(projectile.getPosition().getY() + deltaTime * projectile.getVelocity().getY());
       projectile.setRemainingRange(projectile.getRemainingRange() - projectile.getType().getSpeed() * deltaTime);
       if (projectile.getRemainingRange() <= 0) {
         removedProjectiles.add(projectile);
@@ -136,6 +196,7 @@ public class WorldControl {
         collidedEnemy.setHealth(collidedEnemy.getHealth() - damage);
         if (collidedEnemy.getHealth() <= 0) {
           enemyDeath(collidedEnemy);
+          world.getEnemies().remove(collidedEnemy);
         }
       }
     }
@@ -144,6 +205,7 @@ public class WorldControl {
     }
 
   //  System.out.println("---------------" + world.getEnemies().size());
+    List<Enemy> removedEnemies = new ArrayList<>();
     for (Enemy enemy : world.getEnemies()) {
       if (enemy.isDead()) continue;
       //System.out.println(enemy.getPosition());
@@ -170,16 +232,25 @@ public class WorldControl {
 
       if (Math.abs(enemy.getPosition().getX() - world.getBase().getPosition().getX()) < DELTA &&
           Math.abs(enemy.getPosition().getY() - world.getBase().getPosition().getY()) < DELTA) {
+        //System.out.println("Hit!");
         int damage = enemy.getType().getDamage();
 
         world.getBase().setHealth(world.getBase().getHealth() - damage);
+
+        System.out.println(world.getBase().getHealth());
+
         if (world.getBase().getHealth() <= 0) {
-          finish();
+          removedEnemies.add(enemy);
+          worldObserver.onGameLoosing();
         } else {
+          removedEnemies.add(enemy); // not sure if I should leave this
           enemyDeath(enemy);
         }
 
       }
+    }
+    for (Enemy enemy : removedEnemies) {
+      world.getEnemies().remove(enemy);
     }
 
     if (world.getCountdown() <= 0) {
@@ -212,7 +283,7 @@ public class WorldControl {
         }
 
         world.getEnemies().add(enemy);
-        System.out.println("Spawn!" + enemy.getPosition());
+     //   System.out.println("Spawn!" + enemy.getPosition());
 
         world.getCurrentWave()
             .setCurrentEnemyNumber(world.getCurrentWave().getCurrentEnemyNumber() + 1);
@@ -230,6 +301,8 @@ public class WorldControl {
             world.getCurrentWave().setRemainingEnemiesCount(gameMap.getWaves().get(
                 world.getCurrentWaveNumber()).getEnemiesList().stream()
                 .mapToInt(WaveEnemies::getCount).sum());
+            world.getCurrentWave().setDescription(gameMap.getWaves().get(
+                world.getCurrentWaveNumber()));
           }
         } else {
           // next enemy in this wave
@@ -243,16 +316,18 @@ public class WorldControl {
   }
 
   private void enemyDeath(Enemy enemy) {
-    world.getEnemies().remove(enemy);
+   // System.out.println("REMOVE");
+    //world.getEnemies().remove(enemy);
+    enemy.setDead(true);
     Wave wave = enemy.getWave();
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
       world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward());
+      if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
+          && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
+        worldObserver.onGameWinning();
+      }
     }
-  }
-
-  private void finish() {
-
   }
 
   private double distance(Vector2<Double> a, Vector2<Double> b) {

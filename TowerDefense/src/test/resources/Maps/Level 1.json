@@ -3,7 +3,7 @@
 	"SizeY" : 3,
 	"Reward" : 4,
 	"Base" : {
-		"Health" : 5,
+		"Health" : 500,
 		"PosX" : 1,
 		"PosY" : 2,
 		"Image" : "base"
@@ -22,46 +22,46 @@
 		{
 			"ScaleFactor" : 1.0,
 			"SpawnInterval" : 100.0,
-			"TimeTillNextWave" : 600.0,
+			"TimeTillNextWave" : 300.0,
 			"MoneyReward" : 1000,
 			"Enemies" : [
 				{
 					"SpawnPosition" : 0,
 					"Count" : 7,
-					"Type" : "Goblin"
+					"Type" : "Cyclops"
 				},
 				{
 					"SpawnPosition" : 1,
 					"Count" : 3,
-					"Type" : "Goblin"
+					"Type" : "Cyclops"
 				},
 				{
 					"SpawnPosition" : 2,
 					"Count" : 1,
-					"Type" : "Goblin"
+					"Type" : "Cyclops"
 				}
 			]
 		},
 		{
 			"ScaleFactor" : 1.05,
 			"SpawnInterval" : 100.0,
-			"TimeTillNextWave" : 600.0,
+			"TimeTillNextWave" : 300.0,
 			"MoneyReward" : 1000,
 			"Enemies" : [
 				{
 					"SpawnPosition" : 0,
 					"Count" : 13,
-					"Type" : "Orc"
+					"Type" : "Goblin"
 				},
 				{
 					"SpawnPosition" : 1,
 					"Count" : 5,
-					"Type" : "Orc"
+					"Type" : "Goblin"
 				},
 				{
 					"SpawnPosition" : 2,
 					"Count" : 3,
-					"Type" : "Orc"
+					"Type" : "Goblin"
 				}
 			]
 		},
@@ -74,17 +74,17 @@
 				{
 					"SpawnPosition" : 0,
 					"Count" : 20,
-					"Type" : "Cyclops"
+					"Type" : "Orc"
 				},
 				{
 					"SpawnPosition" : 1,
 					"Count" : 20,
-					"Type" : "Cyclops"
+					"Type" : "Orc"
 				},
 				{
 					"SpawnPosition" : 2,
 					"Count" : 20,
-					"Type" : "Cyclops"
+					"Type" : "Orc"
 				}
 			]
 		}

@@ -10,6 +10,10 @@ public class Tower implements Renderable {
   private Enemy target;
   private Vector2<Integer> position;
 
+  public void setPosition(Vector2<Integer> position) {
+    this.position = position;
+  }
+
   public Vector2<Integer> getCell() {
     return position;
   }
