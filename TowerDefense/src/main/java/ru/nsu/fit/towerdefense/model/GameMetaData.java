@@ -152,18 +152,7 @@ public class GameMetaData {
 
     public String getImagePath(String imageName) // todo
     {
-        File files[] = imagesDir.listFiles();
-        if (files == null) {
-            throw new NoSuchElementException();
-        }
-        for (var x : files)
-        {
-            if (x.getName().substring(0, imageName.length() + 1).compareTo(imageName + '.') == 0)
-            {
-                return imageRoot + x.getName();
-            }
-        }
-        throw new NoSuchElementException();
+        return "ru/nsu/fit/towerdefense/images/" + imageName;
     }
 
     public void forceLoadMap(String mapName) throws NoSuchElementException

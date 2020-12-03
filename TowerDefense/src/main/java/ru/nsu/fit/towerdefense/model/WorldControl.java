@@ -34,7 +34,7 @@ public class WorldControl {
 
     for (Vector2<Integer> position : gameMap.getPositions().getPositions()) {
       Vector2<Integer> coordinates = new Vector2<>(position.getX(), position.getY());
-      world.getTowerPlatforms().add(new TowerPlatform(coordinates, "platform")); // todo image name
+      world.getTowerPlatforms().add(new TowerPlatform(coordinates, "platform.png")); // todo image name
     }
 
     Wave wave = new Wave();
@@ -77,7 +77,7 @@ public class WorldControl {
               }
             }
             if (flag) {
-              world.getRoadTiles().add(new RoadTile("road", new Vector2<>(x1, y)));
+              world.getRoadTiles().add(new RoadTile("road.png", new Vector2<>(x1, y)));
             }
           }
         } else if (y1 == y2) { // horizontal
@@ -90,7 +90,7 @@ public class WorldControl {
               }
             }
             if (flag) {
-              world.getRoadTiles().add(new RoadTile("road", new Vector2<>(x, y1)));
+              world.getRoadTiles().add(new RoadTile("road.png", new Vector2<>(x, y1)));
             }
           }
         }

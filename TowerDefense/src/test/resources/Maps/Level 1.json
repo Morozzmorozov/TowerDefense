@@ -1,12 +1,12 @@
 {
-	"SizeX" : 2,
-	"SizeY" : 3,
+	"SizeX" : 10,
+	"SizeY" : 10,
 	"Reward" : 4,
 	"Base" : {
 		"Health" : 500,
 		"PosX" : 1,
 		"PosY" : 2,
-		"Image" : "base"
+		"Image" : "base.png"
 	},
 	"Roads" : [
 		[[5, 1], [5, 2], [1, 2]],
