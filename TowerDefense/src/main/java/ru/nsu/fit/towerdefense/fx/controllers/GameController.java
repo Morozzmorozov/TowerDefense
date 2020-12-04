@@ -2,7 +2,6 @@ package ru.nsu.fit.towerdefense.fx.controllers;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -50,7 +49,6 @@ public class GameController implements Controller, WorldObserver {
 
     @FXML private ImageView pauseImageView;
 
-    @FXML private Button menuButton;
 
     private final SceneManager sceneManager;
 
@@ -81,7 +79,6 @@ public class GameController implements Controller, WorldObserver {
         worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell());
 
-        menuButton.setOnAction(actionEvent -> sceneManager.switchToMenu());
 
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {

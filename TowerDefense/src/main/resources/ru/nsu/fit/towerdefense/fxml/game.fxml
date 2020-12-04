@@ -47,5 +47,4 @@
             <ImageView fx:id="pauseImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="pause-icon" />
         </HBox>
     </GridPane>
-    <Button fx:id="menuButton" text="Menu" StackPane.alignment="BOTTOM_RIGHT" />
 </StackPane>
