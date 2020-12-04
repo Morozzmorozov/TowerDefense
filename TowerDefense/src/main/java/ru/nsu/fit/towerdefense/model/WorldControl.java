@@ -102,6 +102,31 @@ public class WorldControl {
     return world;
   }
 
+  public int getExperiencePoints() { // todo
+    return 2;
+  }
+
+  public int getBaseHealth() { // todo
+    return 100;
+  }
+
+  public int getEnemiesKilled() { // todo
+    return 34;
+  }
+
+  public int getMoney() { // todo
+    return 200;
+  }
+
+  public int getWaveNumber() { // todo
+    return 1;
+  }
+
+  private long tick;
+  public long getTick() { // todo
+    return ++tick;
+  }
+
   public void simulateTick(int deltaTime) {
     deltaTime = 1; // DEBUG! todo remove
 
