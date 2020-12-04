@@ -7,6 +7,7 @@ import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -68,7 +69,7 @@ public class WorldRenderer {
     public void render() {
         gameNodes.removeIf(node -> !renderableToGameNodeMap.containsKey(node.getUserData()));
 
-        for (Map.Entry<Renderable, Node> entry : renderableToGameNodeMap.entrySet()) {
+        for (Map.Entry<Renderable, Node> entry : new ArrayList<>(renderableToGameNodeMap.entrySet())) {
             Renderable renderable = entry.getKey();
             ImageView imageView = (ImageView) entry.getValue();
 
