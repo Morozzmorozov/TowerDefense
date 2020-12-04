@@ -7,12 +7,12 @@
     -fx-background-image: url('../images/dark-level/root-background.png');
 }
 
-.progress-grid-pane > HBox {
+.bar-grid-pane > HBox {
     -fx-padding: 8;
     -fx-spacing: 12;
 }
 
-.progress-box {
+.progress-box, .wave-box {
     -fx-background-color: linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
 }
 
@@ -20,28 +20,75 @@
     -fx-background-color: linear-gradient(to left, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
 }
 
-.progress-unit-box > Label {
+.bar-image-label {
     -fx-text-fill: white;
     -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 3);
 }
 
-.enemy-progress-icon {
-    -fx-image: url('../icons/skull.png');
+.popup-grid-pane {
+    -fx-padding: 20;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
 }
 
-.health-progress-icon {
-    -fx-image: url('../icons/heart.png');
+.popup-box {
+    -fx-padding: 20;
+    -fx-spacing: 20;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.popup-box > HBox {
+    -fx-padding: 10 20;
+    -fx-spacing: 20;
+    -fx-background-color: #0479bf;
+    -fx-cursor: hand;
+}
+
+.popup-image-label {
+    -fx-text-fill: white;
+}
+
+.experience-progress-icon {
+    -fx-image: url('../icons/star.png');
 }
 
 .money-progress-icon {
     -fx-image: url('../icons/money.png');
 }
 
+.health-progress-icon {
+    -fx-image: url('../icons/heart.png');
+}
+
+.enemy-progress-icon {
+    -fx-image: url('../icons/skull.png');
+}
+
 .wave-progress-icon {
-    -fx-image: url('../icons/star.png');
+    -fx-image: url('../icons/wave.png');
+    -fx-cursor: hand;
 }
 
 .pause-icon {
     -fx-image: url('../icons/pause.png');
     -fx-cursor: hand;
+}
+
+.resume-icon {
+    -fx-image: url('../icons/play.png');
+}
+
+.restart-icon {
+    -fx-image: url('../icons/replay.png');
+}
+
+.idle-icon {
+    -fx-image: url('../icons/time.png');
+}
+
+.finish-icon {
+    -fx-image: url('../icons/cross.png');
+}
+
+.menu-icon {
+    -fx-image: url('../icons/home.png');
 }

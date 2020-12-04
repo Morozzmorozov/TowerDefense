@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
@@ -42,13 +44,22 @@ public class GameController implements Controller, WorldObserver {
     @FXML private StackPane rootStackPane;
     @FXML private AnchorPane worldAnchorPane;
 
-    @FXML private Label waveLabel;
+    @FXML private Label experienceLabel;
     @FXML private Label healthLabel;
     @FXML private Label enemyLabel;
     @FXML private Label moneyLabel;
+    @FXML private Label waveLabel;
+    @FXML private Label playingTimeLabel;
 
+    @FXML private ImageView waveImageView;
     @FXML private ImageView pauseImageView;
 
+    @FXML private GridPane popupGridPane;
+    @FXML private HBox resumeHBox;
+    @FXML private HBox restartHBox;
+    @FXML private HBox idleHBox;
+    @FXML private HBox finishHBox;
+    @FXML private HBox menuHBox;
 
     private final SceneManager sceneManager;
 
@@ -79,14 +90,36 @@ public class GameController implements Controller, WorldObserver {
         worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell());
 
+        pauseImageView.setOnMouseClicked(mouseEvent -> {
+            worldSimulationExecutor.shutdown();
+            popupGridPane.setVisible(true);
+        });
+        resumeHBox.setOnMouseClicked(mouseEvent -> {
+            popupGridPane.setVisible(false);
+            activateGame();
+        });
+        menuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
+        activateGame();
+    }
+
+    private void activateGame() {
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
                 worldControl.simulateTick(DELTA_TIME);
                 worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
                     worldControl.getWorld().getRenderables()));
-                Platform.runLater(() -> worldRenderer.render());
+                Platform.runLater(() -> {
+                    worldRenderer.render();
+
+                    experienceLabel.setText(worldControl.getExperiencePoints() + "");
+                    healthLabel.setText(worldControl.getBaseHealth() + "");
+                    enemyLabel.setText(worldControl.getEnemiesKilled() + "");
+                    moneyLabel.setText(worldControl.getMoney() + "");
+                    waveLabel.setText(worldControl.getWaveNumber() + "");
+                    playingTimeLabel.setText(formatTime(worldControl.getTick() * DELTA_TIME));
+                });
             } catch (RenderException e) {
                 sceneManager.switchToMenu();
 
@@ -179,6 +212,11 @@ public class GameController implements Controller, WorldObserver {
         if (worldSimulationExecutor != null) {
             worldSimulationExecutor.shutdown();
         }
+    }
+
+    private String formatTime(long milliseconds) {
+        return String.format(milliseconds < 3600000 ? "%2$02d:%3$02d" : "%02d:%02d:%02d",
+            milliseconds / 3600000, (milliseconds / 60000) % 60, (milliseconds / 1000) % 60);
     }
 
     // ---------- Stubs ----------

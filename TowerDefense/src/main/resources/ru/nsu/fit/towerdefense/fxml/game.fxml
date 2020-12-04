@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,6 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
 <StackPane fx:id="rootStackPane" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
@@ -16,7 +16,7 @@
         <URL value="@../css/game.css" />
     </stylesheets>
     <AnchorPane fx:id="worldAnchorPane" styleClass="world-anchor-pane" />
-    <GridPane styleClass="progress-grid-pane">
+    <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
             <ColumnConstraints hgrow="NEVER" />
             <ColumnConstraints hgrow="ALWAYS" />
@@ -26,25 +26,76 @@
             <RowConstraints vgrow="NEVER" />
         </rowConstraints>
         <HBox styleClass="progress-box">
-            <HBox styleClass="progress-unit-box">
-                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="wave-progress-icon" />
-                <Label fx:id="waveLabel">0</Label>
+            <HBox>
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="experience-progress-icon" />
+                <Label fx:id="experienceLabel" styleClass="bar-image-label">0</Label>
             </HBox>
-            <HBox styleClass="progress-unit-box">
-                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="health-progress-icon" />
-                <Label fx:id="healthLabel">100</Label>
-            </HBox>
-            <HBox styleClass="progress-unit-box">
-                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="enemy-progress-icon" />
-                <Label fx:id="enemyLabel">0</Label>
-            </HBox>
-            <HBox styleClass="progress-unit-box">
+            <HBox>
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="money-progress-icon" />
-                <Label fx:id="moneyLabel">200</Label>
+                <Label fx:id="moneyLabel" styleClass="bar-image-label">200</Label>
+            </HBox>
+            <HBox>
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="health-progress-icon" />
+                <Label fx:id="healthLabel" styleClass="bar-image-label">100</Label>
+            </HBox>
+            <HBox>
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="enemy-progress-icon" />
+                <Label fx:id="enemyLabel" styleClass="bar-image-label">0</Label>
             </HBox>
         </HBox>
         <HBox styleClass="pause-box" GridPane.columnIndex="2">
+            <Label fx:id="playingTimeLabel" styleClass="bar-image-label">00:00</Label>
             <ImageView fx:id="pauseImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="pause-icon" />
         </HBox>
+    </GridPane>
+    <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" />
+            <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="ALWAYS" />
+            <RowConstraints vgrow="NEVER" />
+        </rowConstraints>
+        <HBox styleClass="wave-box" GridPane.rowIndex="2">
+            <HBox>
+                <ImageView fx:id="waveImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="wave-progress-icon" />
+                <Label fx:id="waveLabel" styleClass="bar-image-label">0</Label>
+            </HBox>
+        </HBox>
+    </GridPane>
+    <GridPane fx:id="popupGridPane" visible="false" styleClass="popup-grid-pane">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" />
+            <ColumnConstraints hgrow="NEVER" />
+            <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="ALWAYS" />
+            <RowConstraints vgrow="NEVER" />
+            <RowConstraints vgrow="ALWAYS" />
+        </rowConstraints>
+        <VBox styleClass="popup-box" GridPane.rowIndex="1" GridPane.columnIndex="1">
+            <HBox fx:id="resumeHBox">
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="resume-icon" />
+                <Label styleClass="popup-image-label">Resume</Label>
+            </HBox>
+            <HBox fx:id="restartHBox">
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="restart-icon" />
+                <Label styleClass="popup-image-label">Restart</Label>
+            </HBox>
+            <HBox fx:id="idleHBox">
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="idle-icon" />
+                <Label styleClass="popup-image-label">Idle game</Label>
+            </HBox>
+            <HBox fx:id="finishHBox">
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="finish-icon" />
+                <Label styleClass="popup-image-label">Finish game</Label>
+            </HBox>
+            <HBox fx:id="menuHBox">
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="menu-icon" />
+                <Label styleClass="popup-image-label">Main menu</Label>
+            </HBox>
+        </VBox>
     </GridPane>
 </StackPane>
