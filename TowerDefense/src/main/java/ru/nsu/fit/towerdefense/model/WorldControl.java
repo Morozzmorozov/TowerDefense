@@ -102,7 +102,7 @@ public class WorldControl {
     return world;
   }
 
-  public int getExperiencePoints() { // todo
+  public int getResearchPoints() { // todo
     return 2;
   }
 

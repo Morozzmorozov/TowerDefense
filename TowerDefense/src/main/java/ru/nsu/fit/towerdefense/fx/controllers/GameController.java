@@ -44,7 +44,7 @@ public class GameController implements Controller, WorldObserver {
     @FXML private StackPane rootStackPane;
     @FXML private AnchorPane worldAnchorPane;
 
-    @FXML private Label experienceLabel;
+    @FXML private Label researchLabel;
     @FXML private Label healthLabel;
     @FXML private Label enemyLabel;
     @FXML private Label moneyLabel;
@@ -113,10 +113,10 @@ public class GameController implements Controller, WorldObserver {
                 Platform.runLater(() -> {
                     worldRenderer.render();
 
-                    experienceLabel.setText(worldControl.getExperiencePoints() + "");
+                    researchLabel.setText(worldControl.getResearchPoints() + "");
+                    moneyLabel.setText(worldControl.getMoney() + "");
                     healthLabel.setText(worldControl.getBaseHealth() + "");
                     enemyLabel.setText(worldControl.getEnemiesKilled() + "");
-                    moneyLabel.setText(worldControl.getMoney() + "");
                     waveLabel.setText(worldControl.getWaveNumber() + "");
                     playingTimeLabel.setText(formatTime(worldControl.getTick() * DELTA_TIME));
                 });

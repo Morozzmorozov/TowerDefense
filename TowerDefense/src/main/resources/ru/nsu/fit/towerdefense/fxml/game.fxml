@@ -27,8 +27,8 @@
         </rowConstraints>
         <HBox styleClass="progress-box">
             <HBox>
-                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="experience-progress-icon" />
-                <Label fx:id="experienceLabel" styleClass="bar-image-label">0</Label>
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
+                <Label fx:id="researchLabel" styleClass="bar-image-label">0</Label>
             </HBox>
             <HBox>
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="money-progress-icon" />
