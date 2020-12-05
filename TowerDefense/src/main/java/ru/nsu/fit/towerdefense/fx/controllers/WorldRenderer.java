@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.fx.controllers;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
@@ -44,17 +45,17 @@ public class WorldRenderer {
     public void update(Set<Renderable> newRenderableSet) throws RenderException {
         for (Renderable renderable : newRenderableSet) {
             if (!renderableToGameNodeMap.containsKey(renderable)) {
-                try {
-                    ImageView imageView =
-                        new ImageView(Images.getInstance().getImage(renderable.getImageName()));
+                ImageView imageView =
+                    new ImageView(Images.getInstance().getImage(renderable.getImageName()));
 
-                    imageView.setOnMouseClicked(mouseEvent -> System.out.println(renderable.getImageName()));
+                imageView.setOnMouseClicked(mouseEvent -> {
+                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                        System.out.println(renderable.getImageName());
+                    }
+                });
 
-                    imageView.setUserData(renderable);
-                    renderableToGameNodeMap.put(renderable, imageView);
-                } catch (NoSuchElementException e) {
-                    throw new RenderException("No image was found by name \"" + renderable.getImageName() + "\".");
-                }
+                imageView.setUserData(renderable);
+                renderableToGameNodeMap.put(renderable, imageView);
             }
         }
 
