@@ -54,12 +54,21 @@ public class GameController implements Controller, WorldObserver {
     @FXML private ImageView waveImageView;
     @FXML private ImageView pauseImageView;
 
-    @FXML private GridPane popupGridPane;
+    @FXML private GridPane pausePopupGridPane;
     @FXML private HBox resumeHBox;
     @FXML private HBox restartHBox;
     @FXML private HBox idleHBox;
     @FXML private HBox finishHBox;
     @FXML private HBox menuHBox;
+
+    @FXML private GridPane resultsPopupGridPane;
+    @FXML private Label resultsHeaderLabel;
+    @FXML private Label resultsWavesLabel;
+    @FXML private Label resultsEnemyLabel;
+    @FXML private Label resultsTimeLabel;
+    @FXML private HBox resultsSaveReplayHBox;
+    @FXML private HBox resultsRestartHBox;
+    @FXML private HBox resultsMenuHBox;
 
     private final SceneManager sceneManager;
 
@@ -92,13 +101,15 @@ public class GameController implements Controller, WorldObserver {
 
         pauseImageView.setOnMouseClicked(mouseEvent -> {
             worldSimulationExecutor.shutdown();
-            popupGridPane.setVisible(true);
+            pausePopupGridPane.setVisible(true);
         });
         resumeHBox.setOnMouseClicked(mouseEvent -> {
-            popupGridPane.setVisible(false);
+            pausePopupGridPane.setVisible(false);
             activateGame();
         });
         menuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
+
+        resultsMenuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         activateGame();
     }
@@ -195,11 +206,7 @@ public class GameController implements Controller, WorldObserver {
      */
     @Override
     public void onGameLoosing() {
-        System.out.println("You lose!");
-
-        if (worldSimulationExecutor != null) {
-            worldSimulationExecutor.shutdown();
-        }
+        finishGame(false);
     }
 
     /**
@@ -207,11 +214,25 @@ public class GameController implements Controller, WorldObserver {
      */
     @Override
     public void onGameWinning() {
-        System.out.println("You win!");
+        finishGame(true);
+    }
 
+    private void finishGame(boolean win) {
         if (worldSimulationExecutor != null) {
             worldSimulationExecutor.shutdown();
         }
+
+        Platform.runLater(() -> {
+            if (win) {
+                resultsHeaderLabel.setText("You win!");
+            }
+
+            resultsWavesLabel.setText(waveLabel.getText());
+            resultsEnemyLabel.setText(enemyLabel.getText());
+            resultsTimeLabel.setText(playingTimeLabel.getText());
+
+            resultsPopupGridPane.setVisible(true);
+        });
     }
 
     private String formatTime(long milliseconds) {

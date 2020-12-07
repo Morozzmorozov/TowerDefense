@@ -2,6 +2,11 @@
     /*-fx-background-color: rgba(255, 255, 255, 0.01);*/
 }
 
+Label {
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 3);
+}
+
 .root {
     -fx-background-color: rgba(0, 0, 0, 0.95);
     -fx-background-image: url('../images/dark-level/root-background.png');
@@ -18,33 +23,6 @@
 
 .pause-box {
     -fx-background-color: linear-gradient(to left, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
-}
-
-.bar-image-label {
-    -fx-text-fill: white;
-    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 3);
-}
-
-.popup-grid-pane {
-    -fx-padding: 20;
-    -fx-background-color: rgba(0, 0, 0, 0.5);
-}
-
-.popup-box {
-    -fx-padding: 20;
-    -fx-spacing: 20;
-    -fx-background-color: rgba(0, 0, 0, 0.5);
-}
-
-.popup-box > HBox {
-    -fx-padding: 10 20;
-    -fx-spacing: 20;
-    -fx-background-color: #0479bf;
-    -fx-cursor: hand;
-}
-
-.popup-image-label {
-    -fx-text-fill: white;
 }
 
 .research-progress-icon {
@@ -73,6 +51,82 @@
     -fx-cursor: hand;
 }
 
+/* Popups */
+
+.popup-grid-pane {
+    -fx-alignment: center;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.pause-popup-box {
+    -fx-padding: 20;
+    -fx-spacing: 20;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.pause-popup-box > HBox {
+    -fx-padding: 10 20;
+    -fx-spacing: 20;
+    -fx-background-color: #0479bf;
+    -fx-cursor: hand;
+}
+
+.results-popup-box {
+    -fx-padding: 20 20 10 20;
+    -fx-spacing: 20;
+    -fx-alignment: center;
+    -fx-background-color: #2e302f;
+}
+
+.results-header {
+    -fx-font-size: 30;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+}
+
+.results-details-box {
+    -fx-padding: 0 10;
+    -fx-alignment: center;
+}
+
+.results-details-box-header {
+    -fx-font-size: 10;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+}
+
+.results-details-box-header-big {
+    -fx-font-size: 13;
+}
+
+.results-details-box-value {
+    -fx-font-size: 20;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+}
+
+.results-details-box-value-big {
+    -fx-font-size: 24;
+}
+
+.results-buttons-grid-pane {
+    -fx-padding: 10 0 0 0;
+    -fx-hgap: 10;
+}
+
+.results-buttons-grid-pane > HBox {
+    -fx-padding: 5 10;
+    -fx-spacing: 5;
+    -fx-font-size: 12;
+    -fx-alignment: center;
+    -fx-opacity: 0.75;
+    -fx-background-color: rgba(0, 0, 0, 0.25);
+    -fx-cursor: hand;
+}
+
+.results-buttons-grid-pane > HBox:hover {
+    -fx-opacity: 1;
+}
+
+/* Icons */
+
 .resume-icon {
     -fx-image: url('../icons/play.png');
 }
@@ -91,4 +145,8 @@
 
 .menu-icon {
     -fx-image: url('../icons/home.png');
+}
+
+.save-icon {
+    -fx-image: url('../icons/save.png');
 }

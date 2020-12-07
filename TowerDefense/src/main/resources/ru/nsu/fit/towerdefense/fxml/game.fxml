@@ -28,23 +28,23 @@
         <HBox styleClass="progress-box">
             <HBox>
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
-                <Label fx:id="researchLabel" styleClass="bar-image-label">0</Label>
+                <Label fx:id="researchLabel">0</Label>
             </HBox>
             <HBox>
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="money-progress-icon" />
-                <Label fx:id="moneyLabel" styleClass="bar-image-label">200</Label>
+                <Label fx:id="moneyLabel">200</Label>
             </HBox>
             <HBox>
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="health-progress-icon" />
-                <Label fx:id="healthLabel" styleClass="bar-image-label">100</Label>
+                <Label fx:id="healthLabel">100</Label>
             </HBox>
             <HBox>
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="enemy-progress-icon" />
-                <Label fx:id="enemyLabel" styleClass="bar-image-label">0</Label>
+                <Label fx:id="enemyLabel">0</Label>
             </HBox>
         </HBox>
         <HBox styleClass="pause-box" GridPane.columnIndex="2">
-            <Label fx:id="playingTimeLabel" styleClass="bar-image-label">00:00</Label>
+            <Label fx:id="playingTimeLabel">00:00</Label>
             <ImageView fx:id="pauseImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="pause-icon" />
         </HBox>
     </GridPane>
@@ -60,42 +60,75 @@
         <HBox styleClass="wave-box" GridPane.rowIndex="2">
             <HBox>
                 <ImageView fx:id="waveImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="wave-progress-icon" />
-                <Label fx:id="waveLabel" styleClass="bar-image-label">0</Label>
+                <Label fx:id="waveLabel">0</Label>
             </HBox>
         </HBox>
     </GridPane>
-    <GridPane fx:id="popupGridPane" visible="false" styleClass="popup-grid-pane">
-        <columnConstraints>
-            <ColumnConstraints hgrow="ALWAYS" />
-            <ColumnConstraints hgrow="NEVER" />
-            <ColumnConstraints hgrow="ALWAYS" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints vgrow="ALWAYS" />
-            <RowConstraints vgrow="NEVER" />
-            <RowConstraints vgrow="ALWAYS" />
-        </rowConstraints>
-        <VBox styleClass="popup-box" GridPane.rowIndex="1" GridPane.columnIndex="1">
+    <GridPane fx:id="pausePopupGridPane" visible="false" styleClass="popup-grid-pane">
+        <VBox styleClass="pause-popup-box">
             <HBox fx:id="resumeHBox">
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="resume-icon" />
-                <Label styleClass="popup-image-label">Resume</Label>
+                <Label>Resume</Label>
             </HBox>
             <HBox fx:id="restartHBox">
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="restart-icon" />
-                <Label styleClass="popup-image-label">Restart</Label>
+                <Label>Restart</Label>
             </HBox>
             <HBox fx:id="idleHBox">
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="idle-icon" />
-                <Label styleClass="popup-image-label">Idle game</Label>
+                <Label>Idle game</Label>
             </HBox>
             <HBox fx:id="finishHBox">
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="finish-icon" />
-                <Label styleClass="popup-image-label">Finish game</Label>
+                <Label>Finish game</Label>
             </HBox>
             <HBox fx:id="menuHBox">
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="menu-icon" />
-                <Label styleClass="popup-image-label">Main menu</Label>
+                <Label>Main menu</Label>
             </HBox>
+        </VBox>
+    </GridPane>
+    <GridPane fx:id="resultsPopupGridPane" visible="false" styleClass="popup-grid-pane">
+        <VBox styleClass="results-popup-box">
+            <Label fx:id="resultsHeaderLabel" styleClass="results-header">Game over</Label>
+            <GridPane>
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="33.33" />
+                    <ColumnConstraints percentWidth="33.33" />
+                    <ColumnConstraints percentWidth="33.33" />
+                </columnConstraints>
+                <VBox styleClass="results-details-box">
+                    <Label fx:id="resultsWavesLabel" styleClass="results-details-box-value" />
+                    <Label styleClass="results-details-box-header">Defeated waves</Label>
+                </VBox>
+                <VBox styleClass="results-details-box" GridPane.columnIndex="1">
+                    <Label fx:id="resultsEnemyLabel" styleClass="results-details-box-value, results-details-box-value-big" />
+                    <Label styleClass="results-details-box-header, results-details-box-header-big">Killed enemies</Label>
+                </VBox>
+                <VBox styleClass="results-details-box" GridPane.columnIndex="2">
+                    <Label fx:id="resultsTimeLabel" styleClass="results-details-box-value" />
+                    <Label styleClass="results-details-box-header">Game duration</Label>
+                </VBox>
+            </GridPane>
+            <GridPane styleClass="results-buttons-grid-pane">
+                <columnConstraints>
+                    <ColumnConstraints prefWidth="100" />
+                    <ColumnConstraints prefWidth="100" />
+                    <ColumnConstraints prefWidth="100" />
+                </columnConstraints>
+                <HBox fx:id="resultsSaveReplayHBox">
+                    <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true" styleClass="save-icon" />
+                    <Label>Save replay</Label>
+                </HBox>
+                <HBox fx:id="resultsRestartHBox" GridPane.columnIndex="1">
+                    <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true" styleClass="restart-icon" />
+                    <Label>Restart</Label>
+                </HBox>
+                <HBox fx:id="resultsMenuHBox" GridPane.columnIndex="2">
+                    <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true" styleClass="menu-icon" />
+                    <Label>Menu</Label>
+                </HBox>
+            </GridPane>
         </VBox>
     </GridPane>
 </StackPane>
