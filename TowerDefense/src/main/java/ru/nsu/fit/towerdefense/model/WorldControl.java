@@ -21,13 +21,16 @@ public class WorldControl {
   private static final double DELTA = 0.001;
 
   private final GameMap gameMap;
+  private final int deltaTime;
   private final WorldObserver worldObserver; // todo use it
   private World world;
 
   private GameMetaData gameMetaData;
 
-  public WorldControl(GameMap gameMap, WorldObserver worldObserver) {
+  public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
     this.gameMap = gameMap;
+    this.deltaTime = 1; // DEBUG! todo remove
+//    this.deltaTime = deltaTime; // DEBUG! todo uncomment
     this.worldObserver = worldObserver;
 
     world = new World();
@@ -127,8 +130,7 @@ public class WorldControl {
     return ++tick;
   }
 
-  public void simulateTick(int deltaTime) {
-    deltaTime = 1; // DEBUG! todo remove
+  public void simulateTick() {
 
 
     for (Tower tower : world.getTowers()) {

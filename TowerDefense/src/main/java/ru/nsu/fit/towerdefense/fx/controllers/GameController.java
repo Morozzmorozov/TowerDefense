@@ -89,7 +89,7 @@ public class GameController implements Controller, WorldObserver {
     public GameController(SceneManager sceneManager, GameMap gameMap) {
         this.sceneManager = sceneManager;
 
-        worldControl = new WorldControl(gameMap, GameController.this);
+        worldControl = new WorldControl(gameMap, DELTA_TIME, GameController.this);
 
         worldSize = gameMap.getSize();
     }
@@ -118,7 +118,7 @@ public class GameController implements Controller, WorldObserver {
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
-                worldControl.simulateTick(DELTA_TIME);
+                worldControl.simulateTick();
                 worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
                 Platform.runLater(() -> {
                     worldRenderer.render();
@@ -251,7 +251,7 @@ public class GameController implements Controller, WorldObserver {
         private int frame;
 
         public WorldControlStub(GameMap gameMap) {
-            super(gameMap, GameController.this);
+            super(gameMap, DELTA_TIME, GameController.this);
 
             for (int i = 0; i < 100; i++) {
                 world.getGameObjectStubs().add(generateRandomGameObject());
@@ -259,7 +259,7 @@ public class GameController implements Controller, WorldObserver {
         }
 
         @Override
-        public void simulateTick(int deltaTime) {
+        public void simulateTick() {
             if (frame++ % 10 == 0) {
                 if (world.getGameObjectStubs().size() > 0) {
                     world.getGameObjectStubs().remove(
