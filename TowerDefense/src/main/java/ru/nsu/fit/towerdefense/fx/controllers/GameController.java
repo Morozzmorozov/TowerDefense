@@ -35,7 +35,7 @@ import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.RENDER_WORLD_ERROR_HE
  *
  * @author Oleg Markelov
  */
-public class GameController implements Controller, WorldObserver {
+public class GameController implements Controller, WorldObserver, WorldRendererObserver {
 
     private static final String FXML_FILE_NAME = "game.fxml";
     private static final int FRAMES_PER_SECOND = 60;
@@ -98,7 +98,7 @@ public class GameController implements Controller, WorldObserver {
     @FXML
     private void initialize() {
         worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
-        worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell());
+        worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell(), this);
 
         pauseImageView.setOnMouseClicked(mouseEvent -> {
             worldSimulationExecutor.shutdown();
@@ -220,6 +220,22 @@ public class GameController implements Controller, WorldObserver {
         finishGame(true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onGameObjectClicked(Renderable renderable) {
+        switch (renderable.getGameObjectType()) {
+            case BASE -> System.out.println("BASE");
+            case ENEMY -> System.out.println("ENEMY");
+            case ENEMY_PORTAL -> System.out.println("ENEMY_PORTAL");
+            case PROJECTILE -> System.out.println("PROJECTILE");
+            case ROAD_TILE -> System.out.println("ROAD_TILE");
+            case TOWER -> System.out.println("TOWER");
+            case TOWER_PLATFORM -> System.out.println("TOWER_PLATFORM");
+        }
+    }
+
     private void finishGame(boolean win) {
         if (worldSimulationExecutor != null) {
             worldSimulationExecutor.shutdown();
@@ -328,6 +344,11 @@ public class GameController implements Controller, WorldObserver {
             private final Vector2<Double> position = new Vector2<>(-1d, 0d);
             private final Vector2<Double> velocity = new Vector2<>(0d, 0d);
             private final Vector2<Double> size = new Vector2<>(GAME_OBJECT_SIZE, GAME_OBJECT_SIZE);
+
+            @Override
+            public Type getGameObjectType() {
+                return null;
+            }
 
             @Override
             public Vector2<Double> getPosition() {

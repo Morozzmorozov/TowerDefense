@@ -11,7 +11,6 @@ import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -23,6 +22,7 @@ public class WorldRenderer {
 
     private final ObservableList<Node> gameNodes;
     private final double pixelsPerGameCell;
+    private final WorldRendererObserver observer;
 
     private final Map<Renderable, Node> renderableToGameNodeMap = new HashMap<>();
 
@@ -31,10 +31,12 @@ public class WorldRenderer {
      *
      * @param gameNodes         list of game nodes.
      * @param pixelsPerGameCell how many pixels fit one dimension of game cell.
+     * @param observer          world renderer observer.
      */
-    public WorldRenderer(ObservableList<Node> gameNodes, double pixelsPerGameCell) {
+    public WorldRenderer(ObservableList<Node> gameNodes, double pixelsPerGameCell, WorldRendererObserver observer) {
         this.gameNodes = gameNodes;
         this.pixelsPerGameCell = pixelsPerGameCell;
+        this.observer = observer;
     }
 
     /**
@@ -50,7 +52,7 @@ public class WorldRenderer {
 
                 imageView.setOnMouseClicked(mouseEvent -> {
                     if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                        System.out.println(renderable.getImageName());
+                        observer.onGameObjectClicked((Renderable) imageView.getUserData());
                     }
                 });
 
