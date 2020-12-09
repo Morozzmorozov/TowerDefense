@@ -41,6 +41,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private static final int FRAMES_PER_SECOND = 60;
     private static final int DELTA_TIME = 1000 / FRAMES_PER_SECOND;
 
+    private enum State { PLAYING, PAUSED, FINISHED }
+
     @FXML private StackPane rootStackPane;
     @FXML private AnchorPane worldAnchorPane;
 
@@ -81,6 +83,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private WorldCamera worldCamera;
     private WorldRenderer worldRenderer;
 
+    private State state;
+
     /**
      * Creates new GameController with specified SceneManager and GameMap.
      *
@@ -93,6 +97,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldControl = new WorldControl(gameMap, DELTA_TIME, GameController.this);
 
         worldSize = gameMap.getSize();
+
+        state = State.PLAYING;
     }
 
     @FXML
@@ -101,10 +107,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell(), this);
 
         pauseImageView.setOnMouseClicked(mouseEvent -> {
+            state = State.PAUSED;
+
             worldSimulationExecutor.shutdown();
             pausePopupGridPane.setVisible(true);
         });
         resumeHBox.setOnMouseClicked(mouseEvent -> {
+            state = State.PLAYING;
+
             pausePopupGridPane.setVisible(false);
             activateGame();
         });
@@ -162,6 +172,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @Override
     public void runAfterSceneSet() {
         sceneManager.getScene().setOnScroll(scrollEvent -> {
+            if (state != State.PLAYING) {
+                return;
+            }
+
             if (scrollEvent.getDeltaY() == 0) {
                 return;
             }
@@ -171,18 +185,30 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         });
 
         sceneManager.getScene().setOnMousePressed(mouseEvent -> {
+            if (state != State.PLAYING) {
+                return;
+            }
+
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
                 worldCamera.initMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
         sceneManager.getScene().setOnMouseDragged(mouseEvent -> {
+            if (state != State.PLAYING) {
+                return;
+            }
+
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
                 worldCamera.updateMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
         sceneManager.getScene().setOnMouseReleased(mouseEvent -> {
+            if (state != State.PLAYING) {
+                return;
+            }
+
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
                 worldCamera.finishMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
@@ -225,6 +251,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      */
     @Override
     public void onGameObjectClicked(Renderable renderable) {
+        if (state != State.PLAYING) {
+            return;
+        }
+
         switch (renderable.getGameObjectType()) {
             case BASE -> System.out.println("BASE");
             case ENEMY -> System.out.println("ENEMY");
@@ -237,6 +267,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void finishGame(boolean win) {
+        state = State.FINISHED;
+
         if (worldSimulationExecutor != null) {
             worldSimulationExecutor.shutdown();
         }
