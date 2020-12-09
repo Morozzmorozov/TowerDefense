@@ -3,6 +3,15 @@ package ru.nsu.fit.towerdefense.model.world.gameobject;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 
 public interface Renderable {
+
+  enum Type {
+    BASE, ENEMY, ENEMY_PORTAL, PROJECTILE, ROAD_TILE, TOWER, TOWER_PLATFORM
+  }
+
+  default Type getGameObjectType() { // todo remove default impl
+    return Type.BASE;
+  }
+
   Vector2<Double> getPosition();
   Vector2<Double> getSize();
   String getImageName();
