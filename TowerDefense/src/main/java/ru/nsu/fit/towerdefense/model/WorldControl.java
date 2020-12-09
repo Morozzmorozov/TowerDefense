@@ -18,6 +18,16 @@ import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
 public class WorldControl {
+  /**
+   * Returns remaining ticks till the next wave (must be > 0).
+   *
+   * In case this info is not yet available - returns 0.
+   *
+   * @return remaining ticks till the next wave.
+   */
+  public long getTicksTillNextWave() { // todo
+    return 333;
+  }
   private static final double DELTA = 0.001;
 
   private final GameMap gameMap;

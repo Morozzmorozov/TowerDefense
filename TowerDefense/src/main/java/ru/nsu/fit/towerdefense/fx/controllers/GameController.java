@@ -48,6 +48,7 @@ public class GameController implements Controller, WorldObserver {
     @FXML private Label healthLabel;
     @FXML private Label enemyLabel;
     @FXML private Label moneyLabel;
+    @FXML private Label nextWaveTimeLabel;
     @FXML private Label waveLabel;
     @FXML private Label playingTimeLabel;
 
@@ -127,8 +128,11 @@ public class GameController implements Controller, WorldObserver {
                     moneyLabel.setText(worldControl.getMoney() + "");
                     healthLabel.setText(worldControl.getBaseHealth() + "");
                     enemyLabel.setText(worldControl.getEnemiesKilled() + "");
+                    long ticksTillNextWave = worldControl.getTicksTillNextWave();
+                    nextWaveTimeLabel.setText(ticksTillNextWave <= 0 ? ""
+                        : formatWaveTime(ticksTillNextWave * DELTA_TIME));
                     waveLabel.setText(worldControl.getWaveNumber() + "");
-                    playingTimeLabel.setText(formatTime(worldControl.getTick() * DELTA_TIME));
+                    playingTimeLabel.setText(formatPlayingTime(worldControl.getTick() * DELTA_TIME));
                 });
             } catch (RenderException e) {
                 sceneManager.switchToMenu();
@@ -234,7 +238,11 @@ public class GameController implements Controller, WorldObserver {
         });
     }
 
-    private String formatTime(long milliseconds) {
+    private String formatWaveTime(long milliseconds) {
+        return String.format("%d:%02d", (milliseconds / 60000) % 60, (milliseconds / 1000) % 60);
+    }
+
+    private String formatPlayingTime(long milliseconds) {
         return String.format(milliseconds < 3600000 ? "%2$02d:%3$02d" : "%02d:%02d:%02d",
             milliseconds / 3600000, (milliseconds / 60000) % 60, (milliseconds / 1000) % 60);
     }

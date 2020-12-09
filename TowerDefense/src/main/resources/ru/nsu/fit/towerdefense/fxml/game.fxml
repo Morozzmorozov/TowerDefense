@@ -58,10 +58,18 @@
             <RowConstraints vgrow="NEVER" />
         </rowConstraints>
         <HBox styleClass="wave-box" GridPane.rowIndex="2">
-            <HBox>
-                <ImageView fx:id="waveImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="wave-progress-icon" />
-                <Label fx:id="waveLabel">0</Label>
-            </HBox>
+            <GridPane hgap="6" vgap="2">
+                <columnConstraints>
+                    <ColumnConstraints halignment="CENTER" />
+                    <ColumnConstraints halignment="CENTER" />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints valignment="CENTER" />
+                </rowConstraints>
+                <Label fx:id="nextWaveTimeLabel" styleClass="next-wave-time-label">0:03</Label>
+                <ImageView fx:id="waveImageView" GridPane.rowIndex="1" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="wave-progress-icon" />
+                <Label fx:id="waveLabel" GridPane.rowIndex="1" GridPane.columnIndex="1">0</Label>
+            </GridPane>
         </HBox>
     </GridPane>
     <GridPane fx:id="pausePopupGridPane" visible="false" styleClass="popup-grid-pane">

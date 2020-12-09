@@ -15,6 +15,11 @@ Label {
 .bar-grid-pane > HBox {
     -fx-padding: 8;
     -fx-spacing: 12;
+    -fx-alignment: center;
+}
+
+.bar-grid-pane > HBox > HBox {
+    -fx-alignment: center;
 }
 
 .progress-box, .wave-box {
@@ -23,6 +28,10 @@ Label {
 
 .pause-box {
     -fx-background-color: linear-gradient(to left, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
+}
+
+.next-wave-time-label {
+    -fx-font-size: 14;
 }
 
 .research-progress-icon {
@@ -124,8 +133,6 @@ Label {
 .results-buttons-grid-pane > HBox:hover {
     -fx-opacity: 1;
 }
-
-/* Icons */
 
 .resume-icon {
     -fx-image: url('../icons/play.png');
