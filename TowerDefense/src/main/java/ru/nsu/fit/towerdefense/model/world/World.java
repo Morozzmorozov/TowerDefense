@@ -1,6 +1,7 @@
 package ru.nsu.fit.towerdefense.model.world;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -85,7 +86,7 @@ public class World {
     return projectiles;
   }
 
-  public Iterable<Renderable> getRenderables() {
+  public Collection<Renderable> getRenderables() {
     // todo resolve conflict with Collection
     List<Renderable> renderables = new ArrayList<>();
     renderables.addAll(roadTiles);

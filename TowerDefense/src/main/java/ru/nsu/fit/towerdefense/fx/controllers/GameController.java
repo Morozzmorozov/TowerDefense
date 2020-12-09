@@ -119,8 +119,7 @@ public class GameController implements Controller, WorldObserver {
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
                 worldControl.simulateTick(DELTA_TIME);
-                worldRenderer.update(new HashSet<>((Collection<? extends Renderable>)
-                    worldControl.getWorld().getRenderables()));
+                worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
                 Platform.runLater(() -> {
                     worldRenderer.render();
 
@@ -311,7 +310,7 @@ public class GameController implements Controller, WorldObserver {
             }
 
             @SuppressWarnings("unchecked")
-            public Iterable<Renderable> getRenderables() {
+            public Collection<Renderable> getRenderables() {
                 return (List<Renderable>) (List<? extends Renderable>) gameObjects;
             }
         }
