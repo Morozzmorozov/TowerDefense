@@ -7,12 +7,12 @@ package ru.nsu.fit.towerdefense.model;
  */
 public interface WorldObserver {
     /**
-     * An event occurring on player loosing the game.
+     * An event occurring on game defeat.
      */
-    void onGameLoosing();
+    void onDefeat();
 
     /**
-     * An event occurring on player winning the game.
+     * An event occurring on game victory.
      */
-    void onGameWinning();
+    void onVictory();
 }

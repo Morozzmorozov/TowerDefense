@@ -205,7 +205,7 @@ public class GameController implements Controller, WorldObserver {
      * {@inheritDoc}
      */
     @Override
-    public void onGameLoosing() {
+    public void onDefeat() {
         finishGame(false);
     }
 
@@ -213,7 +213,7 @@ public class GameController implements Controller, WorldObserver {
      * {@inheritDoc}
      */
     @Override
-    public void onGameWinning() {
+    public void onVictory() {
         finishGame(true);
     }
 

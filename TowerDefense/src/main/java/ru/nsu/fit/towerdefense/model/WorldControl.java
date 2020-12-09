@@ -258,7 +258,7 @@ public class WorldControl {
 
         if (world.getBase().getHealth() <= 0) {
           removedEnemies.add(enemy);
-          worldObserver.onGameLoosing();
+          worldObserver.onDefeat();
         } else {
           removedEnemies.add(enemy); // not sure if I should leave this
           enemyDeath(enemy);
@@ -331,7 +331,7 @@ public class WorldControl {
       world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward());
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
-        worldObserver.onGameWinning();
+        worldObserver.onVictory();
       }
     }
   }
