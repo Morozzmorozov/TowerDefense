@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -28,6 +29,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
+import static javafx.scene.input.KeyCode.ESCAPE;
 import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.RENDER_WORLD_ERROR_HEADER;
 
 /**
@@ -106,22 +108,26 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell(), this);
 
-        pauseImageView.setOnMouseClicked(mouseEvent -> {
-            state = State.PAUSED;
-
-            worldSimulationExecutor.shutdown();
-            pausePopupGridPane.setVisible(true);
-        });
-        resumeHBox.setOnMouseClicked(mouseEvent -> {
-            state = State.PLAYING;
-
-            pausePopupGridPane.setVisible(false);
-            activateGame();
-        });
+        pauseImageView.setOnMouseClicked(mouseEvent -> pauseGame());
+        resumeHBox.setOnMouseClicked(mouseEvent -> resumeGame());
         menuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         resultsMenuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
+        activateGame();
+    }
+
+    private void pauseGame() {
+        state = State.PAUSED;
+
+        worldSimulationExecutor.shutdown();
+        pausePopupGridPane.setVisible(true);
+    }
+
+    private void resumeGame() {
+        state = State.PLAYING;
+
+        pausePopupGridPane.setVisible(false);
         activateGame();
     }
 
@@ -219,6 +225,16 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 worldCamera.finishMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
+
+        sceneManager.getScene().setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(ESCAPE)) {
+                if (state == State.PLAYING) {
+                    pauseGame();
+                } else if (state == State.PAUSED) {
+                    resumeGame();
+                }
+            }
+        });
     }
 
     /**
@@ -234,6 +250,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         sceneManager.getScene().setOnMousePressed(null);
         sceneManager.getScene().setOnMouseDragged(null);
         sceneManager.getScene().setOnMouseReleased(null);
+        sceneManager.getScene().setOnKeyPressed(null);
     }
 
     /**
