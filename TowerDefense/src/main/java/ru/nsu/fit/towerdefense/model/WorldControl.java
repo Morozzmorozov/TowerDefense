@@ -176,14 +176,20 @@ public class WorldControl {
 
 
       if (tower.getTarget() != null) {
+        Vector2<Double> direction = new Vector2<>(
+            tower.getTarget().getPosition().getX() - tower.getPosition().getX(),
+            tower.getTarget().getPosition().getY() - tower.getPosition().getY());
+
+        double rotation = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()) + Math.PI / 2);
+        tower.setRotation(rotation);
+        System.out.println(tower.getRotation());
+
         if (tower.getCooldown() <= 0) {
 
           ProjectileType projectileType = GameMetaData.getInstance().getProjectileType(tower.getType().getProjectileType());
 
           // Instant rotation for now
-          Vector2<Double> direction = new Vector2<>(
-              tower.getTarget().getPosition().getX() - tower.getPosition().getX(),
-              tower.getTarget().getPosition().getY() - tower.getPosition().getY());
+
           direction.setX(direction.getX() * projectileType.getSpeed() / distance(tower.getTarget().getPosition(), tower.getPosition()));
           direction.setY(direction.getY() * projectileType.getSpeed() / distance(tower.getTarget().getPosition(), tower.getPosition()));
 

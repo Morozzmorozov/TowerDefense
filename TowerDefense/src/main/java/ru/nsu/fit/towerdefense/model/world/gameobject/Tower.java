@@ -34,6 +34,7 @@ public class Tower implements Renderable {
     this.type = type;
   }
 
+  @Override
   public double getRotation() {
     return rotation;
   }
