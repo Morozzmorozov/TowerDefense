@@ -34,6 +34,12 @@ Label {
     -fx-font-size: 14;
 }
 
+.speed-box {
+    -fx-padding: 0 0 0 30;
+    -fx-alignment: center;
+    -fx-spacing: 5;
+}
+
 .research-progress-icon {
     -fx-image: url('../icons/star.png');
 }
@@ -55,7 +61,22 @@ Label {
     -fx-cursor: hand;
 }
 
-.pause-icon {
+.speed-1x {
+    -fx-image: url('../icons/speed-1x.png');
+    -fx-cursor: hand;
+}
+
+.speed-2x {
+    -fx-image: url('../icons/speed-2x.png');
+    -fx-cursor: hand;
+}
+
+.speed-3x {
+    -fx-image: url('../icons/speed-3x.png');
+    -fx-cursor: hand;
+}
+
+.pause-icon, .speed-0x {
     -fx-image: url('../icons/pause.png');
     -fx-cursor: hand;
 }

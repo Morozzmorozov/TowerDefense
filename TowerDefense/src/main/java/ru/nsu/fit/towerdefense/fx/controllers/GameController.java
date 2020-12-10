@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -52,11 +51,17 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private Label healthLabel;
     @FXML private Label enemyLabel;
     @FXML private Label moneyLabel;
-    @FXML private Label nextWaveTimeLabel;
-    @FXML private Label waveLabel;
     @FXML private Label playingTimeLabel;
 
     @FXML private ImageView waveImageView;
+    @FXML private Label nextWaveTimeLabel;
+    @FXML private Label waveLabel;
+    @FXML private Label speedLabel;
+    @FXML private ImageView speed0xImageView;
+    @FXML private ImageView speed1xImageView;
+    @FXML private ImageView speed2xImageView;
+    @FXML private ImageView speed3xImageView;
+
     @FXML private ImageView pauseImageView;
 
     @FXML private GridPane pausePopupGridPane;
@@ -86,6 +91,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private WorldRenderer worldRenderer;
 
     private State state;
+    private int speed;
 
     /**
      * Creates new GameController with specified SceneManager and GameMap.
@@ -101,12 +107,18 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldSize = gameMap.getSize();
 
         state = State.PLAYING;
+        speed = 1;
     }
 
     @FXML
     private void initialize() {
         worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell(), this);
+
+        speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
+        speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
+        speed2xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(2));
+        speed3xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(3));
 
         pauseImageView.setOnMouseClicked(mouseEvent -> pauseGame());
         resumeHBox.setOnMouseClicked(mouseEvent -> resumeGame());
@@ -135,7 +147,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
-                worldControl.simulateTick();
+                if (speed == 0) {
+                    return;
+                }
+
+                for (int i = 0; i < speed; i++) {
+                    worldControl.simulateTick();
+                }
+
                 worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
                 Platform.runLater(() -> {
                     worldRenderer.render();
@@ -168,6 +187,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 throwable.printStackTrace();
             }
         }, 0, DELTA_TIME, TimeUnit.MILLISECONDS);
+    }
+
+    private void updateSpeed(int speed) {
+        this.speed = speed;
+        speedLabel.setText(speed + "x");
     }
 
     /**
