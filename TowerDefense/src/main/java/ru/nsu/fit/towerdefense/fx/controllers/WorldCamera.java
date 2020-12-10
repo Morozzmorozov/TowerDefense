@@ -91,8 +91,8 @@ public class WorldCamera {
         }
 
         double f = (scale / worldPane.getScaleY()) - 1;
-        double dx = (zoomPointX - worldPane.getBoundsInLocal().getCenterX());
-        double dy = (zoomPointY - worldPane.getBoundsInLocal().getCenterY());
+        double dx = (zoomPointX - (worldPane.getBoundsInParent().getWidth() / 2 + worldPane.getBoundsInParent().getMinX()));
+        double dy = (zoomPointY - (worldPane.getBoundsInParent().getHeight() / 2 + worldPane.getBoundsInParent().getMinY()));
 
         ScaleTransition scaleTransition = new ScaleTransition(Duration.millis(SCROLL_TIME), worldPane);
         scaleTransition.setToX(scale);
