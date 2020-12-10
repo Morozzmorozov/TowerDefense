@@ -44,6 +44,8 @@ public class WorldControl {
   private int enemiesKilled = 0;
   private int wavesDefeated = 0;
 
+  private double debugRotationSpeed = 3.0;
+
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
     this.gameMap = gameMap;
     this.deltaTime = 1; // DEBUG! todo remove
@@ -180,10 +182,23 @@ public class WorldControl {
             tower.getTarget().getPosition().getX() - tower.getPosition().getX(),
             tower.getTarget().getPosition().getY() - tower.getPosition().getY());
 
-        double rotation = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()) + Math.PI / 2);
-        tower.setRotation(rotation);
+        double targetAngle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()) + Math.PI / 2);
 
-        if (tower.getCooldown() <= 0) {
+        double deltaAngle = (targetAngle - tower.getRotation() + 360.0) % 360.0;
+
+        if (deltaAngle <= debugRotationSpeed || 360.0 - deltaAngle <= debugRotationSpeed) {
+          tower.setRotation(targetAngle);
+        } else {
+          if (deltaAngle < 180.0) {
+            tower.setRotation((tower.getRotation() + debugRotationSpeed) % 360.0);
+          } else {
+            tower.setRotation((tower.getRotation() - debugRotationSpeed + 360.0) % 360.0);
+          }
+        }
+
+        //tower.setRotation(targetAngle);
+
+        if (tower.getCooldown() <= 0 && tower.getRotation() == targetAngle) {
 
           ProjectileType projectileType = GameMetaData.getInstance().getProjectileType(tower.getType().getProjectileType());
 
