@@ -182,7 +182,6 @@ public class WorldControl {
 
         double rotation = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()) + Math.PI / 2);
         tower.setRotation(rotation);
-        System.out.println(tower.getRotation());
 
         if (tower.getCooldown() <= 0) {
 
