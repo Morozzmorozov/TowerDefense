@@ -256,13 +256,27 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         }
 
         switch (renderable.getGameObjectType()) {
-            case BASE -> System.out.println("BASE");
-            case ENEMY -> System.out.println("ENEMY");
-            case ENEMY_PORTAL -> System.out.println("ENEMY_PORTAL");
-            case PROJECTILE -> System.out.println("PROJECTILE");
-            case ROAD_TILE -> System.out.println("ROAD_TILE");
-            case TOWER -> System.out.println("TOWER");
-            case TOWER_PLATFORM -> System.out.println("TOWER_PLATFORM");
+            case BASE:
+                System.out.println("BASE");
+                break;
+            case ENEMY:
+                System.out.println("ENEMY");
+                break;
+            case ENEMY_PORTAL:
+                System.out.println("ENEMY_PORTAL");
+                break;
+            case PROJECTILE:
+                System.out.println("PROJECTILE");
+                break;
+            case ROAD_TILE:
+                System.out.println("ROAD_TILE");
+                break;
+            case TOWER:
+                System.out.println("TOWER");
+                break;
+            case TOWER_PLATFORM:
+                System.out.println("TOWER_PLATFORM");
+                break;
         }
     }
 
