@@ -278,7 +278,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 resultsHeaderLabel.setText("You win!");
             }
 
-            resultsWavesLabel.setText(waveLabel.getText());
+            resultsWavesLabel.setText(worldControl.getWavesDefeated() + "");
             resultsEnemyLabel.setText(enemyLabel.getText());
             resultsTimeLabel.setText(playingTimeLabel.getText());
 

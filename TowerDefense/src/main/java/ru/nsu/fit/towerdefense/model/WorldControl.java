@@ -38,6 +38,7 @@ public class WorldControl {
   private GameMetaData gameMetaData;
 
   private int enemiesKilled = 0;
+  private int wavesDefeated = 0;
 
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
     this.gameMap = gameMap;
@@ -134,12 +135,19 @@ public class WorldControl {
   }
 
   public int getWaveNumber() {
+    if (world.getCurrentWaveNumber() < gameMap.getWaves().size()) {
+      return world.getCurrentWaveNumber() + 1;
+    }
     return world.getCurrentWaveNumber();
   }
 
   private long tick;
   public long getTick() {
     return ++tick;
+  }
+
+  public int getWavesDefeated() {
+    return wavesDefeated;
   }
 
   public void simulateTick() {
@@ -343,6 +351,7 @@ public class WorldControl {
     Wave wave = enemy.getWave();
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
+      wavesDefeated++;
       world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward());
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
