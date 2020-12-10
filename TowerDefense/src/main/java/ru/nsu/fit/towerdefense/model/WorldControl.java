@@ -149,7 +149,7 @@ public class WorldControl {
 
   private long tick;
   public long getTick() {
-    return ++tick;
+    return tick;
   }
 
   public int getWavesDefeated() {
@@ -368,6 +368,8 @@ public class WorldControl {
     } else {
       world.setCountdown(world.getCountdown() - deltaTime);
     }
+
+    ++tick;
   }
 
   private void enemyDeath(Enemy enemy) {
