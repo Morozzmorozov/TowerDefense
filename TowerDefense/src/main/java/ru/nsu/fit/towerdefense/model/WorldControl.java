@@ -9,6 +9,7 @@ import ru.nsu.fit.towerdefense.model.world.Wave;
 import ru.nsu.fit.towerdefense.model.world.World;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Portal;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
@@ -81,6 +82,9 @@ public class WorldControl {
 
     for (int i = 0; i < gameMap.getRoads().getRoadCount(); ++i) {
       List<Vector2<Double>> road = gameMap.getRoads().getRoad(i);
+
+      world.getPortals().add(new Portal("portal.png", new Vector2<>(
+          (int)Math.round(road.get(0).getX()), (int)Math.round(road.get(0).getY()))));
 
       for (int j = 0; j < road.size() - 1; ++j) { // all nodes except last
         int x1 = (int)Math.round(road.get(j).getX());

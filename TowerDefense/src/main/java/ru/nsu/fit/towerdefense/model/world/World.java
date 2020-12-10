@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Portal;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.model.world.gameobject.RoadTile;
@@ -29,10 +30,15 @@ public class World {
   private List<Projectile> projectiles = new ArrayList<>();
   private List<TowerPlatform> towerPlatforms = new ArrayList<>();
   private List<RoadTile> roadTiles = new ArrayList<>();
+  private List<Portal> portals = new ArrayList<>();
   private Base base;
   private int money;
   private int currentWaveNumber = 0;
   private Wave currentWave;
+
+  public List<Portal> getPortals() {
+    return portals;
+  }
 
   public List<RoadTile> getRoadTiles() {
     return roadTiles;
@@ -95,6 +101,7 @@ public class World {
     renderables.add(base);
     renderables.addAll(enemies);
     renderables.addAll(projectiles);
+    renderables.addAll(portals);
     return renderables;
     /*return new Iterable<Renderable>() {
       @Override
