@@ -301,7 +301,7 @@ public class WorldControl {
           Math.abs(enemy.getPosition().getY() - world.getBase().getPosition().getY()) < DELTA) {
         int damage = enemy.getType().getDamage();
 
-        world.getBase().setHealth(world.getBase().getHealth() - damage);
+        world.getBase().setHealth(Math.max(world.getBase().getHealth() - damage, 0));
 
         if (world.getBase().getHealth() <= 0) {
           removedEnemies.add(enemy);
