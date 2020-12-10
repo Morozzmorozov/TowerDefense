@@ -37,6 +37,8 @@ public class WorldControl {
 
   private GameMetaData gameMetaData;
 
+  private int enemiesKilled = 0;
+
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
     this.gameMap = gameMap;
     this.deltaTime = 1; // DEBUG! todo remove
@@ -115,28 +117,28 @@ public class WorldControl {
     return world;
   }
 
-  public int getResearchPoints() { // todo
-    return 2;
+  public int getResearchPoints() {
+    return gameMap.getScienceReward();
   }
 
-  public int getBaseHealth() { // todo
-    return 100;
+  public int getBaseHealth() {
+    return world.getBase().getHealth();
   }
 
-  public int getEnemiesKilled() { // todo
-    return 34;
+  public int getEnemiesKilled() {
+    return enemiesKilled;
   }
 
-  public int getMoney() { // todo
-    return 200;
+  public int getMoney() {
+    return world.getMoney();
   }
 
-  public int getWaveNumber() { // todo
-    return 1;
+  public int getWaveNumber() {
+    return world.getCurrentWaveNumber();
   }
 
   private long tick;
-  public long getTick() { // todo
+  public long getTick() {
     return ++tick;
   }
 
@@ -229,6 +231,7 @@ public class WorldControl {
 
         collidedEnemy.setHealth(collidedEnemy.getHealth() - damage);
         if (collidedEnemy.getHealth() <= 0) {
+          enemiesKilled++;
           enemyDeath(collidedEnemy);
           world.getEnemies().remove(collidedEnemy);
         }
