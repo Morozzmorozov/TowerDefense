@@ -405,12 +405,22 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             public String getImageName() {
                 return "triangle";
             }
+
+            @Override
+            public double getZIndex() {
+                return 0;
+            }
         }
 
         private class Circle extends GameObject {
             @Override
             public String getImageName() {
                 return "circle";
+            }
+
+            @Override
+            public double getZIndex() {
+                return 0;
             }
         }
     }

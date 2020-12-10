@@ -31,4 +31,9 @@ public class RoadTile implements Renderable {
   public String getImageName() {
     return image;
   }
+
+  @Override
+  public double getZIndex() {
+    return 0;
+  }
 }

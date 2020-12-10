@@ -69,4 +69,9 @@ public class Tower implements Renderable {
   public String getImageName() {
     return type.getImage();
   }
+
+  @Override
+  public double getZIndex() {
+    return 3;
+  }
 }

@@ -64,4 +64,9 @@ public class Projectile implements Renderable {
     this.position = position;
     this.velocity = velocity;
   }
+
+  @Override
+  public double getZIndex() {
+    return 5;
+  }
 }

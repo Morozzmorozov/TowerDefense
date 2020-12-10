@@ -28,7 +28,5 @@ public interface Renderable {
    *
    * @return z-index.
    */
-  default double getZIndex() {
-    return 0;
-  }
+  double getZIndex();
 }

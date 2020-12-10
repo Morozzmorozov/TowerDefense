@@ -82,4 +82,9 @@ public class Enemy implements Renderable {
   public List<Vector2<Double>> getTrajectory() {
     return trajectory;
   }
+
+  @Override
+  public double getZIndex() {
+    return 4;
+  }
 }

@@ -30,4 +30,9 @@ public class TowerPlatform implements Renderable {
   public String getImageName() {
     return image;
   }
+
+  @Override
+  public double getZIndex() {
+    return 2;
+  }
 }
