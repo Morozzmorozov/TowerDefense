@@ -139,8 +139,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     healthLabel.setText(worldControl.getBaseHealth() + "");
                     enemyLabel.setText(worldControl.getEnemiesKilled() + "");
                     long ticksTillNextWave = worldControl.getTicksTillNextWave();
-                    nextWaveTimeLabel.setText(ticksTillNextWave <= 0 ? ""
-                        : formatWaveTime(ticksTillNextWave * DELTA_TIME));
+                    if (ticksTillNextWave > 0) {
+                        nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
+                        nextWaveTimeLabel.setManaged(true);
+                        nextWaveTimeLabel.setVisible(true);
+                    } else {
+                        nextWaveTimeLabel.setVisible(false);
+                        nextWaveTimeLabel.setManaged(false);
+                    }
                     waveLabel.setText(worldControl.getWaveNumber() + "");
                     playingTimeLabel.setText(formatPlayingTime(worldControl.getTick() * DELTA_TIME));
                 });
