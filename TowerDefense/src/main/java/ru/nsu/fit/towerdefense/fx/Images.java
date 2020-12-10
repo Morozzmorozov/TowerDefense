@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Images {
 
-    private static final String IMAGES_DIRECTORY = "ru/nsu/fit/towerdefense/images/";
+    private static final String IMAGES_DIRECTORY = "ru/nsu/fit/towerdefense/config/images/";
 
     private static Images instance;
 

@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.fx.controllers;
+package ru.nsu.fit.towerdefense.fx.controllers.game;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;

@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.fx.controllers;
+package ru.nsu.fit.towerdefense.fx.controllers.game;
 
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;

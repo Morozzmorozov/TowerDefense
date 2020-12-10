@@ -1,7 +1,5 @@
 package ru.nsu.fit.towerdefense.fx;
 
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,8 +9,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
-import ru.nsu.fit.towerdefense.fx.controllers.GameController;
-import ru.nsu.fit.towerdefense.fx.controllers.MenuController;
+import ru.nsu.fit.towerdefense.fx.controllers.game.GameController;
+import ru.nsu.fit.towerdefense.fx.controllers.menu.MenuController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.model.GameMetaData;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
@@ -33,7 +31,7 @@ import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.MAP_LOADING_ERROR_HEA
 public class SceneManager {
 
     private static final String DEFAULT_TITLE = "Tower Defense";
-    private static final String FXML_DIRECTORY = "/ru/nsu/fit/towerdefense/fxml/";
+    private static final String FXML_DIRECTORY = "/ru/nsu/fit/towerdefense/fx/fxml/";
 
     private static final KeyCodeCombination EXPAND_COMBINATION = new KeyCodeCombination(ENTER, ALT_DOWN);
 

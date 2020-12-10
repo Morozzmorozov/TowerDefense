@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.fx.controllers;
+package ru.nsu.fit.towerdefense.fx.controllers.menu;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
+import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.model.GameMetaData;
 
 /**

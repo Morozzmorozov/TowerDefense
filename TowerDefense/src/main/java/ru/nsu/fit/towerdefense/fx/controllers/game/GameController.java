@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.fx.controllers;
+package ru.nsu.fit.towerdefense.fx.controllers.game;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
+import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.model.WorldControl;

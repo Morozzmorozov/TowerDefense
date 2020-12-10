@@ -9,7 +9,7 @@ Label {
 
 .root {
     -fx-background-color: rgba(0, 0, 0, 0.95);
-    -fx-background-image: url('../images/dark-level/root-background.png');
+    -fx-background-image: url('../icons/root-background.png');
 }
 
 .bar-grid-pane > HBox {
