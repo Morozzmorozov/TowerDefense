@@ -12,6 +12,11 @@ public class TowerPlatform implements Renderable {
   }
 
   @Override
+  public Type getGameObjectType() {
+    return Type.TOWER_PLATFORM;
+  }
+
+  @Override
   public Vector2<Double> getPosition() {
     return new Vector2<>((double)position.getX(), (double)position.getY());
   }

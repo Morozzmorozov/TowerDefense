@@ -13,6 +13,11 @@ public class RoadTile implements Renderable {
   }
 
   @Override
+  public Type getGameObjectType() {
+    return Type.ROAD_TILE;
+  }
+
+  @Override
   public Vector2<Double> getPosition() {
     return new Vector2<>((double)position.getX(), (double)position.getY());
   }

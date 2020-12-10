@@ -34,6 +34,11 @@ public class Projectile implements Renderable {
     return type;
   }
 
+  @Override
+  public Type getGameObjectType() {
+    return Type.PROJECTILE;
+  }
+
   public Vector2<Double> getPosition() {
     return position;
   }

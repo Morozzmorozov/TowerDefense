@@ -60,6 +60,11 @@ public class Enemy implements Renderable {
   }
 
   @Override
+  public Type getGameObjectType() {
+    return Type.ENEMY;
+  }
+
+  @Override
   public Vector2<Double> getPosition() {
     return position;
   }

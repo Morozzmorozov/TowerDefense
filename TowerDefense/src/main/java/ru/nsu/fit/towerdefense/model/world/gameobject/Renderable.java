@@ -8,9 +8,7 @@ public interface Renderable {
     BASE, ENEMY, ENEMY_PORTAL, PROJECTILE, ROAD_TILE, TOWER, TOWER_PLATFORM
   }
 
-  default Type getGameObjectType() { // todo remove default impl
-    return Type.BASE;
-  }
+  Type getGameObjectType();
 
   Vector2<Double> getPosition();
   Vector2<Double> getSize();

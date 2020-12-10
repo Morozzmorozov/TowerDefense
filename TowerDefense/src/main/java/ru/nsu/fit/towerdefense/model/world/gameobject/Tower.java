@@ -51,6 +51,11 @@ public class Tower implements Renderable {
   }
 
   @Override
+  public Type getGameObjectType() {
+    return Type.TOWER;
+  }
+
+  @Override
   public Vector2<Double> getPosition() {
     return new Vector2<>((double)position.getX(), (double)position.getY());
   }
