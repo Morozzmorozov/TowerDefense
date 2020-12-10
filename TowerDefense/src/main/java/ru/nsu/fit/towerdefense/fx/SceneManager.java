@@ -1,9 +1,13 @@
 package ru.nsu.fit.towerdefense.fx;
 
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
@@ -16,6 +20,8 @@ import ru.nsu.fit.towerdefense.model.util.Vector2;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+import static javafx.scene.input.KeyCode.ENTER;
+import static javafx.scene.input.KeyCombination.ALT_DOWN;
 import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.LAYOUT_LOADING_ERROR_HEADER;
 import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.MAP_LOADING_ERROR_HEADER;
 
@@ -28,6 +34,8 @@ public class SceneManager {
 
     private static final String DEFAULT_TITLE = "Tower Defense";
     private static final String FXML_DIRECTORY = "/ru/nsu/fit/towerdefense/fxml/";
+
+    private static final KeyCodeCombination EXPAND_COMBINATION = new KeyCodeCombination(ENTER, ALT_DOWN);
 
     private final Stage stage;
     private Controller controller;
@@ -138,7 +146,13 @@ public class SceneManager {
             this.controller = controller;
 
             if (stage.getScene() == null) {
-                stage.setScene(new Scene(root, stage.getWidth(), stage.getHeight()));
+                Scene scene = new Scene(root, stage.getWidth(), stage.getHeight());
+                scene.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+                    if (EXPAND_COMBINATION.match(keyEvent)) {
+                        toggleFullScreen();
+                    }
+                });
+                stage.setScene(scene);
             } else {
                 stage.getScene().setRoot(root);
             }
