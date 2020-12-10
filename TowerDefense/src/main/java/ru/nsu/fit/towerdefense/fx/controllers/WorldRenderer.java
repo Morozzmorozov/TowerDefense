@@ -52,7 +52,7 @@ public class WorldRenderer {
 
                 imageView.setOnMouseClicked(mouseEvent -> {
                     if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                        observer.onGameObjectClicked((Renderable) imageView.getUserData());
+                        observer.onGameObjectClicked(renderable);
                     }
                 });
 
