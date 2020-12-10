@@ -26,7 +26,11 @@ public class WorldControl {
    * @return remaining ticks till the next wave.
    */
   public long getTicksTillNextWave() { // todo
-    return 333;
+    if (world.getCurrentWave().getCurrentEnemyNumber() == 0) {
+      return world.getCountdown();
+    } else {
+      return 0;
+    }
   }
   private static final double DELTA = 0.001;
 
