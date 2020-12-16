@@ -18,7 +18,8 @@ import ru.nsu.fit.towerdefense.model.map.WaveDescription;
 import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
-public class WorldControl {
+public class
+WorldControl {
   /**
    * Returns remaining ticks till the next wave (must be > 0).
    *
@@ -382,7 +383,7 @@ public class WorldControl {
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
       wavesDefeated++;
-      world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward());
+      //world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward()); TODO fix me
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
         worldObserver.onVictory();

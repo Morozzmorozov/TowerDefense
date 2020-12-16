@@ -383,7 +383,7 @@ public class GameMetaData {
             builder.setScaleFactor(root.get("ScaleFactor").asDouble());
             builder.setSpawnInterval(root.get("SpawnInterval").asDouble());
             builder.setTimeTillNextWave(root.get("TimeTillNextWave").asDouble());
-            builder.setMoneyReward(root.get("MoneyReward").asInt());
+            builder.setScienceReward(root.get("ScienceReward").asInt());
             ArrayNode enemiesNode = root.get("Enemies").deepCopy();
 
             for (int i = 0; enemiesNode.get(i) != null; i++)
@@ -403,6 +403,7 @@ public class GameMetaData {
     private WaveEnemies readEnemies(JsonNode root)
     {
         WaveEnemies.Builder builder = new WaveEnemies.Builder();
+        builder.setMoneyReward(root.get("MoneyReward").asInt());
         builder.setSpawnPosition(root.get("SpawnPosition").asInt());
         builder.setCount(root.get("Count").asInt());
         builder.setType(root.get("Type").asText());
