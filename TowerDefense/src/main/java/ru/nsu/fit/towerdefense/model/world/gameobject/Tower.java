@@ -4,6 +4,9 @@ import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
 public class Tower implements Renderable {
+
+  public enum Mode { First, Last, Nearest, Farthest, Weakest, Strongest, Random }
+
   private TowerType type;
   private int cooldown = 0;
   private double rotation = 0;

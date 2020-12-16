@@ -17,8 +17,22 @@ import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.map.WaveDescription;
 import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
+import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
 public class WorldControl {
+
+  public void buildTower(TowerPlatform towerPlatform, TowerType towerType) {
+
+  }
+
+  public void upgradeTower(Tower tower, TowerType towerType) {
+
+  }
+
+  public void tuneTower(Tower tower, Tower.Mode towerMode) {
+
+  }
+
   /**
    * Returns remaining ticks till the next wave (must be > 0).
    *
