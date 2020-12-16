@@ -396,7 +396,7 @@ public class WorldControl {
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
       wavesDefeated++;
-      world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward());
+      //world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward()); TODO fix me
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
         worldObserver.onVictory();

@@ -1,41 +1,46 @@
 {
-	"SizeX" : 2,
-	"SizeY" : 3,
+	"SizeX" : 10,
+	"SizeY" : 10,
 	"Reward" : 4,
 	"Base" : {
-		"Health" : 5,
+		"Health" : 500,
 		"PosX" : 1,
 		"PosY" : 2,
-		"Image" : "Tower1.png"
+		"Image" : "base.png"
 	},
 	"Roads" : [
-		[[100, 100], [1, 100], [1, 2]],
-		[[100, 100], [100, 2], [1, 2]],
-		[[100, 100], [1, 2]]
+		[[5, 1], [5, 2], [1, 2]],
+		[[5, 5], [1, 5], [1, 2]],
+		[[4, 3], [4, 2], [1, 2]]
 	],
-	
+
 	"BuildingPositions" : [
-		[3, 4], [5, 6], [7 ,8] 
+		[3, 4], [5, 6], [7 ,8]
 	],
-	
+
 	"Waves" : [
 		{
+
+			"Reward": 5,
 			"ScaleFactor" : 1.0,
-			"SpawnInterval" : 1.0,
-			"TimeTillNextWave" : 60.0,
-			"MoneyReward" : 1000,
+			"SpawnInterval" : 100.0,
+			"TimeTillNextWave" : 300.0,
+			"ScienceReward" : 1000,
 			"Enemies" : [
 				{
+					"MoneyReward": 5,
 					"SpawnPosition" : 0,
 					"Count" : 7,
-					"Type" : "Goblin"
+					"Type" : "Cyclops"
 				},
 				{
+					"MoneyReward": 5,
 					"SpawnPosition" : 1,
 					"Count" : 3,
-					"Type" : "Orc"
+					"Type" : "Cyclops"
 				},
 				{
+					"MoneyReward": 5,
 					"SpawnPosition" : 2,
 					"Count" : 1,
 					"Type" : "Cyclops"
@@ -44,47 +49,53 @@
 		},
 		{
 			"ScaleFactor" : 1.05,
-			"SpawnInterval" : 1.0,
-			"TimeTillNextWave" : 60.0,
-			"MoneyReward" : 1000,
+			"SpawnInterval" : 100.0,
+			"TimeTillNextWave" : 300.0,
+			"ScienceReward" : 1000,
 			"Enemies" : [
 				{
+					"MoneyReward": 5,
 					"SpawnPosition" : 0,
 					"Count" : 13,
 					"Type" : "Goblin"
 				},
 				{
+					"MoneyReward": 5,
 					"SpawnPosition" : 1,
 					"Count" : 5,
-					"Type" : "Orc"
+					"Type" : "Goblin"
 				},
 				{
+					"MoneyReward": 5,
 					"SpawnPosition" : 2,
 					"Count" : 3,
-					"Type" : "Cyclops"
+					"Type" : "Goblin"
 				}
 			]
 		},
 		{
 			"ScaleFactor" : 1.15,
-			"SpawnInterval" : 1.0,
+			"SpawnInterval" : 100.0,
 			"TimeTillNextWave" : 60.0,
-			"MoneyReward" : 1000,
+			"ScienceReward" : 1000,
 			"Enemies" : [
 				{
+					"MoneyReward": 5,
 					"SpawnPosition" : 0,
-					"Count" : 20,
-					"Type" : "Goblin"
+					"Count" : 5,
+					"Type" : "Orc"
 				},
 				{
+					"MoneyReward": 5,
 					"SpawnPosition" : 1,
-					"Count" : 20,
-					"Type" : "Goblin"
+					"Count" : 5,
+					"Type" : "Orc"
 				},
 				{
+					"MoneyReward": 5,
 					"SpawnPosition" : 2,
-					"Count" : 20,
-					"Type" : "Goblin"
+					"Count" : 5,
+					"Type" : "Orc"
 				}
 			]
 		}
