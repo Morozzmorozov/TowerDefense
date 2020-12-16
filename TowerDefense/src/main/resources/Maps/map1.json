@@ -1,0 +1,92 @@
+{
+	"SizeX" : 2,
+	"SizeY" : 3,
+	"Reward" : 4,
+	"Base" : {
+		"Health" : 5,
+		"PosX" : 1,
+		"PosY" : 2,
+		"Image" : "Tower1.png"
+	},
+	"Roads" : [
+		[[100, 100], [1, 100], [1, 2]],
+		[[100, 100], [100, 2], [1, 2]],
+		[[100, 100], [1, 2]]
+	],
+	
+	"BuildingPositions" : [
+		[3, 4], [5, 6], [7 ,8] 
+	],
+	
+	"Waves" : [
+		{
+			"ScaleFactor" : 1.0,
+			"SpawnInterval" : 1.0,
+			"TimeTillNextWave" : 60.0,
+			"MoneyReward" : 1000,
+			"Enemies" : [
+				{
+					"SpawnPosition" : 0,
+					"Count" : 7,
+					"Type" : "Goblin"
+				},
+				{
+					"SpawnPosition" : 1,
+					"Count" : 3,
+					"Type" : "Orc"
+				},
+				{
+					"SpawnPosition" : 2,
+					"Count" : 1,
+					"Type" : "Cyclops"
+				}
+			]
+		},
+		{
+			"ScaleFactor" : 1.05,
+			"SpawnInterval" : 1.0,
+			"TimeTillNextWave" : 60.0,
+			"MoneyReward" : 1000,
+			"Enemies" : [
+				{
+					"SpawnPosition" : 0,
+					"Count" : 13,
+					"Type" : "Goblin"
+				},
+				{
+					"SpawnPosition" : 1,
+					"Count" : 5,
+					"Type" : "Orc"
+				},
+				{
+					"SpawnPosition" : 2,
+					"Count" : 3,
+					"Type" : "Cyclops"
+				}
+			]
+		},
+		{
+			"ScaleFactor" : 1.15,
+			"SpawnInterval" : 1.0,
+			"TimeTillNextWave" : 60.0,
+			"MoneyReward" : 1000,
+			"Enemies" : [
+				{
+					"SpawnPosition" : 0,
+					"Count" : 20,
+					"Type" : "Goblin"
+				},
+				{
+					"SpawnPosition" : 1,
+					"Count" : 20,
+					"Type" : "Goblin"
+				},
+				{
+					"SpawnPosition" : 2,
+					"Count" : 20,
+					"Type" : "Goblin"
+				}
+			]
+		}
+	]
+}

@@ -22,17 +22,17 @@ public class GameMetaData {
     private final HashMap<String, TowerType> loadedTowers;
     private final HashMap<String, ProjectileType> loadedProjectiles;
 
-    private final String mapRoot = "src/test/resources/Maps/";
-    private final String enemiesRoot = "src/test/resources/Enemies/";
-    private final String towersRoot = "src/test/resources/Towers/";
-    private final String projectileRoot = "src/test/resources/Projectiles/";
+    private final String mapRoot = "/Maps";//"src/test/resources/Maps/";
+    private final String enemiesRoot = "/Enemies";//"src/test/resources/Enemies/";
+    private final String towersRoot = "/Towers";//"src/test/resources/Towers/";
+    private final String projectileRoot = "/Projectiles";//"src/test/resources/Projectiles/";
     private final String imageRoot = "src/main/resources/ru/nsu/fit/towerdefense/images/";
 
-    private final File mapDir;
-    private final File enemiesDir;
-    private final File towersDir;
-    private final File projectilesDir;
-    private final File imagesDir;
+    //private final File mapDir;
+    //private final File enemiesDir;
+    //private final File towersDir;
+    //private final File projectilesDir;
+    //private final File imagesDir;
 
     private GameMetaData()
     {
@@ -40,11 +40,12 @@ public class GameMetaData {
         loadedEnemies = new HashMap<>();
         loadedProjectiles = new HashMap<>();
         loadedTowers = new HashMap<>();
-        mapDir = new File(mapRoot);
-        enemiesDir = new File(enemiesRoot);
-        towersDir = new File(towersRoot);
-        projectilesDir = new File(projectileRoot);
-        imagesDir = new File(imageRoot);
+        //mapDir = new File (this.getClass().getClassLoader().getResource(mapRoot));
+        //mapDir = new File(mapRoot);
+        //enemiesDir = new File(enemiesRoot);
+        //towersDir = new File(towersRoot);
+        //projectilesDir = new File(projectileRoot);
+        //imagesDir = new File(imageRoot);
     }
 
     public static GameMetaData getInstance()
@@ -58,7 +59,16 @@ public class GameMetaData {
 
     public Collection<String> getGameMapNames()
     {
-        File file = new File(mapRoot);
+        File file = null;
+        try
+        {
+            var t = GameMetaData.class.getResource(mapRoot);
+            file = new File(t.toURI());
+        }
+        catch (Exception e)
+        {
+            System.out.println("HUI");
+        }
         if (!file.isDirectory())
         {
             return new ArrayList<>();
@@ -93,7 +103,7 @@ public class GameMetaData {
         {
             return loadedMaps.get(name);
         }
-        GameMap map = loadMap(mapRoot + name + ".json");
+        GameMap map = loadMap(mapRoot + "/" + name + ".json");
         if (map != null)
         {
             loadedMaps.put(name, map);
@@ -169,7 +179,7 @@ public class GameMetaData {
     {
         try
         {
-            File json = new File(projectileRoot + name + ".json");
+            File json = new File(GameMetaData.class.getResource(projectileRoot + "/" + name + ".json").toURI());
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
             ProjectileType.Builder builder = new ProjectileType.Builder(name);
@@ -197,7 +207,7 @@ public class GameMetaData {
     {
         try
         {
-            File json = new File(towersRoot + name + ".json");
+            File json = new File(GameMetaData.class.getResource(towersRoot + "/"  + name + ".json").toURI());
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
             TowerType.Builder builder = new TowerType.Builder(name);
@@ -225,7 +235,7 @@ public class GameMetaData {
     {
         try
         {
-            File json = new File(enemiesRoot + name + ".json");
+            File json = new File(GameMetaData.class.getResource(enemiesRoot + "/" + name + ".json").toURI());
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
             EnemyType.Builder builder = new EnemyType.Builder(name);
@@ -247,7 +257,7 @@ public class GameMetaData {
     private GameMap loadMap(String name)
     {
         try {
-            File json = new File(name);
+            File json = new File(GameMetaData.class.getResource(name).toURI());
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
             GameMap.Builder builder = new GameMap.Builder();

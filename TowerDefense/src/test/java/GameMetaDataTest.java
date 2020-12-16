@@ -31,7 +31,7 @@ public class GameMetaDataTest {
         GameMetaData data = GameMetaData.getInstance();
         EnemyType goblin = data.getEnemyType("Goblin");
         Assert.assertNotNull(goblin);
-        Assert.assertEquals(10, goblin.getHealth());
+        Assert.assertEquals(20, goblin.getHealth());
         var x = data.getEnemyType(goblin.getTypeName());
         Assert.assertEquals(x, goblin);
     }
@@ -63,15 +63,15 @@ public class GameMetaDataTest {
     {
         GameMetaData data = GameMetaData.getInstance();
         Collection<String> names = data.getGameMapNames();
-        Assert.assertEquals(1, names.size());
-        Assert.assertEquals("map1", names.iterator().next());
+        Assert.assertEquals(2, names.size());
+        Assert.assertEquals("Level 1", names.iterator().next());
     }
-
+/*
     @Test
     public void testGetImageName()
     {
         GameMetaData data = GameMetaData.getInstance();
         Assert.assertEquals("src/main/resources/ru/nsu/fit/towerdefense/images/triangle.png", data.getImagePath("triangle"));
     }
-
+*/
 }
