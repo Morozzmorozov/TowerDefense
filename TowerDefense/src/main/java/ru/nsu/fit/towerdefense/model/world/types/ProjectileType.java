@@ -13,10 +13,15 @@ public class ProjectileType {
     private int hitBox;
     private Vector2<Double> size;
     private String image;
+    private String displayInfo = "Hurts enemies"; // todo //////////////////////////////////////////
 
     public Vector2<Double> getSize() {
     return size;
   }
+
+    public String getDisplayInfo() {
+        return displayInfo;
+    }
 
     public String getImage() {
     return image;
