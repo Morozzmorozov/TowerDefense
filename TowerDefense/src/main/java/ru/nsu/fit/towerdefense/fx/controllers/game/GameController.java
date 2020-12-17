@@ -26,8 +26,11 @@ import ru.nsu.fit.towerdefense.model.world.World;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
+import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -50,6 +53,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private static final String FXML_FILE_NAME = "game.fxml";
     private static final int FRAMES_PER_SECOND = 60;
     private static final int DELTA_TIME = 1000 / FRAMES_PER_SECOND;
+    private static final DecimalFormat DECIMAL_FORMAT =
+        new DecimalFormat("#.##", new DecimalFormatSymbols() {{setDecimalSeparator('.');}});
 
     private enum State { PLAYING, PAUSED, FINISHED }
 
@@ -58,10 +63,28 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     @FXML private StackPane gameObjectSidePane;
     @FXML private ImageView closeSidePaneImageView;
+
     @FXML private VBox platformSideVBox;
-    @FXML private VBox towerSideVBox;
     @FXML private FlowPane buildTowerFlowPane;
+    @FXML private VBox buildTowerCharacteristicsVBox;
+    @FXML private Label buildTowerOmnidirectionalLabel;
+    @FXML private Label buildTowerRangeLabel;
+    @FXML private Label buildTowerFireRateLabel;
+    @FXML private Label buildTowerRotationSpeedLabel;
+    @FXML private Label buildTowerSelfGuidedLabel;
+    @FXML private Label buildTowerProjectileSpeedLabel;
+    @FXML private Label buildTowerDamageLabel;
+
+    @FXML private VBox towerSideVBox;
     @FXML private FlowPane upgradeTowerFlowPane;
+    @FXML private Label upgradeTowerOmnidirectionalLabel;
+    @FXML private Label upgradeTowerRangeLabel;
+    @FXML private Label upgradeTowerFireRateLabel;
+    @FXML private Label upgradeTowerRotationSpeedLabel;
+    @FXML private Label upgradeTowerSelfGuidedLabel;
+    @FXML private Label upgradeTowerProjectileSpeedLabel;
+    @FXML private Label upgradeTowerDamageLabel;
+    @FXML private Label sellLabel;
 
     @FXML private Label researchLabel;
     @FXML private Label healthLabel;
@@ -356,29 +379,36 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 break;
             case TOWER:
                 System.out.println("TOWER");
-                Tower tower = (Tower) renderable;
-                worldRenderer.showTowerRangeCircle(tower);
-                updateTowerSideBar(tower);
-                showSideBar(towerSideVBox);
+                onTowerClicked((Tower) renderable);
                 break;
             case TOWER_PLATFORM:
                 System.out.println("TOWER_PLATFORM");
-                TowerPlatform towerPlatform = (TowerPlatform) renderable;
-
-                Tower towerOnPlatform = worldControl.getTowerOnPlatform(towerPlatform);
-                if (towerOnPlatform == null) {
-                    updatePlatformSideBar(towerPlatform);
-                    showSideBar(platformSideVBox);
-                } else {
-                    worldRenderer.showTowerRangeCircle(towerOnPlatform);
-                    updateTowerSideBar(towerOnPlatform);
-                    showSideBar(towerSideVBox);
-                }
+                onTowerPlatformClicked((TowerPlatform) renderable);
                 break;
         }
     }
 
+    private void onTowerPlatformClicked(TowerPlatform towerPlatform) {
+        Tower towerOnPlatform = worldControl.getTowerOnPlatform(towerPlatform);
+        if (towerOnPlatform == null) {
+            updatePlatformSideBar(towerPlatform);
+            showSideBar(platformSideVBox);
+        } else {
+            worldRenderer.showTowerRangeCircle(towerOnPlatform);
+            updateTowerSideBar(towerOnPlatform);
+            showSideBar(towerSideVBox);
+        }
+    }
+
+    private void onTowerClicked(Tower tower) {
+        worldRenderer.showTowerRangeCircle(tower);
+        updateTowerSideBar(tower);
+        showSideBar(towerSideVBox);
+    }
+
     private void updateTowerSideBar(Tower tower) {
+        setDefaultTowerCharacteristics(tower);
+
         upgradeTowerFlowPane.getChildren().clear();
         for (TowerType.Upgrade upgrade : tower.getType().getUpgrades()) {
             try {
@@ -399,15 +429,94 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 towerTypeVBox.setOnMouseClicked(mouseEvent -> {
                     try {
                         worldControl.upgradeTower(tower, upgrade);
+                        onTowerClicked(tower);
                     } catch (GameplayException e) {
                         System.out.println(e.getMessage());
                     }
                 });
+                towerTypeVBox.setOnMouseEntered(mouseEvent -> {
+                    ProjectileType projType = GameMetaData.getInstance()
+                        .getProjectileType(tower.getType().getProjectileType());
+                    ProjectileType newProjType = GameMetaData.getInstance()
+                        .getProjectileType(towerType.getProjectileType());
+
+                    updateLabelComparingValues(upgradeTowerOmnidirectionalLabel,
+                        towerType.getFireType() == TowerType.FireType.OMNIDIRECTIONAL,
+                        tower.getType().getFireType() == TowerType.FireType.OMNIDIRECTIONAL);
+
+                    updateLabelComparingValues(upgradeTowerRangeLabel,
+                        towerType.getRange(), tower.getType().getRange());
+
+                    updateLabelComparingValues(upgradeTowerFireRateLabel,
+                        towerType.getFireRate(), tower.getType().getFireRate());
+
+                    updateLabelComparingValues(upgradeTowerRotationSpeedLabel,
+                        towerType.getRotationSpeed(), tower.getType().getRotationSpeed());
+
+                    updateLabelComparingValues(upgradeTowerSelfGuidedLabel,
+                        newProjType.isSelfGuided(), projType.isSelfGuided());
+
+                    updateLabelComparingValues(upgradeTowerProjectileSpeedLabel,
+                        newProjType.getSpeed(), projType.getSpeed());
+
+                    updateLabelComparingValues(upgradeTowerDamageLabel,
+                        newProjType.getBasicDamage(), projType.getBasicDamage());
+                });
+                towerTypeVBox.setOnMouseExited(mouseEvent -> setDefaultTowerCharacteristics(tower));
 
                 upgradeTowerFlowPane.getChildren().add(towerTypeVBox);
             } catch (RenderException e) {
                 System.out.println(e.getMessage());
             }
+        }
+
+        if (upgradeTowerFlowPane.getChildren().isEmpty()) {
+            upgradeTowerFlowPane.getChildren().add(new Label("No more upgrades for this tower"));
+        }
+
+        sellLabel.setText("$" + tower.getSellPrice());
+    }
+
+    private void setDefaultTowerCharacteristics(Tower tower) {
+        upgradeTowerOmnidirectionalLabel.getStyleClass().clear();
+        upgradeTowerOmnidirectionalLabel.setText(
+            tower.getType().getFireType() == TowerType.FireType.OMNIDIRECTIONAL ? "Yes" : "No");
+        upgradeTowerOmnidirectionalLabel.getStyleClass().clear();
+        upgradeTowerRangeLabel.setText(DECIMAL_FORMAT.format(tower.getType().getRange()));
+        upgradeTowerRangeLabel.getStyleClass().clear();
+        upgradeTowerFireRateLabel.setText(DECIMAL_FORMAT.format(tower.getType().getFireRate()));
+        upgradeTowerFireRateLabel.getStyleClass().clear();
+        upgradeTowerRotationSpeedLabel.setText(DECIMAL_FORMAT.format(tower.getType().getRotationSpeed()));
+        upgradeTowerRotationSpeedLabel.getStyleClass().clear();
+        ProjectileType projectileType =
+            GameMetaData.getInstance().getProjectileType(tower.getType().getProjectileType());
+        upgradeTowerSelfGuidedLabel.setText(projectileType.isSelfGuided() ? "Yes" : "No");
+        upgradeTowerSelfGuidedLabel.getStyleClass().clear();
+        upgradeTowerProjectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectileType.getSpeed()));
+        upgradeTowerProjectileSpeedLabel.getStyleClass().clear();
+        upgradeTowerDamageLabel.setText(DECIMAL_FORMAT.format(projectileType.getBasicDamage()));
+        upgradeTowerDamageLabel.getStyleClass().clear();
+    }
+
+    private void updateLabelComparingValues(Label label, double newValue, double value) {
+        int greater = compare(newValue, value);
+        if (greater > 0) {
+            label.setText(DECIMAL_FORMAT.format(newValue) + " (+" +
+                DECIMAL_FORMAT.format(Math.abs(value - newValue)) + ")");
+            label.getStyleClass().add("improvement-text");
+        } else if (greater < 0) {
+            label.setText(DECIMAL_FORMAT.format(newValue) + " (-" +
+                DECIMAL_FORMAT.format(Math.abs(value - newValue)) + ")");
+            label.getStyleClass().add("retrogression-text");
+        }
+    }
+
+    private void updateLabelComparingValues(Label label, boolean newValue, boolean value) {
+        label.setText(newValue ? "Yes" : "No");
+        if (newValue && !value) {
+            label.getStyleClass().add("improvement-text");
+        } else if (!newValue && value) {
+            label.getStyleClass().add("retrogression-text");
         }
     }
 
@@ -432,11 +541,28 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 towerTypeVBox.getChildren().addAll(imageView, label);
                 towerTypeVBox.setOnMouseClicked(mouseEvent -> {
                     try {
-                        worldControl.buildTower(towerPlatform, towerType);
+                        Tower tower = worldControl.buildTower(towerPlatform, towerType);
+                        onTowerClicked(tower);
                     } catch (GameplayException e) {
                         System.out.println(e.getMessage());
                     }
                 });
+                towerTypeVBox.setOnMouseEntered(mouseEvent -> {
+                    buildTowerOmnidirectionalLabel.setText(
+                        towerType.getFireType() == TowerType.FireType.OMNIDIRECTIONAL ? "Yes" : "No");
+                    buildTowerRangeLabel.setText(DECIMAL_FORMAT.format(towerType.getRange()));
+                    buildTowerFireRateLabel.setText(DECIMAL_FORMAT.format(towerType.getFireRate()));
+                    buildTowerRotationSpeedLabel.setText(DECIMAL_FORMAT.format(towerType.getRotationSpeed()));
+                    ProjectileType projectileType =
+                        GameMetaData.getInstance().getProjectileType(towerType.getProjectileType());
+                    buildTowerSelfGuidedLabel.setText(projectileType.isSelfGuided() ? "Yes" : "No");
+                    buildTowerProjectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectileType.getSpeed()));
+                    buildTowerDamageLabel.setText(DECIMAL_FORMAT.format(projectileType.getBasicDamage()));
+
+                    buildTowerCharacteristicsVBox.setVisible(true);
+                });
+                towerTypeVBox.setOnMouseExited(mouseEvent ->
+                    buildTowerCharacteristicsVBox.setVisible(false));
 
                 buildTowerFlowPane.getChildren().add(towerTypeVBox);
             } catch (RenderException e) {
@@ -500,6 +626,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private String formatPlayingTime(long milliseconds) {
         return String.format(milliseconds < 3600000 ? "%2$02d:%3$02d" : "%02d:%02d:%02d",
             milliseconds / 3600000, (milliseconds / 60000) % 60, (milliseconds / 1000) % 60);
+    }
+
+    private int compare(double a, double b) {
+        if (Math.abs(a - b) < 0.01d) return 0;
+        if (a > b) return 1;
+        return -1;
     }
 
     // ---------- Stubs ----------

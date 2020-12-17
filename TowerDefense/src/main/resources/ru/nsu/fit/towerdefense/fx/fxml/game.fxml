@@ -42,7 +42,7 @@
                     <FlowPane fx:id="buildTowerFlowPane" styleClass="tower-upgrades-box" />
                 </VBox>
                 <Region styleClass="side-bar-delimiter" />
-                <VBox styleClass="side-bar-content">
+                <VBox fx:id="buildTowerCharacteristicsVBox" visible="false" styleClass="side-bar-content">
                     <Label>CHARACTERISTICS</Label>
                     <HBox>
                         <Region HBox.hgrow="ALWAYS"/>
@@ -52,14 +52,14 @@
                                 <ColumnConstraints halignment="CENTER" />
                             </columnConstraints>
                             <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Tower</Label>
-                            <Label GridPane.rowIndex="1">Guns number</Label>
-                            <Label GridPane.rowIndex="1" GridPane.columnIndex="1">1</Label>
+                            <Label GridPane.rowIndex="1">Omnidirectional</Label>
+                            <Label fx:id="buildTowerOmnidirectionalLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="2">Range</Label>
-                            <Label GridPane.rowIndex="2" GridPane.columnIndex="1">5.0</Label>
+                            <Label fx:id="buildTowerRangeLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="3">Fire rate</Label>
-                            <Label GridPane.rowIndex="3" GridPane.columnIndex="1">3.5</Label>
+                            <Label fx:id="buildTowerFireRateLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="4">Rotation speed</Label>
-                            <Label GridPane.rowIndex="4" GridPane.columnIndex="1">2.0</Label>
+                            <Label fx:id="buildTowerRotationSpeedLabel" GridPane.rowIndex="4" GridPane.columnIndex="1" />
                         </GridPane>
                         <Region HBox.hgrow="ALWAYS"/>
                         <GridPane styleClass="characteristics-grid-pane">
@@ -69,11 +69,11 @@
                             </columnConstraints>
                             <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Projectile</Label>
                             <Label GridPane.rowIndex="1">Self guided</Label>
-                            <Label GridPane.rowIndex="1" GridPane.columnIndex="1">No</Label>
+                            <Label fx:id="buildTowerSelfGuidedLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="2">Speed</Label>
-                            <Label GridPane.rowIndex="2" GridPane.columnIndex="1">10.0</Label>
+                            <Label fx:id="buildTowerProjectileSpeedLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="3">Damage</Label>
-                            <Label GridPane.rowIndex="3" GridPane.columnIndex="1">15.0</Label>
+                            <Label fx:id="buildTowerDamageLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" />
                         </GridPane>
                         <Region HBox.hgrow="ALWAYS"/>
                     </HBox>
@@ -97,14 +97,14 @@
                                 <ColumnConstraints halignment="CENTER" />
                             </columnConstraints>
                             <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Tower</Label>
-                            <Label GridPane.rowIndex="1">Guns number</Label>
-                            <Label GridPane.rowIndex="1" GridPane.columnIndex="1">1</Label>
+                            <Label GridPane.rowIndex="1">Omnidirectional</Label>
+                            <Label fx:id="upgradeTowerOmnidirectionalLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="2">Range</Label>
-                            <Label GridPane.rowIndex="2" GridPane.columnIndex="1">5.0</Label>
+                            <Label fx:id="upgradeTowerRangeLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="3">Fire rate</Label>
-                            <Label GridPane.rowIndex="3" GridPane.columnIndex="1">3.5</Label>
+                            <Label fx:id="upgradeTowerFireRateLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="4">Rotation speed</Label>
-                            <Label GridPane.rowIndex="4" GridPane.columnIndex="1">2.0</Label>
+                            <Label fx:id="upgradeTowerRotationSpeedLabel" GridPane.rowIndex="4" GridPane.columnIndex="1" />
                         </GridPane>
                         <Region HBox.hgrow="ALWAYS"/>
                         <GridPane styleClass="characteristics-grid-pane">
@@ -114,11 +114,11 @@
                             </columnConstraints>
                             <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Projectile</Label>
                             <Label GridPane.rowIndex="1">Self guided</Label>
-                            <Label GridPane.rowIndex="1" GridPane.columnIndex="1">No</Label>
+                            <Label fx:id="upgradeTowerSelfGuidedLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="2">Speed</Label>
-                            <Label GridPane.rowIndex="2" GridPane.columnIndex="1">10.0</Label>
+                            <Label fx:id="upgradeTowerProjectileSpeedLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
                             <Label GridPane.rowIndex="3">Damage</Label>
-                            <Label GridPane.rowIndex="3" GridPane.columnIndex="1">15.0</Label>
+                            <Label fx:id="upgradeTowerDamageLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" />
                         </GridPane>
                         <Region HBox.hgrow="ALWAYS"/>
                     </HBox>
@@ -155,7 +155,7 @@
                         </columnConstraints>
                         <HBox styleClass="sell-box" GridPane.columnIndex="1">
                             <Label>Sell for </Label>
-                            <Label>$12</Label>
+                            <Label fx:id="sellLabel">$12</Label>
                         </HBox>
                     </GridPane>
                 </VBox>
