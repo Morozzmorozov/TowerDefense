@@ -29,6 +29,62 @@
             <RowConstraints vgrow="ALWAYS" />
         </rowConstraints>
         <StackPane fx:id="gameObjectSidePane" visible="false" GridPane.columnIndex="1" styleClass="side-bar">
+            <VBox fx:id="baseSideVBox" visible="false" managed="false" styleClass="side-bar-box">
+                <VBox styleClass="side-bar-header">
+                    <Text>BASE</Text>
+                    <TextFlow styleClass="game-object-description">
+                        <Text>Protect it from enemies</Text>
+                    </TextFlow>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox>
+                    <Label>Coming soon...</Label>
+                </VBox>
+            </VBox>
+            <VBox fx:id="enemySideVBox" visible="false" managed="false" styleClass="side-bar-box">
+                <VBox styleClass="side-bar-header">
+                    <Text>BASE</Text>
+                    <TextFlow styleClass="game-object-description">
+                        <Text>Enemy hurts your base</Text>
+                    </TextFlow>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox>
+                    <Label>Coming soon...</Label>
+                </VBox>
+            </VBox>
+            <VBox fx:id="portalSideVBox" visible="false" managed="false" styleClass="side-bar-box">
+                <VBox styleClass="side-bar-header">
+                    <Text>PORTAL</Text>
+                    <TextFlow styleClass="game-object-description">
+                        <Text>Enemies come out of the portal</Text>
+                    </TextFlow>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox>
+                    <Label>Coming soon...</Label>
+                </VBox>
+            </VBox>
+            <VBox fx:id="projectileSideVBox" visible="false" managed="false" styleClass="side-bar-box">
+                <VBox styleClass="side-bar-header">
+                    <Text>PROJECTILE</Text>
+                    <TextFlow styleClass="game-object-description">
+                        <Text>Projectile hurts enemies</Text>
+                    </TextFlow>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox>
+                    <Label>Coming soon...</Label>
+                </VBox>
+            </VBox>
+            <VBox fx:id="roadSideVBox" visible="false" managed="false" styleClass="side-bar-box">
+                <VBox styleClass="side-bar-header">
+                    <Text>ROAD</Text>
+                    <TextFlow styleClass="game-object-description">
+                        <Text>Enemies are moving along road to the base</Text>
+                    </TextFlow>
+                </VBox>
+            </VBox>
             <VBox fx:id="platformSideVBox" visible="false" managed="false" styleClass="side-bar-box">
                 <VBox styleClass="side-bar-header">
                     <Text>PLATFORM</Text>

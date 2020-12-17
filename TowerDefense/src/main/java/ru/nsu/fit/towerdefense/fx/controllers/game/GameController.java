@@ -25,7 +25,12 @@ import ru.nsu.fit.towerdefense.model.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.World;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Portal;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
+import ru.nsu.fit.towerdefense.model.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
@@ -97,6 +102,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private HBox towerModeStrongestHBox;
     @FXML private HBox towerModeRandomHBox;
     @FXML private Label sellLabel;
+
+    @FXML private VBox baseSideVBox;
+    @FXML private VBox enemySideVBox;
+    @FXML private VBox portalSideVBox;
+    @FXML private VBox projectileSideVBox;
+    @FXML private VBox roadSideVBox;
 
     @FXML private Label researchLabel;
     @FXML private Label healthLabel;
@@ -387,29 +398,47 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         switch (renderable.getGameObjectType()) {
             case BASE:
-                System.out.println("BASE");
+                onBaseClicked((Base) renderable);
                 break;
             case ENEMY:
-                System.out.println("ENEMY");
+                onEnemyClicked((Enemy) renderable);
                 break;
             case ENEMY_PORTAL:
-                System.out.println("ENEMY_PORTAL");
+                onPortalClicked((Portal) renderable);
                 break;
             case PROJECTILE:
-                System.out.println("PROJECTILE");
+                onProjectileClicked((Projectile) renderable);
                 break;
             case ROAD_TILE:
-                System.out.println("ROAD_TILE");
+                onRoadTileClicked((RoadTile) renderable);
                 break;
             case TOWER:
-                System.out.println("TOWER");
                 onTowerClicked((Tower) renderable);
                 break;
             case TOWER_PLATFORM:
-                System.out.println("TOWER_PLATFORM");
                 onTowerPlatformClicked((TowerPlatform) renderable);
                 break;
         }
+    }
+
+    private void onBaseClicked(Base base) {
+        showSideBar(baseSideVBox);
+    }
+
+    private void onEnemyClicked(Enemy enemy) {
+        showSideBar(enemySideVBox);
+    }
+
+    private void onPortalClicked(Portal portal) {
+        showSideBar(portalSideVBox);
+    }
+
+    private void onProjectileClicked(Projectile projectile) {
+        showSideBar(projectileSideVBox);
+    }
+
+    private void onRoadTileClicked(RoadTile roadTile) {
+        showSideBar(roadSideVBox);
     }
 
     private void onTowerPlatformClicked(TowerPlatform towerPlatform) {
