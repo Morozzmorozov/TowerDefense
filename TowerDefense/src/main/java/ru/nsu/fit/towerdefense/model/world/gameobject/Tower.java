@@ -12,6 +12,15 @@ public class Tower implements Renderable {
   private double rotation = 0;
   private Enemy target;
   private Vector2<Integer> position;
+  private Mode mode;
+
+  public Mode getMode() {
+    return mode;
+  }
+
+  public void setMode(Mode mode) {
+    this.mode = mode;
+  }
 
   public void setPosition(Vector2<Integer> position) {
     this.position = position;

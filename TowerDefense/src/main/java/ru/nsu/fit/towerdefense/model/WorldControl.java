@@ -22,15 +22,29 @@ import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 public class WorldControl {
 
   public void buildTower(TowerPlatform towerPlatform, TowerType towerType) {
-
+    if (world.getMoney() < towerType.getPrice()) {
+      return;
+    }
+    Tower tower = new Tower();
+    tower.setPosition(new Vector2<>((int)Math.round(towerPlatform.getPosition().getX()),
+        (int)Math.round(towerPlatform.getPosition().getY())));
+    tower.setType(towerType);
+    tower.setRotation(0);
+    tower.setCooldown(towerType.getFireRate());
+    world.getTowers().add(tower);
   }
 
   public void upgradeTower(Tower tower, TowerType towerType) {
-
+    if (world.getMoney() < towerType.getPrice()) {
+      return;
+    }
+    tower.setType(towerType);
+    tower.setCooldown(towerType.getFireRate());
+    tower.setTarget(null);
   }
 
   public void tuneTower(Tower tower, Tower.Mode towerMode) {
-
+    tower.setMode(towerMode);
   }
 
   /**
@@ -396,6 +410,7 @@ public class WorldControl {
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
       wavesDefeated++;
+
       //world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward()); TODO fix me
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
