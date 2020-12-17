@@ -104,7 +104,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private Label sellLabel;
 
     @FXML private VBox baseSideVBox;
+
     @FXML private VBox enemySideVBox;
+    @FXML private Text enemyNameText;
+    @FXML private Text enemyDisplayInfoText;
+    @FXML private Label enemyHealthLabel;
+    @FXML private Label enemySpeedLabel;
+    @FXML private Label enemyDamageLabel;
+
     @FXML private VBox portalSideVBox;
 
     @FXML private VBox projectileSideVBox;
@@ -433,6 +440,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void onEnemyClicked(Enemy enemy) {
+        updateEnemySideBar(enemy);
         showSideBar(enemySideVBox);
     }
 
@@ -465,6 +473,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldRenderer.showTowerRangeCircle(tower, tower.getType().getRange());
         updateTowerSideBar(tower);
         showSideBar(towerSideVBox);
+    }
+
+    private void updateEnemySideBar(Enemy enemy) {
+        enemyNameText.setText(enemy.getType().getTypeName());
+        enemyDisplayInfoText.setText(enemy.getType().getDisplayInfo());
+        enemyHealthLabel.setText(DECIMAL_FORMAT.format(enemy.getType().getHealth()));
+        enemySpeedLabel.setText(DECIMAL_FORMAT.format(enemy.getType().getSpeed()));
+        enemyDamageLabel.setText(DECIMAL_FORMAT.format(enemy.getType().getDamage()));
     }
 
     private void updateProjectileSideBar(Projectile projectile) {

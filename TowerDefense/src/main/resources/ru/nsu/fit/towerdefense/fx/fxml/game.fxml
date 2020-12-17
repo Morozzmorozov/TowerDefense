@@ -43,14 +43,28 @@
             </VBox>
             <VBox fx:id="enemySideVBox" visible="false" managed="false" styleClass="side-bar-box">
                 <VBox styleClass="side-bar-header">
-                    <Text>BASE</Text>
+                    <Text fx:id="enemyNameText" />
                     <TextFlow styleClass="game-object-description">
-                        <Text>Enemy hurts your base</Text>
+                        <Text fx:id="enemyDisplayInfoText" />
                     </TextFlow>
                 </VBox>
                 <Region styleClass="side-bar-delimiter" />
-                <VBox>
-                    <Label>Coming soon...</Label>
+                <VBox styleClass="side-bar-content">
+                    <Label>CHARACTERISTICS</Label>
+                    <HBox alignment="CENTER">
+                        <GridPane styleClass="characteristics-grid-pane">
+                            <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints halignment="CENTER" />
+                            </columnConstraints>
+                            <Label>Health</Label>
+                            <Label fx:id="enemyHealthLabel" GridPane.columnIndex="1" />
+                            <Label GridPane.rowIndex="1">Speed</Label>
+                            <Label fx:id="enemySpeedLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                            <Label GridPane.rowIndex="2">Damage</Label>
+                            <Label fx:id="enemyDamageLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                        </GridPane>
+                    </HBox>
                 </VBox>
             </VBox>
             <VBox fx:id="portalSideVBox" visible="false" managed="false" styleClass="side-bar-box">
