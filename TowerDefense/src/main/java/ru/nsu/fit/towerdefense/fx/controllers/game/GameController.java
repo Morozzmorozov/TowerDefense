@@ -197,15 +197,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldSimulationExecutor = Executors.newSingleThreadScheduledExecutor();
         worldSimulationExecutor.scheduleWithFixedDelay(() -> {
             try {
-                if (speed == 0) {
-                    return;
-                }
-
                 for (int i = 0; i < speed; i++) {
                     worldControl.simulateTick();
                 }
 
-                worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
+                if (speed != 0) {
+                    worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
+                }
+
                 Platform.runLater(() -> {
                     try {
                         worldRenderer.render();
@@ -484,7 +483,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         sellLabel.setText("$" + tower.getSellPrice());
         sellLabel.setOnMouseClicked(mouseEvent -> {
             worldControl.sellTower(tower);
-            //worldRenderer.erase(tower); todo uncomment
+            worldRenderer.remove(tower);
         });
     }
 
@@ -553,9 +552,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 towerTypeVBox.setOnMouseClicked(mouseEvent -> {
                     try {
                         Tower tower = worldControl.buildTower(towerPlatform, towerType);
+                        worldRenderer.add(tower);
                         onTowerClicked(tower);
                     } catch (GameplayException e) {
                         System.out.println(e.getMessage());
+                    } catch (RenderException e) {
+                        handleRenderException(e);
                     }
                 });
                 towerTypeVBox.setOnMouseEntered(mouseEvent -> {
