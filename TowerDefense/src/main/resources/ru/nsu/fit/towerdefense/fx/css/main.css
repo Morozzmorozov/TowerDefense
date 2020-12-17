@@ -15,3 +15,7 @@
     -fx-font-size: 30px;
     -fx-font-weight: bold;
 }
+
+.tower-icon {
+    -fx-image: url('../../config/images/tower.png');
+}

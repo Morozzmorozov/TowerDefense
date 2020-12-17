@@ -6,19 +6,26 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
+import ru.nsu.fit.towerdefense.model.GameMetaData;
 import ru.nsu.fit.towerdefense.model.WorldControl;
 import ru.nsu.fit.towerdefense.model.WorldObserver;
+import ru.nsu.fit.towerdefense.model.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.World;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
+import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
+import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,6 +54,13 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     @FXML private StackPane rootStackPane;
     @FXML private AnchorPane worldAnchorPane;
+
+    @FXML private StackPane gameObjectSidePane;
+    @FXML private ImageView closeSidePaneImageView;
+    @FXML private VBox platformSideVBox;
+    @FXML private VBox towerSideVBox;
+    @FXML private FlowPane buildTowerFlowPane;
+    @FXML private FlowPane upgradeTowerFlowPane;
 
     @FXML private Label researchLabel;
     @FXML private Label healthLabel;
@@ -93,6 +107,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     private State state;
     private int speed;
+    private VBox currentSideVBox;
 
     /**
      * Creates new GameController with specified SceneManager and GameMap.
@@ -115,6 +130,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private void initialize() {
         worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell(), this);
+
+        closeSidePaneImageView.setOnMouseClicked(mouseEvent -> hideSideBar());
 
         speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
         speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
@@ -221,6 +238,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 scrollEvent.getSceneX(), scrollEvent.getSceneY());
         });
 
+
+
         sceneManager.getScene().setOnMousePressed(mouseEvent -> {
             if (state != State.PLAYING) {
                 return;
@@ -321,10 +340,74 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 break;
             case TOWER:
                 System.out.println("TOWER");
+                showSideBar(towerSideVBox);
                 break;
             case TOWER_PLATFORM:
                 System.out.println("TOWER_PLATFORM");
+                TowerPlatform towerPlatform = (TowerPlatform) renderable;
+
+                String[] towerTypeNames = { "Archer", "Catapult", "Crossbowman" };
+                buildTowerFlowPane.getChildren().clear();
+                for (String towerTypeName : towerTypeNames) {
+                    try {
+                        TowerType towerType = GameMetaData.getInstance().getTowerType(towerTypeName);
+
+                        ImageView imageView = new ImageView(
+                            Images.getInstance().getImage(towerType.getImage()));
+                        imageView.setFitWidth(48);
+                        imageView.setFitHeight(48);
+                        imageView.setPickOnBounds(true);
+                        imageView.setPreserveRatio(true);
+
+                        Label label = new Label("$" + towerType.getPrice());
+
+                        VBox towerTypeVBox = new VBox();
+                        towerTypeVBox.getStyleClass().add("tower-upgrade-box");
+                        towerTypeVBox.getChildren().addAll(imageView, label);
+                        towerTypeVBox.setOnMouseClicked(mouseEvent -> {
+                            try {
+                                worldControl.buildTower(towerPlatform, towerType);
+                            } catch (GameplayException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        });
+
+                        buildTowerFlowPane.getChildren().add(towerTypeVBox);
+                    } catch (RenderException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+
+                showSideBar(platformSideVBox);
                 break;
+        }
+    }
+
+    private void showSideBar(VBox newBox) {
+        if (newBox == currentSideVBox) {
+            return;
+        }
+
+        hideCurrentSideBox();
+
+        newBox.setManaged(true);
+        newBox.setVisible(true);
+
+        gameObjectSidePane.setVisible(true);
+
+        currentSideVBox = newBox;
+    }
+
+    private void hideSideBar() {
+        gameObjectSidePane.setVisible(false);
+        hideCurrentSideBox();
+        currentSideVBox = null;
+    }
+
+    private void hideCurrentSideBox() {
+        if (currentSideVBox != null) {
+            currentSideVBox.setVisible(false);
+            currentSideVBox.setManaged(false);
         }
     }
 

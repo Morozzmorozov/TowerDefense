@@ -4,11 +4,15 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
 <StackPane fx:id="rootStackPane" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
@@ -16,6 +20,162 @@
         <URL value="@../css/game.css" />
     </stylesheets>
     <AnchorPane fx:id="worldAnchorPane" styleClass="world-anchor-pane" />
+    <GridPane pickOnBounds="false">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="66.67" />
+            <ColumnConstraints percentWidth="33.33" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="ALWAYS" />
+        </rowConstraints>
+        <StackPane fx:id="gameObjectSidePane" visible="false" GridPane.columnIndex="1" styleClass="side-bar">
+            <VBox fx:id="platformSideVBox" visible="false" managed="false" styleClass="side-bar-box">
+                <VBox styleClass="side-bar-header">
+                    <Text>PLATFORM</Text>
+                    <TextFlow styleClass="game-object-description">
+                        <Text>Used as the basis for towers</Text>
+                    </TextFlow>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox styleClass="side-bar-content">
+                    <Label>BUILD TOWER</Label>
+                    <FlowPane fx:id="buildTowerFlowPane" styleClass="tower-upgrades-box" />
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox styleClass="side-bar-content">
+                    <Label>CHARACTERISTICS</Label>
+                    <HBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <GridPane styleClass="characteristics-grid-pane">
+                            <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints halignment="CENTER" />
+                            </columnConstraints>
+                            <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Tower</Label>
+                            <Label GridPane.rowIndex="1">Guns number</Label>
+                            <Label GridPane.rowIndex="1" GridPane.columnIndex="1">1</Label>
+                            <Label GridPane.rowIndex="2">Range</Label>
+                            <Label GridPane.rowIndex="2" GridPane.columnIndex="1">5.0</Label>
+                            <Label GridPane.rowIndex="3">Fire rate</Label>
+                            <Label GridPane.rowIndex="3" GridPane.columnIndex="1">3.5</Label>
+                            <Label GridPane.rowIndex="4">Rotation speed</Label>
+                            <Label GridPane.rowIndex="4" GridPane.columnIndex="1">2.0</Label>
+                        </GridPane>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <GridPane styleClass="characteristics-grid-pane">
+                            <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints halignment="CENTER" />
+                            </columnConstraints>
+                            <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Projectile</Label>
+                            <Label GridPane.rowIndex="1">Self guided</Label>
+                            <Label GridPane.rowIndex="1" GridPane.columnIndex="1">No</Label>
+                            <Label GridPane.rowIndex="2">Speed</Label>
+                            <Label GridPane.rowIndex="2" GridPane.columnIndex="1">10.0</Label>
+                            <Label GridPane.rowIndex="3">Damage</Label>
+                            <Label GridPane.rowIndex="3" GridPane.columnIndex="1">15.0</Label>
+                        </GridPane>
+                        <Region HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+            <VBox fx:id="towerSideVBox" visible="false" managed="false" styleClass="side-bar-box">
+                <VBox styleClass="side-bar-header">
+                    <Text>BASIC TOWER</Text>
+                    <TextFlow styleClass="game-object-description">
+                        <Text>The simplest tower with good, but limited power</Text>
+                    </TextFlow>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox styleClass="side-bar-content">
+                    <Label>CHARACTERISTICS</Label>
+                    <HBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <GridPane styleClass="characteristics-grid-pane">
+                            <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints halignment="CENTER" />
+                            </columnConstraints>
+                            <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Tower</Label>
+                            <Label GridPane.rowIndex="1">Guns number</Label>
+                            <Label GridPane.rowIndex="1" GridPane.columnIndex="1">1</Label>
+                            <Label GridPane.rowIndex="2">Range</Label>
+                            <Label GridPane.rowIndex="2" GridPane.columnIndex="1">5.0</Label>
+                            <Label GridPane.rowIndex="3">Fire rate</Label>
+                            <Label GridPane.rowIndex="3" GridPane.columnIndex="1">3.5</Label>
+                            <Label GridPane.rowIndex="4">Rotation speed</Label>
+                            <Label GridPane.rowIndex="4" GridPane.columnIndex="1">2.0</Label>
+                        </GridPane>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <GridPane styleClass="characteristics-grid-pane">
+                            <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints halignment="CENTER" />
+                            </columnConstraints>
+                            <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Projectile</Label>
+                            <Label GridPane.rowIndex="1">Self guided</Label>
+                            <Label GridPane.rowIndex="1" GridPane.columnIndex="1">No</Label>
+                            <Label GridPane.rowIndex="2">Speed</Label>
+                            <Label GridPane.rowIndex="2" GridPane.columnIndex="1">10.0</Label>
+                            <Label GridPane.rowIndex="3">Damage</Label>
+                            <Label GridPane.rowIndex="3" GridPane.columnIndex="1">15.0</Label>
+                        </GridPane>
+                        <Region HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox styleClass="side-bar-content">
+                    <Label>UPGRADES</Label>
+                    <FlowPane fx:id="upgradeTowerFlowPane" styleClass="tower-upgrades-box">
+                        <VBox styleClass="tower-upgrade-box">
+                            <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="tower-icon" />
+                            <Label>$20</Label>
+                        </VBox>
+                        <VBox styleClass="tower-upgrade-box">
+                            <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="tower-icon" />
+                            <Label>$20</Label>
+                        </VBox>
+                        <VBox styleClass="tower-upgrade-box">
+                            <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="tower-icon" />
+                            <Label>$20</Label>
+                        </VBox>
+                    </FlowPane>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox styleClass="side-bar-content">
+                    <Label>TARGET</Label>
+                    <GridPane styleClass="target-grid-pane">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33" />
+                            <ColumnConstraints percentWidth="33.34" />
+                            <ColumnConstraints percentWidth="33.33" />
+                        </columnConstraints>
+                        <HBox styleClass="target-box, target-box-selected"><Label>First</Label></HBox>
+                        <HBox styleClass="target-box" GridPane.columnIndex="1"><Label>Weakest</Label></HBox>
+                        <HBox styleClass="target-box" GridPane.columnIndex="2"><Label>Nearest</Label></HBox>
+                        <HBox styleClass="target-box" GridPane.rowIndex="1"><Label>Last</Label></HBox>
+                        <HBox styleClass="target-box" GridPane.columnIndex="1" GridPane.rowIndex="1"><Label>Strongest</Label></HBox>
+                        <HBox styleClass="target-box" GridPane.columnIndex="2" GridPane.rowIndex="1"><Label>Random</Label></HBox>
+                    </GridPane>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox styleClass="side-bar-content">
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33" />
+                            <ColumnConstraints percentWidth="33.34" />
+                            <ColumnConstraints percentWidth="33.33" />
+                        </columnConstraints>
+                        <HBox styleClass="sell-box" GridPane.columnIndex="1">
+                            <Label>Sell for </Label>
+                            <Label>$12</Label>
+                        </HBox>
+                    </GridPane>
+                </VBox>
+            </VBox>
+            <ImageView fx:id="closeSidePaneImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="close-side-pane, close-icon" />
+        </StackPane>
+    </GridPane>
     <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
             <ColumnConstraints hgrow="NEVER" />

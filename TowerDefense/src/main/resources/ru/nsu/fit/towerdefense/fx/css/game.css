@@ -2,14 +2,94 @@
     /*-fx-background-color: rgba(255, 255, 255, 0.01);*/
 }
 
-Label {
+Label, Text {
     -fx-text-fill: white;
+    -fx-fill: white;
     -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 3);
 }
 
 .root {
     -fx-background-color: rgba(0, 0, 0, 0.95);
     -fx-background-image: url('../icons/root-background.png');
+}
+
+.side-bar {
+    -fx-padding: 50 10 10 10;
+    -fx-spacing: 20;
+    -fx-alignment: bottom-left;
+    -fx-background-color: #2e302f;
+    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 5);
+}
+
+.close-side-pane {
+    -fx-opacity: 0.5;
+    -fx-cursor: hand;
+}
+
+.close-side-pane:hover {
+    -fx-opacity: 1;
+}
+
+.side-bar-delimiter {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 1;
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.side-bar-box {
+    -fx-padding: 0 10;
+    -fx-spacing: 8;
+}
+
+.side-bar-header {
+    -fx-alignment: center;
+}
+
+.game-object-description {
+    -fx-font-size: 14;
+    -fx-text-alignment: center;
+}
+
+.side-bar-content {
+    -fx-spacing: 8;
+    -fx-font-size: 12;
+    -fx-alignment: center;
+}
+
+.characteristics-grid-pane {
+    -fx-hgap: 8;
+}
+
+.tower-upgrades-box {
+    -fx-alignment: center;
+}
+
+.tower-upgrade-box {
+    -fx-padding: 5 10;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}
+
+.tower-upgrade-box:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.25);
+}
+
+.target-box, .sell-box {
+    -fx-pref-height: 30;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}
+
+.target-box:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.25);
+}
+
+.target-box-selected, .target-box-selected:hover {
+    -fx-background-color: #0479bf;
+}
+
+.sell-box {
+    -fx-background-color: #bf1e1e;
 }
 
 .bar-grid-pane > HBox {
@@ -38,6 +118,10 @@ Label {
     -fx-padding: 0 0 0 30;
     -fx-alignment: center;
     -fx-spacing: 5;
+}
+
+.close-icon {
+    -fx-image: url('../icons/close.png');
 }
 
 .research-progress-icon {
@@ -106,6 +190,7 @@ Label {
     -fx-spacing: 20;
     -fx-alignment: center;
     -fx-background-color: #2e302f;
+    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 5);
 }
 
 .results-header {
