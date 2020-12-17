@@ -3,7 +3,7 @@
 	"Upgrades": [
 		["Catapult", 350]
 	],
-	"Range" : 40,
+	"Range" : 6,
 	"FireRate" : 40,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Arrow",

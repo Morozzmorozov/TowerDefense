@@ -4,7 +4,7 @@
 		["Crossbowman", 250],
 		["Catapult", 400]
 	],
-	"Range" : 30,
+	"Range" : 3,
 	"FireRate" : 50,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Arrow",
