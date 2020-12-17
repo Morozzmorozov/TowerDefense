@@ -211,6 +211,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             worldRenderer.hideTowerRangeCircle();
         });
 
+        bindUppercase(enemyNameText);
+        bindUppercase(projectileNameText);
         bindUppercase(towerNameText);
 
         baseInitialHealthLabel.setText(baseInitialHealth + "");
