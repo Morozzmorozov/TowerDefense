@@ -14,13 +14,19 @@ public class Enemy implements Renderable {
   private boolean isDead = false;
   private Vector2<Double> position;
   private List<Vector2<Double>> trajectory = new ArrayList<>();
+  private int moneyReward;
 
-  public Enemy(EnemyType type, Wave wave, Vector2<Double> position) {
+  public Enemy(EnemyType type, Wave wave, Vector2<Double> position, int moneyReward) {
     this.type = type;
     this.wave = wave;
     this.position = position;
+    this.moneyReward = moneyReward;
     health = type.getHealth();
     velocity = type.getSpeed();
+  }
+
+  public int getMoneyReward() {
+    return moneyReward;
   }
 
   public Vector2<Double> getCell() {

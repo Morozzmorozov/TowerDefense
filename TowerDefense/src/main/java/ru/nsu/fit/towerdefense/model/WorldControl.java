@@ -296,6 +296,7 @@ public class WorldControl {
         collidedEnemy.setHealth(collidedEnemy.getHealth() - damage);
         if (collidedEnemy.getHealth() <= 0) {
           enemiesKilled++;
+          world.setMoney(world.getMoney() + collidedEnemy.getMoneyReward());
           enemyDeath(collidedEnemy);
           world.getEnemies().remove(collidedEnemy);
         }
@@ -359,7 +360,7 @@ public class WorldControl {
             Vector2<Double> spawnPosition = gameMap.getRoads().getRoad(enemies.getSpawnPosition()).get(0);
             Vector2<Double> coordinates = new Vector2<>(spawnPosition.getX(), spawnPosition.getY());
             enemy = new Enemy(
-                GameMetaData.getInstance().getEnemyType(enemies.getType()), world.getCurrentWave(), coordinates);
+                GameMetaData.getInstance().getEnemyType(enemies.getType()), world.getCurrentWave(), coordinates, enemies.getMoneyReward());
             for (Vector2<Double> position : gameMap.getRoads()
                 .getRoad(enemies.getSpawnPosition())) {
               enemy.getTrajectory().add(new Vector2<>(position.getX(), position.getY()));
