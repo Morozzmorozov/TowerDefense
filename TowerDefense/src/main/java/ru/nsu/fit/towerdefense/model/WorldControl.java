@@ -21,17 +21,9 @@ import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType.Upgrade;
 
 public class WorldControl {
-  List<Tower> newTowers = new ArrayList<>();
 
-  public Tower getTowerOnPlatform(TowerPlatform towerPlatform) {
-    for (Tower candidate : world.getTowers()) {
-      if (Math.abs(candidate.getPosition().getX() - towerPlatform.getPosition().getX()) < DELTA
-        && Math.abs(candidate.getPosition().getY() - towerPlatform.getPosition().getY()) < DELTA) {
-        return candidate;
-      }
-    }
-    return null;
-  }
+  private final int DEBUG_MONEY = 600;
+
 
   public void buildTower(TowerPlatform towerPlatform, TowerType towerType)
       throws GameplayException {
@@ -57,6 +49,18 @@ public class WorldControl {
     tower.setType(type);
     tower.setCooldown(type.getFireRate());
     tower.setTarget(null);
+  }
+
+  List<Tower> newTowers = new ArrayList<>();
+
+  public Tower getTowerOnPlatform(TowerPlatform towerPlatform) {
+    for (Tower candidate : world.getTowers()) {
+      if (Math.abs(candidate.getPosition().getX() - towerPlatform.getPosition().getX()) < DELTA
+          && Math.abs(candidate.getPosition().getY() - towerPlatform.getPosition().getY()) < DELTA) {
+        return candidate;
+      }
+    }
+    return null;
   }
 
   public void tuneTower(Tower tower, Tower.Mode towerMode) {
@@ -110,7 +114,7 @@ public class WorldControl {
     wave.setRemainingEnemiesCount(gameMap.getWaves().get(0).getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum());
     wave.setDescription(gameMap.getWaves().get(0));
     world.setCurrentWave(wave);
-    world.setMoney(300); // todo starting money
+    world.setMoney(DEBUG_MONEY); // todo starting money
 
 
     Base base = new Base(gameMap.getBaseDescription().getHealth(), gameMap.getBaseDescription().getImage(),
