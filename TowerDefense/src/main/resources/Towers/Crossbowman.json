@@ -1,0 +1,11 @@
+{
+	"Price" : 200,
+	"Upgrades": [
+		["Catapult", 350]
+	],
+	"Range" : 40,
+	"FireRate" : 40,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Arrow",
+	"Image" : "tower2.png"
+}

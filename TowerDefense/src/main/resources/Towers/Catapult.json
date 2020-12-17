@@ -1,0 +1,11 @@
+{
+	"Price" : 100,
+	"Upgrades": [
+
+	],
+	"Range" : 50,
+	"FireRate" : 30,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Bolt",
+	"Image" : "tower3.png"
+}
