@@ -126,20 +126,7 @@
                 <Region styleClass="side-bar-delimiter" />
                 <VBox styleClass="side-bar-content">
                     <Label>UPGRADES</Label>
-                    <FlowPane fx:id="upgradeTowerFlowPane" styleClass="tower-upgrades-box">
-                        <VBox styleClass="tower-upgrade-box">
-                            <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="tower-icon" />
-                            <Label>$20</Label>
-                        </VBox>
-                        <VBox styleClass="tower-upgrade-box">
-                            <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="tower-icon" />
-                            <Label>$20</Label>
-                        </VBox>
-                        <VBox styleClass="tower-upgrade-box">
-                            <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="tower-icon" />
-                            <Label>$20</Label>
-                        </VBox>
-                    </FlowPane>
+                    <FlowPane fx:id="upgradeTowerFlowPane" styleClass="tower-upgrades-box" />
                 </VBox>
                 <Region styleClass="side-bar-delimiter" />
                 <VBox styleClass="side-bar-content">
