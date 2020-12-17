@@ -29,6 +29,7 @@ public class TowerType {
     private List<Upgrade> upgrades;
     private int range;
     private int fireRate;
+    private int rotationSpeed = 1; // todo /////////////////////////////////////////////////////////
     private FireType fireType;
     private String projectileType;
     private String image;
@@ -57,6 +58,10 @@ public class TowerType {
     public int getFireRate() {
     return fireRate;
   }
+
+    public int getRotationSpeed() {
+        return rotationSpeed;
+    }
 
     public FireType getFireType() {
     return fireType;
