@@ -25,7 +25,7 @@ public class WorldControl {
   private final int DEBUG_MONEY = 600;
 
 
-  public void buildTower(TowerPlatform towerPlatform, TowerType towerType)
+  public Tower buildTower(TowerPlatform towerPlatform, TowerType towerType)
       throws GameplayException {
     if (world.getMoney() < towerType.getPrice()) {
       throw new GameplayException("Not enough money to build the tower");
@@ -38,6 +38,7 @@ public class WorldControl {
     tower.setRotation(0);
     tower.setCooldown(towerType.getFireRate());
     newTowers.add(tower);
+    return tower;
   }
 
   public void upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
