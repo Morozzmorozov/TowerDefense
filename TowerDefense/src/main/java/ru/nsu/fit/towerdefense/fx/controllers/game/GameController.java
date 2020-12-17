@@ -398,14 +398,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             updatePlatformSideBar(towerPlatform);
             showSideBar(platformSideVBox);
         } else {
-            worldRenderer.showTowerRangeCircle(towerOnPlatform);
+            worldRenderer.showTowerRangeCircle(towerOnPlatform, towerOnPlatform.getType().getRange());
             updateTowerSideBar(towerOnPlatform);
             showSideBar(towerSideVBox);
         }
     }
 
     private void onTowerClicked(Tower tower) {
-        worldRenderer.showTowerRangeCircle(tower);
+        worldRenderer.showTowerRangeCircle(tower, tower.getType().getRange());
         updateTowerSideBar(tower);
         showSideBar(towerSideVBox);
     }
@@ -467,8 +467,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
                     updateLabelComparingValues(upgradeTowerDamageLabel,
                         newProjType.getBasicDamage(), projType.getBasicDamage());
+
+                    worldRenderer.showNewTowerRangeCircle(tower, towerType.getRange(),
+                        compare(towerType.getRange(), tower.getType().getRange()));
                 });
-                towerTypeVBox.setOnMouseExited(mouseEvent -> setDefaultTowerCharacteristics(tower));
+                towerTypeVBox.setOnMouseExited(mouseEvent -> {
+                    setDefaultTowerCharacteristics(tower);
+                    worldRenderer.hideNewTowerRangeCircle();
+                });
 
                 upgradeTowerFlowPane.getChildren().add(towerTypeVBox);
             } catch (RenderException e) {
@@ -531,7 +537,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void updatePlatformSideBar(TowerPlatform towerPlatform) {
-        String[] towerTypeNames = { "Archer", "Catapult", "Crossbowman" };
+        String[] towerTypeNames = { "Archer", "Crossbowman", "Catapult" };
         buildTowerFlowPane.getChildren().clear();
         for (String towerTypeName : towerTypeNames) {
             try {
@@ -573,9 +579,13 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     buildTowerDamageLabel.setText(DECIMAL_FORMAT.format(projectileType.getBasicDamage()));
 
                     buildTowerCharacteristicsVBox.setVisible(true);
+
+                    worldRenderer.showNewTowerRangeCircle(towerPlatform, towerType.getRange(), 1);
                 });
-                towerTypeVBox.setOnMouseExited(mouseEvent ->
-                    buildTowerCharacteristicsVBox.setVisible(false));
+                towerTypeVBox.setOnMouseExited(mouseEvent -> {
+                    buildTowerCharacteristicsVBox.setVisible(false);
+                    worldRenderer.hideNewTowerRangeCircle();
+                });
 
                 buildTowerFlowPane.getChildren().add(towerTypeVBox);
             } catch (RenderException e) {

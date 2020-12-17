@@ -17,7 +17,15 @@ Label, Text {
 }
 
 .tower-range {
-    -fx-fill: rgba(255, 255, 255, 0.15);
+    -fx-fill: radial-gradient(center 50% 50%, radius 50%, transparent, rgba(255, 255, 255, 0.15));
+}
+
+.improvement-tower-range {
+    -fx-fill: radial-gradient(center 50% 50%, radius 50%, transparent, rgba(0, 255, 0, 0.15));
+}
+
+.retrogression-tower-range {
+    -fx-fill: radial-gradient(center 50% 50%, radius 50%, transparent, rgba(255, 0, 0, 0.15));
 }
 
 .root {
