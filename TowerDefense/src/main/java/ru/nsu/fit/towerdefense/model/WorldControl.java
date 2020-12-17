@@ -109,7 +109,7 @@ public class WorldControl {
     wave.setRemainingEnemiesCount(gameMap.getWaves().get(0).getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum());
     wave.setDescription(gameMap.getWaves().get(0));
     world.setCurrentWave(wave);
-    world.setMoney(100); // todo starting money
+    world.setMoney(300); // todo starting money
 
 
     Base base = new Base(gameMap.getBaseDescription().getHealth(), gameMap.getBaseDescription().getImage(),

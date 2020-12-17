@@ -3,7 +3,7 @@
 	"Upgrades": [
 
 	],
-	"Range" : 50,
+	"Range" : 10,
 	"FireRate" : 30,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Bolt",
