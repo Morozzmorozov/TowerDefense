@@ -67,14 +67,28 @@
             </VBox>
             <VBox fx:id="projectileSideVBox" visible="false" managed="false" styleClass="side-bar-box">
                 <VBox styleClass="side-bar-header">
-                    <Text>PROJECTILE</Text>
+                    <Text fx:id="projectileNameText" />
                     <TextFlow styleClass="game-object-description">
-                        <Text>Projectile hurts enemies</Text>
+                        <Text fx:id="projectileDisplayInfoText" />
                     </TextFlow>
                 </VBox>
                 <Region styleClass="side-bar-delimiter" />
-                <VBox>
-                    <Label>Coming soon...</Label>
+                <VBox styleClass="side-bar-content">
+                    <Label>CHARACTERISTICS</Label>
+                    <HBox alignment="CENTER">
+                        <GridPane styleClass="characteristics-grid-pane">
+                            <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints halignment="CENTER" />
+                            </columnConstraints>
+                            <Label>Self guided</Label>
+                            <Label fx:id="projectileSelfGuidedLabel" GridPane.columnIndex="1" />
+                            <Label GridPane.rowIndex="1">Speed</Label>
+                            <Label fx:id="projectileSpeedLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                            <Label GridPane.rowIndex="2">Damage</Label>
+                            <Label fx:id="projectileDamageLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                        </GridPane>
+                    </HBox>
                 </VBox>
             </VBox>
             <VBox fx:id="roadSideVBox" visible="false" managed="false" styleClass="side-bar-box">

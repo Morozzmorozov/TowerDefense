@@ -106,7 +106,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private VBox baseSideVBox;
     @FXML private VBox enemySideVBox;
     @FXML private VBox portalSideVBox;
+
     @FXML private VBox projectileSideVBox;
+    @FXML private Text projectileNameText;
+    @FXML private Text projectileDisplayInfoText;
+    @FXML private Label projectileSelfGuidedLabel;
+    @FXML private Label projectileSpeedLabel;
+    @FXML private Label projectileDamageLabel;
+
     @FXML private VBox roadSideVBox;
 
     @FXML private Label researchLabel;
@@ -434,6 +441,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void onProjectileClicked(Projectile projectile) {
+        updateProjectileSideBar(projectile);
         showSideBar(projectileSideVBox);
     }
 
@@ -457,6 +465,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldRenderer.showTowerRangeCircle(tower, tower.getType().getRange());
         updateTowerSideBar(tower);
         showSideBar(towerSideVBox);
+    }
+
+    private void updateProjectileSideBar(Projectile projectile) {
+        projectileNameText.setText(projectile.getType().getTypeName());
+        projectileDisplayInfoText.setText(projectile.getType().getDisplayInfo());
+        projectileSelfGuidedLabel.setText(projectile.getType().isSelfGuided() ? "Yes" : "No");
+        projectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectile.getType().getSpeed()));
+        projectileDamageLabel.setText(DECIMAL_FORMAT.format(projectile.getType().getBasicDamage()));
     }
 
     private void updateTowerSideBar(Tower tower) {
