@@ -482,6 +482,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         }
 
         sellLabel.setText("$" + tower.getSellPrice());
+        sellLabel.setOnMouseClicked(mouseEvent -> {
+            worldControl.sellTower(tower);
+            //worldRenderer.erase(tower); todo uncomment
+        });
     }
 
     private void setDefaultTowerCharacteristics(Tower tower) {
