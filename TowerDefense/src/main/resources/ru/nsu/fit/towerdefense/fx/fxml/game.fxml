@@ -37,8 +37,18 @@
                     </TextFlow>
                 </VBox>
                 <Region styleClass="side-bar-delimiter" />
-                <VBox>
-                    <Label>Coming soon...</Label>
+                <VBox styleClass="side-bar-content">
+                    <Label>CHARACTERISTICS</Label>
+                    <HBox alignment="CENTER">
+                        <GridPane styleClass="characteristics-grid-pane">
+                            <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints halignment="CENTER" />
+                            </columnConstraints>
+                            <Label>Initial Health</Label>
+                            <Label fx:id="baseInitialHealthLabel" GridPane.columnIndex="1" />
+                        </GridPane>
+                    </HBox>
                 </VBox>
             </VBox>
             <VBox fx:id="enemySideVBox" visible="false" managed="false" styleClass="side-bar-box">

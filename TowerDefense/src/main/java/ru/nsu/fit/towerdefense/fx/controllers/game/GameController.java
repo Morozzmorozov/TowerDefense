@@ -104,6 +104,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private Label sellLabel;
 
     @FXML private VBox baseSideVBox;
+    @FXML private Label baseInitialHealthLabel;
 
     @FXML private VBox enemySideVBox;
     @FXML private Text enemyNameText;
@@ -161,6 +162,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private ScheduledExecutorService worldSimulationExecutor;
 
     private final Vector2<Integer> worldSize;
+    private final int baseInitialHealth;
 
     private final WorldControl worldControl;
     private WorldCamera worldCamera;
@@ -184,6 +186,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldControl = new WorldControl(gameMap, DELTA_TIME, GameController.this);
 
         worldSize = gameMap.getSize();
+        baseInitialHealth = gameMap.getBaseDescription().getHealth();
 
         state = State.PLAYING;
         speed = 1;
@@ -209,6 +212,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         });
 
         bindUppercase(towerNameText);
+
+        baseInitialHealthLabel.setText(baseInitialHealth + "");
 
         speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
         speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
