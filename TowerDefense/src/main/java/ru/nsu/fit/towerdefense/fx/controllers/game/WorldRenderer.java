@@ -59,19 +59,7 @@ public class WorldRenderer {
      */
     public void update(Set<Renderable> newRenderableSet) throws RenderException {
         for (Renderable renderable : newRenderableSet) {
-            if (!renderableToGameNodeMap.containsKey(renderable)) {
-                ImageView imageView =
-                    new ImageView(Images.getInstance().getImage(renderable.getImageName()));
-
-                imageView.setOnMouseClicked(mouseEvent -> {
-                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
-                        observer.onGameObjectClicked(renderable);
-                    }
-                });
-
-                imageView.setUserData(renderable);
-                renderableToGameNodeMap.put(renderable, imageView);
-            }
+            add(renderable);
         }
 
         renderableToGameNodeMap.entrySet().removeIf(entry -> !newRenderableSet.contains(entry.getKey()));
@@ -109,6 +97,37 @@ public class WorldRenderer {
                 gameNodes.add(imageView);
             }
         }
+    }
+
+    /**
+     * Adds renderable for future render.
+     *
+     * @param renderable renderable.
+     * @throws RenderException if no image was found for this renderable.
+     */
+    public void add(Renderable renderable) throws RenderException {
+        if (!renderableToGameNodeMap.containsKey(renderable)) {
+            ImageView imageView =
+                new ImageView(Images.getInstance().getImage(renderable.getImageName()));
+
+            imageView.setOnMouseClicked(mouseEvent -> {
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                    observer.onGameObjectClicked(renderable);
+                }
+            });
+
+            imageView.setUserData(renderable);
+            renderableToGameNodeMap.put(renderable, imageView);
+        }
+    }
+
+    /**
+     * Removes renderable for future erasing.
+     *
+     * @param renderable renderable.
+     */
+    public void remove(Renderable renderable) {
+        renderableToGameNodeMap.remove(renderable);
     }
 
     public void showTowerRangeCircle(Tower tower) {
