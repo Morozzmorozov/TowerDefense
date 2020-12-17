@@ -2,6 +2,7 @@ package ru.nsu.fit.towerdefense.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import ru.nsu.fit.towerdefense.model.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.model.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.Wave;
@@ -17,13 +18,15 @@ import ru.nsu.fit.towerdefense.model.map.WaveDescription;
 import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
+import ru.nsu.fit.towerdefense.model.world.types.TowerType.Upgrade;
 
 public class WorldControl {
   List<Tower> newTowers = new ArrayList<>();
 
-  public void buildTower(TowerPlatform towerPlatform, TowerType towerType) {
+  public void buildTower(TowerPlatform towerPlatform, TowerType towerType)
+      throws GameplayException {
     if (world.getMoney() < towerType.getPrice()) {
-      return;
+      throw new GameplayException("Not enough money to build the tower");
     }
     Tower tower = new Tower();
     tower.setPosition(new Vector2<>((int)Math.round(towerPlatform.getPosition().getX()),
@@ -34,12 +37,14 @@ public class WorldControl {
     newTowers.add(tower);
   }
 
-  public void upgradeTower(Tower tower, TowerType towerType) {
-    if (world.getMoney() < towerType.getPrice()) {
-      return;
+  public void upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
+    if (world.getMoney() < upgrade.getCost()) {
+      throw new GameplayException("Not enough money to upgrade the tower");
     }
-    tower.setType(towerType);
-    tower.setCooldown(towerType.getFireRate());
+
+    TowerType type = GameMetaData.getInstance().getTowerType(upgrade.getName());
+    tower.setType(type);
+    tower.setCooldown(type.getFireRate());
     tower.setTarget(null);
   }
 
