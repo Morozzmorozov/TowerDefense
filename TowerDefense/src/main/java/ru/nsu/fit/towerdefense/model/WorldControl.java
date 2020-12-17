@@ -24,6 +24,9 @@ public class WorldControl {
 
   private final int DEBUG_MONEY = 600;
 
+  public void sellTower(Tower tower) { // todo
+    System.out.println("SELL");
+  }
 
   public Tower buildTower(TowerPlatform towerPlatform, TowerType towerType)
       throws GameplayException {
