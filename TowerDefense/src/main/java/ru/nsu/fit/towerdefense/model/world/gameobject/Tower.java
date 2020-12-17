@@ -12,7 +12,7 @@ public class Tower extends GameObject implements Renderable {
   private double rotation = 0;
   private Enemy target;
   private Vector2<Integer> position;
-  private Mode mode;
+  private Mode mode = Mode.First;
 
   public int getSellPrice() { // todo e.g. 40% of all the money user payed for building and upgrading this tower
     return 12;
