@@ -5,9 +5,11 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.shape.Circle;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public class WorldRenderer {
     private final WorldRendererObserver observer;
 
     private final Map<Renderable, Node> renderableToGameNodeMap = new HashMap<>();
+    private final Circle towerRangeCircle;
 
     /**
      * Creates new WorldRenderer with specified game nodes.
@@ -38,6 +41,15 @@ public class WorldRenderer {
         this.gameNodes = gameNodes;
         this.pixelsPerGameCell = pixelsPerGameCell;
         this.observer = observer;
+
+        towerRangeCircle = new Circle();
+        towerRangeCircle.setVisible(false);
+        towerRangeCircle.setManaged(false);
+        towerRangeCircle.setMouseTransparent(true);
+        towerRangeCircle.setViewOrder(Double.NEGATIVE_INFINITY);
+        towerRangeCircle.getStyleClass().add("tower-range");
+
+        gameNodes.add(towerRangeCircle);
     }
 
     /**
@@ -71,7 +83,8 @@ public class WorldRenderer {
      * Must be called in JavaFX Application thread!
      */
     public void render() throws RenderException {
-        gameNodes.removeIf(node -> !renderableToGameNodeMap.containsKey(node.getUserData()));
+        gameNodes.removeIf(node ->
+            node != towerRangeCircle && !renderableToGameNodeMap.containsKey(node.getUserData()));
 
         for (Map.Entry<Renderable, Node> entry : new ArrayList<>(renderableToGameNodeMap.entrySet())) {
             Renderable renderable = entry.getKey();
@@ -96,5 +109,20 @@ public class WorldRenderer {
                 gameNodes.add(imageView);
             }
         }
+    }
+
+    public void showTowerRangeCircle(Tower tower) {
+        int range = tower.getType().getRange();
+
+        towerRangeCircle.setRadius(range * pixelsPerGameCell);
+        towerRangeCircle.relocate(
+            (tower.getPosition().getX() + tower.getSize().getX() / 2 - range) * pixelsPerGameCell,
+            (tower.getPosition().getY() + tower.getSize().getY() / 2 - range) * pixelsPerGameCell);
+
+        towerRangeCircle.setVisible(true);
+    }
+
+    public void hideTowerRangeCircle() {
+        towerRangeCircle.setVisible(false);
     }
 }

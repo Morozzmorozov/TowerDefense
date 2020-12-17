@@ -8,6 +8,10 @@ Label, Text {
     -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 3);
 }
 
+.tower-range {
+    -fx-fill: rgba(255, 255, 255, 0.15);
+}
+
 .root {
     -fx-background-color: rgba(0, 0, 0, 0.95);
     -fx-background-image: url('../icons/root-background.png');
