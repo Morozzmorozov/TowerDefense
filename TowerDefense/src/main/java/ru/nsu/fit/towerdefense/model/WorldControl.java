@@ -24,7 +24,13 @@ public class WorldControl {
   List<Tower> newTowers = new ArrayList<>();
 
   public Tower getTowerOnPlatform(TowerPlatform towerPlatform) {
-    return null; // todo
+    for (Tower candidate : world.getTowers()) {
+      if (Math.abs(candidate.getPosition().getX() - towerPlatform.getPosition().getX()) < DELTA
+        && Math.abs(candidate.getPosition().getY() - towerPlatform.getPosition().getY()) < DELTA) {
+        return candidate;
+      }
+    }
+    return null;
   }
 
   public void buildTower(TowerPlatform towerPlatform, TowerType towerType)
