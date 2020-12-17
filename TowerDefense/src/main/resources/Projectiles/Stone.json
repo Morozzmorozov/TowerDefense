@@ -1,5 +1,5 @@
 {
-    "Speed" : 0.3,
+    "Speed" : 0.9,
     "SelfGuided" : false,
     "BasicDamage" : 30,
     "EnemyTypeDamage" : [
