@@ -2,7 +2,6 @@ package ru.nsu.fit.towerdefense.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import ru.nsu.fit.towerdefense.model.map.RoadDescription;
 import ru.nsu.fit.towerdefense.model.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.Wave;
@@ -20,6 +19,7 @@ import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
 public class WorldControl {
+  List<Tower> newTowers = new ArrayList<>();
 
   public void buildTower(TowerPlatform towerPlatform, TowerType towerType) {
     if (world.getMoney() < towerType.getPrice()) {
@@ -31,7 +31,7 @@ public class WorldControl {
     tower.setType(towerType);
     tower.setRotation(0);
     tower.setCooldown(towerType.getFireRate());
-    world.getTowers().add(tower);
+    newTowers.add(tower);
   }
 
   public void upgradeTower(Tower tower, TowerType towerType) {
@@ -400,6 +400,9 @@ public class WorldControl {
     } else {
       world.setCountdown(world.getCountdown() - deltaTime);
     }
+
+    world.getTowers().addAll(newTowers);
+    newTowers.clear();
 
     ++tick;
   }
