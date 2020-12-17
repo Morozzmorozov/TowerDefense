@@ -3,7 +3,7 @@ package ru.nsu.fit.towerdefense.model.world.gameobject;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 
-public class Projectile implements Renderable {
+public class Projectile extends GameObject implements Renderable {
   private Enemy target;
   private float remainingRange;
   private ProjectileType type;

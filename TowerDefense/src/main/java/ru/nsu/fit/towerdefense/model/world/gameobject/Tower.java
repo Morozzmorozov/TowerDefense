@@ -3,7 +3,7 @@ package ru.nsu.fit.towerdefense.model.world.gameobject;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
-public class Tower implements Renderable {
+public class Tower extends GameObject implements Renderable {
 
   public enum Mode { First, Last, Nearest, Farthest, Weakest, Strongest, Random }
 

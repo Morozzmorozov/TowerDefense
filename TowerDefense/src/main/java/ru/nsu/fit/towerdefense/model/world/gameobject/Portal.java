@@ -2,7 +2,7 @@ package ru.nsu.fit.towerdefense.model.world.gameobject;
 
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 
-public class Portal implements Renderable {
+public class Portal extends GameObject implements Renderable {
   private String image;
 
   private Vector2<Integer> position;

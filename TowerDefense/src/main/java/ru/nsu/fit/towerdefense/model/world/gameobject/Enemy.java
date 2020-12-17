@@ -6,7 +6,7 @@ import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.Wave;
 import ru.nsu.fit.towerdefense.model.world.types.EnemyType;
 
-public class Enemy implements Renderable {
+public class Enemy extends GameObject implements Renderable {
   private int health;
   private EnemyType type;
   private float velocity;

@@ -2,7 +2,7 @@ package ru.nsu.fit.towerdefense.model.world.gameobject;
 
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 
-public class Base implements Renderable {
+public class Base extends GameObject implements Renderable {
   private int health;
 
   private String image;
