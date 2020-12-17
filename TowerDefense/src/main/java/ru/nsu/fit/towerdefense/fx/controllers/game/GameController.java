@@ -24,6 +24,7 @@ import ru.nsu.fit.towerdefense.model.map.GameMap;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.World;
 import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
+import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
 
@@ -340,46 +341,89 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 break;
             case TOWER:
                 System.out.println("TOWER");
+                updateTowerSideBar((Tower) renderable);
                 showSideBar(towerSideVBox);
                 break;
             case TOWER_PLATFORM:
                 System.out.println("TOWER_PLATFORM");
                 TowerPlatform towerPlatform = (TowerPlatform) renderable;
 
-                String[] towerTypeNames = { "Archer", "Catapult", "Crossbowman" };
-                buildTowerFlowPane.getChildren().clear();
-                for (String towerTypeName : towerTypeNames) {
+                Tower towerOnPlatform = worldControl.getTowerOnPlatform(towerPlatform);
+                if (towerOnPlatform == null) {
+                    updatePlatformSideBar(towerPlatform);
+                    showSideBar(platformSideVBox);
+                } else {
+                    updateTowerSideBar(towerOnPlatform);
+                    showSideBar(towerSideVBox);
+                }
+                break;
+        }
+    }
+
+    private void updateTowerSideBar(Tower tower) {
+        upgradeTowerFlowPane.getChildren().clear();
+        for (TowerType.Upgrade upgrade : tower.getType().getUpgrades()) {
+            try {
+                TowerType towerType = GameMetaData.getInstance().getTowerType(upgrade.getName());
+
+                ImageView imageView = new ImageView(
+                    Images.getInstance().getImage(towerType.getImage()));
+                imageView.setFitWidth(48);
+                imageView.setFitHeight(48);
+                imageView.setPickOnBounds(true);
+                imageView.setPreserveRatio(true);
+
+                Label label = new Label("$" + upgrade.getCost());
+
+                VBox towerTypeVBox = new VBox();
+                towerTypeVBox.getStyleClass().add("tower-upgrade-box");
+                towerTypeVBox.getChildren().addAll(imageView, label);
+                towerTypeVBox.setOnMouseClicked(mouseEvent -> {
                     try {
-                        TowerType towerType = GameMetaData.getInstance().getTowerType(towerTypeName);
-
-                        ImageView imageView = new ImageView(
-                            Images.getInstance().getImage(towerType.getImage()));
-                        imageView.setFitWidth(48);
-                        imageView.setFitHeight(48);
-                        imageView.setPickOnBounds(true);
-                        imageView.setPreserveRatio(true);
-
-                        Label label = new Label("$" + towerType.getPrice());
-
-                        VBox towerTypeVBox = new VBox();
-                        towerTypeVBox.getStyleClass().add("tower-upgrade-box");
-                        towerTypeVBox.getChildren().addAll(imageView, label);
-                        towerTypeVBox.setOnMouseClicked(mouseEvent -> {
-                            try {
-                                worldControl.buildTower(towerPlatform, towerType);
-                            } catch (GameplayException e) {
-                                System.out.println(e.getMessage());
-                            }
-                        });
-
-                        buildTowerFlowPane.getChildren().add(towerTypeVBox);
-                    } catch (RenderException e) {
+                        worldControl.upgradeTower(tower, upgrade);
+                    } catch (GameplayException e) {
                         System.out.println(e.getMessage());
                     }
-                }
+                });
 
-                showSideBar(platformSideVBox);
-                break;
+                upgradeTowerFlowPane.getChildren().add(towerTypeVBox);
+            } catch (RenderException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void updatePlatformSideBar(TowerPlatform towerPlatform) {
+        String[] towerTypeNames = { "Archer", "Catapult", "Crossbowman" };
+        buildTowerFlowPane.getChildren().clear();
+        for (String towerTypeName : towerTypeNames) {
+            try {
+                TowerType towerType = GameMetaData.getInstance().getTowerType(towerTypeName);
+
+                ImageView imageView = new ImageView(
+                    Images.getInstance().getImage(towerType.getImage()));
+                imageView.setFitWidth(48);
+                imageView.setFitHeight(48);
+                imageView.setPickOnBounds(true);
+                imageView.setPreserveRatio(true);
+
+                Label label = new Label("$" + towerType.getPrice());
+
+                VBox towerTypeVBox = new VBox();
+                towerTypeVBox.getStyleClass().add("tower-upgrade-box");
+                towerTypeVBox.getChildren().addAll(imageView, label);
+                towerTypeVBox.setOnMouseClicked(mouseEvent -> {
+                    try {
+                        worldControl.buildTower(towerPlatform, towerType);
+                    } catch (GameplayException e) {
+                        System.out.println(e.getMessage());
+                    }
+                });
+
+                buildTowerFlowPane.getChildren().add(towerTypeVBox);
+            } catch (RenderException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
