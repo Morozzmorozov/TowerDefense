@@ -38,6 +38,7 @@ public class WorldControl {
     if (world.getMoney() < towerType.getPrice()) {
       throw new GameplayException("Not enough money to build the tower");
     }
+    world.setMoney(world.getMoney() - towerType.getPrice());
     Tower tower = new Tower();
     tower.setPosition(new Vector2<>((int)Math.round(towerPlatform.getPosition().getX()),
         (int)Math.round(towerPlatform.getPosition().getY())));
@@ -51,7 +52,7 @@ public class WorldControl {
     if (world.getMoney() < upgrade.getCost()) {
       throw new GameplayException("Not enough money to upgrade the tower");
     }
-
+    world.setMoney(world.getMoney() - upgrade.getCost());
     TowerType type = GameMetaData.getInstance().getTowerType(upgrade.getName());
     tower.setType(type);
     tower.setCooldown(type.getFireRate());
