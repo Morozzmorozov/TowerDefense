@@ -8,6 +8,9 @@ public class WaveEnemies {
 
     private String type;
 
+    private Integer moneyReward;
+
+
     public WaveEnemies()
     {
         type = null;
@@ -21,6 +24,8 @@ public class WaveEnemies {
         return count;
     }
 
+    public Integer getMoneyReward() {return moneyReward; }
+
     public Integer getSpawnPosition() {
         return spawnPosition;
     }
@@ -29,6 +34,7 @@ public class WaveEnemies {
     {
         private int spawnPosition;
         private int count;
+        private int moneyReward;
         private String type;
         public Builder(){}
 
@@ -46,12 +52,15 @@ public class WaveEnemies {
             this.count = count;
         }
 
+        public void setMoneyReward(int moneyReward) {this.moneyReward = moneyReward;}
+
         public WaveEnemies build()
         {
             WaveEnemies enemies = new WaveEnemies();
             enemies.type = type;
             enemies.count = count;
             enemies.spawnPosition = spawnPosition;
+            enemies.moneyReward = moneyReward;
             return enemies;
         }
     }

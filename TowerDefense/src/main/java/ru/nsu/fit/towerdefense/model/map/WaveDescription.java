@@ -7,7 +7,8 @@ public class WaveDescription {
     private Double scaleFactor;
     private Double spawnInterval;
     private Double timeTillNextWave;
-    private Integer moneyReward;
+    private Integer scienceReward;
+
 
     private List<WaveEnemies> enemiesList;
 
@@ -21,7 +22,7 @@ public class WaveDescription {
         private Double scaleFactor;
         private Double spawnInterval;
         private Double timeTillNextWave;
-        private Integer moneyReward;
+        private Integer scienceReward;
 
         private List<WaveEnemies> enemiesList;
         public Builder()
@@ -44,9 +45,9 @@ public class WaveDescription {
             this.timeTillNextWave = timeTillNextWave;
         }
 
-        public void setMoneyReward(int moneyReward)
+        public void setScienceReward(int scienceReward)
         {
-            this.moneyReward = moneyReward;
+            this.scienceReward = scienceReward;
         }
 
         public void addEnemy(WaveEnemies enemy)
@@ -58,7 +59,7 @@ public class WaveDescription {
         {
             WaveDescription description = new WaveDescription();
             description.enemiesList = enemiesList;
-            description.moneyReward = moneyReward;
+            description.scienceReward = scienceReward;
             description.timeTillNextWave = timeTillNextWave;
             description.spawnInterval = spawnInterval;
             description.scaleFactor = scaleFactor;
@@ -66,8 +67,8 @@ public class WaveDescription {
         }
     }
 
-    public Integer getMoneyReward() {
-        return moneyReward;
+    public Integer getScienceReward() {
+        return scienceReward;
     }
 
     public Double getTimeTillNextWave() {
