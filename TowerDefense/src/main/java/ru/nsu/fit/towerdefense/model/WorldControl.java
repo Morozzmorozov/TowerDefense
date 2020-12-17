@@ -392,7 +392,6 @@ public class WorldControl {
           if (world.getCurrentWaveNumber() < gameMap.getWaves().size()) {
             world.setCurrentWave(new Wave());
             world.getCurrentWave().setNumber(world.getCurrentWaveNumber());
-            System.out.println(world.getCurrentWaveNumber());
             world.getCurrentWave().setCurrentEnemyNumber(0);
             world.getCurrentWave().setRemainingEnemiesCount(gameMap.getWaves().get(
                 world.getCurrentWaveNumber()).getEnemiesList().stream()
