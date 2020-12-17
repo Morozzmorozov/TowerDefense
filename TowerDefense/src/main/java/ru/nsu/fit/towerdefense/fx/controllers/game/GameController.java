@@ -2,6 +2,7 @@ package ru.nsu.fit.towerdefense.fx.controllers.game;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -34,8 +35,10 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
@@ -87,6 +90,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private Label upgradeTowerSelfGuidedLabel;
     @FXML private Label upgradeTowerProjectileSpeedLabel;
     @FXML private Label upgradeTowerDamageLabel;
+    @FXML private HBox towerModeFirstHBox;
+    @FXML private HBox towerModeWeakestHBox;
+    @FXML private HBox towerModeNearestHBox;
+    @FXML private HBox towerModeLastHBox;
+    @FXML private HBox towerModeStrongestHBox;
+    @FXML private HBox towerModeRandomHBox;
     @FXML private Label sellLabel;
 
     @FXML private Label researchLabel;
@@ -132,6 +141,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private WorldCamera worldCamera;
     private WorldRenderer worldRenderer;
 
+    private Map<Tower.Mode, Node> towerModeToUiNodeMap;
+
     private State state;
     private int speed;
     private VBox currentSideVBox;
@@ -157,6 +168,15 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private void initialize() {
         worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell(), this);
+
+        towerModeToUiNodeMap = new HashMap<>() {{
+            put(Tower.Mode.First, towerModeFirstHBox);
+            put(Tower.Mode.Last, towerModeLastHBox);
+            put(Tower.Mode.Weakest, towerModeWeakestHBox);
+            put(Tower.Mode.Strongest, towerModeStrongestHBox);
+            put(Tower.Mode.Nearest, towerModeNearestHBox);
+            put(Tower.Mode.Random, towerModeRandomHBox);
+        }};
 
         closeSidePaneImageView.setOnMouseClicked(mouseEvent -> {
             hideSideBar();
@@ -485,6 +505,21 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         if (upgradeTowerFlowPane.getChildren().isEmpty()) {
             upgradeTowerFlowPane.getChildren().add(new Label("No more upgrades for this tower"));
         }
+
+        for (Map.Entry<Tower.Mode, Node> entry : towerModeToUiNodeMap.entrySet()) {
+            Tower.Mode mode = entry.getKey();
+            Node node = entry.getValue();
+
+            node.setOnMouseClicked(mouseEvent -> {
+                worldControl.tuneTower(tower, mode);
+                for (Node _node : towerModeToUiNodeMap.values()) {
+                    _node.getStyleClass().removeIf(className -> className.equals("target-box-selected"));
+                }
+                node.getStyleClass().add("target-box-selected");
+            });
+            node.getStyleClass().removeIf(className -> className.equals("target-box-selected"));
+        }
+        towerModeToUiNodeMap.get(tower.getMode()).getStyleClass().add("target-box-selected");
 
         sellLabel.setText("$" + tower.getSellPrice());
         sellLabel.setOnMouseClicked(mouseEvent -> {

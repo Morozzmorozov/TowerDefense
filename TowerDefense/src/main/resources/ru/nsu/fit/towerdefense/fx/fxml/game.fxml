@@ -137,12 +137,12 @@
                             <ColumnConstraints percentWidth="33.34" />
                             <ColumnConstraints percentWidth="33.33" />
                         </columnConstraints>
-                        <HBox styleClass="target-box, target-box-selected"><Label>First</Label></HBox>
-                        <HBox styleClass="target-box" GridPane.columnIndex="1"><Label>Weakest</Label></HBox>
-                        <HBox styleClass="target-box" GridPane.columnIndex="2"><Label>Nearest</Label></HBox>
-                        <HBox styleClass="target-box" GridPane.rowIndex="1"><Label>Last</Label></HBox>
-                        <HBox styleClass="target-box" GridPane.columnIndex="1" GridPane.rowIndex="1"><Label>Strongest</Label></HBox>
-                        <HBox styleClass="target-box" GridPane.columnIndex="2" GridPane.rowIndex="1"><Label>Random</Label></HBox>
+                        <HBox fx:id="towerModeFirstHBox" styleClass="target-box"><Label>First</Label></HBox>
+                        <HBox fx:id="towerModeWeakestHBox" styleClass="target-box" GridPane.columnIndex="1"><Label>Weakest</Label></HBox>
+                        <HBox fx:id="towerModeNearestHBox" styleClass="target-box" GridPane.columnIndex="2"><Label>Nearest</Label></HBox>
+                        <HBox fx:id="towerModeLastHBox" styleClass="target-box" GridPane.rowIndex="1"><Label>Last</Label></HBox>
+                        <HBox fx:id="towerModeStrongestHBox" styleClass="target-box" GridPane.columnIndex="1" GridPane.rowIndex="1"><Label>Strongest</Label></HBox>
+                        <HBox fx:id="towerModeRandomHBox" styleClass="target-box" GridPane.columnIndex="2" GridPane.rowIndex="1"><Label>Random</Label></HBox>
                     </GridPane>
                 </VBox>
                 <Region styleClass="side-bar-delimiter" />
