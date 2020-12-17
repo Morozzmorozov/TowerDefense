@@ -10,6 +10,12 @@ public class EnemyType {
     private Vector2<Double> size;
     private String image;
     private int damage;
+    private String displayInfo = "Hurts your base"; // todo ////////////////////////////////////////
+
+    public String getDisplayInfo() {
+        return displayInfo;
+    }
+
     public String getImage() {
     return image;
   }
