@@ -33,6 +33,7 @@ public class TowerType {
     private FireType fireType;
     private String projectileType;
     private String image;
+    private String displayInfo = "Shoots enemies"; // todo /////////////////////////////////////////
 
     public String getTypeName()
     {
@@ -70,6 +71,10 @@ public class TowerType {
     public String getProjectileType() {
     return projectileType;
   }
+
+    public String getDisplayInfo() {
+        return displayInfo;
+    }
 
     public enum FireType {
         UNIDIRECTIONAL, OMNIDIRECTIONAL
