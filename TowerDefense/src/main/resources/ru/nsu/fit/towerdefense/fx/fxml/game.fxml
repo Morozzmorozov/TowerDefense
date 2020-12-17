@@ -81,9 +81,9 @@
             </VBox>
             <VBox fx:id="towerSideVBox" visible="false" managed="false" styleClass="side-bar-box">
                 <VBox styleClass="side-bar-header">
-                    <Text>BASIC TOWER</Text>
+                    <Text fx:id="towerNameText" />
                     <TextFlow styleClass="game-object-description">
-                        <Text>The simplest tower with good, but limited power</Text>
+                        <Text fx:id="towerDisplayInfoText" />
                     </TextFlow>
                 </VBox>
                 <Region styleClass="side-bar-delimiter" />

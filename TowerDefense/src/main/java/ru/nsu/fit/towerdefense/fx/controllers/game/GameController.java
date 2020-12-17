@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
@@ -76,6 +77,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private Label buildTowerDamageLabel;
 
     @FXML private VBox towerSideVBox;
+    @FXML private Text towerNameText;
+    @FXML private Text towerDisplayInfoText;
     @FXML private FlowPane upgradeTowerFlowPane;
     @FXML private Label upgradeTowerOmnidirectionalLabel;
     @FXML private Label upgradeTowerRangeLabel;
@@ -159,6 +162,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             hideSideBar();
             worldRenderer.hideTowerRangeCircle();
         });
+
+        bindUppercase(towerNameText);
 
         speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
         speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
@@ -407,6 +412,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void updateTowerSideBar(Tower tower) {
+        towerNameText.setText(tower.getType().getTypeName());
+        towerDisplayInfoText.setText(tower.getType().getDisplayInfo());
         setDefaultTowerCharacteristics(tower);
 
         upgradeTowerFlowPane.getChildren().clear();
@@ -616,6 +623,16 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             resultsTimeLabel.setText(playingTimeLabel.getText());
 
             resultsPopupGridPane.setVisible(true);
+        });
+    }
+
+    private void bindUppercase(Text text) {
+        text.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue.equalsIgnoreCase(newValue)) {
+                return;
+            }
+
+            text.setText(newValue.toUpperCase());
         });
     }
 
