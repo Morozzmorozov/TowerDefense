@@ -23,6 +23,10 @@ import ru.nsu.fit.towerdefense.model.world.types.TowerType.Upgrade;
 public class WorldControl {
   List<Tower> newTowers = new ArrayList<>();
 
+  public Tower getTowerOnPlatform(TowerPlatform towerPlatform) {
+    return null; // todo
+  }
+
   public void buildTower(TowerPlatform towerPlatform, TowerType towerType)
       throws GameplayException {
     if (world.getMoney() < towerType.getPrice()) {
