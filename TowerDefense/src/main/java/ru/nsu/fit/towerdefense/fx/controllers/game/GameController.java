@@ -132,7 +132,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell(), this);
 
-        closeSidePaneImageView.setOnMouseClicked(mouseEvent -> hideSideBar());
+        closeSidePaneImageView.setOnMouseClicked(mouseEvent -> {
+            hideSideBar();
+            worldRenderer.hideTowerRangeCircle();
+        });
 
         speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
         speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
@@ -333,6 +336,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             return;
         }
 
+        worldRenderer.hideTowerRangeCircle();
+
         switch (renderable.getGameObjectType()) {
             case BASE:
                 System.out.println("BASE");
@@ -351,7 +356,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 break;
             case TOWER:
                 System.out.println("TOWER");
-                updateTowerSideBar((Tower) renderable);
+                Tower tower = (Tower) renderable;
+                worldRenderer.showTowerRangeCircle(tower);
+                updateTowerSideBar(tower);
                 showSideBar(towerSideVBox);
                 break;
             case TOWER_PLATFORM:
@@ -363,6 +370,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     updatePlatformSideBar(towerPlatform);
                     showSideBar(platformSideVBox);
                 } else {
+                    worldRenderer.showTowerRangeCircle(towerOnPlatform);
                     updateTowerSideBar(towerOnPlatform);
                     showSideBar(towerSideVBox);
                 }
