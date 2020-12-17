@@ -3,9 +3,18 @@ package ru.nsu.fit.towerdefense.model.world;
 import ru.nsu.fit.towerdefense.model.map.WaveDescription;
 
 public class Wave {
+  private int number;
   private int remainingEnemiesCount;
   private int currentEnemyNumber = 0;
   private WaveDescription description;
+
+  public int getNumber() {
+    return number;
+  }
+
+  public void setNumber(int number) {
+    this.number = number;
+  }
 
   public int getCurrentEnemyNumber() {
     return currentEnemyNumber;

@@ -94,6 +94,7 @@ public class WorldControl {
     }
 
     Wave wave = new Wave();
+    wave.setNumber(0);
     wave.setCurrentEnemyNumber(0);
     wave.setRemainingEnemiesCount(gameMap.getWaves().get(0).getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum());
     wave.setDescription(gameMap.getWaves().get(0));
@@ -390,6 +391,8 @@ public class WorldControl {
           world.setCurrentWaveNumber(world.getCurrentWaveNumber() + 1);
           if (world.getCurrentWaveNumber() < gameMap.getWaves().size()) {
             world.setCurrentWave(new Wave());
+            world.getCurrentWave().setNumber(world.getCurrentWaveNumber());
+            System.out.println(world.getCurrentWaveNumber());
             world.getCurrentWave().setCurrentEnemyNumber(0);
             world.getCurrentWave().setRemainingEnemiesCount(gameMap.getWaves().get(
                 world.getCurrentWaveNumber()).getEnemiesList().stream()
