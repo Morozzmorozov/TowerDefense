@@ -2,6 +2,7 @@ package ru.nsu.fit.towerdefense.fx.controllers.game;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import ru.nsu.fit.towerdefense.fx.Images;
@@ -69,12 +70,17 @@ public class WorldRenderer {
      *
      * Must be called in JavaFX Application thread!
      */
-    public void render() {
+    public void render() throws RenderException {
         gameNodes.removeIf(node -> !renderableToGameNodeMap.containsKey(node.getUserData()));
 
         for (Map.Entry<Renderable, Node> entry : new ArrayList<>(renderableToGameNodeMap.entrySet())) {
             Renderable renderable = entry.getKey();
             ImageView imageView = (ImageView) entry.getValue();
+
+            Image image = Images.getInstance().getImage(renderable.getImageName());
+            if (imageView.getImage() != image) {
+                imageView.setImage(image);
+            }
 
             imageView.relocate(
                 renderable.getPosition().getX() * pixelsPerGameCell,

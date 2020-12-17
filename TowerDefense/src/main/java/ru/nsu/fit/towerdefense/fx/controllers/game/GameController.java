@@ -176,36 +176,46 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
                 worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
                 Platform.runLater(() -> {
-                    worldRenderer.render();
+                    try {
+                        worldRenderer.render();
 
-                    researchLabel.setText(worldControl.getResearchPoints() + "");
-                    moneyLabel.setText(worldControl.getMoney() + "");
-                    healthLabel.setText(worldControl.getBaseHealth() + "");
-                    enemyLabel.setText(worldControl.getEnemiesKilled() + "");
-                    long ticksTillNextWave = worldControl.getTicksTillNextWave();
-                    if (ticksTillNextWave > 0) {
-                        nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
-                        nextWaveTimeLabel.setManaged(true);
-                        nextWaveTimeLabel.setVisible(true);
-                    } else {
-                        nextWaveTimeLabel.setVisible(false);
-                        nextWaveTimeLabel.setManaged(false);
+                        researchLabel.setText(worldControl.getResearchPoints() + "");
+                        moneyLabel.setText(worldControl.getMoney() + "");
+                        healthLabel.setText(worldControl.getBaseHealth() + "");
+                        enemyLabel.setText(worldControl.getEnemiesKilled() + "");
+                        long ticksTillNextWave = worldControl.getTicksTillNextWave();
+                        if (ticksTillNextWave > 0) {
+                            nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
+                            nextWaveTimeLabel.setManaged(true);
+                            nextWaveTimeLabel.setVisible(true);
+                        } else {
+                            nextWaveTimeLabel.setVisible(false);
+                            nextWaveTimeLabel.setManaged(false);
+                        }
+                        waveLabel.setText(worldControl.getWaveNumber() + "");
+                        playingTimeLabel.setText(formatPlayingTime(worldControl.getTick() * DELTA_TIME));
+                    } catch (RenderException e) {
+                        handleRenderException(e);
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
                     }
-                    waveLabel.setText(worldControl.getWaveNumber() + "");
-                    playingTimeLabel.setText(formatPlayingTime(worldControl.getTick() * DELTA_TIME));
                 });
             } catch (RenderException e) {
-                sceneManager.switchToMenu();
-
-                Platform.runLater(() -> new AlertBuilder()
-                    .setHeaderText(RENDER_WORLD_ERROR_HEADER)
-                    .setContentText(e.getMessage())
-                    .setOwner(sceneManager.getWindowOwner())
-                    .build().showAndWait());
+                handleRenderException(e);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
         }, 0, DELTA_TIME, TimeUnit.MILLISECONDS);
+    }
+
+    private void handleRenderException(RenderException e) {
+        sceneManager.switchToMenu();
+
+        Platform.runLater(() -> new AlertBuilder()
+            .setHeaderText(RENDER_WORLD_ERROR_HEADER)
+            .setContentText(e.getMessage())
+            .setOwner(sceneManager.getWindowOwner())
+            .build().showAndWait());
     }
 
     private void updateSpeed(int speed) {
