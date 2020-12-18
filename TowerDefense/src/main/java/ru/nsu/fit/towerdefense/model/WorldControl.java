@@ -220,7 +220,138 @@ public class WorldControl {
   }
 
   public void simulateTick() {
+    towerSequence();
+    projectileSequence();
+    enemySequence();
+    spawnSequence();
 
+    world.getTowers().addAll(newTowers);
+    world.getTowers().removeAll(removedTowers);
+    newTowers.clear();
+
+    ++tick;
+  }
+
+  private void enemyDeath(Enemy enemy) {
+    enemy.setDead(true);
+    Wave wave = enemy.getWave();
+    wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
+    if (wave.getRemainingEnemiesCount() == 0) {
+      wavesDefeated++;
+
+      //world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward()); TODO fix me
+      if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
+          && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
+        worldObserver.onVictory();
+      }
+    }
+  }
+
+  private double distance(Vector2<Double> a, Vector2<Double> b) {
+    return Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY() , 2));
+  }
+
+
+  private void projectileSequence() {
+    List<Projectile> removedProjectiles = new ArrayList<>();
+    for (Projectile projectile : world.getProjectiles()) {
+      if (projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
+        Vector2<Double> newDirection = new Vector2<>(
+            projectile.getTarget().getPosition().getX() - projectile.getPosition().getX(),
+            projectile.getTarget().getPosition().getY() - projectile.getPosition().getY());
+
+        double length = distance(projectile.getPosition(), projectile.getTarget().getPosition());
+        newDirection.setX(newDirection.getX() / length * projectile.getType().getSpeed());
+        newDirection.setY(newDirection.getY() / length * projectile.getType().getSpeed());
+
+        projectile.setVelocity(newDirection);
+      }
+
+      projectile.getPosition().setX(projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX());
+      projectile.getPosition().setY(projectile.getPosition().getY() + deltaTime * projectile.getVelocity().getY());
+      projectile.setRemainingRange(projectile.getRemainingRange() - projectile.getType().getSpeed() * deltaTime);
+      if (projectile.getRemainingRange() <= 0) {
+        removedProjectiles.add(projectile);
+        continue;
+      }
+
+      Enemy collidedEnemy = null;
+      // Collision checking
+      for (Enemy enemy : world.getEnemies()) {
+        if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getType().getHitBox()) {
+          collidedEnemy = enemy;
+
+          break;
+        }
+      }
+
+      if (collidedEnemy != null) {
+        int damage = projectile.getType().getEnemyTypeDamageMap().get(collidedEnemy.getType().getTypeName());
+
+        removedProjectiles.add(projectile);
+
+        collidedEnemy.setHealth(collidedEnemy.getHealth() - damage);
+        if (collidedEnemy.getHealth() <= 0) {
+          enemiesKilled++;
+          world.setMoney(world.getMoney() + collidedEnemy.getMoneyReward());
+          enemyDeath(collidedEnemy);
+          world.getEnemies().remove(collidedEnemy);
+        }
+      }
+    }
+    for (Projectile projectile : removedProjectiles) {
+      world.getProjectiles().remove(projectile);
+    }
+  }
+
+
+  private void enemySequence() {
+    List<Enemy> removedEnemies = new ArrayList<>();
+    for (Enemy enemy : world.getEnemies()) {
+      if (enemy.isDead()) continue;
+
+      // TODO get effects & update health
+
+      double remainingDistance = enemy.getVelocity() * deltaTime;
+      while (remainingDistance > DELTA && !enemy.getTrajectory().isEmpty()) {
+        double dist = distance(enemy.getPosition(), enemy.getTrajectory().get(0));
+        if (Double.compare(remainingDistance, dist) >= 0) {
+          // enemy reaches next vertex
+          remainingDistance -= dist;
+          enemy.setPosition(enemy.getTrajectory().get(0));
+          enemy.getTrajectory().remove(0);
+        } else {
+          // enemy does not reach next vertex
+          enemy.getPosition().setX(
+              enemy.getPosition().getX() + (enemy.getTrajectory().get(0).getX() - enemy.getPosition().getX()) * remainingDistance / dist);
+          enemy.getPosition().setY(
+              enemy.getPosition().getY() + (enemy.getTrajectory().get(0).getY() - enemy.getPosition().getY()) * remainingDistance / dist);
+          remainingDistance = 0;
+        }
+      }
+
+      if (Math.abs(enemy.getPosition().getX() - world.getBase().getPosition().getX()) < DELTA &&
+          Math.abs(enemy.getPosition().getY() - world.getBase().getPosition().getY()) < DELTA) {
+        int damage = enemy.getType().getDamage();
+
+        world.getBase().setHealth(Math.max(world.getBase().getHealth() - damage, 0));
+
+        if (world.getBase().getHealth() <= 0) {
+          removedEnemies.add(enemy);
+          worldObserver.onDefeat();
+        } else {
+          removedEnemies.add(enemy); // not sure if I should leave this
+          enemyDeath(enemy);
+        }
+
+      }
+    }
+    for (Enemy enemy : removedEnemies) {
+      world.getEnemies().remove(enemy);
+    }
+  }
+
+  private void towerSequence() {
 
     for (Tower tower : world.getTowers()) {
       if (tower.getTarget() == null || tower.getTarget().isDead()
@@ -274,8 +405,8 @@ public class WorldControl {
               tower.getTarget(), tower.getType().getRange(), projectileType,
               new Vector2<>(
                   (double)tower.getCell().getX()/* + 0.5*/, (double)tower.getCell().getY() /*+ 0.5*/),
-             // new Vector2<>(projectileType.getSpeed() * Math.cos(tower.getRotation()),
-             //     projectileType.getSpeed() * Math.sin(tower.getRotation())))
+              // new Vector2<>(projectileType.getSpeed() * Math.cos(tower.getRotation()),
+              //     projectileType.getSpeed() * Math.sin(tower.getRotation())))
               direction
           ));
           tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
@@ -286,101 +417,9 @@ public class WorldControl {
         tower.setCooldown(tower.getCooldown() - deltaTime);
       }
     }
+  }
 
-    List<Projectile> removedProjectiles = new ArrayList<>();
-    for (Projectile projectile : world.getProjectiles()) {
-      if (projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
-        Vector2<Double> newDirection = new Vector2<>(
-            projectile.getTarget().getPosition().getX() - projectile.getPosition().getX(),
-            projectile.getTarget().getPosition().getY() - projectile.getPosition().getY());
-
-        double length = distance(projectile.getPosition(), projectile.getTarget().getPosition());
-        newDirection.setX(newDirection.getX() / length * projectile.getType().getSpeed());
-        newDirection.setY(newDirection.getY() / length * projectile.getType().getSpeed());
-
-        projectile.setVelocity(newDirection);
-      }
-
-      projectile.getPosition().setX(projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX());
-      projectile.getPosition().setY(projectile.getPosition().getY() + deltaTime * projectile.getVelocity().getY());
-      projectile.setRemainingRange(projectile.getRemainingRange() - projectile.getType().getSpeed() * deltaTime);
-      if (projectile.getRemainingRange() <= 0) {
-        removedProjectiles.add(projectile);
-        continue;
-      }
-
-      Enemy collidedEnemy = null;
-      // Collision checking
-      for (Enemy enemy : world.getEnemies()) {
-        if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getType().getHitBox()) {
-          collidedEnemy = enemy;
-
-          break;
-        }
-      }
-
-      if (collidedEnemy != null) {
-        int damage = projectile.getType().getEnemyTypeDamageMap().get(collidedEnemy.getType().getTypeName());
-
-        removedProjectiles.add(projectile);
-
-        collidedEnemy.setHealth(collidedEnemy.getHealth() - damage);
-        if (collidedEnemy.getHealth() <= 0) {
-          enemiesKilled++;
-          world.setMoney(world.getMoney() + collidedEnemy.getMoneyReward());
-          enemyDeath(collidedEnemy);
-          world.getEnemies().remove(collidedEnemy);
-        }
-      }
-    }
-    for (Projectile projectile : removedProjectiles) {
-      world.getProjectiles().remove(projectile);
-    }
-
-    List<Enemy> removedEnemies = new ArrayList<>();
-    for (Enemy enemy : world.getEnemies()) {
-      if (enemy.isDead()) continue;
-
-      // TODO get effects & update health
-
-      double remainingDistance = enemy.getVelocity() * deltaTime;
-      while (remainingDistance > DELTA && !enemy.getTrajectory().isEmpty()) {
-        double dist = distance(enemy.getPosition(), enemy.getTrajectory().get(0));
-        if (Double.compare(remainingDistance, dist) >= 0) {
-          // enemy reaches next vertex
-          remainingDistance -= dist;
-          enemy.setPosition(enemy.getTrajectory().get(0));
-          enemy.getTrajectory().remove(0);
-        } else {
-          // enemy does not reach next vertex
-          enemy.getPosition().setX(
-              enemy.getPosition().getX() + (enemy.getTrajectory().get(0).getX() - enemy.getPosition().getX()) * remainingDistance / dist);
-          enemy.getPosition().setY(
-              enemy.getPosition().getY() + (enemy.getTrajectory().get(0).getY() - enemy.getPosition().getY()) * remainingDistance / dist);
-          remainingDistance = 0;
-        }
-      }
-
-      if (Math.abs(enemy.getPosition().getX() - world.getBase().getPosition().getX()) < DELTA &&
-          Math.abs(enemy.getPosition().getY() - world.getBase().getPosition().getY()) < DELTA) {
-        int damage = enemy.getType().getDamage();
-
-        world.getBase().setHealth(Math.max(world.getBase().getHealth() - damage, 0));
-
-        if (world.getBase().getHealth() <= 0) {
-          removedEnemies.add(enemy);
-          worldObserver.onDefeat();
-        } else {
-          removedEnemies.add(enemy); // not sure if I should leave this
-          enemyDeath(enemy);
-        }
-
-      }
-    }
-    for (Enemy enemy : removedEnemies) {
-      world.getEnemies().remove(enemy);
-    }
-
+  private void spawnSequence() {
     if (world.getCountdown() <= 0) {
       if (gameMap.getWaves().size() > world.getCurrentWaveNumber()) {
         WaveDescription description = gameMap.getWaves().get(world.getCurrentWaveNumber());
@@ -433,30 +472,5 @@ public class WorldControl {
     } else {
       world.setCountdown(world.getCountdown() - deltaTime);
     }
-
-    world.getTowers().addAll(newTowers);
-    world.getTowers().removeAll(removedTowers);
-    newTowers.clear();
-
-    ++tick;
-  }
-
-  private void enemyDeath(Enemy enemy) {
-    enemy.setDead(true);
-    Wave wave = enemy.getWave();
-    wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
-    if (wave.getRemainingEnemiesCount() == 0) {
-      wavesDefeated++;
-
-      //world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward()); TODO fix me
-      if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
-          && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
-        worldObserver.onVictory();
-      }
-    }
-  }
-
-  private double distance(Vector2<Double> a, Vector2<Double> b) {
-    return Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY() , 2));
   }
 }
