@@ -232,6 +232,7 @@ public class WorldControl {
     world.getTowers().addAll(newTowers);
     world.getTowers().removeAll(removedTowers);
     newTowers.clear();
+    removedTowers.clear();
 
     ++tick;
   }
