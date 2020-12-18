@@ -13,6 +13,15 @@ public class Projectile extends GameObject implements Renderable {
   private double rotation;
   private Tower parent;
   private double scale = 1.0;
+  private double rotationSpeed = 3.0; // DEBUG
+
+  public double getRotationSpeed() {
+    return rotationSpeed;
+  }
+
+  public void setRotationSpeed(double rotationSpeed) {
+    this.rotationSpeed = rotationSpeed;
+  }
 
   public double getScale() {
     return scale;
@@ -36,6 +45,10 @@ public class Projectile extends GameObject implements Renderable {
 
   public Enemy getTarget() {
     return target;
+  }
+
+  public void setTarget(Enemy target) {
+    this.target = target;
   }
 
   public float getRemainingRange() {

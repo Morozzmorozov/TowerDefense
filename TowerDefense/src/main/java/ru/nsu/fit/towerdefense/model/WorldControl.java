@@ -136,7 +136,7 @@ public class WorldControl {
     world.setBase(base);
 
     Tower tower = new Tower(); // DEBUG! todo remove
-    tower.setType(GameMetaData.getInstance().getTowerType("Wave"));
+    tower.setType(GameMetaData.getInstance().getTowerType("RocketLauncher"));
     tower.setCooldown(0);
     tower.setRotation(0);
     tower.setPosition(new Vector2<>(3, 4));
@@ -261,20 +261,32 @@ public class WorldControl {
   private void projectileSequence() {
     List<Projectile> removedProjectiles = new ArrayList<>();
     for (Projectile projectile : world.getProjectiles()) {
+      if (projectile.getTarget() != null && projectile.getType().isSelfGuided() && projectile.getTarget().isDead()) {
+        Enemy newEnemy = null;
+        double dist = 0;
+        for (Enemy enemy : world.getEnemies()) {
+          if (newEnemy == null
+              || distance(projectile.getPosition(), enemy.getPosition()) < dist) {
+            newEnemy = enemy;
+            dist = distance(projectile.getPosition(), enemy.getPosition());
+          }
+        }
+        if (newEnemy != null) {
+          projectile.setTarget(newEnemy);
+        }
+      }
       if (projectile.getParent().getType().getFireType().equals(FireType.UNIDIRECTIONAL)
           && projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
-        Vector2<Double> newDirection = new Vector2<>(
-            projectile.getTarget().getPosition().getX() - projectile.getPosition().getX(),
-            projectile.getTarget().getPosition().getY() - projectile.getPosition().getY());
 
-        double length = distance(projectile.getPosition(), projectile.getTarget().getPosition());
-        newDirection.setX(newDirection.getX() / length * projectile.getType().getSpeed());
-        newDirection.setY(newDirection.getY() / length * projectile.getType().getSpeed());
+        double newRotation = getNewDirection(projectile.getRotation() - 90, projectile.getPosition(), projectile.getTarget().getPosition(), projectile.getRotationSpeed()) + 90;
+
+        Vector2<Double> newDirection = new Vector2<>(
+            projectile.getType().getSpeed() * Math.cos(Math.toRadians(newRotation - 90)),
+            projectile.getType().getSpeed() * Math.sin(Math.toRadians(newRotation - 90)));
 
         projectile.setVelocity(newDirection);
 
-        projectile.setRotation(
-            Math.toDegrees(Math.atan2(newDirection.getY(), newDirection.getX()) + Math.PI / 2));
+        projectile.setRotation(newRotation);
       }
 
       List<Enemy> affectedEnemies = new ArrayList<>();
@@ -445,24 +457,14 @@ public class WorldControl {
       if (tower.getTarget() != null) {
         switch (tower.getType().getFireType()) {
           case UNIDIRECTIONAL:
-            Vector2<Double> direction = new Vector2<>(
+           Vector2<Double> direction = new Vector2<>(
                 tower.getTarget().getPosition().getX() - tower.getPosition().getX(),
                 tower.getTarget().getPosition().getY() - tower.getPosition().getY());
 
-            double targetAngle = Math
-                .toDegrees(Math.atan2(direction.getY(), direction.getX()) + Math.PI / 2);
+           double targetAngle = Math
+              .toDegrees(Math.atan2(direction.getY(), direction.getX())) + 90;
 
-            double deltaAngle = (targetAngle - tower.getRotation() + 360.0) % 360.0;
-
-            if (deltaAngle <= debugRotationSpeed || 360.0 - deltaAngle <= debugRotationSpeed) {
-              tower.setRotation(targetAngle);
-            } else {
-              if (deltaAngle < 180.0) {
-                tower.setRotation((tower.getRotation() + debugRotationSpeed) % 360.0);
-              } else {
-                tower.setRotation((tower.getRotation() - debugRotationSpeed + 360.0) % 360.0);
-              }
-            }
+            tower.setRotation(getNewDirection(tower.getRotation() - 90, tower.getPosition(), tower.getTarget().getPosition(), debugRotationSpeed) + 90);
 
             if (tower.getCooldown() <= 0 && tower.getRotation() == targetAngle) {
 
@@ -479,7 +481,7 @@ public class WorldControl {
                   new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
                   direction, tower);
               projectile.setRotation(
-                  Math.toDegrees(Math.atan2(direction.getY(), direction.getX())) + Math.PI / 2);
+                  Math.toDegrees(Math.atan2(direction.getY(), direction.getX())) + 90);
               world.getProjectiles().add(projectile);
               tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
             }
@@ -565,5 +567,26 @@ public class WorldControl {
       ans += distance(enemy.getTrajectory().get(i), enemy.getTrajectory().get(i - 1));
     }
     return ans;
+  }
+
+  private double getNewDirection(double oldDirection, Vector2<Double> position, Vector2<Double> targetPosition, double rotationSpeed) {
+    Vector2<Double> direction = new Vector2<>(
+        targetPosition.getX() - position.getX(),
+        targetPosition.getY() - position.getY());
+
+    double targetAngle = Math
+        .toDegrees(Math.atan2(direction.getY(), direction.getX()));
+
+    double deltaAngle = (targetAngle - oldDirection + 360.0) % 360.0;
+
+    if (deltaAngle <= rotationSpeed || 360.0 - deltaAngle <= rotationSpeed) {
+      return targetAngle;
+    } else {
+      if (deltaAngle < 180.0) {
+        return (oldDirection + rotationSpeed) % 360.0;
+      } else {
+        return (oldDirection - rotationSpeed + 360.0) % 360.0;
+      }
+    }
   }
 }
