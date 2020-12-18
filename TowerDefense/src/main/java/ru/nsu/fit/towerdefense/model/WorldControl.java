@@ -23,9 +23,11 @@ import ru.nsu.fit.towerdefense.model.world.types.TowerType.Upgrade;
 public class WorldControl {
 
   private final int DEBUG_MONEY = 600;
+  private final float SELL_MULTIPLIER = 0.4f;
 
-  public void sellTower(Tower tower) { // todo
-    System.out.println("SELL");
+  public void sellTower(Tower tower) {
+    world.setMoney(world.getMoney() + tower.getSellPrice());
+    removedTowers.add(tower);
   }
 
   public Tower buildTower(TowerPlatform towerPlatform, TowerType towerType)
@@ -40,6 +42,7 @@ public class WorldControl {
     tower.setType(towerType);
     tower.setRotation(0);
     tower.setCooldown(towerType.getFireRate());
+    tower.setSellPrice(Math.round(towerType.getPrice() * SELL_MULTIPLIER));
     newTowers.add(tower);
     return tower;
   }
@@ -53,9 +56,11 @@ public class WorldControl {
     tower.setType(type);
     tower.setCooldown(type.getFireRate());
     tower.setTarget(null);
+    tower.setSellPrice(tower.getSellPrice() + Math.round(upgrade.getCost() + SELL_MULTIPLIER));
   }
 
   List<Tower> newTowers = new ArrayList<>();
+  List<Tower> removedTowers = new ArrayList<>();
 
   public Tower getTowerOnPlatform(TowerPlatform towerPlatform) {
     for (Tower candidate : world.getTowers()) {
@@ -130,6 +135,7 @@ public class WorldControl {
     tower.setCooldown(0);
     tower.setRotation(0);
     tower.setPosition(new Vector2<>(3, 4));
+    tower.setSellPrice(Math.round(tower.getType().getPrice() * SELL_MULTIPLIER));
     world.getTowers().add(tower);
 
 
@@ -429,6 +435,7 @@ public class WorldControl {
     }
 
     world.getTowers().addAll(newTowers);
+    world.getTowers().removeAll(removedTowers);
     newTowers.clear();
 
     ++tick;
