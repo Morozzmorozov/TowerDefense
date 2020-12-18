@@ -293,24 +293,38 @@ public class WorldControl {
 
       switch (projectile.getParent().getType().getFireType()) {
         case UNIDIRECTIONAL:
-          projectile.getPosition()
-            .setX(projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX());
-          projectile.getPosition()
-              .setY(projectile.getPosition().getY() + deltaTime * projectile.getVelocity().getY());
-          projectile.setRemainingRange(
-              projectile.getRemainingRange() - projectile.getType().getSpeed() * deltaTime);
-          if (projectile.getRemainingRange() <= 0) {
-            removedProjectiles.add(projectile);
-          }
-
-          // Collision checking
+          Vector2<Double> newPosition = new Vector2<>(
+              projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX(),
+              projectile.getPosition().getY() + deltaTime * projectile.getVelocity().getY());
           for (Enemy enemy : world.getEnemies()) {
-            if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getType()
-                .getHitBox()) {
+            // Collision checking
+            Vector2<Double> oldVectorToEnemy = new Vector2<>(enemy.getPosition().getX() - projectile.getPosition().getX(),
+                enemy.getPosition().getY() - projectile.getPosition().getY());
+            Vector2<Double> pathVector = new Vector2<>(
+                newPosition.getX() - projectile.getPosition().getX(),
+                newPosition.getY() - projectile.getPosition().getY());
+
+            double angle = Math.acos((oldVectorToEnemy.getX() * pathVector.getX() + oldVectorToEnemy.getY() + pathVector.getY())
+                / distance(newPosition, projectile.getPosition()) / distance(projectile.getPosition(), enemy.getPosition()));
+
+            double encounterDistance = Math.sin(angle) * distance(enemy.getPosition(), projectile.getPosition());
+
+            double pathToEncounter = Math.cos(angle) * distance(enemy.getPosition(), projectile.getPosition());
+
+            if (distance(newPosition, enemy.getPosition()) < enemy.getType().getHitBox()
+                || (encounterDistance < enemy.getType().getHitBox() && pathToEncounter < projectile.getType().getSpeed())) {
               affectedEnemies.add(enemy);
               removedProjectiles.add(projectile);
               break;
             }
+          }
+
+          projectile.setPosition(newPosition);
+
+          projectile.setRemainingRange(
+              projectile.getRemainingRange() - projectile.getType().getSpeed() * deltaTime);
+          if (projectile.getRemainingRange() <= 0) {
+            removedProjectiles.add(projectile);
           }
 
           break;
