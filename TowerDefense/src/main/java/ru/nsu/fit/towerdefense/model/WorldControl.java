@@ -1,7 +1,10 @@
 package ru.nsu.fit.towerdefense.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import ru.nsu.fit.towerdefense.model.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.model.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
@@ -74,6 +77,7 @@ public class WorldControl {
 
   public void tuneTower(Tower tower, Tower.Mode towerMode) {
     tower.setMode(towerMode);
+    tower.setTarget(null);
   }
 
   /**
@@ -360,16 +364,52 @@ public class WorldControl {
           || distance(tower.getPosition(), tower.getTarget().getPosition()) > tower.getType().getRange()) {
         tower.setTarget(null);
         // finds the closest enemy for now
-        for (Enemy enemy : world.getEnemies()) {
-          double dist = distance(tower.getPosition(), enemy.getPosition());
-          if (dist > tower.getType().getRange()) {
-            continue;
-          }
-          if (tower.getTarget() == null
-              || dist < distance(tower.getPosition(), tower.getTarget().getPosition())) {
-            tower.setTarget(enemy);
-          }
+        List<Enemy> candidates = world.getEnemies().stream()
+            .filter((enemy -> distance(tower.getPosition(), enemy.getPosition()) <= tower.getType().getRange()))
+            .collect(Collectors.toList());
+        if (candidates.isEmpty()) {
+          continue;
         }
+        switch (tower.getMode()) {
+          case Nearest:
+            for (Enemy enemy : candidates) {
+              double dist = distance(tower.getPosition(), enemy.getPosition());
+              if (tower.getTarget() == null
+                  || dist < distance(tower.getPosition(), tower.getTarget().getPosition())) {
+                tower.setTarget(enemy);
+              }
+            }
+            break;
+          case Farthest:
+            for (Enemy enemy : candidates) {
+              double dist = distance(tower.getPosition(), enemy.getPosition());
+              if (tower.getTarget() == null
+                  || dist > distance(tower.getPosition(), tower.getTarget().getPosition())) {
+                tower.setTarget(enemy);
+              }
+            }
+            break;
+          case Random:
+            Random random = new Random();
+            tower.setTarget(candidates.get(random.nextInt(candidates.size())));
+            break;
+          case Strongest:
+            tower.setTarget(candidates.stream().max(Comparator.comparingInt(Enemy::getHealth)).get());
+            break;
+          case Weakest:
+            tower.setTarget(candidates.stream().min(Comparator.comparingInt(Enemy::getHealth)).get());
+            break;
+          case First:
+            tower.setTarget(candidates.stream().min(Comparator.comparingDouble(this::distanceToFinish)).get());
+            break;
+          case Last:
+            tower.setTarget(candidates.stream().max(Comparator.comparingDouble(this::distanceToFinish)).get());
+            break;
+          default:
+            tower.setTarget(candidates.get(0)); // Just in case
+        }
+
+
       }
 
 
@@ -471,5 +511,14 @@ public class WorldControl {
     } else {
       world.setCountdown(world.getCountdown() - deltaTime);
     }
+  }
+
+  private double distanceToFinish(Enemy enemy) {
+    double ans = 0;
+    ans += distance(enemy.getPosition(), enemy.getTrajectory().get(0));
+    for (int i = 1; i < enemy.getTrajectory().size(); ++i) {
+      ans += distance(enemy.getTrajectory().get(i), enemy.getTrajectory().get(i - 1));
+    }
+    return ans;
   }
 }
