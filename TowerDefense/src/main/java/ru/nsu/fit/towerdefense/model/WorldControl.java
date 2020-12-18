@@ -29,9 +29,16 @@ public class WorldControl {
   private final int DEBUG_MONEY = 600;
   private final float SELL_MULTIPLIER = 0.4f;
 
-  public void sellTower(Tower tower) {
+  public TowerPlatform sellTower(Tower tower) {
     world.setMoney(world.getMoney() + tower.getSellPrice());
     removedTowers.add(tower);
+    for (TowerPlatform platform : world.getTowerPlatforms()) {
+      if (Math.abs(tower.getPosition().getX() - platform.getPosition().getX()) < DELTA
+        && Math.abs(tower.getPosition().getY() - platform.getPosition().getY()) < DELTA) {
+        return platform;
+      }
+    }
+    return null;
   }
 
   public Tower buildTower(TowerPlatform towerPlatform, TowerType towerType)
