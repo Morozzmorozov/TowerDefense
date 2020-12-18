@@ -640,7 +640,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void updatePlatformSideBar(TowerPlatform towerPlatform) {
-        String[] towerTypeNames = { "Archer", "Crossbowman", "Catapult" };
+        String[] towerTypeNames = { "Archer", "Crossbowman", "Catapult", "RocketLauncher" };
         buildTowerFlowPane.getChildren().clear();
         for (String towerTypeName : towerTypeNames) {
             try {

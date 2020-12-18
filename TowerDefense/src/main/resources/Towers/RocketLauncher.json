@@ -1,0 +1,10 @@
+{
+	"Price" : 200,
+	"Upgrades": [
+	],
+	"Range" : 7,
+	"FireRate" : 80,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Rocket",
+	"Image" : "rocket_launcher.png"
+}

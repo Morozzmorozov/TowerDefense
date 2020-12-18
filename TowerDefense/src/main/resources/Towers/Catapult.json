@@ -6,6 +6,6 @@
 	"Range" : 10,
 	"FireRate" : 30,
 	"FireType" : "Unidirectional",
-	"ProjectileType" : "Bolt",
+	"ProjectileType" : "Stone",
 	"Image" : "tower3.png"
 }

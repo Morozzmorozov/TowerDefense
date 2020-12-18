@@ -131,7 +131,7 @@ public class WorldControl {
     world.setBase(base);
 
     Tower tower = new Tower(); // DEBUG! todo remove
-    tower.setType(GameMetaData.getInstance().getTowerType("Archer"));
+    tower.setType(GameMetaData.getInstance().getTowerType("RocketLauncher"));
     tower.setCooldown(0);
     tower.setRotation(0);
     tower.setPosition(new Vector2<>(3, 4));
@@ -265,6 +265,8 @@ public class WorldControl {
         newDirection.setY(newDirection.getY() / length * projectile.getType().getSpeed());
 
         projectile.setVelocity(newDirection);
+
+        projectile.setRotation(Math.toDegrees(Math.atan2(newDirection.getY(), newDirection.getX()) + Math.PI / 2));
       }
 
       projectile.getPosition().setX(projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX());
@@ -401,14 +403,11 @@ public class WorldControl {
           direction.setX(direction.getX() * projectileType.getSpeed() / distance(tower.getTarget().getPosition(), tower.getPosition()));
           direction.setY(direction.getY() * projectileType.getSpeed() / distance(tower.getTarget().getPosition(), tower.getPosition()));
 
-          world.getProjectiles().add(new Projectile(
+          Projectile projectile = new Projectile(
               tower.getTarget(), tower.getType().getRange(), projectileType,
-              new Vector2<>(
-                  (double)tower.getCell().getX()/* + 0.5*/, (double)tower.getCell().getY() /*+ 0.5*/),
-              // new Vector2<>(projectileType.getSpeed() * Math.cos(tower.getRotation()),
-              //     projectileType.getSpeed() * Math.sin(tower.getRotation())))
-              direction
-          ));
+              new Vector2<>((double)tower.getCell().getX(), (double)tower.getCell().getY()), direction);
+          projectile.setRotation(Math.toDegrees(Math.atan2(direction.getY(), direction.getX())) + Math.PI / 2);
+          world.getProjectiles().add(projectile);
           tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
         }
       }

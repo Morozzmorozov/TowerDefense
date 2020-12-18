@@ -9,6 +9,7 @@ public class Projectile extends GameObject implements Renderable {
   private ProjectileType type;
   private Vector2<Double> position;
   private Vector2<Double> velocity;
+  private double rotation;
 
   public Vector2<Double> getVelocity() {
     return velocity;
@@ -32,6 +33,15 @@ public class Projectile extends GameObject implements Renderable {
 
   public ProjectileType getType() {
     return type;
+  }
+
+  @Override
+  public double getRotation() {
+    return rotation;
+  }
+
+  public void setRotation(double rotation) {
+    this.rotation = rotation;
   }
 
   @Override
