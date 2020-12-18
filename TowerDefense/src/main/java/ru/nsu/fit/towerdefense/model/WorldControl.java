@@ -21,6 +21,7 @@ import ru.nsu.fit.towerdefense.model.map.WaveDescription;
 import ru.nsu.fit.towerdefense.model.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.model.world.types.ProjectileType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType;
+import ru.nsu.fit.towerdefense.model.world.types.TowerType.FireType;
 import ru.nsu.fit.towerdefense.model.world.types.TowerType.Upgrade;
 
 public class WorldControl {
@@ -135,7 +136,7 @@ public class WorldControl {
     world.setBase(base);
 
     Tower tower = new Tower(); // DEBUG! todo remove
-    tower.setType(GameMetaData.getInstance().getTowerType("RocketLauncher"));
+    tower.setType(GameMetaData.getInstance().getTowerType("Wave"));
     tower.setCooldown(0);
     tower.setRotation(0);
     tower.setPosition(new Vector2<>(3, 4));
@@ -260,7 +261,8 @@ public class WorldControl {
   private void projectileSequence() {
     List<Projectile> removedProjectiles = new ArrayList<>();
     for (Projectile projectile : world.getProjectiles()) {
-      if (projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
+      if (projectile.getParent().getType().getFireType().equals(FireType.UNIDIRECTIONAL)
+          && projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
         Vector2<Double> newDirection = new Vector2<>(
             projectile.getTarget().getPosition().getX() - projectile.getPosition().getX(),
             projectile.getTarget().getPosition().getY() - projectile.getPosition().getY());
@@ -271,38 +273,64 @@ public class WorldControl {
 
         projectile.setVelocity(newDirection);
 
-        projectile.setRotation(Math.toDegrees(Math.atan2(newDirection.getY(), newDirection.getX()) + Math.PI / 2));
+        projectile.setRotation(
+            Math.toDegrees(Math.atan2(newDirection.getY(), newDirection.getX()) + Math.PI / 2));
       }
 
-      projectile.getPosition().setX(projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX());
-      projectile.getPosition().setY(projectile.getPosition().getY() + deltaTime * projectile.getVelocity().getY());
-      projectile.setRemainingRange(projectile.getRemainingRange() - projectile.getType().getSpeed() * deltaTime);
-      if (projectile.getRemainingRange() <= 0) {
-        removedProjectiles.add(projectile);
-        continue;
-      }
+      List<Enemy> affectedEnemies = new ArrayList<>();
 
-      Enemy collidedEnemy = null;
-      // Collision checking
-      for (Enemy enemy : world.getEnemies()) {
-        if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getType().getHitBox()) {
-          collidedEnemy = enemy;
+      switch (projectile.getParent().getType().getFireType()) {
+        case UNIDIRECTIONAL:
+          projectile.getPosition()
+            .setX(projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX());
+          projectile.getPosition()
+              .setY(projectile.getPosition().getY() + deltaTime * projectile.getVelocity().getY());
+          projectile.setRemainingRange(
+              projectile.getRemainingRange() - projectile.getType().getSpeed() * deltaTime);
+          if (projectile.getRemainingRange() <= 0) {
+            removedProjectiles.add(projectile);
+          }
+
+          // Collision checking
+          for (Enemy enemy : world.getEnemies()) {
+            if (distance(enemy.getPosition(), projectile.getPosition()) < enemy.getType()
+                .getHitBox()) {
+              affectedEnemies.add(enemy);
+              removedProjectiles.add(projectile);
+              break;
+            }
+          }
 
           break;
-        }
+        case OMNIDIRECTIONAL:
+          double newScale = projectile.getScale() + Math.min(projectile.getRemainingRange() * 2, projectile.getType().getSpeed() * 2);
+
+          for (Enemy enemy : world.getEnemies()) {
+            double distanceToEnemy = distance(projectile.getParent().getPosition(), enemy.getPosition());
+            if (distanceToEnemy >= projectile.getScale() / 2 && distanceToEnemy < newScale / 2) {
+              affectedEnemies.add(enemy);
+            }
+          }
+          projectile.setRemainingRange(projectile.getRemainingRange() - projectile.getType().getSpeed());
+          if (projectile.getRemainingRange() <= 0) {
+            removedProjectiles.add(projectile);
+          } else {
+            projectile.setScale(newScale);
+          }
       }
 
-      if (collidedEnemy != null) {
-        int damage = projectile.getType().getEnemyTypeDamageMap().get(collidedEnemy.getType().getTypeName());
+      for (Enemy enemy : affectedEnemies) {
+        int damage = projectile.getType().getEnemyTypeDamageMap()
+            .get(enemy.getType().getTypeName());
 
-        removedProjectiles.add(projectile);
 
-        collidedEnemy.setHealth(collidedEnemy.getHealth() - damage);
-        if (collidedEnemy.getHealth() <= 0) {
+
+        enemy.setHealth(enemy.getHealth() - damage);
+        if (enemy.getHealth() <= 0) {
           enemiesKilled++;
-          world.setMoney(world.getMoney() + collidedEnemy.getMoneyReward());
-          enemyDeath(collidedEnemy);
-          world.getEnemies().remove(collidedEnemy);
+          world.setMoney(world.getMoney() + enemy.getMoneyReward());
+          enemyDeath(enemy);
+          world.getEnemies().remove(enemy);
         }
       }
     }
@@ -415,44 +443,60 @@ public class WorldControl {
 
 
       if (tower.getTarget() != null) {
-        Vector2<Double> direction = new Vector2<>(
-            tower.getTarget().getPosition().getX() - tower.getPosition().getX(),
-            tower.getTarget().getPosition().getY() - tower.getPosition().getY());
+        switch (tower.getType().getFireType()) {
+          case UNIDIRECTIONAL:
+            Vector2<Double> direction = new Vector2<>(
+                tower.getTarget().getPosition().getX() - tower.getPosition().getX(),
+                tower.getTarget().getPosition().getY() - tower.getPosition().getY());
 
-        double targetAngle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()) + Math.PI / 2);
+            double targetAngle = Math
+                .toDegrees(Math.atan2(direction.getY(), direction.getX()) + Math.PI / 2);
 
-        double deltaAngle = (targetAngle - tower.getRotation() + 360.0) % 360.0;
+            double deltaAngle = (targetAngle - tower.getRotation() + 360.0) % 360.0;
 
-        if (deltaAngle <= debugRotationSpeed || 360.0 - deltaAngle <= debugRotationSpeed) {
-          tower.setRotation(targetAngle);
-        } else {
-          if (deltaAngle < 180.0) {
-            tower.setRotation((tower.getRotation() + debugRotationSpeed) % 360.0);
-          } else {
-            tower.setRotation((tower.getRotation() - debugRotationSpeed + 360.0) % 360.0);
-          }
-        }
+            if (deltaAngle <= debugRotationSpeed || 360.0 - deltaAngle <= debugRotationSpeed) {
+              tower.setRotation(targetAngle);
+            } else {
+              if (deltaAngle < 180.0) {
+                tower.setRotation((tower.getRotation() + debugRotationSpeed) % 360.0);
+              } else {
+                tower.setRotation((tower.getRotation() - debugRotationSpeed + 360.0) % 360.0);
+              }
+            }
 
-        //tower.setRotation(targetAngle);
+            if (tower.getCooldown() <= 0 && tower.getRotation() == targetAngle) {
 
-        if (tower.getCooldown() <= 0 && tower.getRotation() == targetAngle) {
+              ProjectileType projectileType = GameMetaData.getInstance()
+                  .getProjectileType(tower.getType().getProjectileType());
 
-          ProjectileType projectileType = GameMetaData.getInstance().getProjectileType(tower.getType().getProjectileType());
+              direction.setX(direction.getX() * projectileType.getSpeed() / distance(
+                  tower.getTarget().getPosition(), tower.getPosition()));
+              direction.setY(direction.getY() * projectileType.getSpeed() / distance(
+                  tower.getTarget().getPosition(), tower.getPosition()));
 
-          // Instant rotation for now
+              Projectile projectile = new Projectile(
+                  tower.getTarget(), tower.getType().getRange(), projectileType,
+                  new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
+                  direction, tower);
+              projectile.setRotation(
+                  Math.toDegrees(Math.atan2(direction.getY(), direction.getX())) + Math.PI / 2);
+              world.getProjectiles().add(projectile);
+              tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
+            }
+            break;
+          case OMNIDIRECTIONAL:
+            if (tower.getCooldown() <= 0) {
+              ProjectileType projectileType = GameMetaData.getInstance().getProjectileType(tower.getType().getProjectileType());
 
-          direction.setX(direction.getX() * projectileType.getSpeed() / distance(tower.getTarget().getPosition(), tower.getPosition()));
-          direction.setY(direction.getY() * projectileType.getSpeed() / distance(tower.getTarget().getPosition(), tower.getPosition()));
-
-          Projectile projectile = new Projectile(
-              tower.getTarget(), tower.getType().getRange(), projectileType,
-              new Vector2<>((double)tower.getCell().getX(), (double)tower.getCell().getY()), direction);
-          projectile.setRotation(Math.toDegrees(Math.atan2(direction.getY(), direction.getX())) + Math.PI / 2);
-          world.getProjectiles().add(projectile);
-          tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
+              Projectile projectile = new Projectile(null, tower.getType().getRange(),
+                  projectileType, new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
+                  null, tower);
+              projectile.setScale(0);
+              world.getProjectiles().add(projectile);
+              tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
+            }
         }
       }
-
       if (tower.getCooldown() > 0) {
         tower.setCooldown(tower.getCooldown() - deltaTime);
       }

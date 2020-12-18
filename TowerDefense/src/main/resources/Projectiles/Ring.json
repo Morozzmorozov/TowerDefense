@@ -1,0 +1,12 @@
+{
+    "Speed" : 0.05,
+    "SelfGuided" : false,
+    "BasicDamage" : 3,
+    "EnemyTypeDamage" : [
+        ["Cyclops", 6], ["Goblin", 5], ["Orc", 4]
+    ],
+    "HitBox" : 2,
+    "SizeX" : 1.0,
+    "SizeY" : 1.0,
+    "Image" : "ring.png"
+}
