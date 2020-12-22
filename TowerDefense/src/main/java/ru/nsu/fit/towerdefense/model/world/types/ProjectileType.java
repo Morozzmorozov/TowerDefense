@@ -13,15 +13,11 @@ public class ProjectileType {
     private int hitBox;
     private Vector2<Double> size;
     private String image;
-    private String displayInfo = "Hurts enemies"; // todo //////////////////////////////////////////
+    private String displayInfo;
 
     public Vector2<Double> getSize() {
     return size;
   }
-
-    public String getDisplayInfo() {
-        return displayInfo;
-    }
 
     public String getImage() {
     return image;
@@ -53,6 +49,8 @@ public class ProjectileType {
         return typeName;
     }
 
+    public String getDisplayInfo () { return displayInfo ; }
+
     public static class Builder
     {
         private String typeName;
@@ -63,6 +61,7 @@ public class ProjectileType {
         private Vector2<Double> size;
         private int basicDamage;
         private String image;
+        private String displayInfo ;
         public Builder(String name)
         {
             typeName = name;
@@ -89,6 +88,12 @@ public class ProjectileType {
         {
             this.size.setX(x);
             this.size.setY(y);
+        }
+
+        public void setDisplayInfo(String displayInfo )
+        {
+
+            this.displayInfo  = displayInfo ;
         }
 
         public void setBasicDamage(int basicDamage)
@@ -122,6 +127,7 @@ public class ProjectileType {
             type.hitBox = hitBox;
             type.enemyTypeDamageMap = enemyTypeDamageMap;
             type.basicDamage = basicDamage;
+            type.displayInfo  = displayInfo ;
             return type;
         }
     }

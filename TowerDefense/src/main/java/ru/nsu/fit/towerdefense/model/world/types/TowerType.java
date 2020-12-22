@@ -24,16 +24,20 @@ public class TowerType {
         }
     }
 
+    private String displayInfo ;
     private String typeName;
     private int price;
     private List<Upgrade> upgrades;
     private int range;
     private int fireRate;
-    private int rotationSpeed = 1; // todo /////////////////////////////////////////////////////////
     private FireType fireType;
     private String projectileType;
     private String image;
-    private String displayInfo = "Shoots enemies"; // todo /////////////////////////////////////////
+
+    public String getDisplayInfo ()
+    {
+        return displayInfo ;
+    }
 
     public String getTypeName()
     {
@@ -60,10 +64,6 @@ public class TowerType {
     return fireRate;
   }
 
-    public int getRotationSpeed() {
-        return rotationSpeed;
-    }
-
     public FireType getFireType() {
     return fireType;
   }
@@ -72,16 +72,13 @@ public class TowerType {
     return projectileType;
   }
 
-    public String getDisplayInfo() {
-        return displayInfo;
-    }
-
     public enum FireType {
         UNIDIRECTIONAL, OMNIDIRECTIONAL
     }
 
     public static class Builder
     {
+        private String displayInfo ;
         private int price;
         private String typeName;
         private List<Upgrade> upgrades;
@@ -95,6 +92,11 @@ public class TowerType {
         {
             this.typeName = typeName;
             upgrades = new LinkedList<>();
+        }
+
+        public void setDisplayInfo (String displayInfo )
+        {
+            this.displayInfo  = displayInfo ;
         }
 
         public void setImage(String image)
@@ -150,6 +152,7 @@ public class TowerType {
             type.projectileType = projectileType;
             type.range = range;
             type.upgrades = upgrades;
+            type.displayInfo  = displayInfo ;
             return type;
         }
     }

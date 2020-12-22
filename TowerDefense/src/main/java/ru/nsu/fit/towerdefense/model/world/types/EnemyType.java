@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.model.world.types;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 
 public class EnemyType {
+    private String displayInfo ;
     private String typeName;
     private int health;
     private float speed;
@@ -10,12 +11,6 @@ public class EnemyType {
     private Vector2<Double> size;
     private String image;
     private int damage;
-    private String displayInfo = "Hurts your base"; // todo ////////////////////////////////////////
-
-    public String getDisplayInfo() {
-        return displayInfo;
-    }
-
     public String getImage() {
     return image;
   }
@@ -40,6 +35,8 @@ public class EnemyType {
     return damage;
   }
 
+    public String getDisplayInfo () {return displayInfo ; }
+
     public String getTypeName()
     {
         return typeName;
@@ -47,6 +44,7 @@ public class EnemyType {
 
     public static class Builder
     {
+        private String displayInfo ;
         private int health;
         private float speed;
         private float hitBox;
@@ -58,6 +56,11 @@ public class EnemyType {
         {
             this.typeName = typeName;
             size = new Vector2<>(0.0, 0.0);
+        }
+
+        public void setDisplayInfo (String displayInfo )
+        {
+            this.displayInfo  = displayInfo ;
         }
 
         public void setHealth(int health)
@@ -97,6 +100,7 @@ public class EnemyType {
             type.image = image;
             type.size = size;
             type.speed = speed;
+            type.displayInfo = displayInfo;
             return type;
         }
     }

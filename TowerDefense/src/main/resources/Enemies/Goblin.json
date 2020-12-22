@@ -1,4 +1,5 @@
 {
+	"DisplayInfo" : "It's a goblin, it's green and mad",
 	"Health" : 20,
 	"Speed" : 0.02,
 	"HitBox" : 0.4,

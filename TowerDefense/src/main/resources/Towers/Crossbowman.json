@@ -1,4 +1,5 @@
 {
+	"DisplayInfo" : "Crossbowman",
 	"Price" : 300,
 	"Upgrades": [
 		["Catapult", 350]

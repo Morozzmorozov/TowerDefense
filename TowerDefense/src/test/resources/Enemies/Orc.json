@@ -1,4 +1,5 @@
 {
+	"DisplayInfo" : "Looks like goblin, just a bit bigger",
 	"Health" : 20,
 	"Speed" : 0.02,
 	"HitBox" : 0.4,

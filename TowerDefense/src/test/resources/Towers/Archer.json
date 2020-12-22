@@ -1,4 +1,5 @@
 {
+	"DisplayInfo" : "Just archer",
 	"Price" : 100,
 	"Upgrades": [
 		["Crossbowman", 250],

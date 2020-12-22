@@ -67,7 +67,6 @@ public class GameMetaData {
         }
         catch (Exception e)
         {
-            System.out.println("HUI");
         }
         if (!file.isDirectory())
         {
@@ -183,6 +182,7 @@ public class GameMetaData {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
             ProjectileType.Builder builder = new ProjectileType.Builder(name);
+            builder.setDisplayInfo(node.get("DisplayInfo").asText());
             builder.setSpeed((float)node.get("Speed").asDouble());
             builder.setSelfGuided(node.get("SelfGuided").asBoolean());
             builder.setBasicDamage(node.get("BasicDamage").asInt());
@@ -211,6 +211,7 @@ public class GameMetaData {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
             TowerType.Builder builder = new TowerType.Builder(name);
+            builder.setDisplayInfo(node.get("DisplayInfo").asText());
             builder.setPrice(node.get("Price").asInt());
             ArrayNode upgrades = node.get("Upgrades").deepCopy();
             for (int i = 0; upgrades.get(i) != null; i++)
@@ -239,6 +240,7 @@ public class GameMetaData {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
             EnemyType.Builder builder = new EnemyType.Builder(name);
+            builder.setDisplayInfo (node.get("DisplayInfo").asText());
             builder.setHealth(node.get("Health").asInt());
             builder.setSpeed((float)node.get("Speed").asDouble());
             builder.setHitBox((float)node.get("HitBox").asDouble());

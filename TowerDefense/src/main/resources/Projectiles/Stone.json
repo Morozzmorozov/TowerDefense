@@ -1,4 +1,5 @@
 {
+	"DisplayInfo" : "Simple stone",
     "Speed" : 0.9,
     "SelfGuided" : false,
     "BasicDamage" : 30,
