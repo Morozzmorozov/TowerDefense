@@ -33,6 +33,7 @@ public class TowerType {
     private FireType fireType;
     private String projectileType;
     private String image;
+    private double rotationSpeed;
 
     public String getDisplayInfo ()
     {
@@ -72,6 +73,11 @@ public class TowerType {
     return projectileType;
   }
 
+    public double getRotationSpeed()
+    {
+        return rotationSpeed;
+    }
+
     public enum FireType {
         UNIDIRECTIONAL, OMNIDIRECTIONAL
     }
@@ -84,6 +90,7 @@ public class TowerType {
         private List<Upgrade> upgrades;
         private int range;
         private int fireRate;
+        private double rotationSpeed;
         private String fireType;
         private String projectileType;
         private String image;
@@ -129,6 +136,12 @@ public class TowerType {
             this.range = range;
         }
 
+        public void setRotationSpeed(double speed)
+        {
+            this.rotationSpeed = speed;
+        }
+
+
         public void addUpgrade(Upgrade upgrade)
         {
             upgrades.add(upgrade);
@@ -152,7 +165,8 @@ public class TowerType {
             type.projectileType = projectileType;
             type.range = range;
             type.upgrades = upgrades;
-            type.displayInfo  = displayInfo ;
+            type.displayInfo  = displayInfo;
+            type.rotationSpeed = rotationSpeed;
             return type;
         }
     }

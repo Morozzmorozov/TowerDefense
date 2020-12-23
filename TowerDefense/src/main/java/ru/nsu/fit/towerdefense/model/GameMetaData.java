@@ -223,6 +223,7 @@ public class GameMetaData {
             builder.setFireRate(node.get("FireRate").asInt());
             builder.setFireType(node.get("FireType").asText());
             builder.setProjectileType(node.get("ProjectileType").asText());
+            builder.setRotationSpeed(node.get("RotationSpeed").asDouble());
             builder.setImage(node.get("Image").asText());
             return builder.build();
         }
