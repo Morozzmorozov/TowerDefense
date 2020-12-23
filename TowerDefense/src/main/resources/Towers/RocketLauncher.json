@@ -7,5 +7,6 @@
 	"FireRate" : 25,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Rocket",
-	"Image" : "rocket_launcher.png"
+	"Image" : "rocket_launcher.png",
+	"RotationSpeed": 1.0
 }

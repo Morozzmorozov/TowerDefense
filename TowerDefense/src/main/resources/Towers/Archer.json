@@ -9,5 +9,6 @@
 	"FireRate" : 50,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Arrow",
-	"Image" : "tower.png"
+	"Image" : "tower.png",
+	"RotationSpeed": 1.0
 }

@@ -7,5 +7,6 @@
 	"FireRate" : 50,
 	"FireType" : "Omnidirectional",
 	"ProjectileType" : "Ring",
-	"Image" : "uni.png"
+	"Image" : "uni.png",
+	"RotationSpeed": 1.0
 }

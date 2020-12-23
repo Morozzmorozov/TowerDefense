@@ -8,5 +8,6 @@
 	"FireRate" : 30,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Stone",
-	"Image" : "tower3.png"
+	"Image" : "tower3.png",
+	"RotationSpeed": 1.0
 }

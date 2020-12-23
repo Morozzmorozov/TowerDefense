@@ -8,5 +8,6 @@
 	"FireRate" : 40,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Arrow",
-	"Image" : "tower2.png"
+	"Image" : "tower2.png",
+	"RotationSpeed": 1.0
 }
