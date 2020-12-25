@@ -1,6 +1,6 @@
-package ru.nsu.fit.towerdefense.simulator.map;
+package ru.nsu.fit.towerdefense.metadata.map;
 
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 
 import java.util.Iterator;
 import java.util.LinkedList;

@@ -1,10 +1,10 @@
 import org.junit.Assert;
 import org.junit.Test;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
-import ru.nsu.fit.towerdefense.simulator.map.GameMap;
-import ru.nsu.fit.towerdefense.simulator.world.types.EnemyType;
-import ru.nsu.fit.towerdefense.simulator.world.types.ProjectileType;
-import ru.nsu.fit.towerdefense.simulator.world.types.TowerType;
+import ru.nsu.fit.towerdefense.metadata.map.GameMap;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EnemyType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 
 import java.util.Collection;
 

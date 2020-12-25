@@ -1,7 +1,7 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
-import ru.nsu.fit.towerdefense.simulator.world.types.TowerType;
+import ru.nsu.fit.towerdefense.util.Vector2;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 
 public class Tower extends GameObject implements Renderable {
 

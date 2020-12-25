@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.simulator.map;
+package ru.nsu.fit.towerdefense.metadata.map;
 
 public class WaveEnemies {
 

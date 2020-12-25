@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.replay.objectInfo;
 
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 
 public class TowerInfo {

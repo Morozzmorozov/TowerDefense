@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.world;
 
-import ru.nsu.fit.towerdefense.simulator.map.WaveDescription;
+import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 
 public class Wave {
   private int number;

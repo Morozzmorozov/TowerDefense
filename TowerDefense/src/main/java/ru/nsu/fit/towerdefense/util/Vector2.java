@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.simulator.util;
+package ru.nsu.fit.towerdefense.util;
 
 public class Vector2<T> {
   private T x;

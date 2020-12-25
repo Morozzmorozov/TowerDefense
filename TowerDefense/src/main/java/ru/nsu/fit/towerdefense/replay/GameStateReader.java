@@ -4,7 +4,7 @@ import javafx.util.Pair;
 import ru.nsu.fit.towerdefense.replay.objectInfo.EnemyInfo;
 import ru.nsu.fit.towerdefense.replay.objectInfo.ProjectileInfo;
 import ru.nsu.fit.towerdefense.replay.objectInfo.TowerInfo;
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 
 import javax.xml.stream.XMLInputFactory;

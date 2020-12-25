@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class TowerPlatform extends GameObject implements Renderable {
   private Vector2<Integer> position;

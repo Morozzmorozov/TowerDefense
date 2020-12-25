@@ -1,6 +1,6 @@
-package ru.nsu.fit.towerdefense.simulator.world.types;
+package ru.nsu.fit.towerdefense.metadata.gameobjecttypes;
 
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class EnemyType {
     private String displayInfo ;

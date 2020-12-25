@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class Portal extends GameObject implements Renderable {
   private String image;

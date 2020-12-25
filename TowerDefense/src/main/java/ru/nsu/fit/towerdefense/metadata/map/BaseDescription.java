@@ -1,6 +1,6 @@
-package ru.nsu.fit.towerdefense.simulator.map;
+package ru.nsu.fit.towerdefense.metadata.map;
 
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 
 /**
  * This object should be immutable (read-only).

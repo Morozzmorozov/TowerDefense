@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.simulator.world.types;
+package ru.nsu.fit.towerdefense.metadata.gameobjecttypes;
 
 import java.util.LinkedList;
 import java.util.List;

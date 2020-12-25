@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
-import ru.nsu.fit.towerdefense.simulator.map.WaveEnemies;
+import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.replay.WorldState;
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.simulator.world.Wave;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
@@ -19,13 +19,13 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Portal;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
-import ru.nsu.fit.towerdefense.simulator.map.GameMap;
-import ru.nsu.fit.towerdefense.simulator.map.WaveDescription;
+import ru.nsu.fit.towerdefense.metadata.map.GameMap;
+import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
-import ru.nsu.fit.towerdefense.simulator.world.types.ProjectileType;
-import ru.nsu.fit.towerdefense.simulator.world.types.TowerType;
-import ru.nsu.fit.towerdefense.simulator.world.types.TowerType.FireType;
-import ru.nsu.fit.towerdefense.simulator.world.types.TowerType.Upgrade;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.FireType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.Upgrade;
 
 public class WorldControl {
 

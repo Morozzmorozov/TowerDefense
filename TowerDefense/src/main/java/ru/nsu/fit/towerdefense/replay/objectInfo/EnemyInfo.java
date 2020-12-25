@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.replay.objectInfo;
 
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 import java.util.List;
 
 public class EnemyInfo {

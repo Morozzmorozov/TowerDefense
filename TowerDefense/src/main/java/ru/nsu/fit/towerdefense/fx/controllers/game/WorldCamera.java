@@ -5,7 +5,7 @@ import javafx.animation.TranslateTransition;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 
 /**
  * WorldCamera class is used for scaling and moving the world on the screen.

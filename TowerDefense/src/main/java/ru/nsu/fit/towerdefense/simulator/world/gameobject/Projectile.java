@@ -1,8 +1,8 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
-import ru.nsu.fit.towerdefense.simulator.world.types.ProjectileType;
-import ru.nsu.fit.towerdefense.simulator.world.types.TowerType.FireType;
+import ru.nsu.fit.towerdefense.util.Vector2;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.FireType;
 
 public class Projectile extends GameObject implements Renderable {
   private Enemy target;

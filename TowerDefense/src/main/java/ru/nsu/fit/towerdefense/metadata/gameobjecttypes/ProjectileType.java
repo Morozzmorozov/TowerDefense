@@ -1,8 +1,8 @@
-package ru.nsu.fit.towerdefense.simulator.world.types;
+package ru.nsu.fit.towerdefense.metadata.gameobjecttypes;
 
 import java.util.HashMap;
 import java.util.Map;
-import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class ProjectileType {
     private String typeName;
