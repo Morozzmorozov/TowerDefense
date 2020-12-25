@@ -25,6 +25,7 @@ public class GameStateReader {
 	private XMLStreamReader reader = null;
 
 	private String replayDir = "./Replays/";
+	private String saveDir = "./Saves/";
 
 	private GameStateReader()
 	{
@@ -49,7 +50,36 @@ public class GameStateReader {
 		return parent.list();
 	}
 
+	public String[] getSaves()
+	{
+		File file = new File(saveDir);
+		if (!file.exists() && !file.mkdirs())
+		{
+			return new String[0];
+		}
+		return file.list();
+	}
 
+	public WorldState loadSave(String level)
+	{
+		try
+		{
+			String dir = saveDir + level + "/save.xml";
+			File file = new File(dir);
+			reader = factory.createXMLStreamReader(new FileInputStream(file));
+
+			reader.next();
+			reader.next();
+			reader.next();
+			reader.next();
+			return parseState(-1, "WorldState");
+
+		}
+		catch (Exception e)
+		{
+			return null;
+		}
+	}
 
 	public Replay readReplay(String level, String name)
 	{
@@ -60,7 +90,7 @@ public class GameStateReader {
 			ArrayList<WorldState> states = new ArrayList<>();
 			ArrayList<EventRecord> records = new ArrayList<>();
 
-			XMLStreamReader reader = factory.createXMLStreamReader(new FileInputStream(file));
+			reader = factory.createXMLStreamReader(new FileInputStream(file));
 			int tickRate = 0;
 
 			reader.next();
@@ -75,11 +105,11 @@ public class GameStateReader {
 					reader.next();
 					if (type.equals("true"))
 					{
-						states.add(parseState(id, reader));
+						states.add(parseState(id, "Frame"));
 					}
 					else
 					{
-						records.add(parseRecord(id, reader));
+						records.add(parseRecord(id));
 					}
 				}
 				else
@@ -97,7 +127,7 @@ public class GameStateReader {
 	}
 
 
-	private WorldState parseState(int fid, XMLStreamReader reader1)
+	private WorldState parseState(int fid, String tag)
 	{
 		try
 		{
@@ -108,23 +138,23 @@ public class GameStateReader {
 			int health = 0;
 			while (true)
 			{
-				int event = reader1.getEventType();
+				int event = reader.getEventType();
 				if (event == XMLStreamConstants.START_ELEMENT)
 				{
-					switch (reader1.getLocalName())
+					switch (reader.getLocalName())
 					{
-						case "Base" -> health = Integer.parseInt(reader1.getAttributeValue(0));
-						case "Enemy" -> enemies.add(parseEnemy(reader1));
-						case "Tower" -> towers.add(parseTower(reader1));
-						case "Projectile" -> projectiles.add(parseProjectile(reader1));
-						default -> money = Integer.parseInt(reader1.getAttributeValue(0));
+						case "Base" -> health = Integer.parseInt(reader.getAttributeValue(0));
+						case "Enemy" -> enemies.add(parseEnemy());
+						case "Tower" -> towers.add(parseTower());
+						case "Projectile" -> projectiles.add(parseProjectile());
+						default -> money = Integer.parseInt(reader.getAttributeValue(0));
 					}
 				}
 				else if (event == XMLStreamConstants.END_ELEMENT)
 				{
-					if (reader1.getLocalName().equals("Frame")) break;
+					if (reader.getLocalName().equals(tag)) break;
 				}
-				reader1.next();
+				reader.next();
 			}
 			return new WorldState(enemies, towers, projectiles, money, fid, health);
 		}
@@ -134,7 +164,7 @@ public class GameStateReader {
 		}
 	}
 
-	private EnemyInfo parseEnemy(XMLStreamReader reader1)
+	private EnemyInfo parseEnemy()
 	{
 		try
 		{
@@ -147,31 +177,31 @@ public class GameStateReader {
 			EnemyInfo info = new EnemyInfo();
 			while (true)
 			{
-				int event = reader1.getEventType();
+				int event = reader.getEventType();
 				if (event == XMLStreamConstants.START_ELEMENT)
 				{
-					if (reader1.getLocalName().equals("Enemy"))
+					if (reader.getLocalName().equals("Enemy"))
 					{
-						id = reader1.getAttributeValue(0);
-						health = Integer.parseInt(reader1.getAttributeValue(1));
+						id = reader.getAttributeValue(0);
+						health = Integer.parseInt(reader.getAttributeValue(1));
 						info.setHealth(health);
-						position.setX(Double.parseDouble(reader1.getAttributeValue(2)));
-						position.setY(Double.parseDouble(reader1.getAttributeValue(3)));
+						position.setX(Double.parseDouble(reader.getAttributeValue(2)));
+						position.setY(Double.parseDouble(reader.getAttributeValue(3)));
 
-						type = reader1.getAttributeValue(4);
-						wave = Integer.parseInt(reader1.getAttributeValue(5));
+						type = reader.getAttributeValue(4);
+						wave = Integer.parseInt(reader.getAttributeValue(5));
 					}
-					else if (reader1.getLocalName().equals("Point")) // trajectory
+					else if (reader.getLocalName().equals("Point")) // trajectory
 					{
-						trajectory.add(new Vector2<>(Double.parseDouble(reader1.getAttributeValue(0)), Double.parseDouble(reader1.getAttributeValue(1))));
+						trajectory.add(new Vector2<>(Double.parseDouble(reader.getAttributeValue(0)), Double.parseDouble(reader.getAttributeValue(1))));
 					}
 				}
 				else if (event == XMLStreamConstants.END_ELEMENT)
 				{
-					if (reader1.getLocalName().equals("Enemy"))
+					if (reader.getLocalName().equals("Enemy"))
 						break;
 				}
-				reader1.next();
+				reader.next();
 			}
 			info.setId(id);
 			info.setHealth(health);
@@ -187,19 +217,19 @@ public class GameStateReader {
 		}
 	}
 
-	private TowerInfo parseTower(XMLStreamReader reader1)
+	private TowerInfo parseTower()
 	{
 		try
 		{
 			TowerInfo info = new TowerInfo();
-			info.setId(reader1.getAttributeValue(0));
-			info.setType(reader1.getAttributeValue(1));
-			info.setPosition(new Vector2<>(Double.parseDouble(reader1.getAttributeValue(2)), Double.parseDouble(reader1.getAttributeValue(3))));
-			info.setMode(Tower.Mode.valueOf(reader1.getAttributeLocalName(4)));
-			info.setRotation(Double.parseDouble(reader1.getAttributeValue(5)));
-			info.setCooldown(Integer.parseInt(reader1.getAttributeValue(6)));
-			info.setTarget(reader1.getAttributeValue(7));
-			reader1.next();
+			info.setId(reader.getAttributeValue(0));
+			info.setType(reader.getAttributeValue(1));
+			info.setPosition(new Vector2<>(Double.parseDouble(reader.getAttributeValue(2)), Double.parseDouble(reader.getAttributeValue(3))));
+			info.setMode(Tower.Mode.valueOf(reader.getAttributeLocalName(4)));
+			info.setRotation(Double.parseDouble(reader.getAttributeValue(5)));
+			info.setCooldown(Integer.parseInt(reader.getAttributeValue(6)));
+			info.setTarget(reader.getAttributeValue(7));
+			reader.next();
 			return info;
 		}
 		catch (Exception e)
@@ -208,17 +238,17 @@ public class GameStateReader {
 		}
 	}
 
-	private ProjectileInfo parseProjectile(XMLStreamReader reader1)
+	private ProjectileInfo parseProjectile()
 	{
 		try
 		{
 			ProjectileInfo info = new ProjectileInfo();
 
-			info.setId(reader1.getAttributeValue(0));
-			info.setTarget(reader1.getAttributeValue(1));
-			info.setPosition(new Vector2<>(Double.parseDouble(reader1.getAttributeValue(2)), Double.parseDouble(reader1.getAttributeValue(3))));
-			info.setType(reader1.getAttributeValue(4));
-			info.setRange(Double.parseDouble(reader1.getAttributeValue(5)));
+			info.setId(reader.getAttributeValue(0));
+			info.setTarget(reader.getAttributeValue(1));
+			info.setPosition(new Vector2<>(Double.parseDouble(reader.getAttributeValue(2)), Double.parseDouble(reader.getAttributeValue(3))));
+			info.setType(reader.getAttributeValue(4));
+			info.setRange(Double.parseDouble(reader.getAttributeValue(5)));
 			return info;
 		}
 		catch (Exception e)
@@ -229,7 +259,7 @@ public class GameStateReader {
 
 
 
-	private EventRecord parseRecord(int fid, XMLStreamReader reader1)
+	private EventRecord parseRecord(int fid)
 	{
 		try
 		{
@@ -243,54 +273,54 @@ public class GameStateReader {
 			List<Pair<String, Tower.Mode>> tuneTower = new LinkedList<>();
 			while (true)
 			{
-				int eventType = reader1.getEventType();
+				int eventType = reader.getEventType();
 				if (eventType == XMLStreamConstants.START_ELEMENT)
 				{
-					switch (reader1.getLocalName())
+					switch (reader.getLocalName())
 					{
 						case "BuildTower" -> {
-							int position = Integer.parseInt(reader1.getAttributeValue(0));
-							String type = reader1.getAttributeValue(1);
+							int position = Integer.parseInt(reader.getAttributeValue(0));
+							String type = reader.getAttributeValue(1);
 							buildTower.add(new Pair<>(position, type));
 							break;
 						}
 						case "UpgradeTower" -> {
-							int position = Integer.parseInt(reader1.getAttributeValue(0));
-							String type = reader1.getAttributeValue(1);
+							int position = Integer.parseInt(reader.getAttributeValue(0));
+							String type = reader.getAttributeValue(1);
 							upgradeTower.add(new Pair<>(position, type));
 							break;
 						}
 						case "CallWave" -> callWave = true;
 						case "RemoveEnemy" -> {
-							String id = reader1.getAttributeValue(0);
+							String id = reader.getAttributeValue(0);
 							removeEnemy.add(id);
 							break;
 						}
 						case "RemoveProjectile" -> {
-							String id = reader1.getAttributeValue(0);
+							String id = reader.getAttributeValue(0);
 							removeProjectile.add(id);
 							break;
 						}
 						case "DealDamage" -> {
-							String id = reader1.getAttributeValue(0);
-							int amount = Integer.parseInt(reader1.getAttributeValue(1));
+							String id = reader.getAttributeValue(0);
+							int amount = Integer.parseInt(reader.getAttributeValue(1));
 							enemyDamage.add(new Pair<>(amount, id));
 							break;
 						}
 						case "DealDamageBase" -> {
-							int amount = Integer.parseInt(reader1.getAttributeValue(0));
+							int amount = Integer.parseInt(reader.getAttributeValue(0));
 							damageToBase.add(amount);
 							break;
 						}
-						case "SwitchMode" -> tuneTower.add(new Pair<>(reader1.getAttributeValue(0), Tower.Mode.valueOf(reader1.getAttributeValue(1))));
+						case "SwitchMode" -> tuneTower.add(new Pair<>(reader.getAttributeValue(0), Tower.Mode.valueOf(reader.getAttributeValue(1))));
 					}
 				}
 				else if (eventType == XMLStreamConstants.END_ELEMENT)
 				{
-					if (reader1.getLocalName().equals("Frame"))
+					if (reader.getLocalName().equals("Frame"))
 						break;
 				}
-				reader1.next();
+				reader.next();
 			}
 			return new EventRecord(fid, buildTower, upgradeTower, callWave, removeEnemy, removeProjectile, enemyDamage, damageToBase, tuneTower);
 		}
