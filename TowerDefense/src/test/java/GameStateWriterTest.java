@@ -70,6 +70,7 @@ public class GameStateWriterTest {
 		tower.get(0).setPosition(new Vector2<>(3, 3));
 
 		writer.saveGame("map1", enemies, tower, projectiles, base, 1000);
+		writer.saveGame("Level 1", enemies, tower, projectiles, base, 1000);
 	}
 
 }
