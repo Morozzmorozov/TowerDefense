@@ -66,6 +66,14 @@ public class GameMetaDataTest {
         Assert.assertEquals(2, names.size());
         Assert.assertEquals("Level 1", names.iterator().next());
     }
+    @Test
+    public void testGetTowerNames()
+    {
+        GameMetaData data = GameMetaData.getInstance();
+        Collection<String> names = data.getTowerNames();
+        Assert.assertEquals(5, names.size());
+
+    }
 /*
     @Test
     public void testGetImageName()

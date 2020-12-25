@@ -14,6 +14,12 @@ public class ProjectileType {
     private Vector2<Double> size;
     private String image;
     private String displayInfo;
+    private double angularVelocity;
+
+    public double getAngularVelocity()
+    {
+        return angularVelocity;
+    }
 
     public Vector2<Double> getSize() {
     return size;
@@ -62,6 +68,7 @@ public class ProjectileType {
         private int basicDamage;
         private String image;
         private String displayInfo ;
+        private double angularVelocity = 0.0;
         public Builder(String name)
         {
             typeName = name;
@@ -82,6 +89,11 @@ public class ProjectileType {
         public void setHitBox(int hitBox)
         {
             this.hitBox = hitBox;
+        }
+
+        public void setAngularVelocity(double angularVelocity)
+        {
+            this.angularVelocity = angularVelocity;
         }
 
         public void setSize(Double x, Double y)
@@ -127,7 +139,8 @@ public class ProjectileType {
             type.hitBox = hitBox;
             type.enemyTypeDamageMap = enemyTypeDamageMap;
             type.basicDamage = basicDamage;
-            type.displayInfo  = displayInfo ;
+            type.displayInfo  = displayInfo;
+            type.angularVelocity = angularVelocity;
             return type;
         }
     }

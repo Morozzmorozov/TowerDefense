@@ -91,6 +91,41 @@ public class GameMetaData {
         return names;
     }
 
+    public Collection<String> getTowerNames()
+    {
+        File file = null;
+        try
+        {
+            var t = GameMetaData.class.getResource(towersRoot);
+            file = new File(t.toURI());
+        }
+        catch (Exception e)
+        {
+        }
+        if (!file.isDirectory())
+        {
+            return new ArrayList<>();
+        }
+
+        File[] files = file.listFiles();
+        ArrayList<String> names = new ArrayList<>();
+        for (var x : files)
+        {
+            if (x.isFile())
+            {
+                String path = x.getName();
+                String[] name = new String[2];
+                name[0] = path.substring(0, path.length() - 5);
+                name[1] = path.substring(path.length() - 5, path.length());
+                if (name[1].compareTo(".json") == 0) {
+                    names.add(name[0]);
+                }
+            }
+        }
+        return names;
+    }
+
+
     /**
      * Tries to get map description by it's name
      * @param name - name of a map
