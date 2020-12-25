@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import ru.nsu.fit.towerdefense.model.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.model.map.WaveEnemies;
+import ru.nsu.fit.towerdefense.model.replay.WorldState;
 import ru.nsu.fit.towerdefense.model.util.Vector2;
 import ru.nsu.fit.towerdefense.model.world.Wave;
 import ru.nsu.fit.towerdefense.model.world.World;
@@ -115,6 +116,15 @@ public class WorldControl {
   private int wavesDefeated = 0;
 
   private double debugRotationSpeed = 3.0;
+
+  public WorldControl(GameMap gameMap, WorldState worldState, int deltaTime, WorldObserver worldObserver) {
+    // todo init worldState
+    
+    this.gameMap = gameMap;
+    this.deltaTime = 1; // DEBUG! todo remove
+//    this.deltaTime = deltaTime; // DEBUG! todo uncomment
+    this.worldObserver = worldObserver;
+  }
 
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
     this.gameMap = gameMap;
