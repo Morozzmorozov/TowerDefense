@@ -1,7 +1,7 @@
 import org.junit.Assert;
 import org.junit.Test;
-import ru.nsu.fit.towerdefense.model.replay.GameStateReader;
-import ru.nsu.fit.towerdefense.model.replay.Replay;
+import ru.nsu.fit.towerdefense.replay.GameStateReader;
+import ru.nsu.fit.towerdefense.replay.Replay;
 
 public class GameStateReaderTest {
 

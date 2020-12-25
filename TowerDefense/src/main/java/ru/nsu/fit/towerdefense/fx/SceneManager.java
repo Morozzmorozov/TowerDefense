@@ -12,8 +12,8 @@ import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.game.GameController;
 import ru.nsu.fit.towerdefense.fx.controllers.menu.MenuController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
-import ru.nsu.fit.towerdefense.model.GameMetaData;
-import ru.nsu.fit.towerdefense.model.util.Vector2;
+import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.simulator.util.Vector2;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;

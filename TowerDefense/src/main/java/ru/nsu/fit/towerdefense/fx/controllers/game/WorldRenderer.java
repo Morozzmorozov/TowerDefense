@@ -8,7 +8,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Circle;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
-import ru.nsu.fit.towerdefense.model.world.gameobject.Renderable;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Renderable;
 
 import java.util.ArrayList;
 import java.util.HashMap;

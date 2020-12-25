@@ -1,14 +1,14 @@
 import org.junit.Test;
-import ru.nsu.fit.towerdefense.model.GameMetaData;
-import ru.nsu.fit.towerdefense.model.replay.GameStateWriter;
-import ru.nsu.fit.towerdefense.model.util.Vector2;
-import ru.nsu.fit.towerdefense.model.world.Wave;
-import ru.nsu.fit.towerdefense.model.world.gameobject.Base;
-import ru.nsu.fit.towerdefense.model.world.gameobject.Enemy;
-import ru.nsu.fit.towerdefense.model.world.gameobject.Projectile;
-import ru.nsu.fit.towerdefense.model.world.gameobject.Tower;
-import ru.nsu.fit.towerdefense.model.world.types.EnemyType;
-import ru.nsu.fit.towerdefense.model.world.types.TowerType;
+import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.replay.GameStateWriter;
+import ru.nsu.fit.towerdefense.simulator.util.Vector2;
+import ru.nsu.fit.towerdefense.simulator.world.Wave;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
+import ru.nsu.fit.towerdefense.simulator.world.types.EnemyType;
+import ru.nsu.fit.towerdefense.simulator.world.types.TowerType;
 
 import java.util.ArrayList;
 
