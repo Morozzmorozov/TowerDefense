@@ -1,0 +1,14 @@
+{
+	"DisplayInfo" : "Heavy-rocket",
+    "Speed" : 0.07,
+    "SelfGuided" : true,
+    "BasicDamage" : 20,
+    "EnemyTypeDamage" : [
+        ["Cyclops", 20], ["Goblin", 15], ["Orc", 10]
+    ],
+    "HitBox" : 2,
+    "SizeX" : 1.0,
+    "SizeY" : 1.0,
+    "Image" : "rocket.png",
+    "AngularVelocity": 3.0
+}

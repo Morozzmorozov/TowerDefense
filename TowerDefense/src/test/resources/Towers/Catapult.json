@@ -1,0 +1,13 @@
+{
+	"DisplayInfo" : "Catapult",
+	"Price" : 450,
+	"Upgrades": [
+
+	],
+	"Range" : 10,
+	"FireRate" : 30,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Stone",
+	"Image" : "tower3.png",
+	"RotationSpeed": 1.0
+}

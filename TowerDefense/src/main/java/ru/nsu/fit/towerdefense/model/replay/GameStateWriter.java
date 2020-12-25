@@ -12,26 +12,28 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReplayWriter {
+public class GameStateWriter {
 
 
-	private static ReplayWriter instance = null;
+	private static GameStateWriter instance = null;
 
 	private XMLOutputFactory factory = null;
 
 	private XMLStreamWriter writer = null;
 
+	private String replayDir = "./Replays/";
+
 	private int currentTick = 0;
 	private int fullCopy = 360;
 	String tab = "\t\t\t\t\t\t\t";
-	private ReplayWriter()
+	private GameStateWriter()
 	{
 		factory = XMLOutputFactory.newFactory();
 	}
 
-	public static ReplayWriter getInstance()
+	public static GameStateWriter getInstance()
 	{
-		if (instance == null) instance = new ReplayWriter();
+		if (instance == null) instance = new GameStateWriter();
 		return instance;
 	}
 
@@ -39,14 +41,15 @@ public class ReplayWriter {
 	{
 		try
 		{
-			int id = (int) (Math.random() * 1000);
-			String name = "./Replays/" + levelName + "/Replay" + id + ".xml";
-			File file = new File(name);
-			File parent = file.getParentFile();
+			String dir = replayDir + levelName + "/";
+			File parent = new File(dir);
 			if (!parent.exists() && !parent.mkdirs())
 			{
-				System.out.println("Ploho");
+				System.out.println("Unable to create file");
+				return;
 			}
+			int id = parent.list().length;
+			File file = new File(dir + "/Replay_" + id + ".xml");
 			file.createNewFile();
 			writer = factory.createXMLStreamWriter(new FileWriter(file));
 			writer.writeStartDocument();
@@ -83,7 +86,7 @@ public class ReplayWriter {
 	private List<Tower> towers = new ArrayList<>();
 	private List<Projectile> projectiles = new ArrayList<>();
 
-	public void fullCopy(List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles, Base base)
+	public void fullCopy(List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles, Base base, int money)
 	{
 		if (currentTick % fullCopy != 0)
 			return;
@@ -133,6 +136,7 @@ public class ReplayWriter {
 				writer.writeAttribute("Type", x.getType().getTypeName());
 				writer.writeAttribute("PosX", Double.toString(x.getPosition().getX()));
 				writer.writeAttribute("PosY", Double.toString(x.getPosition().getY()));
+				writer.writeAttribute("Mode", x.getMode().name());
 				writer.writeAttribute("Rotation", Double.toString(x.getRotation()));
 				writer.writeAttribute("Cooldown", Integer.toString(x.getCooldown()));
 				String target = "";
@@ -163,8 +167,14 @@ public class ReplayWriter {
 				writer.writeAttribute("RemainingRange", Double.toString(x.getRemainingRange()));
 				writer.writeEndElement();
 				writer.writeCharacters(System.getProperty("line.separator"));
-
 			}
+
+			writer.writeCharacters(tab.substring(0, 2));
+			writer.writeStartElement("Money");
+			writer.writeAttribute("amount", Integer.toString(money));
+			writer.writeEndElement();
+			writer.writeCharacters(System.getProperty("line.separator"));
+
 		}
 		catch (Exception e)
 		{
@@ -263,6 +273,25 @@ public class ReplayWriter {
 		}
 	}
 
+	public void switchMode(Tower tower, Tower.Mode newMode)
+	{
+		if (currentTick % fullCopy == 0)
+			return;
+		try
+		{
+			writer.writeCharacters(tab.substring(0, 2));
+			writer.writeStartElement("SwitchMode");
+			writer.writeAttribute("TowerId", tower.getId().toString());
+			writer.writeAttribute("Mode", newMode.name());
+			writer.writeEndElement();
+			writer.writeCharacters(System.getProperty("line.separator"));
+		}
+		catch (Exception e)
+		{
+
+		}
+	}
+
 	public void dealDamageEnemy(Enemy enemy, int damage)
 	{
 		if (currentTick % fullCopy == 0)
@@ -323,6 +352,42 @@ public class ReplayWriter {
 			writer.writeCharacters(System.getProperty("line.separator"));
 			writer.writeEndDocument();
 			writer.close();
+		}
+		catch (Exception e)
+		{
+
+		}
+	}
+
+	public void saveGame(String levelName, List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles, Base base, int money)
+	{
+		try
+		{
+			String name = "./Saves/" + levelName + "/save.xml";
+			File file = new File(name);
+			File parent = file.getParentFile();
+			if (!parent.exists() && !parent.mkdirs())
+			{
+				System.out.println("Unable to create file");
+			}
+			file.createNewFile();
+			writer = factory.createXMLStreamWriter(new FileWriter(file));
+			writer.writeStartDocument();
+			writer.writeCharacters(System.getProperty("line.separator"));
+			writer.writeStartElement("Save");
+			writer.writeCharacters(System.getProperty("line.separator"));
+			writer.writeCharacters(tab.substring(0, 1));
+			writer.writeStartElement("WorldState");
+			writer.writeCharacters(System.getProperty("line.separator"));
+			fullCopy(enemies, towers, projectiles, base, money);
+			writer.writeCharacters(tab.substring(0, 1));
+			writer.writeEndElement();
+			writer.writeCharacters(System.getProperty("line.separator"));
+			writer.writeEndElement();
+			writer.writeCharacters(System.getProperty("line.separator"));
+			writer.writeEndDocument();
+			writer.close();
+
 		}
 		catch (Exception e)
 		{

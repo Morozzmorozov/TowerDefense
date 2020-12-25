@@ -1,0 +1,13 @@
+{
+	"DisplayInfo" : "Crossbowman",
+	"Price" : 300,
+	"Upgrades": [
+		["Catapult", 350]
+	],
+	"Range" : 6,
+	"FireRate" : 40,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Arrow",
+	"Image" : "tower2.png",
+	"RotationSpeed": 1.0
+}

@@ -1,0 +1,12 @@
+{
+	"DisplayInfo" : "Waver",
+	"Price" : 100,
+	"Upgrades": [
+	],
+	"Range" : 3,
+	"FireRate" : 50,
+	"FireType" : "Omnidirectional",
+	"ProjectileType" : "Ring",
+	"Image" : "uni.png",
+	"RotationSpeed": 1.0
+}

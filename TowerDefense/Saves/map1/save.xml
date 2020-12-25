@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<Save>
+	<WorldState>
+		<Base Health="100"></Base>
+		<Enemy EnemyId="8ab3d9a5-6693-4797-961b-f183e2308c1c" Health="20" PosX="10.0" PosY="10.0" Type="Goblin" Wave="0">
+			<Trajectory>
+			</Trajectory>
+		</Enemy>
+		<Tower TowerId="bfc7033a-29c1-415b-9030-6076d0f985df" Type="Archer" PosX="3.0" PosY="3.0" Rotation="0.0" Cooldown="20" TargetId="None"></Tower>
+		<Money amount="1000"></Money>
+	</WorldState>
+</Save>

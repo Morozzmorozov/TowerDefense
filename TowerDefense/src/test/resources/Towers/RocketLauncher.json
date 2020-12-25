@@ -1,0 +1,12 @@
+{
+	"DisplayInfo" : "RocketLauncher",
+	"Price" : 200,
+	"Upgrades": [
+	],
+	"Range" : 7,
+	"FireRate" : 25,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Rocket",
+	"Image" : "rocket_launcher.png",
+	"RotationSpeed": 1.0
+}

@@ -1,13 +1,14 @@
 {
-	"DisplayInfo" : "Just archer",
+	"DisplayInfo" : "Archer", 
 	"Price" : 100,
 	"Upgrades": [
 		["Crossbowman", 250],
 		["Catapult", 400]
 	],
-	"Range" : 30,
+	"Range" : 3,
 	"FireRate" : 50,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Arrow",
-	"Image" : "tower.png"
+	"Image" : "tower.png",
+	"RotationSpeed": 1.0
 }

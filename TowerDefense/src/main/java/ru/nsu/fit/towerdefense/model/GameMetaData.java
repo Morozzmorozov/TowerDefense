@@ -195,6 +195,8 @@ public class GameMetaData {
             builder.setHitBox(node.get("HitBox").asInt());
             builder.setSize(node.get("SizeX").asDouble(), node.get("SizeY").asDouble());
             builder.setImage(node.get("Image").asText());
+            if (node.has("AngularVelocity"))
+                builder.setAngularVelocity(node.get("AngularVelocity").asDouble());
             return builder.build();
         }
         catch (Exception e)
