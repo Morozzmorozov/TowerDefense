@@ -27,6 +27,7 @@ import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Portal;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
@@ -435,6 +436,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 break;
             case ENEMY:
                 onEnemyClicked((Enemy) renderable);
+                break;
+            case EFFECT:
+                onEnemyClicked(((Effect) renderable).getHost());
                 break;
             case ENEMY_PORTAL:
                 onPortalClicked((Portal) renderable);
