@@ -225,10 +225,11 @@ public class GameStateReader {
 			info.setId(reader.getAttributeValue(0));
 			info.setType(reader.getAttributeValue(1));
 			info.setPosition(new Vector2<>(Double.parseDouble(reader.getAttributeValue(2)), Double.parseDouble(reader.getAttributeValue(3))));
-			info.setMode(Tower.Mode.valueOf(reader.getAttributeLocalName(4)));
+			info.setMode(Tower.Mode.valueOf(reader.getAttributeValue(4)));
 			info.setRotation(Double.parseDouble(reader.getAttributeValue(5)));
 			info.setCooldown(Integer.parseInt(reader.getAttributeValue(6)));
-			info.setTarget(reader.getAttributeValue(7));
+			info.setSellPrice(Integer.parseInt(reader.getAttributeValue(7)));
+			info.setTarget(reader.getAttributeValue(8));
 			reader.next();
 			return info;
 		}
@@ -249,6 +250,7 @@ public class GameStateReader {
 			info.setPosition(new Vector2<>(Double.parseDouble(reader.getAttributeValue(2)), Double.parseDouble(reader.getAttributeValue(3))));
 			info.setType(reader.getAttributeValue(4));
 			info.setRange(Double.parseDouble(reader.getAttributeValue(5)));
+			info.setVelocity(new Vector2<>(Double.parseDouble(reader.getAttributeValue(6)), Double.parseDouble(reader.getAttributeValue(7))));
 			return info;
 		}
 		catch (Exception e)
@@ -271,6 +273,7 @@ public class GameStateReader {
 			List<Pair<Integer, String>> enemyDamage = new LinkedList<>();
 			List<Integer> damageToBase = new LinkedList<>();
 			List<Pair<String, Tower.Mode>> tuneTower = new LinkedList<>();
+			List<Integer> sellTower = new LinkedList<>();
 			while (true)
 			{
 				int eventType = reader.getEventType();
@@ -312,6 +315,7 @@ public class GameStateReader {
 							damageToBase.add(amount);
 							break;
 						}
+						case "SellTower" -> sellTower.add(Integer.parseInt(reader.getAttributeValue(0)));
 						case "SwitchMode" -> tuneTower.add(new Pair<>(reader.getAttributeValue(0), Tower.Mode.valueOf(reader.getAttributeValue(1))));
 					}
 				}
@@ -322,7 +326,7 @@ public class GameStateReader {
 				}
 				reader.next();
 			}
-			return new EventRecord(fid, buildTower, upgradeTower, callWave, removeEnemy, removeProjectile, enemyDamage, damageToBase, tuneTower);
+			return new EventRecord(fid, buildTower, upgradeTower, callWave, removeEnemy, removeProjectile, enemyDamage, damageToBase, tuneTower, sellTower);
 		}
 		catch (Exception e)
 		{

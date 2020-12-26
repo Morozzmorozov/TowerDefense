@@ -14,11 +14,12 @@ public class EventRecord {
 	private List<Pair<Integer, String>> enemyDamage;
 	private List<Integer> damageToBase;
 	private List<Pair<String, Tower.Mode>> tuneTower;
+	private List<Integer> sellTower;
 	private int id;
 
 	public EventRecord(int id, List<Pair<Integer, String>> buildTower, List<Pair<Integer, String>> upgradeTower,
 	                   boolean callWave, List<String> removeEnemy, List<String> removeProjectile, List<Pair<Integer, String>> enemyDamage,
-	                   List<Integer> damageToBase, List<Pair<String, Tower.Mode>> tuneTower)
+	                   List<Integer> damageToBase, List<Pair<String, Tower.Mode>> tuneTower, List<Integer> sellTower)
 	{
 		this.id = id;
 		this.buildTower = buildTower;
@@ -29,6 +30,7 @@ public class EventRecord {
 		this.enemyDamage = enemyDamage;
 		this.damageToBase = damageToBase;
 		this.tuneTower = tuneTower;
+		this.sellTower = sellTower;
 	}
 
 	public int getId()
