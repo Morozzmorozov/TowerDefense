@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.replay.GameStateWriter;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.replay.WorldState;
@@ -58,6 +59,7 @@ public class WorldControl {
     tower.setCooldown(towerType.getFireRate());
     tower.setSellPrice(Math.round(towerType.getPrice() * SELL_MULTIPLIER));
     newTowers.add(tower);
+    GameStateWriter.getInstance().buildTower(world.getTowerPlatforms().indexOf(towerPlatform), towerType.getTypeName());
     return tower;
   }
 
@@ -71,6 +73,7 @@ public class WorldControl {
     tower.setCooldown(type.getFireRate());
     tower.setTarget(null);
     tower.setSellPrice(tower.getSellPrice() + Math.round(upgrade.getCost() + SELL_MULTIPLIER));
+    GameStateWriter.getInstance().upgradeTower(world.getTowers().indexOf(tower), upgrade.getName()); // todo ask about platform
   }
 
   List<Tower> newTowers = new ArrayList<>();
@@ -89,6 +92,7 @@ public class WorldControl {
   public void tuneTower(Tower tower, Tower.Mode towerMode) {
     tower.setMode(towerMode);
     tower.setTarget(null);
+    GameStateWriter.getInstance().switchMode(tower, towerMode);
   }
 
   /**
