@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "Ring of fire matter",
-    "Speed" : 0.05,
+    "Speed" : 0.003,
     "SelfGuided" : false,
     "BasicDamage" : 3,
     "EnemyTypeDamage" : [

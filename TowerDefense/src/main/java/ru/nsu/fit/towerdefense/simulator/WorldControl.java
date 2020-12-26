@@ -189,8 +189,7 @@ public class WorldControl {
 
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
     this.gameMap = gameMap;
-    this.deltaTime = 1; // DEBUG! todo remove
-//    this.deltaTime = deltaTime; // DEBUG! todo uncomment
+    this.deltaTime = deltaTime;
     this.worldObserver = worldObserver;
 
     world = new World();

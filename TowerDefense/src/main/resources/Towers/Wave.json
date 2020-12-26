@@ -4,9 +4,9 @@
 	"Upgrades": [
 	],
 	"Range" : 3,
-	"FireRate" : 50,
+	"FireRate" : 833,
 	"FireType" : "Omnidirectional",
 	"ProjectileType" : "Ring",
 	"Image" : "uni.png",
-	"RotationSpeed": 1.0
+	"RotationSpeed": 0.06
 }

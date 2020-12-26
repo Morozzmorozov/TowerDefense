@@ -1,7 +1,7 @@
 {
 	"DisplayInfo" : "It's a goblin, it's green and mad",
 	"Health" : 20,
-	"Speed" : 0.02,
+	"Speed" : 0.0012,
 	"HitBox" : 0.4,
 	"SizeX" : 1,
 	"SizeY" : 1,

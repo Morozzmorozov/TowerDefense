@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "Heavy-rocket",
-    "Speed" : 0.07,
+    "Speed" : 0.0042,
     "SelfGuided" : true,
     "BasicDamage" : 20,
     "EnemyTypeDamage" : [
@@ -10,5 +10,5 @@
     "SizeX" : 1.0,
     "SizeY" : 1.0,
     "Image" : "rocket.png",
-    "AngularVelocity": 3.0
+    "AngularVelocity": 0.18
 }

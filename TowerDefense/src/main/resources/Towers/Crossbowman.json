@@ -5,9 +5,9 @@
 		["Catapult", 350]
 	],
 	"Range" : 6,
-	"FireRate" : 40,
+	"FireRate" : 666,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Arrow",
 	"Image" : "tower2.png",
-	"RotationSpeed": 1.0
+	"RotationSpeed": 0.06
 }

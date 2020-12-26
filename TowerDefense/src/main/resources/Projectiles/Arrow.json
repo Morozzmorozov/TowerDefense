@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "Arrow",
-    "Speed" : 0.2,
+    "Speed" : 0.012,
     "SelfGuided" : false,
     "BasicDamage" : 9,
     "EnemyTypeDamage" : [

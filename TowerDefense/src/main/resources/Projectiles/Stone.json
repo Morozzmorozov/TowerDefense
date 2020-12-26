@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "Simple stone",
-    "Speed" : 0.9,
+    "Speed" : 0.054,
     "SelfGuided" : false,
     "BasicDamage" : 30,
     "EnemyTypeDamage" : [

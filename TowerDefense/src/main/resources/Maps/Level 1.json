@@ -23,8 +23,8 @@
 
 			"Reward": 5,
 			"ScaleFactor" : 1.0,
-			"SpawnInterval" : 100.0,
-			"TimeTillNextWave" : 300.0,
+			"SpawnInterval" : 1666.667,
+			"TimeTillNextWave" : 5000.0,
 			"ScienceReward" : 1000,
 			"Enemies" : [
 				{
