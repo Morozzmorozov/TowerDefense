@@ -502,7 +502,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         enemyNameText.setText(enemy.getType().getTypeName());
         enemyDisplayInfoText.setText(enemy.getType().getDisplayInfo());
         enemyHealthLabel.setText(DECIMAL_FORMAT.format(enemy.getType().getHealth()));
-        enemySpeedLabel.setText(DECIMAL_FORMAT.format(enemy.getType().getSpeed()));
+        enemySpeedLabel.setText(DECIMAL_FORMAT.format(enemy.getType().getSpeed() * 1000));
         enemyDamageLabel.setText(DECIMAL_FORMAT.format(enemy.getType().getDamage()));
     }
 
@@ -510,7 +510,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         projectileNameText.setText(projectile.getType().getTypeName());
         projectileDisplayInfoText.setText(projectile.getType().getDisplayInfo());
         projectileSelfGuidedLabel.setText(projectile.getType().isSelfGuided() ? "Yes" : "No");
-        projectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectile.getType().getSpeed()));
+        projectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectile.getType().getSpeed() * 1000));
         projectileDamageLabel.setText(DECIMAL_FORMAT.format(projectile.getType().getBasicDamage()));
     }
 
@@ -568,7 +568,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         newProjType.isSelfGuided(), projType.isSelfGuided());
 
                     updateLabelComparingValues(upgradeTowerProjectileSpeedLabel,
-                        newProjType.getSpeed(), projType.getSpeed());
+                        newProjType.getSpeed() * 1000, projType.getSpeed() * 1000);
 
                     updateLabelComparingValues(upgradeTowerDamageLabel,
                         newProjType.getBasicDamage(), projType.getBasicDamage());
@@ -631,7 +631,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             GameMetaData.getInstance().getProjectileType(tower.getType().getProjectileType());
         upgradeTowerSelfGuidedLabel.setText(projectileType.isSelfGuided() ? "Yes" : "No");
         upgradeTowerSelfGuidedLabel.getStyleClass().clear();
-        upgradeTowerProjectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectileType.getSpeed()));
+        upgradeTowerProjectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectileType.getSpeed() * 1000));
         upgradeTowerProjectileSpeedLabel.getStyleClass().clear();
         upgradeTowerDamageLabel.setText(DECIMAL_FORMAT.format(projectileType.getBasicDamage()));
         upgradeTowerDamageLabel.getStyleClass().clear();
@@ -699,7 +699,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     ProjectileType projectileType =
                         GameMetaData.getInstance().getProjectileType(towerType.getProjectileType());
                     buildTowerSelfGuidedLabel.setText(projectileType.isSelfGuided() ? "Yes" : "No");
-                    buildTowerProjectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectileType.getSpeed()));
+                    buildTowerProjectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectileType.getSpeed() * 1000));
                     buildTowerDamageLabel.setText(DECIMAL_FORMAT.format(projectileType.getBasicDamage()));
 
                     buildTowerCharacteristicsVBox.setVisible(true);
