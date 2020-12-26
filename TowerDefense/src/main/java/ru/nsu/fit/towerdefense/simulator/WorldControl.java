@@ -48,8 +48,6 @@ public class WorldControl {
   private int enemiesKilled = 0;
   private int wavesDefeated = 0;
 
-  private double debugRotationSpeed = 3.0;
-
   List<Tower> newTowers = new ArrayList<>();
   List<Tower> removedTowers = new ArrayList<>();
 
@@ -547,7 +545,7 @@ public class WorldControl {
            double targetAngle = Math
               .toDegrees(Math.atan2(direction.getY(), direction.getX())) + 90;
 
-            tower.setRotation(getNewDirection(tower.getRotation() - 90, tower.getPosition(), tower.getTarget().getPosition(), debugRotationSpeed) + 90);
+            tower.setRotation(getNewDirection(tower.getRotation() - 90, tower.getPosition(), tower.getTarget().getPosition(), tower.getType().getRotationSpeed()) + 90);
 
             if (tower.getCooldown() <= 0 && tower.getRotation() == targetAngle) {
 
