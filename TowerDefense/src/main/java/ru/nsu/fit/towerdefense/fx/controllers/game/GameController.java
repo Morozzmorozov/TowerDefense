@@ -210,6 +210,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         closeSidePaneImageView.setOnMouseClicked(mouseEvent -> {
             hideSideBar();
             worldRenderer.hideTowerRangeCircle();
+            worldRenderer.hideGameObjectSelection();
         });
 
         bindUppercase(enemyNameText);
@@ -426,6 +427,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         }
 
         worldRenderer.hideTowerRangeCircle();
+        worldRenderer.showGameObjectSelection(renderable);
 
         switch (renderable.getGameObjectType()) {
             case BASE:
@@ -480,14 +482,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             updatePlatformSideBar(towerPlatform);
             showSideBar(platformSideVBox);
         } else {
-            worldRenderer.showTowerRangeCircle(towerOnPlatform, towerOnPlatform.getType().getRange());
+            worldRenderer.showTowerRange(towerOnPlatform, towerOnPlatform.getType().getRange());
             updateTowerSideBar(towerOnPlatform);
             showSideBar(towerSideVBox);
         }
     }
 
     private void onTowerClicked(Tower tower) {
-        worldRenderer.showTowerRangeCircle(tower, tower.getType().getRange());
+        worldRenderer.showTowerRange(tower, tower.getType().getRange());
         updateTowerSideBar(tower);
         showSideBar(towerSideVBox);
     }
@@ -566,7 +568,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     updateLabelComparingValues(upgradeTowerDamageLabel,
                         newProjType.getBasicDamage(), projType.getBasicDamage());
 
-                    worldRenderer.showNewTowerRangeCircle(tower, towerType.getRange(),
+                    worldRenderer.showNewTowerRange(tower, towerType.getRange(),
                         compare(towerType.getRange(), tower.getType().getRange()));
                 });
                 towerTypeVBox.setOnMouseExited(mouseEvent -> {
@@ -695,7 +697,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
                     buildTowerCharacteristicsVBox.setVisible(true);
 
-                    worldRenderer.showNewTowerRangeCircle(towerPlatform, towerType.getRange(), 1);
+                    worldRenderer.showNewTowerRange(towerPlatform, towerType.getRange(), 1);
                 });
                 towerTypeVBox.setOnMouseExited(mouseEvent -> {
                     buildTowerCharacteristicsVBox.setVisible(false);

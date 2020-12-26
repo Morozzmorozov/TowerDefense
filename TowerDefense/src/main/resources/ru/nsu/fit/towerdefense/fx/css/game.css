@@ -28,6 +28,12 @@ Label, Text {
     -fx-fill: radial-gradient(center 50% 50%, radius 50%, transparent, rgba(255, 0, 0, 0.15));
 }
 
+.game-object-selection {
+    -fx-fill: transparent;
+    -fx-stroke: rgba(0, 255, 255, 0.5);
+    -fx-stroke-width: 5;
+}
+
 .root {
     -fx-background-color: rgba(0, 0, 0, 0.95);
     -fx-background-image: url('../icons/root-background.png');
