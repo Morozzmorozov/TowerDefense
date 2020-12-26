@@ -5,7 +5,7 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 public interface Renderable {
 
   enum Type {
-    BASE, ENEMY, ENEMY_PORTAL, PROJECTILE, ROAD_TILE, TOWER, TOWER_PLATFORM
+    BASE, ENEMY, ENEMY_PORTAL, PROJECTILE, ROAD_TILE, TOWER, TOWER_PLATFORM, EFFECT
   }
 
   Type getGameObjectType();

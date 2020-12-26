@@ -32,7 +32,7 @@ public class Effect extends GameObject implements Renderable {
 
   @Override
   public Type getGameObjectType() {
-    return null;
+    return Type.EFFECT;
   }
 
   @Override
