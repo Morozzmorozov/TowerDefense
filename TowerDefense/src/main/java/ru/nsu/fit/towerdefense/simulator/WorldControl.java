@@ -248,7 +248,7 @@ public class WorldControl {
    */
   public long getTicksTillNextWave() { // todo
     if (world.getCurrentWave().getCurrentEnemyNumber() == 0) {
-      return world.getCountdown();
+      return world.getCountdown() / deltaTime;
     } else {
       return 0;
     }
