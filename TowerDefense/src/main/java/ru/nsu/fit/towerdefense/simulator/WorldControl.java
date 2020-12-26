@@ -142,19 +142,7 @@ public class WorldControl {
     Map<UUID, Enemy> uuidEnemyMap = new HashMap<>();
 
 
-    for (TowerInfo towerInfo : worldState.getTowers()) {
-      Tower tower = new Tower();
-      tower.setCooldown(towerInfo.getCooldown());
-      tower.setMode(towerInfo.getMode());
-      tower.setPosition(new Vector2<>(
-          (int)Math.round(towerInfo.getPosition().getX()),
-          (int)Math.round(towerInfo.getPosition().getY())));
-      tower.setRotation(towerInfo.getRotation());
-      tower.setSellPrice(0); // todo
-      tower.setTarget(null); // todo
-      tower.setType(GameMetaData.getInstance().getTowerType(towerInfo.getType()));
-      world.getTowers().add(tower);
-    }
+
 
     for (EnemyInfo enemyInfo : worldState.getEnemies()) {
       Enemy enemy = new Enemy(GameMetaData.getInstance().getEnemyType(enemyInfo.getType()),
@@ -164,6 +152,20 @@ public class WorldControl {
       UUID uuid = UUID.fromString(enemyInfo.getId());
       uuidEnemyMap.put(uuid, enemy);
       world.getEnemies().add(enemy);
+    }
+
+    for (TowerInfo towerInfo : worldState.getTowers()) {
+      Tower tower = new Tower();
+      tower.setCooldown(towerInfo.getCooldown());
+      tower.setMode(towerInfo.getMode());
+      tower.setPosition(new Vector2<>(
+          (int)Math.round(towerInfo.getPosition().getX()),
+          (int)Math.round(towerInfo.getPosition().getY())));
+      tower.setRotation(towerInfo.getRotation());
+      tower.setSellPrice(0); // todo
+      tower.setTarget(uuidEnemyMap.get(UUID.fromString(towerInfo.getTarget())));
+      tower.setType(GameMetaData.getInstance().getTowerType(towerInfo.getType()));
+      world.getTowers().add(tower);
     }
 
     for (ProjectileInfo projectileInfo : worldState.getProjectiles()) {
