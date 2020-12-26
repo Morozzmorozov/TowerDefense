@@ -108,6 +108,9 @@ public class World {
     renderables.addAll(enemies);
     renderables.addAll(projectiles);
     renderables.addAll(portals);
+    for (Enemy enemy : enemies) {
+      renderables.addAll(enemy.getEffects());
+    }
     return renderables;
     /*return new Iterable<Renderable>() {
       @Override

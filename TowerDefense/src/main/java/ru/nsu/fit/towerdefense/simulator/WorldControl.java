@@ -5,11 +5,13 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EffectType;
 import ru.nsu.fit.towerdefense.replay.GameStateWriter;
 import ru.nsu.fit.towerdefense.replay.objectInfo.EnemyInfo;
 import ru.nsu.fit.towerdefense.replay.objectInfo.ProjectileInfo;
@@ -17,6 +19,7 @@ import ru.nsu.fit.towerdefense.replay.objectInfo.TowerInfo;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.replay.WorldState;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
 import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.simulator.world.Wave;
 import ru.nsu.fit.towerdefense.simulator.world.World;
@@ -417,7 +420,17 @@ public class WorldControl {
         int damage = projectile.getType().getEnemyTypeDamageMap()
             .get(enemy.getType().getTypeName());
 
+        List<EffectType> effectsDebug = new ArrayList<>(); // DEBUG! TODO remove
+        effectsDebug.add(EffectType.POISON);
 
+        for (EffectType effectType : effectsDebug) {
+          Optional<Effect> existingEffect = enemy.getEffects().stream().filter(effect -> effect.getType() == effectType).findFirst();
+          if (existingEffect.isPresent()) {
+            existingEffect.get().setRemainingTicks(effectType.getDuration());
+          } else {
+            enemy.getEffects().add(new Effect(enemy, effectType));
+          }
+        }
 
         enemy.setHealth(enemy.getHealth() - damage);
         if (enemy.getHealth() <= 0) {
@@ -438,9 +451,11 @@ public class WorldControl {
     for (Enemy enemy : world.getEnemies()) {
       if (enemy.isDead()) continue;
 
-      // TODO get effects & update health
+      double speed = enemy.getVelocity() * enemy.getEffects()
+          .stream().mapToDouble((effect) -> effect.getType().getSpeedMultiplier())
+          .reduce(1, (a, b) -> a * b);
 
-      double remainingDistance = enemy.getVelocity() * deltaTime;
+      double remainingDistance = speed * deltaTime;
       while (remainingDistance > DELTA && !enemy.getTrajectory().isEmpty()) {
         double dist = distance(enemy.getPosition(), enemy.getTrajectory().get(0));
         if (Double.compare(remainingDistance, dist) >= 0) {
@@ -473,6 +488,27 @@ public class WorldControl {
         }
 
       }
+
+      int effectDamage = enemy.getEffects().stream()
+          .mapToInt((effect) -> effect.getType().getDamagePerTick())
+          .reduce(0, Integer::sum);
+
+      enemy.setHealth(enemy.getHealth() - effectDamage);
+
+      if (enemy.getHealth() <= 0) {
+        enemiesKilled++;
+        world.setMoney(world.getMoney() + enemy.getMoneyReward());
+        enemyDeath(enemy);
+        removedEnemies.add(enemy);
+      }
+
+      for (Effect effect : enemy.getEffects()) {
+        effect.setRemainingTicks(effect.getRemainingTicks() - 1);
+      }
+
+      enemy.getEffects().removeAll(enemy.getEffects().stream()
+          .filter((effect -> effect.getRemainingTicks() <= 0))
+          .collect(Collectors.toList()));
     }
     for (Enemy enemy : removedEnemies) {
       world.getEnemies().remove(enemy);

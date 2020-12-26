@@ -15,6 +15,7 @@ public class Enemy extends GameObject implements Renderable {
   private Vector2<Double> position;
   private List<Vector2<Double>> trajectory = new ArrayList<>();
   private int moneyReward;
+  private List<Effect> effects = new ArrayList<>();
 
   public Enemy(EnemyType type, int waveNumber, Vector2<Double> position, int moneyReward) {
     this.type = type;
@@ -25,7 +26,9 @@ public class Enemy extends GameObject implements Renderable {
     velocity = type.getSpeed();
   }
 
-
+  public List<Effect> getEffects() {
+    return effects;
+  }
 
   public int getMoneyReward() {
     return moneyReward;
