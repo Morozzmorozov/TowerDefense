@@ -41,6 +41,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -49,6 +50,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static javafx.scene.control.Alert.AlertType;
 import static javafx.scene.input.KeyCode.ESCAPE;
@@ -658,12 +660,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void updatePlatformSideBar(TowerPlatform towerPlatform) {
-        String[] towerTypeNames = { "Archer", "Crossbowman", "Catapult", "RocketLauncher", "Wave" };
-        buildTowerFlowPane.getChildren().clear();
-        for (String towerTypeName : towerTypeNames) {
-            try {
-                TowerType towerType = GameMetaData.getInstance().getTowerType(towerTypeName);
+        List<TowerType> towerTypes = GameMetaData.getInstance().getTowerNames().stream()
+            .map(towerName -> GameMetaData.getInstance().getTowerType(towerName))
+            .sorted(Comparator.comparingInt(TowerType::getPrice))
+            .collect(Collectors.toList());
 
+        buildTowerFlowPane.getChildren().clear();
+        for (TowerType towerType : towerTypes) {
+            try {
                 ImageView imageView = new ImageView(
                     Images.getInstance().getImage(towerType.getImage()));
                 imageView.setFitWidth(48);
