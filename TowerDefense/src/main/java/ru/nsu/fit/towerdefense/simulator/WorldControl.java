@@ -2,12 +2,18 @@ package ru.nsu.fit.towerdefense.simulator;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.replay.GameStateWriter;
+import ru.nsu.fit.towerdefense.replay.objectInfo.EnemyInfo;
+import ru.nsu.fit.towerdefense.replay.objectInfo.ProjectileInfo;
+import ru.nsu.fit.towerdefense.replay.objectInfo.TowerInfo;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.replay.WorldState;
@@ -126,6 +132,53 @@ public class WorldControl {
 
   public WorldControl(GameMap gameMap, WorldState worldState, int deltaTime, WorldObserver worldObserver) {
     // todo init worldState
+    world = new World();
+
+    Base base = new Base(worldState.getBaseHealth(), gameMap.getBaseDescription().getImage(),
+        new Vector2<>(gameMap.getBaseDescription().getPosition().getX(), gameMap.getBaseDescription().getPosition().getY()));
+    world.setBase(base);
+    world.setMoney(worldState.getMoney());
+
+    Map<UUID, Enemy> uuidEnemyMap = new HashMap<>();
+
+
+    for (TowerInfo towerInfo : worldState.getTowers()) {
+      Tower tower = new Tower();
+      tower.setCooldown(towerInfo.getCooldown());
+      tower.setMode(towerInfo.getMode());
+      tower.setPosition(new Vector2<>(
+          (int)Math.round(towerInfo.getPosition().getX()),
+          (int)Math.round(towerInfo.getPosition().getY())));
+      tower.setRotation(towerInfo.getRotation());
+      tower.setSellPrice(0); // todo
+      tower.setTarget(null); // todo
+      tower.setType(GameMetaData.getInstance().getTowerType(towerInfo.getType()));
+      world.getTowers().add(tower);
+    }
+
+    for (EnemyInfo enemyInfo : worldState.getEnemies()) {
+      Enemy enemy = new Enemy(GameMetaData.getInstance().getEnemyType(enemyInfo.getType()),
+          enemyInfo.getWave(), new Vector2<>(enemyInfo.getPosition().getX(), enemyInfo.getPosition()
+          .getY()), 100); // todo
+      enemy.setHealth(enemyInfo.getHealth());
+      UUID uuid = UUID.fromString(enemyInfo.getId());
+      uuidEnemyMap.put(uuid, enemy);
+      world.getEnemies().add(enemy);
+    }
+
+    for (ProjectileInfo projectileInfo : worldState.getProjectiles()) {
+      Projectile projectile = new Projectile(
+          uuidEnemyMap.get(UUID.fromString(projectileInfo.getTarget())),
+          (float) projectileInfo.getRange().doubleValue(),
+          GameMetaData.getInstance().getProjectileType(projectileInfo.getType()),
+          new Vector2<>(projectileInfo.getPosition().getX(), projectileInfo.getPosition().getY()),
+          new Vector2<>(1d,1d), // todo
+          null // todo
+      );
+
+      projectile.setId(UUID.fromString(projectileInfo.getId()));
+      world.getProjectiles().add(projectile);
+    }
 
     this.gameMap = gameMap;
     this.deltaTime = 1; // DEBUG! todo remove

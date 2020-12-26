@@ -3,7 +3,7 @@ package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 import java.util.UUID;
 
 public class GameObject {
-  private final UUID id;
+  protected UUID id;
 
   public GameObject() {
     id = UUID.randomUUID();
@@ -11,5 +11,9 @@ public class GameObject {
 
   public UUID getId() {
     return id;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
   }
 }
