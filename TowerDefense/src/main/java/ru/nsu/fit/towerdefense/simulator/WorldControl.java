@@ -674,7 +674,7 @@ public class WorldControl {
     double targetAngle = Math
         .toDegrees(Math.atan2(direction.getY(), direction.getX()));
 
-    double deltaAngle = (targetAngle - oldDirection + 360.0) % 360.0;
+    double deltaAngle = (targetAngle - oldDirection + 720.0) % 360.0;
 
     if (deltaAngle <= rotationSpeed || 360.0 - deltaAngle <= rotationSpeed) {
       return targetAngle;
