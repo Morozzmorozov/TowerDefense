@@ -6,6 +6,7 @@ public class ProjectileInfo {
 	private String id;
 	private String target;
 	private Vector2<Double> position;
+	private Vector2<Double> velocity;
 	private String type;
 	private Double range;
 	public ProjectileInfo(){}
@@ -35,6 +36,11 @@ public class ProjectileInfo {
 		return position;
 	}
 
+	public Vector2<Double> getVelocity()
+	{
+		return velocity;
+	}
+
 	public void setRange(Double range)
 	{
 		this.range = range;
@@ -58,6 +64,11 @@ public class ProjectileInfo {
 	public void setTarget(String target)
 	{
 		this.target = target;
+	}
+
+	public void setVelocity(Vector2<Double> velocity)
+	{
+		this.velocity = velocity;
 	}
 
 }

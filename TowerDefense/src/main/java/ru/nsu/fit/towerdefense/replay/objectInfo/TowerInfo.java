@@ -11,6 +11,7 @@ public class TowerInfo {
 	private double rotation;
 	private String target;
 	private int cooldown;
+	private int sellPrice;
 
 	public TowerInfo(){}
 
@@ -44,6 +45,11 @@ public class TowerInfo {
 		return type;
 	}
 
+	public int getSellPrice()
+	{
+		return sellPrice;
+	}
+
 	public Vector2<Double> getPosition()
 	{
 		return position;
@@ -72,6 +78,11 @@ public class TowerInfo {
 	public void setMode(Tower.Mode mode)
 	{
 		this.mode = mode;
+	}
+
+	public void setSellPrice(int sellPrice)
+	{
+		this.sellPrice = sellPrice;
 	}
 
 	public void setRotation(double rotation)

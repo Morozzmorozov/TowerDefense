@@ -139,6 +139,7 @@ public class GameStateWriter {
 				writer.writeAttribute("Mode", x.getMode().name());
 				writer.writeAttribute("Rotation", Double.toString(x.getRotation()));
 				writer.writeAttribute("Cooldown", Integer.toString(x.getCooldown()));
+				writer.writeAttribute("SellPrice", Integer.toString(x.getSellPrice()));
 				String target = "";
 				if (x.getTarget() != null && !x.getTarget().isDead())
 					target = x.getTarget().getId().toString();
@@ -165,6 +166,8 @@ public class GameStateWriter {
 				writer.writeAttribute("PosX", Double.toString(x.getPosition().getY()));
 				writer.writeAttribute("Type", x.getType().getTypeName());
 				writer.writeAttribute("RemainingRange", Double.toString(x.getRemainingRange()));
+				writer.writeAttribute("VelX", Double.toString(x.getVelocity().getX()));
+				writer.writeAttribute("VelY", Double.toString(x.getVelocity().getY()));
 				writer.writeEndElement();
 				writer.writeCharacters(System.getProperty("line.separator"));
 			}
@@ -320,6 +323,24 @@ public class GameStateWriter {
 			writer.writeCharacters(tab.substring(0, 2));
 			writer.writeStartElement("DealDamageBase");
 			writer.writeAttribute("Damage", Integer.toString(damage));
+			writer.writeEndElement();
+			writer.writeCharacters(System.getProperty("line.separator"));
+		}
+		catch (Exception e)
+		{
+
+		}
+	}
+
+	public void sellTower(int position)
+	{
+		if (currentTick % fullCopy == 0)
+			return;
+		try
+		{
+			writer.writeCharacters(tab.substring(0, 2));
+			writer.writeStartElement("SellTower");
+			writer.writeAttribute("Position", Integer.toString(position));
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));
 		}
