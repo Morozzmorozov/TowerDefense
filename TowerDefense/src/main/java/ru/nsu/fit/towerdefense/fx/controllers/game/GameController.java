@@ -19,11 +19,12 @@ import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
+import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
-import ru.nsu.fit.towerdefense.metadata.map.GameMap;
-import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
@@ -33,8 +34,7 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
-import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
-import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
+import ru.nsu.fit.towerdefense.util.Vector2;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -49,6 +49,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
+import static javafx.scene.control.Alert.AlertType;
 import static javafx.scene.input.KeyCode.ESCAPE;
 import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.RENDER_WORLD_ERROR_HEADER;
 
@@ -300,6 +301,15 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             .build().showAndWait());
     }
 
+    private void handleGameplayException(GameplayException e) {
+        new AlertBuilder()
+            .setAlertType(AlertType.INFORMATION)
+            .setHeaderText(e.getMessage())
+            .setContentText("")
+            .setOwner(sceneManager.getWindowOwner())
+            .build().showAndWait();
+    }
+
     private void updateSpeed(int speed) {
         this.speed = speed;
         speedLabel.setText(speed + "x");
@@ -525,7 +535,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         worldControl.upgradeTower(tower, upgrade);
                         onTowerClicked(tower);
                     } catch (GameplayException e) {
-                        System.out.println(e.getMessage());
+                        handleGameplayException(e);
                     }
                 });
                 towerTypeVBox.setOnMouseEntered(mouseEvent -> {
@@ -666,7 +676,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         worldRenderer.add(tower);
                         onTowerClicked(tower);
                     } catch (GameplayException e) {
-                        System.out.println(e.getMessage());
+                        handleGameplayException(e);
                     } catch (RenderException e) {
                         handleRenderException(e);
                     }
