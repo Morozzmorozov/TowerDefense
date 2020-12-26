@@ -212,14 +212,7 @@ public class WorldControl {
     Base base = new Base(gameMap.getBaseDescription().getHealth(), gameMap.getBaseDescription().getImage(),
         new Vector2<>(gameMap.getBaseDescription().getPosition()));
     world.setBase(base);
-
-    Tower tower = new Tower(); // DEBUG! todo remove
-    tower.setType(GameMetaData.getInstance().getTowerType("RocketLauncher"));
-    tower.setCooldown(0);
-    tower.setRotation(0);
-    tower.setPosition(new Vector2<>(3, 4));
-    tower.setSellPrice(Math.round(tower.getType().getPrice() * SELL_MULTIPLIER));
-    world.getTowers().add(tower);
+    
 
 
     for (int i = 0; i < gameMap.getRoads().getRoadCount(); ++i) {
