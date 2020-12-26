@@ -35,6 +35,11 @@ public class World {
   private int money;
   private int currentWaveNumber = 0;
   private Wave currentWave;
+  private List<Wave> waves = new ArrayList<>();
+
+  public List<Wave> getWaves() {
+    return waves;
+  }
 
   public List<Portal> getPortals() {
     return portals;
@@ -54,6 +59,7 @@ public class World {
 
   public void setCurrentWave(Wave currentWave) {
     this.currentWave = currentWave;
+    waves.add(currentWave);
   }
 
   public int getCurrentWaveNumber() {

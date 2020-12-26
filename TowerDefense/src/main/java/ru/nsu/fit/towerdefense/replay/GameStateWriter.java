@@ -107,7 +107,7 @@ public class GameStateWriter {
 				writer.writeAttribute("PosX", Double.toString(x.getPosition().getX()));
 				writer.writeAttribute("PosY", Double.toString(x.getPosition().getY()));
 				writer.writeAttribute("Type", x.getType().getTypeName());
-				writer.writeAttribute("Wave", Integer.toString(x.getWave().getNumber()));
+				writer.writeAttribute("Wave", Integer.toString(x.getWaveNumber()));
 				writer.writeCharacters(System.getProperty("line.separator"));
 				writer.writeCharacters(tab.substring(0, 3));
 				writer.writeStartElement("Trajectory");

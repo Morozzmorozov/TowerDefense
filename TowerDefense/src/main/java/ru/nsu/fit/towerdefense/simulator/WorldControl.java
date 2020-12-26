@@ -264,11 +264,11 @@ public class WorldControl {
 
   private void enemyDeath(Enemy enemy) {
     enemy.setDead(true);
-    Wave wave = enemy.getWave();
+    Wave wave = world.getWaves().get(enemy.getWaveNumber());
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
       wavesDefeated++;
-
+      System.out.println("wave " + wave.getNumber() + " defeated");
       //world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward()); TODO fix me
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
@@ -554,7 +554,7 @@ public class WorldControl {
             Vector2<Double> spawnPosition = gameMap.getRoads().getRoad(enemies.getSpawnPosition()).get(0);
             Vector2<Double> coordinates = new Vector2<>(spawnPosition.getX(), spawnPosition.getY());
             enemy = new Enemy(
-                GameMetaData.getInstance().getEnemyType(enemies.getType()), world.getCurrentWave(), coordinates, enemies.getMoneyReward());
+                GameMetaData.getInstance().getEnemyType(enemies.getType()), world.getCurrentWaveNumber(), coordinates, enemies.getMoneyReward());
             for (Vector2<Double> position : gameMap.getRoads()
                 .getRoad(enemies.getSpawnPosition())) {
               enemy.getTrajectory().add(new Vector2<>(position.getX(), position.getY()));

@@ -10,20 +10,22 @@ public class Enemy extends GameObject implements Renderable {
   private int health;
   private EnemyType type;
   private float velocity;
-  private Wave wave;
+  private int waveNumber;
   private boolean isDead = false;
   private Vector2<Double> position;
   private List<Vector2<Double>> trajectory = new ArrayList<>();
   private int moneyReward;
 
-  public Enemy(EnemyType type, Wave wave, Vector2<Double> position, int moneyReward) {
+  public Enemy(EnemyType type, int waveNumber, Vector2<Double> position, int moneyReward) {
     this.type = type;
-    this.wave = wave;
+    this.waveNumber = waveNumber;
     this.position = position;
     this.moneyReward = moneyReward;
     health = type.getHealth();
     velocity = type.getSpeed();
   }
+
+
 
   public int getMoneyReward() {
     return moneyReward;
@@ -45,8 +47,8 @@ public class Enemy extends GameObject implements Renderable {
     isDead = dead;
   }
 
-  public Wave getWave() {
-    return wave;
+  public int getWaveNumber() {
+    return waveNumber;
   }
 
   public int getHealth() {
