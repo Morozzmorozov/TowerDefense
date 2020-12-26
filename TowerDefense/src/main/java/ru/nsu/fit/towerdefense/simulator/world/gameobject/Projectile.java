@@ -15,6 +15,10 @@ public class Projectile extends GameObject implements Renderable {
   private double scale = 1.0;
   private double rotationSpeed = 3.0; // DEBUG
 
+  public FireType getFireType() {
+    return parent.getType().getFireType();
+  }
+
   public double getRotationSpeed() {
     return rotationSpeed;
   }
@@ -108,6 +112,6 @@ public class Projectile extends GameObject implements Renderable {
 
   @Override
   public double getZIndex() {
-    return 5;
+    return 6;
   }
 }
