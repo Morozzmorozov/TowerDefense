@@ -558,7 +558,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         towerType.getRange(), tower.getType().getRange());
 
                     updateLabelComparingValues(upgradeTowerFireRateLabel,
-                        towerType.getFireRate(), tower.getType().getFireRate());
+                        1000d / towerType.getFireRate(), 1000d / tower.getType().getFireRate());
 
                     updateLabelComparingValues(upgradeTowerRotationSpeedLabel,
                         towerType.getRotationSpeed(), tower.getType().getRotationSpeed());
@@ -621,7 +621,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         upgradeTowerOmnidirectionalLabel.getStyleClass().clear();
         upgradeTowerRangeLabel.setText(DECIMAL_FORMAT.format(tower.getType().getRange()));
         upgradeTowerRangeLabel.getStyleClass().clear();
-        upgradeTowerFireRateLabel.setText(DECIMAL_FORMAT.format(tower.getType().getFireRate()));
+        upgradeTowerFireRateLabel.setText(DECIMAL_FORMAT.format(1000d / tower.getType().getFireRate()));
         upgradeTowerFireRateLabel.getStyleClass().clear();
         upgradeTowerRotationSpeedLabel.setText(DECIMAL_FORMAT.format(tower.getType().getRotationSpeed()));
         upgradeTowerRotationSpeedLabel.getStyleClass().clear();
@@ -691,7 +691,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     buildTowerOmnidirectionalLabel.setText(
                         towerType.getFireType() == TowerType.FireType.OMNIDIRECTIONAL ? "Yes" : "No");
                     buildTowerRangeLabel.setText(DECIMAL_FORMAT.format(towerType.getRange()));
-                    buildTowerFireRateLabel.setText(DECIMAL_FORMAT.format(towerType.getFireRate()));
+                    buildTowerFireRateLabel.setText(DECIMAL_FORMAT.format(1000d / towerType.getFireRate()));
                     buildTowerRotationSpeedLabel.setText(DECIMAL_FORMAT.format(towerType.getRotationSpeed()));
                     ProjectileType projectileType =
                         GameMetaData.getInstance().getProjectileType(towerType.getProjectileType());
