@@ -9,6 +9,15 @@ public class Vector2<T> {
     this.y = y;
   }
 
+  /**
+   * Copies another Vector2 (creates a Vector2 with same coordinates)
+   *
+   * @param other the vector to be copied
+   */
+  public Vector2(Vector2<T> other) {
+    this(other.getX(), other.getY());
+  }
+
   public T getX() {
     return x;
   }

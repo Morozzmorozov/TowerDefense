@@ -135,7 +135,7 @@ public class WorldControl {
     world = new World();
 
     Base base = new Base(worldState.getBaseHealth(), gameMap.getBaseDescription().getImage(),
-        new Vector2<>(gameMap.getBaseDescription().getPosition().getX(), gameMap.getBaseDescription().getPosition().getY()));
+        new Vector2<>(gameMap.getBaseDescription().getPosition()));
     world.setBase(base);
     world.setMoney(worldState.getMoney());
 
@@ -146,8 +146,7 @@ public class WorldControl {
 
     for (EnemyInfo enemyInfo : worldState.getEnemies()) {
       Enemy enemy = new Enemy(GameMetaData.getInstance().getEnemyType(enemyInfo.getType()),
-          enemyInfo.getWave(), new Vector2<>(enemyInfo.getPosition().getX(), enemyInfo.getPosition()
-          .getY()), 100); // todo
+          enemyInfo.getWave(), new Vector2<>(enemyInfo.getPosition()), 100); // todo
       enemy.setHealth(enemyInfo.getHealth());
       UUID uuid = UUID.fromString(enemyInfo.getId());
       uuidEnemyMap.put(uuid, enemy);
@@ -173,7 +172,7 @@ public class WorldControl {
           uuidEnemyMap.get(UUID.fromString(projectileInfo.getTarget())),
           (float) projectileInfo.getRange().doubleValue(),
           GameMetaData.getInstance().getProjectileType(projectileInfo.getType()),
-          new Vector2<>(projectileInfo.getPosition().getX(), projectileInfo.getPosition().getY()),
+          new Vector2<>(projectileInfo.getPosition()),
           new Vector2<>(1d,1d), // todo
           null // todo
       );
@@ -197,7 +196,7 @@ public class WorldControl {
     world = new World();
 
     for (Vector2<Integer> position : gameMap.getPositions().getPositions()) {
-      Vector2<Integer> coordinates = new Vector2<>(position.getX(), position.getY());
+      Vector2<Integer> coordinates = new Vector2<>(position);
       world.getTowerPlatforms().add(new TowerPlatform(coordinates, "platform.png")); // todo image name
     }
 
@@ -211,7 +210,7 @@ public class WorldControl {
 
 
     Base base = new Base(gameMap.getBaseDescription().getHealth(), gameMap.getBaseDescription().getImage(),
-        new Vector2<>(gameMap.getBaseDescription().getPosition().getX(), gameMap.getBaseDescription().getPosition().getY()));
+        new Vector2<>(gameMap.getBaseDescription().getPosition()));
     world.setBase(base);
 
     Tower tower = new Tower(); // DEBUG! todo remove
@@ -611,12 +610,12 @@ public class WorldControl {
         for (WaveEnemies enemies : description.getEnemiesList()) {
           if (enemyIndex < enemies.getCount()) {
             Vector2<Double> spawnPosition = gameMap.getRoads().getRoad(enemies.getSpawnPosition()).get(0);
-            Vector2<Double> coordinates = new Vector2<>(spawnPosition.getX(), spawnPosition.getY());
+            Vector2<Double> coordinates = new Vector2<>(spawnPosition);
             enemy = new Enemy(
                 GameMetaData.getInstance().getEnemyType(enemies.getType()), world.getCurrentWaveNumber(), coordinates, enemies.getMoneyReward());
             for (Vector2<Double> position : gameMap.getRoads()
                 .getRoad(enemies.getSpawnPosition())) {
-              enemy.getTrajectory().add(new Vector2<>(position.getX(), position.getY()));
+              enemy.getTrajectory().add(new Vector2<>(position));
             }
             break;
           } else {
