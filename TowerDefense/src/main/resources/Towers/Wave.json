@@ -8,5 +8,5 @@
 	"FireType" : "Omnidirectional",
 	"ProjectileType" : "Ring",
 	"Image" : "uni.png",
-	"RotationSpeed": 0.06
+	"RotationSpeed": 3.0
 }

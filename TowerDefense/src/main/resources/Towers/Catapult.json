@@ -9,5 +9,5 @@
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Stone",
 	"Image" : "tower3.png",
-	"RotationSpeed": 0.06
+	"RotationSpeed": 3.0
 }

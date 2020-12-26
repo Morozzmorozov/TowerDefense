@@ -8,5 +8,5 @@
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Rocket",
 	"Image" : "rocket_launcher.png",
-	"RotationSpeed": 0.06
+	"RotationSpeed": 3.0
 }
