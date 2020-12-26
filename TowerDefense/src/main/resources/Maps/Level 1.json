@@ -49,8 +49,8 @@
 		},
 		{
 			"ScaleFactor" : 1.05,
-			"SpawnInterval" : 100.0,
-			"TimeTillNextWave" : 300.0,
+			"SpawnInterval" : 1666.667,
+			"TimeTillNextWave" : 5000.0,
 			"ScienceReward" : 1000,
 			"Enemies" : [
 				{
@@ -75,8 +75,8 @@
 		},
 		{
 			"ScaleFactor" : 1.15,
-			"SpawnInterval" : 100.0,
-			"TimeTillNextWave" : 60.0,
+			"SpawnInterval" : 1666.667,
+			"TimeTillNextWave" : 1000.0,
 			"ScienceReward" : 1000,
 			"Enemies" : [
 				{
