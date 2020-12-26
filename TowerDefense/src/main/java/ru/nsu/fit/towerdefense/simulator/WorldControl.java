@@ -339,6 +339,7 @@ public class WorldControl {
 
   private void projectileSequence() {
     List<Projectile> removedProjectiles = new ArrayList<>();
+
     for (Projectile projectile : world.getProjectiles()) {
       if (projectile.getTarget() != null && projectile.getType().isSelfGuided() && projectile.getTarget().isDead()) {
         Enemy newEnemy = null;
@@ -352,12 +353,15 @@ public class WorldControl {
         }
         if (newEnemy != null) {
           projectile.setTarget(newEnemy);
+
         }
       }
+
+
       if (projectile.getParent().getType().getFireType().equals(FireType.UNIDIRECTIONAL)
           && projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
 
-        double newRotation = getNewDirection(projectile.getRotation() - 90, projectile.getPosition(), projectile.getTarget().getPosition(), projectile.getRotationSpeed()) + 90;
+        double newRotation = (getNewDirection(projectile.getRotation() - 90, projectile.getPosition(), projectile.getTarget().getPosition(), projectile.getRotationSpeed()) + 90) % 360;
 
         Vector2<Double> newDirection = new Vector2<>(
             projectile.getType().getSpeed() * Math.cos(Math.toRadians(newRotation - 90)),
