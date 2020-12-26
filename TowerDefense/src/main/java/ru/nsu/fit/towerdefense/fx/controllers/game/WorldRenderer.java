@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Renderable;
@@ -29,6 +30,9 @@ public class WorldRenderer {
     private final Map<Renderable, Node> renderableToGameNodeMap = new HashMap<>();
     private final Circle towerRangeCircle;
     private final Circle newTowerRangeCircle;
+    private final Rectangle gameObjectSelectionRectangle;
+
+    private Node selectedGameNode;
 
     /**
      * Creates new WorldRenderer with specified game nodes.
@@ -44,9 +48,11 @@ public class WorldRenderer {
 
         towerRangeCircle = createCircle();
         newTowerRangeCircle = createCircle();
+        gameObjectSelectionRectangle = createRectangle();
 
         gameNodes.add(towerRangeCircle);
         gameNodes.add(newTowerRangeCircle);
+        gameNodes.add(gameObjectSelectionRectangle);
     }
 
     private Circle createCircle() {
@@ -57,6 +63,16 @@ public class WorldRenderer {
         circle.setViewOrder(Double.NEGATIVE_INFINITY);
         circle.getStyleClass().add("tower-range");
         return circle;
+    }
+
+    private Rectangle createRectangle() {
+        Rectangle rectangle = new Rectangle();
+        rectangle.setVisible(false);
+        rectangle.setManaged(false);
+        rectangle.setMouseTransparent(true);
+        rectangle.setViewOrder(Double.NEGATIVE_INFINITY);
+        rectangle.getStyleClass().add("game-object-selection");
+        return rectangle;
     }
 
     /**
@@ -78,8 +94,14 @@ public class WorldRenderer {
      * Must be called in JavaFX Application thread!
      */
     public void render() throws RenderException {
-        gameNodes.removeIf(node -> node != towerRangeCircle && node != newTowerRangeCircle
-             && !renderableToGameNodeMap.containsKey(node.getUserData()));
+        gameNodes.removeIf(node -> node != gameObjectSelectionRectangle
+            && node != towerRangeCircle && node != newTowerRangeCircle
+            && !renderableToGameNodeMap.containsKey(node.getUserData()));
+
+        if (!gameNodes.contains(selectedGameNode)) {
+            hideGameObjectSelection();
+            selectedGameNode = null;
+        }
 
         for (Map.Entry<Renderable, Node> entry : new ArrayList<>(renderableToGameNodeMap.entrySet())) {
             Renderable renderable = entry.getKey();
@@ -138,23 +160,45 @@ public class WorldRenderer {
     }
 
     /**
-     * Shows tower range circle in the center of the renderable.
+     * Shows game object selection.
+     *
+     * @param renderable renderable to center on.
+     */
+    public void showGameObjectSelection(Renderable renderable) {
+        gameObjectSelectionRectangle.setWidth(renderable.getSize().getX() * pixelsPerGameCell
+            + gameObjectSelectionRectangle.getStrokeWidth());
+        gameObjectSelectionRectangle.setHeight(renderable.getSize().getY() * pixelsPerGameCell
+            + gameObjectSelectionRectangle.getStrokeWidth());
+
+        selectedGameNode = renderableToGameNodeMap.get(renderable);
+        gameObjectSelectionRectangle.layoutXProperty().bind(selectedGameNode.layoutXProperty()
+            .subtract(gameObjectSelectionRectangle.getStrokeWidth() / 2));
+        gameObjectSelectionRectangle.layoutYProperty().bind(selectedGameNode.layoutYProperty()
+            .subtract(gameObjectSelectionRectangle.getStrokeWidth() / 2));
+
+        gameObjectSelectionRectangle.setViewOrder(-renderable.getZIndex() - Double.MIN_VALUE);
+
+        gameObjectSelectionRectangle.setVisible(true);
+    }
+
+    /**
+     * Shows tower range.
      *
      * @param renderable renderable to center on.
      * @param range      radius.
      */
-    public void showTowerRangeCircle(Renderable renderable, int range) {
+    public void showTowerRange(Renderable renderable, int range) {
         showTowerRangeCircle(renderable, range, towerRangeCircle);
     }
 
     /**
-     * Shows new tower range circle in the center of the renderable.
+     * Shows new tower range.
      *
      * @param renderable       renderable to center on.
      * @param range            radius.
      * @param rangesComparison new and current ranges comparison.
      */
-    public void showNewTowerRangeCircle(Renderable renderable, int range, int rangesComparison) {
+    public void showNewTowerRange(Renderable renderable, int range, int rangesComparison) {
         if (rangesComparison == 0) {
             return;
         }
@@ -173,6 +217,13 @@ public class WorldRenderer {
             (renderable.getPosition().getY() + renderable.getSize().getY() / 2 - range) * pixelsPerGameCell);
 
         circle.setVisible(true);
+    }
+
+    /**
+     * Hides game object selection.
+     */
+    public void hideGameObjectSelection() {
+        gameObjectSelectionRectangle.setVisible(false);
     }
 
     /**
