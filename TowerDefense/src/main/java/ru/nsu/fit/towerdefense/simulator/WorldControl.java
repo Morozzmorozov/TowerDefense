@@ -81,7 +81,8 @@ public class WorldControl {
 
   public Tower getTowerOnPlatform(TowerPlatform towerPlatform) {
     for (Tower candidate : world.getTowers()) {
-      if (Math.abs(candidate.getPosition().getX() - towerPlatform.getPosition().getX()) < DELTA
+      if (!removedTowers.contains(candidate)
+          && Math.abs(candidate.getPosition().getX() - towerPlatform.getPosition().getX()) < DELTA
           && Math.abs(candidate.getPosition().getY() - towerPlatform.getPosition().getY()) < DELTA) {
         return candidate;
       }
