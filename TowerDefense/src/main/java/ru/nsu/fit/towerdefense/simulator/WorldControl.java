@@ -38,97 +38,20 @@ public class WorldControl {
 
   private final int DEBUG_MONEY = 600;
   private final float SELL_MULTIPLIER = 0.4f;
+  private static final double DELTA = 1e-12;
 
-  public TowerPlatform sellTower(Tower tower) {
-    world.setMoney(world.getMoney() + tower.getSellPrice());
-    removedTowers.add(tower);
-    for (TowerPlatform platform : world.getTowerPlatforms()) {
-      if (Math.abs(tower.getPosition().getX() - platform.getPosition().getX()) < DELTA
-        && Math.abs(tower.getPosition().getY() - platform.getPosition().getY()) < DELTA) {
-        return platform;
-      }
-    }
-    return null;
-  }
-
-  public Tower buildTower(TowerPlatform towerPlatform, TowerType towerType)
-      throws GameplayException {
-    if (world.getMoney() < towerType.getPrice()) {
-      throw new GameplayException("Not enough money to build the tower");
-    }
-    world.setMoney(world.getMoney() - towerType.getPrice());
-    Tower tower = new Tower();
-    tower.setPosition(new Vector2<>((int)Math.round(towerPlatform.getPosition().getX()),
-        (int)Math.round(towerPlatform.getPosition().getY())));
-    tower.setType(towerType);
-    tower.setRotation(0);
-    tower.setCooldown(towerType.getFireRate());
-    tower.setSellPrice(Math.round(towerType.getPrice() * SELL_MULTIPLIER));
-    newTowers.add(tower);
-    GameStateWriter.getInstance().buildTower(world.getTowerPlatforms().indexOf(towerPlatform), towerType.getTypeName());
-    return tower;
-  }
-
-  public void upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
-    if (world.getMoney() < upgrade.getCost()) {
-      throw new GameplayException("Not enough money to upgrade the tower");
-    }
-    world.setMoney(world.getMoney() - upgrade.getCost());
-    TowerType type = GameMetaData.getInstance().getTowerType(upgrade.getName());
-    tower.setType(type);
-    tower.setCooldown(type.getFireRate());
-    tower.setTarget(null);
-    tower.setSellPrice(tower.getSellPrice() + Math.round(upgrade.getCost() + SELL_MULTIPLIER));
-    GameStateWriter.getInstance().upgradeTower(world.getTowers().indexOf(tower), upgrade.getName()); // todo ask about platform
-  }
-
-  List<Tower> newTowers = new ArrayList<>();
-  List<Tower> removedTowers = new ArrayList<>();
-
-  public Tower getTowerOnPlatform(TowerPlatform towerPlatform) {
-    for (Tower candidate : world.getTowers()) {
-      if (!removedTowers.contains(candidate)
-          && Math.abs(candidate.getPosition().getX() - towerPlatform.getPosition().getX()) < DELTA
-          && Math.abs(candidate.getPosition().getY() - towerPlatform.getPosition().getY()) < DELTA) {
-        return candidate;
-      }
-    }
-    return null;
-  }
-
-  public void tuneTower(Tower tower, Tower.Mode towerMode) {
-    tower.setMode(towerMode);
-    tower.setTarget(null);
-    GameStateWriter.getInstance().switchMode(tower, towerMode);
-  }
-
-  /**
-   * Returns remaining ticks till the next wave (must be > 0).
-   *
-   * In case this info is not yet available - returns 0.
-   *
-   * @return remaining ticks till the next wave.
-   */
-  public long getTicksTillNextWave() { // todo
-    if (world.getCurrentWave().getCurrentEnemyNumber() == 0) {
-      return world.getCountdown();
-    } else {
-      return 0;
-    }
-  }
-  private static final double DELTA = 0.001;
-
+  private long tick;
   private final GameMap gameMap;
   private final int deltaTime;
   private final WorldObserver worldObserver; // todo use it
   private World world;
-
-  private GameMetaData gameMetaData;
-
   private int enemiesKilled = 0;
   private int wavesDefeated = 0;
 
   private double debugRotationSpeed = 3.0;
+
+  List<Tower> newTowers = new ArrayList<>();
+  List<Tower> removedTowers = new ArrayList<>();
 
   public WorldControl(GameMap gameMap, WorldState worldState, int deltaTime, WorldObserver worldObserver) {
     // todo init worldState
@@ -211,7 +134,7 @@ public class WorldControl {
     Base base = new Base(gameMap.getBaseDescription().getHealth(), gameMap.getBaseDescription().getImage(),
         new Vector2<>(gameMap.getBaseDescription().getPosition()));
     world.setBase(base);
-    
+
 
 
     for (int i = 0; i < gameMap.getRoads().getRoadCount(); ++i) {
@@ -258,6 +181,81 @@ public class WorldControl {
     }
   }
 
+  public TowerPlatform sellTower(Tower tower) {
+    world.setMoney(world.getMoney() + tower.getSellPrice());
+    removedTowers.add(tower);
+    for (TowerPlatform platform : world.getTowerPlatforms()) {
+      if (Math.abs(tower.getPosition().getX() - platform.getPosition().getX()) < DELTA
+        && Math.abs(tower.getPosition().getY() - platform.getPosition().getY()) < DELTA) {
+        return platform;
+      }
+    }
+    return null;
+  }
+
+  public Tower buildTower(TowerPlatform towerPlatform, TowerType towerType)
+      throws GameplayException {
+    if (world.getMoney() < towerType.getPrice()) {
+      throw new GameplayException("Not enough money to build the tower");
+    }
+    world.setMoney(world.getMoney() - towerType.getPrice());
+    Tower tower = new Tower();
+    tower.setPosition(new Vector2<>((int)Math.round(towerPlatform.getPosition().getX()),
+        (int)Math.round(towerPlatform.getPosition().getY())));
+    tower.setType(towerType);
+    tower.setRotation(0);
+    tower.setCooldown(towerType.getFireRate());
+    tower.setSellPrice(Math.round(towerType.getPrice() * SELL_MULTIPLIER));
+    newTowers.add(tower);
+    GameStateWriter.getInstance().buildTower(world.getTowerPlatforms().indexOf(towerPlatform), towerType.getTypeName());
+    return tower;
+  }
+
+  public void upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
+    if (world.getMoney() < upgrade.getCost()) {
+      throw new GameplayException("Not enough money to upgrade the tower");
+    }
+    world.setMoney(world.getMoney() - upgrade.getCost());
+    TowerType type = GameMetaData.getInstance().getTowerType(upgrade.getName());
+    tower.setType(type);
+    tower.setCooldown(type.getFireRate());
+    tower.setTarget(null);
+    tower.setSellPrice(tower.getSellPrice() + Math.round(upgrade.getCost() + SELL_MULTIPLIER));
+    GameStateWriter.getInstance().upgradeTower(world.getTowers().indexOf(tower), upgrade.getName()); // todo ask about platform
+  }
+
+  public Tower getTowerOnPlatform(TowerPlatform towerPlatform) {
+    for (Tower candidate : world.getTowers()) {
+      if (!removedTowers.contains(candidate)
+          && Math.abs(candidate.getPosition().getX() - towerPlatform.getPosition().getX()) < DELTA
+          && Math.abs(candidate.getPosition().getY() - towerPlatform.getPosition().getY()) < DELTA) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  public void tuneTower(Tower tower, Tower.Mode towerMode) {
+    tower.setMode(towerMode);
+    tower.setTarget(null);
+    GameStateWriter.getInstance().switchMode(tower, towerMode);
+  }
+
+  /**
+   * Returns remaining ticks till the next wave (must be > 0).
+   *
+   * In case this info is not yet available - returns 0.
+   *
+   * @return remaining ticks till the next wave.
+   */
+  public long getTicksTillNextWave() { // todo
+    if (world.getCurrentWave().getCurrentEnemyNumber() == 0) {
+      return world.getCountdown();
+    } else {
+      return 0;
+    }
+  }
+
   public World getWorld() {
     return world;
   }
@@ -285,7 +283,6 @@ public class WorldControl {
     return world.getCurrentWaveNumber();
   }
 
-  private long tick;
   public long getTick() {
     return tick;
   }
@@ -326,7 +323,6 @@ public class WorldControl {
   private double distance(Vector2<Double> a, Vector2<Double> b) {
     return Math.sqrt(Math.pow(a.getX() - b.getX(), 2) + Math.pow(a.getY() - b.getY() , 2));
   }
-
 
   private void projectileSequence() {
     List<Projectile> removedProjectiles = new ArrayList<>();
@@ -438,7 +434,6 @@ public class WorldControl {
       world.getProjectiles().remove(projectile);
     }
   }
-
 
   private void enemySequence() {
     List<Enemy> removedEnemies = new ArrayList<>();
