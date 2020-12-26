@@ -176,8 +176,6 @@ public class WorldRenderer {
         gameObjectSelectionRectangle.layoutYProperty().bind(selectedGameNode.layoutYProperty()
             .subtract(gameObjectSelectionRectangle.getStrokeWidth() / 2));
 
-        gameObjectSelectionRectangle.setViewOrder(-renderable.getZIndex() - Double.MIN_VALUE);
-
         gameObjectSelectionRectangle.setVisible(true);
     }
 
