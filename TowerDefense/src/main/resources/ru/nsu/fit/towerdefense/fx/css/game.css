@@ -1,9 +1,3 @@
-Label, Text {
-    -fx-text-fill: white;
-    -fx-fill: white;
-    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 3);
-}
-
 .improvement-text {
     -fx-text-fill: LAWNGREEN;
 }
@@ -154,61 +148,6 @@ Label, Text {
     -fx-background-color: -slider-track-color;
 }
 
-.close-icon {
-    -fx-image: url('../icons/close.png');
-}
-
-.research-progress-icon {
-    -fx-image: url('../icons/star.png');
-}
-
-.money-progress-icon {
-    -fx-image: url('../icons/money.png');
-}
-
-.health-progress-icon {
-    -fx-image: url('../icons/heart.png');
-}
-
-.enemy-progress-icon {
-    -fx-image: url('../icons/skull.png');
-}
-
-.wave-progress-icon {
-    -fx-image: url('../icons/wave.png');
-    -fx-cursor: hand;
-}
-
-.speed-1x {
-    -fx-image: url('../icons/speed-1x.png');
-    -fx-cursor: hand;
-}
-
-.speed-2x {
-    -fx-image: url('../icons/speed-2x.png');
-    -fx-cursor: hand;
-}
-
-.speed-3x {
-    -fx-image: url('../icons/speed-3x.png');
-    -fx-cursor: hand;
-}
-
-.pause-icon, .speed-0x {
-    -fx-image: url('../icons/pause.png');
-    -fx-cursor: hand;
-}
-
-.skip-left {
-    -fx-image: url('../icons/skip-left.png');
-    -fx-cursor: hand;
-}
-
-.skip-right {
-    -fx-image: url('../icons/skip-right.png');
-    -fx-cursor: hand;
-}
-
 /* Popups */
 
 .popup-grid-pane {
@@ -282,28 +221,4 @@ Label, Text {
 
 .results-buttons-grid-pane > HBox:hover {
     -fx-opacity: 1;
-}
-
-.resume-icon {
-    -fx-image: url('../icons/play.png');
-}
-
-.restart-icon {
-    -fx-image: url('../icons/replay.png');
-}
-
-.idle-icon {
-    -fx-image: url('../icons/time.png');
-}
-
-.finish-icon {
-    -fx-image: url('../icons/cross.png');
-}
-
-.menu-icon {
-    -fx-image: url('../icons/home.png');
-}
-
-.save-icon {
-    -fx-image: url('../icons/save.png');
 }

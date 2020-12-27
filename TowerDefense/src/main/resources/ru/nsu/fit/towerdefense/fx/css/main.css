@@ -1,21 +1,12 @@
+Label, Text {
+    -fx-text-fill: white;
+    -fx-fill: white;
+    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 3);
+}
+
 .root {
     -fx-pref-width: 1080px;
     -fx-pref-height: 720px;
     -fx-min-width: 720px;
     -fx-font-size: 20px;
-}
-
-.content {
-    -fx-alignment: top-center;
-    -fx-padding: 20px;
-    -fx-spacing: 20px;
-}
-
-.header {
-    -fx-font-size: 30px;
-    -fx-font-weight: bold;
-}
-
-.tower-icon {
-    -fx-image: url('../../config/images/tower.png');
 }

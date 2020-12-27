@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
-<BorderPane xmlns="http://javafx.com/javafx/100.2-internal"
-            xmlns:fx="http://javafx.com/fxml/1"
-            styleClass="root">
+<StackPane styleClass="root" xmlns="http://javafx.com/javafx/100.2-internal" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/main.css"/>
+        <URL value="@../css/icons.css" />
         <URL value="@../css/menu.css"/>
     </stylesheets>
-    <center>
-        <VBox styleClass="content">
-            <Label fx:id="levelsLabel" styleClass="header">Levels</Label>
-            <ScrollPane fx:id="buttonsScrollPane" styleClass="buttons-scroll-pane">
-                <content>
-                    <VBox fx:id="buttonsVBox" styleClass="content, buttons-box"/>
-                </content>
-            </ScrollPane>
-        </VBox>
-    </center>
-</BorderPane>
+    <VBox styleClass="content">
+        <Label styleClass="header">Levels</Label>
+        <FlowPane fx:id="levelsFlowPane" styleClass="levels-flow-pane" />
+    </VBox>
+</StackPane>

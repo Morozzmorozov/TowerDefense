@@ -1,3 +1,59 @@
+.root {
+    -fx-background-color: rgba(0, 0, 0, 0.95);
+    -fx-background-image: url('../icons/root-background.png');
+}
+
+.content {
+    -fx-alignment: top-center;
+    -fx-padding: 50 20 0 20;
+    -fx-spacing: 20;
+}
+
+.header {
+    -fx-font-size: 30;
+    -fx-font-weight: bold;
+}
+
+.levels-flow-pane {
+    -fx-hgap: 20;
+    -fx-vgap: 20;
+    -fx-alignment: center;
+}
+
+.level-grid-pane {
+    -fx-padding: 10;
+    -fx-hgap: 5;
+    -fx-vgap: 5;
+    -fx-background-color: #2e302f;
+    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 5);
+}
+
+.level-header {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.level-button {
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-min-width: 150;
+    -fx-max-width: 150;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+}
+
+.level-button:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.level-button > Label {
+    -fx-font-size: 16px;
+}
+
+.replay-selection-combo-box {
+    -fx-padding: 10 20;
+}
+
 .buttons-scroll-pane {
     -fx-fit-to-width: true;
     -fx-fit-to-height: true;

@@ -1,21 +1,27 @@
 package ru.nsu.fit.towerdefense.fx.controllers.menu;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
-import javafx.scene.control.Button;
+import javafx.geometry.HPos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.replay.GameStateReader;
 import ru.nsu.fit.towerdefense.replay.Replay;
+
+import java.io.File;
 
 /**
  * MenuController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a menu scene.
@@ -27,10 +33,11 @@ public class MenuController implements Controller {
     private static final String FXML_FILE_NAME = "menu.fxml";
 
     @FXML private Label levelsLabel;
-    @FXML private ScrollPane buttonsScrollPane;
-    @FXML private VBox buttonsVBox;
+    @FXML private FlowPane levelsFlowPane;
 
     private final SceneManager sceneManager;
+
+    private final ComboBox<String> comboBox;
 
     /**
      * Creates new MenuController with specified SceneManager.
@@ -39,42 +46,104 @@ public class MenuController implements Controller {
      */
     public MenuController(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
+
+        comboBox = new ComboBox<>();
     }
 
     @FXML
     private void initialize() {
         if (GameMetaData.getInstance().getGameMapNames().isEmpty()) {
             levelsLabel.setText("No levels");
-            ((VBox) buttonsScrollPane.getParent()).getChildren().remove(buttonsScrollPane);
         }
 
         for (String gameMapName : GameMetaData.getInstance().getGameMapNames()) {
-            Button gameButton = new Button(gameMapName);
-            gameButton.setOnAction(actionEvent -> sceneManager.switchToGame(gameMapName));
+            GridPane gridPane = new GridPane();
+            gridPane.getStyleClass().add("level-grid-pane");
+            gridPane.getColumnConstraints().addAll(createColumn(), createColumn());
 
-            ComboBox<String> comboBox = new ComboBox<>(FXCollections.observableArrayList(
-                GameStateReader.getInstance().getReplays(gameMapName)));
-            comboBox.getSelectionModel().selectFirst();
+            Label label = new Label(gameMapName);
+            label.getStyleClass().add("level-header");
+            GridPane.setColumnSpan(label, 2);
+            gridPane.add(label, 0, 0);
 
-            Button replayButton = new Button("Replay");
-            replayButton.setOnAction(actionEvent -> {
-                Replay replay = GameStateReader.getInstance().readReplay(gameMapName, comboBox.getValue());
-                if (replay != null) {
-                    sceneManager.switchToGame(gameMapName, replay);
-                } else {
-                    new AlertBuilder()
-                        .setHeaderText("Replay is null!")
+            ImageView imageView;
+            File snapshotFile = new File(".\\levelsnapshots\\" + gameMapName + ".png");
+            if (snapshotFile.exists()) {
+                imageView = new ImageView(new Image(snapshotFile.toURI().toString()));
+            } else {
+                imageView = new ImageView();
+                imageView.getStyleClass().add("question-icon");
+            }
+            imageView.setFitHeight(192);
+            imageView.setPickOnBounds(true);
+            imageView.setPreserveRatio(true);
+            GridPane.setColumnSpan(imageView, 2);
+            gridPane.add(imageView, 0, 1);
+
+            gridPane.add(createLevelButton("resume-icon", "New game",
+                mouseEvent -> sceneManager.switchToGame(gameMapName)), 0, 2);
+            gridPane.add(createLevelButton("skip-right-icon", "Resume", null), 1, 2);
+            gridPane.add(createLevelButton("camera-icon", "View replay",
+                mouseEvent -> {
+                    comboBox.getItems().clear();
+                    comboBox.getItems().addAll(GameStateReader.getInstance().getReplays(gameMapName));
+                    comboBox.getSelectionModel().selectFirst();
+
+                    Alert alert = new AlertBuilder()
+                        .setAlertType(Alert.AlertType.CONFIRMATION)
+                        .setButtons(ButtonType.OK, ButtonType.CANCEL)
+                        .setHeaderText("Select a replay:")
+                        .setContent(new HBox() {{
+                            setStyle("-fx-alignment: center;");
+                            getChildren().add(comboBox);
+                        }})
                         .setOwner(sceneManager.getWindowOwner())
-                        .build().showAndWait();
-                }
-            });
+                        .build();
 
-            buttonsVBox.getChildren().add(new Group() {{
-                getChildren().add(new HBox() {{
-                    getChildren().addAll(gameButton, replayButton, comboBox);
-                }});
-            }});
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.OK) {
+                        Replay replay = GameStateReader.getInstance().readReplay(gameMapName, comboBox.getValue());
+                        if (replay != null) {
+                            sceneManager.switchToGame(gameMapName, replay);
+                        } else {
+                            new AlertBuilder()
+                                .setHeaderText("Replay is null!")
+                                .setOwner(sceneManager.getWindowOwner())
+                                .build().showAndWait();
+                        }
+                    }
+                }), 0, 3);
+            gridPane.add(createLevelButton("idle-icon", "Idle game", null), 1, 3);
+
+            levelsFlowPane.getChildren().add(gridPane);
         }
+    }
+
+    private ColumnConstraints createColumn() {
+        return new ColumnConstraints() {{
+            setHalignment(HPos.CENTER);
+            setPercentWidth(50);
+        }};
+    }
+
+    private HBox createLevelButton(String imageStyleClass, String labelText,
+                                   EventHandler<? super MouseEvent> mouseEvent)
+    {
+        HBox hBox = new HBox();
+        hBox.getStyleClass().add("level-button");
+        hBox.setOnMouseClicked(mouseEvent);
+
+        ImageView imageView = new ImageView();
+        imageView.getStyleClass().add(imageStyleClass);
+        imageView.setFitHeight(32);
+        imageView.setPickOnBounds(true);
+        imageView.setPreserveRatio(true);
+
+        Label label = new Label(labelText);
+
+        hBox.getChildren().addAll(imageView, label);
+
+        return hBox;
     }
 
     /**
