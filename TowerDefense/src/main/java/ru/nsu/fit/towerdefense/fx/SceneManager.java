@@ -13,6 +13,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.game.GameController;
 import ru.nsu.fit.towerdefense.fx.controllers.menu.MenuController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 import java.io.IOException;
@@ -114,6 +115,23 @@ public class SceneManager {
         try {
             switchScene(new GameController(this,
                 GameMetaData.getInstance().getMapDescription(gameMapName)));
+        } catch (NoSuchElementException e) {
+            new AlertBuilder()
+                .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
+                .build().showAndWait();
+        }
+    }
+
+    /**
+     * Creates new GameController with replay and game map gotten by specified game map name and
+     * switches the scene to a game.
+     *
+     * @param gameMapName game map name.
+     */
+    public void switchToGame(String gameMapName, Replay replay) {
+        try {
+            switchScene(new GameController(this,
+                GameMetaData.getInstance().getMapDescription(gameMapName), replay));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
