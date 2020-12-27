@@ -1,0 +1,6 @@
+{
+  "Speed" : 0.5,
+  "DamagePerTick" : 1,
+  "Duration" : 200,
+  "Image" : "poison.png"
+}

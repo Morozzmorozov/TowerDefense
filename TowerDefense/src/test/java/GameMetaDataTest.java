@@ -1,6 +1,7 @@
 import org.junit.Assert;
 import org.junit.Test;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EffectType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EnemyType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
@@ -91,6 +92,15 @@ public class GameMetaDataTest {
         tree.unlock(researchArrayList.get(0).getName());
 
         Assert.assertEquals(2, tree.getAvailableResearches().size());
+    }
+
+    @Test
+    public void testEffect()
+    {
+        GameMetaData data = GameMetaData.getInstance();
+        EffectType poison = data.getEffectType("Poison");
+
+        System.out.println(poison.getDamagePerTick());
     }
 
     /*
