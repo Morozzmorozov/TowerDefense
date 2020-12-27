@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "Thunderbolt",
-    "Speed" : 0.5,
+    "Speed" : 0.03125,
     "SelfGuided" : false,
     "BasicDamage" : 14,
     "EnemyTypeDamage" : [

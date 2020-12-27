@@ -1,10 +1,10 @@
 {
 	"DisplayInfo" : "Arrow",
-    "Speed" : 0.2,
+    "Speed" : 0.0125,
     "SelfGuided" : false,
     "BasicDamage" : 9,
     "EnemyTypeDamage" : [
-        ["Goblin", 8], ["Orc", 6], ["Cyclops", 10]
+        ["Goblin", 80000], ["Orc", 6], ["Cyclops", 10]
     ],
     "HitBox" : 2,
     "SizeX" : 1.0,

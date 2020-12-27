@@ -4,7 +4,7 @@
 	"Upgrades": [
 	],
 	"Range" : 7,
-	"FireRate" : 417,
+	"FireRate" : 1000,
 	"FireType" : "Unidirectional",
 	"ProjectileType" : "Rocket",
 	"Image" : "rocket_launcher.png",
