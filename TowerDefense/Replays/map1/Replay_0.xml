@@ -2,7 +2,13 @@
 <Replay tickRate="360">
 	<Frame frameId="0" isFullCopy="true">
 		<Base Health="100"></Base>
-		<Tower TowerId="acea0b2e-31d1-4a12-9b9c-46a58ecf086b" Type="Archer" PosX="3.0" PosY="3.0" Mode="First" Rotation="0.0" Cooldown="20" SellPrice="0" TargetId="None"></Tower>
+		<Enemy EnemyId="caed5afc-4189-4797-b35d-bee25ea65bb6" Health="20" PosX="10.0" PosY="10.0" Type="Goblin" Wave="0">
+			<Trajectory>
+			</Trajectory>
+			<Effects>
+			</Effects>
+		</Enemy>
+		<Tower TowerId="c5d9bb86-d0f2-48d7-b989-7c22dda4759f" Type="Archer" PosX="3.0" PosY="3.0" Mode="First" Rotation="0.0" Cooldown="20" SellPrice="0" TargetId="None"></Tower>
 		<Money amount="100"></Money>
 	</Frame>
 	<Frame frameId="1" isFullCopy="false">

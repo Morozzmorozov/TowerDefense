@@ -19,11 +19,17 @@ public class EventRecord {
 	private List<Integer> damageToBase;
 	private List<Pair<String, Tower.Mode>> tuneTower;
 	private List<Integer> sellTower;
+
+	/**
+	 * Enemy id, effect name
+	 */
+	private List<Pair<String, String>> applyEffect;
 	private int id;
 
 	public EventRecord(int id, List<Pair<Integer, Pair<String, String>>> buildTower, List<Pair<Integer, String>> upgradeTower,
 	                   boolean callWave, List<String> removeEnemy, List<String> removeProjectile, List<Pair<Integer, String>> enemyDamage,
-	                   List<Integer> damageToBase, List<Pair<String, Tower.Mode>> tuneTower, List<Integer> sellTower)
+	                   List<Integer> damageToBase, List<Pair<String, Tower.Mode>> tuneTower, List<Integer> sellTower,
+	                   List<Pair<String, String>> applyEffect)
 	{
 		this.id = id;
 		this.buildTower = buildTower;
@@ -35,6 +41,7 @@ public class EventRecord {
 		this.damageToBase = damageToBase;
 		this.tuneTower = tuneTower;
 		this.sellTower = sellTower;
+		this.applyEffect = applyEffect;
 	}
 
 	public int getId()
@@ -81,6 +88,16 @@ public class EventRecord {
 	public boolean isCallWave()
 	{
 		return callWave;
+	}
+
+	public List<Integer> getSellTower()
+	{
+		return sellTower;
+	}
+
+	public List<Pair<String, String>> getApplyEffect()
+	{
+		return applyEffect;
 	}
 
 }
