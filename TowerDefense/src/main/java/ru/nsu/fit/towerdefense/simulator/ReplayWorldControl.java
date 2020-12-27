@@ -119,11 +119,11 @@ public class ReplayWorldControl extends WorldControl {
     }
     for (var buildTower : event.getBuildTower()) {
       Tower tower = new Tower();
-      tower.setType(GameMetaData.getInstance().getTowerType(buildTower.getValue()));
+      tower.setType(GameMetaData.getInstance().getTowerType(buildTower.getValue().getKey()));
       tower.setPosition(new Vector2<>(
           (int)Math.round(world.getTowerPlatforms().get(buildTower.getKey()).getPosition().getX()),
           (int)Math.round(world.getTowerPlatforms().get(buildTower.getKey()).getPosition().getY())));
-      // todo id
+      tower.setId(UUID.fromString(buildTower.getValue().getValue()));
       world.getTowers().add(tower);
       world.setMoney(world.getMoney() - tower.getType().getPrice());
     }

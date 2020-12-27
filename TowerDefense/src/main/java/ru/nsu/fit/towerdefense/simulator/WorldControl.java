@@ -157,7 +157,7 @@ public class WorldControl {
     tower.setCooldown(towerType.getFireRate());
     tower.setSellPrice(Math.round(towerType.getPrice() * SELL_MULTIPLIER));
     newTowers.add(tower);
-    GameStateWriter.getInstance().buildTower(world.getTowerPlatforms().indexOf(towerPlatform), towerType.getTypeName());
+    GameStateWriter.getInstance().buildTower(world.getTowerPlatforms().indexOf(towerPlatform), towerType.getTypeName(), tower.getId().toString());
     return tower;
   }
 
