@@ -14,6 +14,8 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.Group?>
 <StackPane fx:id="rootStackPane" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/main.css" />
@@ -304,20 +306,26 @@
                     <ColumnConstraints halignment="CENTER" />
                     <ColumnConstraints halignment="CENTER" />
                     <ColumnConstraints halignment="CENTER" />
+                    <ColumnConstraints halignment="CENTER" />
                 </columnConstraints>
                 <rowConstraints>
                     <RowConstraints valignment="CENTER" />
                     <RowConstraints valignment="CENTER" />
                 </rowConstraints>
-                <Label fx:id="nextWaveTimeLabel" styleClass="next-wave-time-label">0:03</Label>
+                <Label fx:id="nextWaveTimeLabel" styleClass="next-wave-time-label" />
                 <ImageView fx:id="waveImageView" GridPane.rowIndex="1" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="wave-progress-icon" />
-                <Label fx:id="waveLabel" GridPane.rowIndex="1" GridPane.columnIndex="1">0</Label>
+                <Label fx:id="waveLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" minWidth="-Infinity">0</Label>
                 <HBox GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="speed-box">
-                    <Label fx:id="speedLabel">1x</Label>
+                    <Label fx:id="speedLabel" minWidth="-Infinity">1x</Label>
                     <ImageView fx:id="speed0xImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="speed-0x" />
                     <ImageView fx:id="speed1xImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="speed-1x" />
                     <ImageView fx:id="speed2xImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="speed-2x" />
                     <ImageView fx:id="speed3xImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="speed-3x" />
+                </HBox>
+                <HBox fx:id="replayHBox" GridPane.rowIndex="1" GridPane.columnIndex="3" visible="false" managed="false" styleClass="replay-box">
+                    <ImageView fx:id="skipLeftImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="skip-left" />
+                    <ImageView fx:id="skipRightImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="skip-right" />
+                    <Slider fx:id="replaySlider" focusTraversable="false" />
                 </HBox>
             </GridPane>
         </HBox>

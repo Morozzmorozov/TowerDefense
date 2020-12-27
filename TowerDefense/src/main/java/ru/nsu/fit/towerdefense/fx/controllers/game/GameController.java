@@ -1,9 +1,11 @@
 package ru.nsu.fit.towerdefense.fx.controllers.game;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
@@ -22,6 +24,9 @@ import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
+import ru.nsu.fit.towerdefense.replay.GameStateReader;
+import ru.nsu.fit.towerdefense.replay.Replay;
+import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
@@ -45,6 +50,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -68,6 +74,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private static final int DELTA_TIME = 1000 / FRAMES_PER_SECOND;
     private static final DecimalFormat DECIMAL_FORMAT =
         new DecimalFormat("#.##", new DecimalFormatSymbols() {{setDecimalSeparator('.');}});
+
+    private static final String SLIDER_STYLE_FORMAT =
+        "-slider-track-color: linear-gradient(to right, -slider-filled-track-color 0%%, "
+            + "-slider-filled-track-color %1$f%%, -fx-base %1$f%%, -fx-base 100%%);";
 
     private enum State { PLAYING, PAUSED, FINISHED }
 
@@ -143,6 +153,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private ImageView speed2xImageView;
     @FXML private ImageView speed3xImageView;
 
+    @FXML private HBox replayHBox;
+    @FXML private ImageView skipLeftImageView;
+    @FXML private ImageView skipRightImageView;
+    @FXML private Slider replaySlider;
+
     @FXML private ImageView pauseImageView;
 
     @FXML private GridPane pausePopupGridPane;
@@ -172,11 +187,37 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private WorldCamera worldCamera;
     private WorldRenderer worldRenderer;
 
+    private Replay replay;
+
     private Map<Tower.Mode, Node> towerModeToUiNodeMap;
 
     private State state;
     private int speed;
     private VBox currentSideVBox;
+
+    /**
+     * Creates new GameController with specified SceneManager, GameMap and Replay.
+     *
+     * @param sceneManager scene manager.
+     * @param gameMap      game map.
+     * @param replay       replay.
+     */
+    public GameController(SceneManager sceneManager, GameMap gameMap, Replay replay) {
+        this.sceneManager = sceneManager;
+
+        worldSize = gameMap.getSize();
+        baseInitialHealth = gameMap.getBaseDescription().getHealth();
+
+        state = State.PLAYING;
+        speed = 1;
+
+        if (replay == null) {
+            worldControl = new WorldControl(gameMap, DELTA_TIME, this);
+        } else {
+            this.replay = replay;
+            worldControl = new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
+        }
+    }
 
     /**
      * Creates new GameController with specified SceneManager and GameMap.
@@ -185,15 +226,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      * @param gameMap      game map.
      */
     public GameController(SceneManager sceneManager, GameMap gameMap) {
-        this.sceneManager = sceneManager;
-
-        worldControl = new WorldControl(gameMap, DELTA_TIME, GameController.this);
-
-        worldSize = gameMap.getSize();
-        baseInitialHealth = gameMap.getBaseDescription().getHealth();
-
-        state = State.PLAYING;
-        speed = 1;
+        this(sceneManager, gameMap, null);
     }
 
     @FXML
@@ -226,6 +259,22 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
         speed2xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(2));
         speed3xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(3));
+
+        if (isReplaying()) {
+            replayHBox.setVisible(true);
+            replayHBox.setManaged(true);
+
+            replaySlider.setMax(replay.getReplayLength());
+
+            replaySlider.setOnMousePressed(mouseEvent -> onSliderPressedOrDragged());
+            replaySlider.setOnMouseDragged(mouseEvent -> onSliderPressedOrDragged());
+            replaySlider.setOnMouseReleased(mouseEvent -> onSliderReleased());
+            replaySlider.styleProperty().bind(Bindings.createStringBinding(() -> {
+                double percentage =
+                    (replaySlider.getValue() - replaySlider.getMin()) / (replaySlider.getMax() - replaySlider.getMin()) * 100.0;
+                return String.format(Locale.US, SLIDER_STYLE_FORMAT, percentage);
+            }, replaySlider.valueProperty(), replaySlider.minProperty(), replaySlider.maxProperty()));
+        }
 
         pauseImageView.setOnMouseClicked(mouseEvent -> pauseGame());
         resumeHBox.setOnMouseClicked(mouseEvent -> resumeGame());
@@ -262,37 +311,43 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
                 }
 
-                Platform.runLater(() -> {
-                    try {
-                        worldRenderer.render();
-
-                        researchLabel.setText(worldControl.getResearchPoints() + "");
-                        moneyLabel.setText(worldControl.getMoney() + "");
-                        healthLabel.setText(worldControl.getBaseHealth() + "");
-                        enemyLabel.setText(worldControl.getEnemiesKilled() + "");
-                        long ticksTillNextWave = worldControl.getTicksTillNextWave();
-                        if (ticksTillNextWave > 0) {
-                            nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
-                            nextWaveTimeLabel.setManaged(true);
-                            nextWaveTimeLabel.setVisible(true);
-                        } else {
-                            nextWaveTimeLabel.setVisible(false);
-                            nextWaveTimeLabel.setManaged(false);
-                        }
-                        waveLabel.setText(worldControl.getWaveNumber() + "");
-                        playingTimeLabel.setText(formatPlayingTime(worldControl.getTick() * DELTA_TIME));
-                    } catch (RenderException e) {
-                        handleRenderException(e);
-                    } catch (Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
-                });
+                Platform.runLater(this::renderAll);
             } catch (RenderException e) {
                 handleRenderException(e);
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
         }, 0, DELTA_TIME, TimeUnit.MILLISECONDS);
+    }
+
+    private void renderAll() {
+        try {
+            worldRenderer.render();
+
+            researchLabel.setText(worldControl.getResearchPoints() + "");
+            moneyLabel.setText(worldControl.getMoney() + "");
+            healthLabel.setText(worldControl.getBaseHealth() + "");
+            enemyLabel.setText(worldControl.getEnemiesKilled() + "");
+            long ticksTillNextWave = worldControl.getTicksTillNextWave();
+            if (ticksTillNextWave > 0) {
+                nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
+                nextWaveTimeLabel.setManaged(true);
+                nextWaveTimeLabel.setVisible(true);
+            } else {
+                nextWaveTimeLabel.setVisible(false);
+                nextWaveTimeLabel.setManaged(false);
+            }
+            waveLabel.setText(worldControl.getWaveNumber() + "");
+            playingTimeLabel.setText(formatPlayingTime(worldControl.getTick() * DELTA_TIME));
+
+            if (isReplaying()) {
+                replaySlider.setValue(worldControl.getTick());
+            }
+        } catch (RenderException e) {
+            handleRenderException(e);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     private void handleRenderException(RenderException e) {
@@ -317,6 +372,24 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private void updateSpeed(int speed) {
         this.speed = speed;
         speedLabel.setText(speed + "x");
+    }
+
+    private void onSliderPressedOrDragged() {
+        worldSimulationExecutor.shutdown();
+
+        try {
+            ((ReplayWorldControl) worldControl).skipToTick((int) replaySlider.getValue());
+            worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
+            renderAll();
+        } catch (RenderException e) {
+            handleRenderException(e);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+    }
+
+    private void onSliderReleased() {
+        activateGame();
     }
 
     /**
@@ -344,8 +417,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             worldCamera.scale(scrollEvent.getDeltaY() > 0,
                 scrollEvent.getSceneX(), scrollEvent.getSceneY());
         });
-
-
 
         sceneManager.getScene().setOnMousePressed(mouseEvent -> {
             if (state != State.PLAYING) {
@@ -488,9 +559,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             updatePlatformSideBar(towerPlatform);
             showSideBar(platformSideVBox);
         } else {
-            worldRenderer.showTowerRange(towerOnPlatform, towerOnPlatform.getType().getRange());
-            updateTowerSideBar(towerOnPlatform);
-            showSideBar(towerSideVBox);
+            onTowerClicked(towerOnPlatform);
         }
     }
 
@@ -539,6 +608,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 towerTypeVBox.getStyleClass().add("tower-upgrade-box");
                 towerTypeVBox.getChildren().addAll(imageView, label);
                 towerTypeVBox.setOnMouseClicked(mouseEvent -> {
+                    if (isReplaying()) {
+                        return;
+                    }
+
                     try {
                         worldControl.upgradeTower(tower, upgrade);
                         onTowerClicked(tower);
@@ -597,6 +670,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             Node node = entry.getValue();
 
             node.setOnMouseClicked(mouseEvent -> {
+                if (isReplaying()) {
+                    return;
+                }
+
                 worldControl.tuneTower(tower, mode);
                 for (Node _node : towerModeToUiNodeMap.values()) {
                     _node.getStyleClass().removeIf(className -> className.equals("target-box-selected"));
@@ -609,6 +686,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         sellLabel.setText("$" + tower.getSellPrice());
         sellLabel.setOnMouseClicked(mouseEvent -> {
+            if (isReplaying()) {
+                return;
+            }
+
             TowerPlatform towerPlatform = worldControl.sellTower(tower);
             worldRenderer.remove(tower);
 
@@ -681,6 +762,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 towerTypeVBox.getStyleClass().add("tower-upgrade-box");
                 towerTypeVBox.getChildren().addAll(imageView, label);
                 towerTypeVBox.setOnMouseClicked(mouseEvent -> {
+                    if (isReplaying()) {
+                        return;
+                    }
+
                     try {
                         Tower tower = worldControl.buildTower(towerPlatform, towerType);
                         worldRenderer.add(tower);
@@ -748,11 +833,15 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void finishGame(boolean win) {
-        state = State.FINISHED;
-
         if (worldSimulationExecutor != null) {
             worldSimulationExecutor.shutdown();
         }
+
+        if (isReplaying()) {
+            return;
+        }
+
+        state = State.FINISHED;
 
         Platform.runLater(() -> {
             if (win) {
@@ -765,6 +854,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
             resultsPopupGridPane.setVisible(true);
         });
+    }
+
+    private boolean isReplaying() {
+        return replay != null;
     }
 
     private void bindUppercase(Text text) {

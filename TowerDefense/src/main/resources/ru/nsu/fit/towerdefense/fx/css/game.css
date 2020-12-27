@@ -140,10 +140,22 @@ Label, Text {
     -fx-font-size: 14;
 }
 
-.speed-box {
+.speed-box, .replay-box {
     -fx-padding: 0 0 0 30;
     -fx-alignment: center;
     -fx-spacing: 5;
+}
+
+.slider {
+    -fx-pref-width: 9999;
+    -fx-padding: 0 8;
+    -slider-filled-track-color: #febf10;
+    -slider-track-color: -slider-filled-track-color;
+    -fx-cursor: hand;
+}
+
+.slider .track {
+    -fx-background-color: -slider-track-color;
 }
 
 .close-icon {
@@ -188,6 +200,16 @@ Label, Text {
 
 .pause-icon, .speed-0x {
     -fx-image: url('../icons/pause.png');
+    -fx-cursor: hand;
+}
+
+.skip-left {
+    -fx-image: url('../icons/skip-left.png');
+    -fx-cursor: hand;
+}
+
+.skip-right {
+    -fx-image: url('../icons/skip-right.png');
     -fx-cursor: hand;
 }
 
