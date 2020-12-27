@@ -39,20 +39,20 @@ import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.Upgrade;
 
 public class WorldControl {
 
-  private final int DEBUG_MONEY = 600;
-  private final float SELL_MULTIPLIER = 0.4f;
-  private static final double DELTA = 1e-12;
+  protected final int DEBUG_MONEY = 600;
+  protected final float SELL_MULTIPLIER = 0.4f;
+  protected static final double DELTA = 1e-12;
 
-  private long tick;
-  private final GameMap gameMap;
-  private final int deltaTime;
-  private final WorldObserver worldObserver; // todo use it
-  private World world;
-  private int enemiesKilled = 0;
-  private int wavesDefeated = 0;
+  protected long tick;
+  protected final GameMap gameMap;
+  protected final int deltaTime;
+  protected final WorldObserver worldObserver; // todo use it
+  protected World world;
+  protected int enemiesKilled = 0;
+  protected int wavesDefeated = 0;
 
-  List<Tower> newTowers = new ArrayList<>();
-  List<Tower> removedTowers = new ArrayList<>();
+  private List<Tower> newTowers = new ArrayList<>();
+  private List<Tower> removedTowers = new ArrayList<>();
 
   public WorldControl(GameMap gameMap, WorldState worldState, int deltaTime, WorldObserver worldObserver) {
     // todo init worldState
