@@ -42,7 +42,7 @@ public class WorldControl {
   protected static final int DEBUG_MONEY = 600;
   protected static final float SELL_MULTIPLIER = 0.4f;
   protected static final double DELTA = 1e-12;
-  protected static final int DEBUG_TICK_RATE = 5000;
+  protected static final int DEBUG_TICK_RATE = 360;
 
   protected long tick; // Beware: this field shows the index of the FOLLOWING frame
   protected final GameMap gameMap;
@@ -56,6 +56,7 @@ public class WorldControl {
   private List<Tower> removedTowers = new ArrayList<>();
 
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
+    System.out.println();
     this.gameMap = gameMap;
     this.deltaTime = deltaTime;
     this.worldObserver = worldObserver;
@@ -129,6 +130,8 @@ public class WorldControl {
         .dropWhile(name -> GameMetaData.getInstance().getMapDescription(name) != gameMap)
         .findFirst()
         .ifPresent(name -> GameStateWriter.getInstance().startNewReplay(DEBUG_TICK_RATE, name));
+
+    GameStateWriter.getInstance().newFrame();
   }
 
   public TowerPlatform sellTower(Tower tower) {
@@ -242,7 +245,7 @@ public class WorldControl {
   }
 
   public void simulateTick() {
-    GameStateWriter.getInstance().newFrame();
+
 
     towerSequence();
     projectileSequence();
@@ -254,8 +257,11 @@ public class WorldControl {
     newTowers.clear();
     removedTowers.clear();
 
+
+    GameStateWriter.getInstance().fullCopy(world.getEnemies(), world.getTowers(), world.getProjectiles(), world.getBase(), world.getMoney());
     GameStateWriter.getInstance().endFrame();
 
+    GameStateWriter.getInstance().newFrame();
     ++tick;
   }
 
@@ -376,7 +382,7 @@ public class WorldControl {
             .get(enemy.getType().getTypeName());
 
         List<EffectType> effectsDebug = new ArrayList<>(); // DEBUG! TODO remove
-        effectsDebug.add(EffectType.POISON);
+        //effectsDebug.add(EffectType.POISON);
 
         for (EffectType effectType : effectsDebug) {
           Optional<Effect> existingEffect = enemy.getEffects().stream().filter(effect -> effect.getType() == effectType).findFirst();

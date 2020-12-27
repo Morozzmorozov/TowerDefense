@@ -31,6 +31,15 @@ public class ReplayWorldControl extends WorldControl {
     }
   }
 
+  @Override
+  public void simulateTick() {
+    skipToTick((int)tick);
+  }
+
+  private void simulateTick2() {
+    super.simulateTick();
+  }
+
   /**
    * Skips to the state after <code>tickIndex</code> tick
    *
@@ -41,17 +50,18 @@ public class ReplayWorldControl extends WorldControl {
     int worldStateIndex = tickIndex / replay.getTickRate();
     if (!(worldStateIndex == currentWorldStateIndex && tickIndex >= tick)) {
       setWorldState(replay.getWorldStates().get(worldStateIndex)); // move to state after tick No. tickIndex
+      currentWorldStateIndex = worldStateIndex;
     }
 
     while (tick != tickIndex + 1) {
-      simulateTick();
-
+      simulateTick2();
       fireEvents(tick - 1); // we want to access events that happened at the tick we have now simulated
     }
   }
 
   private void setWorldState(WorldState state) {
     world.setMoney(state.getMoney());
+    System.out.println("==================");
 
 
 
@@ -62,6 +72,10 @@ public class ReplayWorldControl extends WorldControl {
 
 
     for (var enemyInfo : state.getEnemies()) {
+      for (var heh : enemyInfo.getTrajectory()) {
+        System.out.println(heh.getX() + " " + heh.getY());
+      }
+      System.out.println(" --- ");
       var savedEnemy = world.getEnemies().stream()
           .dropWhile(enemy -> !enemy.getId().toString().equals(enemyInfo.getId()))
           .findFirst();
@@ -80,7 +94,7 @@ public class ReplayWorldControl extends WorldControl {
             enemyInfo.getPosition(),
             100 // todo something with it
             );
-
+        enemy.getTrajectory().addAll(enemyInfo.getTrajectory());
         world.getEnemies().add(enemy);
       }
     }
@@ -108,12 +122,69 @@ public class ReplayWorldControl extends WorldControl {
                 .dropWhile(enemy -> enemy.getId().toString().equals(projectileInfo.getTarget()))
                 .findFirst()
                 .orElse(null));
+      } else {
+        Projectile projectile = new Projectile(
+            world.getEnemies().stream()
+              .dropWhile(enemy -> enemy.getId().toString().equals(projectileInfo.getTarget()))
+              .findFirst()
+              .orElse(null),
+            projectileInfo.getRange().floatValue(),
+            GameMetaData.getInstance().getProjectileType(projectileInfo.getType()),
+            new Vector2<>(projectileInfo.getPosition()),
+            new Vector2<>(projectileInfo.getVelocity()),
+            null);
+        projectile.setFireType(projectileInfo.getFireType());
+        projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
+
+      }
+    }
+
+
+    world.getTowers().removeAll(world.getTowers().stream()
+        .filter(tower -> state.getTowers().stream()
+            .noneMatch(candidate -> candidate.getId().equals(tower.getId().toString())))
+        .collect(Collectors.toList()));
+
+    for (var towerInfo : state.getTowers()) {
+      var savedTower = world.getTowers().stream()
+          .dropWhile(tower -> !tower.getId().toString().equals(towerInfo.getId()))
+          .findFirst();
+
+      if (savedTower.isPresent()) {
+        Tower tower = savedTower.get();
+        tower.setType(GameMetaData.getInstance().getTowerType(towerInfo.getType()));
+        tower.setMode(towerInfo.getMode());
+        tower.setSellPrice(towerInfo.getSellPrice());
+        tower.setRotation(towerInfo.getRotation());
+        tower.setCooldown(towerInfo.getCooldown());
+        tower.setTarget(world.getEnemies().stream()
+            .dropWhile(enemy -> enemy.getId().toString().equals(towerInfo.getTarget()))
+            .findFirst()
+            .orElse(null));
+      } else {
+        Tower tower = new Tower();
+        tower.setType(GameMetaData.getInstance().getTowerType(towerInfo.getType()));
+        tower.setMode(towerInfo.getMode());
+        tower.setSellPrice(towerInfo.getSellPrice());
+        tower.setRotation(towerInfo.getRotation());
+        tower.setCooldown(towerInfo.getCooldown());
+        tower.setTarget(world.getEnemies().stream()
+            .dropWhile(enemy -> enemy.getId().toString().equals(towerInfo.getTarget()))
+            .findFirst()
+            .orElse(null));
+        tower.setPosition(new Vector2<>(
+            Math.round(towerInfo.getPosition().getX().floatValue()),
+            Math.round(towerInfo.getPosition().getY().floatValue())
+            ));
       }
     }
   }
 
   private void fireEvents(long tickIndex) {
     var event = idEventMap.get((int)tickIndex);
+    if (tickIndex == 120) {
+      System.out.println(event.getBuildTower().size());
+    }
     if (event == null) {
       return;
     }

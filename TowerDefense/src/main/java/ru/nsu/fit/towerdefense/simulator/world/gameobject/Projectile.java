@@ -14,9 +14,15 @@ public class Projectile extends GameObject implements Renderable {
   private Tower parent;
   private double scale = 1.0;
   private double rotationSpeed = 3.0; // DEBUG
+  private FireType fireType = null; // todo change
 
   public FireType getFireType() {
+    if (fireType != null) return fireType;
     return parent.getType().getFireType();
+  }
+
+  public void setFireType(FireType fireType) {
+    this.fireType = fireType;
   }
 
   public double getRotationSpeed() {
