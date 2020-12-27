@@ -30,7 +30,7 @@ Label, Text {
     -fx-stroke-width: 5;
 }
 
-.root {
+.world-wrapper {
     -fx-background-color: rgba(0, 0, 0, 0.95);
     -fx-background-image: url('../icons/root-background.png');
 }

@@ -20,7 +20,7 @@
         <URL value="@../css/main.css" />
         <URL value="@../css/game.css" />
     </stylesheets>
-    <StackPane fx:id="worldWrapperStackPane">
+    <StackPane fx:id="worldWrapperStackPane" styleClass="world-wrapper">
         <AnchorPane fx:id="worldAnchorPane" />
     </StackPane>
     <GridPane pickOnBounds="false">

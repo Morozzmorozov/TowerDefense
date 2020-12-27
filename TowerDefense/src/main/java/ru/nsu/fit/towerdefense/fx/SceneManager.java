@@ -16,6 +16,7 @@ import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
@@ -114,6 +115,7 @@ public class SceneManager {
     public void switchToGame(String gameMapName) {
         try {
             switchScene(new GameController(this,
+                new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName)));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
@@ -131,6 +133,7 @@ public class SceneManager {
     public void switchToGame(String gameMapName, Replay replay) {
         try {
             switchScene(new GameController(this,
+                new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), replay));
         } catch (NoSuchElementException e) {
             new AlertBuilder()

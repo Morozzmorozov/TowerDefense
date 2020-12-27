@@ -2,11 +2,13 @@ package ru.nsu.fit.towerdefense.fx.controllers.game;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -41,6 +43,10 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -176,6 +182,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private HBox resultsMenuHBox;
 
     private final SceneManager sceneManager;
+    private final File snapshotFile;
 
     private ScheduledExecutorService worldSimulationExecutor;
 
@@ -201,8 +208,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      * @param gameMap      game map.
      * @param replay       replay.
      */
-    public GameController(SceneManager sceneManager, GameMap gameMap, Replay replay) {
+    public GameController(SceneManager sceneManager, File snapshotFile, GameMap gameMap, Replay replay) {
         this.sceneManager = sceneManager;
+        this.snapshotFile = snapshotFile;
 
         worldSize = gameMap.getSize();
         baseInitialHealth = gameMap.getBaseDescription().getHealth();
@@ -224,8 +232,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      * @param sceneManager scene manager.
      * @param gameMap      game map.
      */
-    public GameController(SceneManager sceneManager, GameMap gameMap) {
-        this(sceneManager, gameMap, null);
+    public GameController(SceneManager sceneManager, File snapshotFile, GameMap gameMap) {
+        this(sceneManager, snapshotFile, gameMap, null);
     }
 
     @FXML
@@ -468,6 +476,21 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 }
             }
         });
+
+        if (!snapshotFile.exists()) { // todo move somewhere?
+            try {
+                File parent = snapshotFile.getParentFile();
+                if (!parent.exists() && !parent.mkdirs()) {
+                    throw new IOException("Couldn't create dir: " + parent);
+                }
+
+                WritableImage snapshot = worldWrapperStackPane.snapshot(null, null);
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
+                ImageIO.write(bufferedImage, "png", snapshotFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
