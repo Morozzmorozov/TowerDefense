@@ -41,6 +41,7 @@ public class GameStateWriter {
 	{
 		try
 		{
+			fullCopy = tickRate;
 			String dir = replayDir + levelName + "/";
 			File parent = new File(dir);
 			if (!parent.exists() && !parent.mkdirs())
@@ -174,7 +175,7 @@ public class GameStateWriter {
 					target = "None";
 				writer.writeAttribute("TargetId", target);
 				writer.writeAttribute("PosX", Double.toString(x.getPosition().getX()));
-				writer.writeAttribute("PosX", Double.toString(x.getPosition().getY()));
+				writer.writeAttribute("PosY", Double.toString(x.getPosition().getY()));
 				writer.writeAttribute("Type", x.getType().getTypeName());
 				writer.writeAttribute("RemainingRange", Double.toString(x.getRemainingRange()));
 				writer.writeAttribute("VelX", Double.toString(x.getVelocity().getX()));
