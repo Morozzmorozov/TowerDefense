@@ -39,9 +39,10 @@ import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.Upgrade;
 
 public class WorldControl {
 
-  protected final int DEBUG_MONEY = 600;
-  protected final float SELL_MULTIPLIER = 0.4f;
+  protected static final int DEBUG_MONEY = 600;
+  protected static final float SELL_MULTIPLIER = 0.4f;
   protected static final double DELTA = 1e-12;
+  protected static final int DEBUG_TICK_RATE = 5000;
 
   protected long tick; // Beware: this field shows the index of the FOLLOWING frame
   protected final GameMap gameMap;
@@ -53,63 +54,6 @@ public class WorldControl {
 
   private List<Tower> newTowers = new ArrayList<>();
   private List<Tower> removedTowers = new ArrayList<>();
-
-  public WorldControl(GameMap gameMap, WorldState worldState, int deltaTime, WorldObserver worldObserver) {
-    // todo init worldState
-    world = new World();
-
-    Base base = new Base(worldState.getBaseHealth(), gameMap.getBaseDescription().getImage(),
-        new Vector2<>(gameMap.getBaseDescription().getPosition()));
-    world.setBase(base);
-    world.setMoney(worldState.getMoney());
-
-    Map<UUID, Enemy> uuidEnemyMap = new HashMap<>();
-
-
-
-
-    for (EnemyInfo enemyInfo : worldState.getEnemies()) {
-      Enemy enemy = new Enemy(GameMetaData.getInstance().getEnemyType(enemyInfo.getType()),
-          enemyInfo.getWave(), new Vector2<>(enemyInfo.getPosition()), 100); // todo
-      enemy.setHealth(enemyInfo.getHealth());
-      UUID uuid = UUID.fromString(enemyInfo.getId());
-      uuidEnemyMap.put(uuid, enemy);
-      world.getEnemies().add(enemy);
-    }
-
-    for (TowerInfo towerInfo : worldState.getTowers()) {
-      Tower tower = new Tower();
-      tower.setCooldown(towerInfo.getCooldown());
-      tower.setMode(towerInfo.getMode());
-      tower.setPosition(new Vector2<>(
-          (int)Math.round(towerInfo.getPosition().getX()),
-          (int)Math.round(towerInfo.getPosition().getY())));
-      tower.setRotation(towerInfo.getRotation());
-      tower.setSellPrice(0); // todo
-      tower.setTarget(uuidEnemyMap.get(UUID.fromString(towerInfo.getTarget())));
-      tower.setType(GameMetaData.getInstance().getTowerType(towerInfo.getType()));
-      world.getTowers().add(tower);
-    }
-
-    for (ProjectileInfo projectileInfo : worldState.getProjectiles()) {
-      Projectile projectile = new Projectile(
-          uuidEnemyMap.get(UUID.fromString(projectileInfo.getTarget())),
-          (float) projectileInfo.getRange().doubleValue(),
-          GameMetaData.getInstance().getProjectileType(projectileInfo.getType()),
-          new Vector2<>(projectileInfo.getPosition()),
-          new Vector2<>(1d,1d), // todo
-          null // todo
-      );
-
-      projectile.setId(UUID.fromString(projectileInfo.getId()));
-      world.getProjectiles().add(projectile);
-    }
-
-    this.gameMap = gameMap;
-    this.deltaTime = 1; // DEBUG! todo remove
-//    this.deltaTime = deltaTime; // DEBUG! todo uncomment
-    this.worldObserver = worldObserver;
-  }
 
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
     this.gameMap = gameMap;
@@ -180,6 +124,11 @@ public class WorldControl {
         }
       }
     }
+
+    GameMetaData.getInstance().getGameMapNames().stream()
+        .dropWhile(name -> GameMetaData.getInstance().getMapDescription(name) != gameMap)
+        .findFirst()
+        .ifPresent(name -> GameStateWriter.getInstance().startNewReplay(DEBUG_TICK_RATE, name));
   }
 
   public TowerPlatform sellTower(Tower tower) {
@@ -293,6 +242,8 @@ public class WorldControl {
   }
 
   public void simulateTick() {
+    GameStateWriter.getInstance().newFrame();
+
     towerSequence();
     projectileSequence();
     enemySequence();
@@ -302,6 +253,8 @@ public class WorldControl {
     world.getTowers().removeAll(removedTowers);
     newTowers.clear();
     removedTowers.clear();
+
+    GameStateWriter.getInstance().endFrame();
 
     ++tick;
   }
@@ -316,6 +269,8 @@ public class WorldControl {
       //world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward()); TODO fix me
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
+        GameStateWriter.getInstance().endFrame();
+        GameStateWriter.getInstance().close();
         worldObserver.onVictory();
       }
     }
@@ -481,6 +436,8 @@ public class WorldControl {
 
         if (world.getBase().getHealth() <= 0) {
           removedEnemies.add(enemy);
+          GameStateWriter.getInstance().endFrame();
+          GameStateWriter.getInstance().close();
           worldObserver.onDefeat();
         } else {
           removedEnemies.add(enemy); // not sure if I should leave this
