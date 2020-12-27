@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EffectType;
 import ru.nsu.fit.towerdefense.metadata.map.BaseDescription;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.metadata.map.RoadDescription;
@@ -12,6 +13,7 @@ import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.metadata.techtree.Research;
 import ru.nsu.fit.towerdefense.metadata.techtree.TechTree;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
 import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EnemyType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
@@ -29,6 +31,7 @@ public class GameMetaData {
     private final HashMap<String, EnemyType> loadedEnemies;
     private final HashMap<String, TowerType> loadedTowers;
     private final HashMap<String, ProjectileType> loadedProjectiles;
+    private final HashMap<String, EffectType> loadedEffects;
     private TechTree tree = null;
 
     private final String mapRoot = "/Maps";//"src/test/resources/Maps/";
@@ -37,6 +40,7 @@ public class GameMetaData {
     private final String projectileRoot = "/Projectiles";//"src/test/resources/Projectiles/";
     private final String imageRoot = "src/main/resources/ru/nsu/fit/towerdefense/images/";
     private final String techRoot = "/TechTree";
+    private final String effectRoot = "/Effects";
 
     //private final File mapDir;
     //private final File enemiesDir;
@@ -50,6 +54,7 @@ public class GameMetaData {
         loadedEnemies = new HashMap<>();
         loadedProjectiles = new HashMap<>();
         loadedTowers = new HashMap<>();
+        loadedEffects = new HashMap<>();
         //mapDir = new File (this.getClass().getClassLoader().getResource(mapRoot));
         //mapDir = new File(mapRoot);
         //enemiesDir = new File(enemiesRoot);
@@ -225,6 +230,43 @@ public class GameMetaData {
             tree = loadTree();
 
         return tree;
+    }
+
+    public EffectType getEffectType(String name) throws NoSuchElementException
+    {
+        if (loadedEffects.containsKey(name))
+        {
+            return loadedEffects.get(name);
+        }
+        EffectType type = loadEffect(name);
+        if (type != null)
+        {
+            loadedEffects.put(name, type);
+            return type;
+        }
+        throw new NoSuchElementException("Invalid name or configuration");
+    }
+
+    private EffectType loadEffect(String name)
+    {
+        try
+        {
+            File json = new File(GameMetaData.class.getResource(effectRoot + "/" + name + ".json").toURI());
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
+            EffectType.Builder builder = new EffectType.Builder(name);
+
+            builder.setSpeedMultiplier(node.get("Speed").asDouble());
+            builder.setDamagePerTick(node.get("DamagePerTick").asInt());
+            builder.setDuration(node.get("Duration").asInt());
+            builder.setImage(node.get("Image").asText());
+
+            return builder.build();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
     private TechTree loadTree()
