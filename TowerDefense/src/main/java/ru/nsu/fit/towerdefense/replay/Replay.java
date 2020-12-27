@@ -30,4 +30,9 @@ public class Replay {
 		return worldStates;
 	}
 
+	public int getReplayLength()
+	{
+		return eventRecords.size() + worldStates.size();
+	}
+
 }
