@@ -10,12 +10,15 @@ public class TechTree {
 
 	private ArrayList<Research> availableResearches;
 
-
+	private ArrayList<String> unlocked;
 
 	public TechTree(HashMap<String, Research> nameToResearch)
 	{
 		this.nameToResearch = nameToResearch;
+		unlocked = new ArrayList<>();
 	}
+
+
 
 	public void unlock(String name)
 	{
@@ -24,6 +27,7 @@ public class TechTree {
 		availableTypes.addAll(r.getTowerNames());
 		availableResearches.addAll(t);
 		availableResearches.remove(r);
+		unlocked.add(name);
 	}
 
 
@@ -42,6 +46,13 @@ public class TechTree {
 		return availableTypes;
 	}
 
+
+	public ArrayList<String> getUnlocked()
+	{
+		return unlocked;
+	}
+
+
 	public void setAvailableResearches(ArrayList<Research> availableResearches)
 	{
 		this.availableResearches = availableResearches;
@@ -55,6 +66,11 @@ public class TechTree {
 	public void setResearch(ArrayList<Research> research)
 	{
 		this.research = research;
+	}
+
+	public void setUnlocked(ArrayList<String> unlocked)
+	{
+		this.unlocked = unlocked;
 	}
 
 }
