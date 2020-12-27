@@ -317,7 +317,7 @@
                 <ImageView fx:id="waveImageView" GridPane.rowIndex="1" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="wave-progress-icon" />
                 <Label fx:id="waveLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" minWidth="-Infinity">0</Label>
                 <HBox GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="speed-box">
-                    <Label fx:id="speedLabel" minWidth="-Infinity">1x</Label>
+                    <Label fx:id="speedLabel" minWidth="-Infinity">0x</Label>
                     <ImageView fx:id="speed0xImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="speed-0x" />
                     <ImageView fx:id="speed1xImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="speed-1x" />
                     <ImageView fx:id="speed2xImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="speed-2x" />

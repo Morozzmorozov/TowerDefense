@@ -208,7 +208,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         baseInitialHealth = gameMap.getBaseDescription().getHealth();
 
         state = State.PLAYING;
-        speed = 1;
+        speed = 0;
 
         if (replay == null) {
             worldControl = new WorldControl(gameMap, DELTA_TIME, this);
@@ -282,6 +282,16 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         menuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         resultsMenuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
+
+        try {
+            worldControl.simulateTick();
+            worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
+            renderAll();
+        } catch (RenderException e) {
+            handleRenderException(e);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
 
         activateGame();
     }
