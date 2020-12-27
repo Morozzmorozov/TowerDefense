@@ -43,10 +43,10 @@ public class WorldControl {
   protected final float SELL_MULTIPLIER = 0.4f;
   protected static final double DELTA = 1e-12;
 
-  protected long tick;
+  protected long tick; // Beware: this field shows the index of the FOLLOWING frame
   protected final GameMap gameMap;
   protected final int deltaTime;
-  protected final WorldObserver worldObserver; // todo use it
+  protected final WorldObserver worldObserver;
   protected World world;
   protected int enemiesKilled = 0;
   protected int wavesDefeated = 0;
