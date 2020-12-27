@@ -377,7 +377,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     private void onSliderPressedOrDragged() {
         worldSimulationExecutor.shutdown();
+    }
 
+    private void onSliderReleased() {
         try {
             ((ReplayWorldControl) worldControl).skipToTick((int) replaySlider.getValue());
             worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
@@ -387,9 +389,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-    }
 
-    private void onSliderReleased() {
         activateGame();
     }
 
