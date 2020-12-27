@@ -1,6 +1,8 @@
 package ru.nsu.fit.towerdefense.metadata.gameobjecttypes;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
@@ -16,9 +18,16 @@ public class ProjectileType {
     private String displayInfo;
     private double angularVelocity;
 
+    private List<String> effects;
+
     public double getAngularVelocity()
     {
         return angularVelocity;
+    }
+
+    public List<String> getEffects()
+    {
+        return effects;
     }
 
     public Vector2<Double> getSize() {
@@ -69,11 +78,13 @@ public class ProjectileType {
         private String image;
         private String displayInfo ;
         private double angularVelocity = 0.0;
+        private List<String> effects;
         public Builder(String name)
         {
             typeName = name;
             enemyTypeDamageMap = new HashMap<>();
             size = new Vector2<>(0.0, 0.0);
+            effects = new LinkedList<>();
         }
 
         public void setImage(String image)
@@ -128,6 +139,11 @@ public class ProjectileType {
             enemyTypeDamageMap.put(type, basicDamage);
         }
 
+        public void addEffect(String name)
+        {
+            effects.add(name);
+        }
+
         public ProjectileType build()
         {
             ProjectileType type = new ProjectileType();
@@ -141,6 +157,7 @@ public class ProjectileType {
             type.basicDamage = basicDamage;
             type.displayInfo  = displayInfo;
             type.angularVelocity = angularVelocity;
+            type.effects = effects;
             return type;
         }
     }

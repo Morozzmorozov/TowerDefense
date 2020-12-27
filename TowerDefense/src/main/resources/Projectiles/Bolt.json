@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "Thunderbolt",
-    "Speed" : 0.03,
+    "Speed" : 0.5,
     "SelfGuided" : false,
     "BasicDamage" : 14,
     "EnemyTypeDamage" : [
@@ -9,5 +9,6 @@
     "HitBox" : 2,
     "SizeX" : 1.0,
     "SizeY" : 1.0,
-    "Image" : "fireball.png"
+    "Image" : "fireball.png",
+    "Effects" : []
 }

@@ -18,10 +18,10 @@ public class GameMetaDataTest {
         GameMetaData data = GameMetaData.getInstance();
         GameMap map = data.getMapDescription("map1");
         Assert.assertNotNull(map);
-        Assert.assertEquals((Integer)2, map.getSize().getX());
-        Assert.assertEquals((Integer)3, map.getSize().getY());
+        Assert.assertEquals((Integer)10, map.getSize().getX());
+        Assert.assertEquals((Integer)10, map.getSize().getY());
         Assert.assertEquals((Integer)4, map.getScienceReward());
-        Assert.assertEquals((Integer)5, map.getBaseDescription().getHealth());
+        Assert.assertEquals((Integer)500, map.getBaseDescription().getHealth());
         Assert.assertEquals((Integer)1, map.getBaseDescription().getPosition().getX());
         Assert.assertEquals((Integer)2, map.getBaseDescription().getPosition().getY());
 

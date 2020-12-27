@@ -6,7 +6,11 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import java.util.List;
 
 public class EventRecord {
-	private List<Pair<Integer, String>> buildTower;
+
+	/**
+	 * Position, TypeName, ID
+	 */
+	private List<Pair<Integer, Pair<String, String>>> buildTower;
 	private List<Pair<Integer, String>> upgradeTower;
 	private boolean callWave;
 	private List<String> removeEnemy;
@@ -17,7 +21,7 @@ public class EventRecord {
 	private List<Integer> sellTower;
 	private int id;
 
-	public EventRecord(int id, List<Pair<Integer, String>> buildTower, List<Pair<Integer, String>> upgradeTower,
+	public EventRecord(int id, List<Pair<Integer, Pair<String, String>>> buildTower, List<Pair<Integer, String>> upgradeTower,
 	                   boolean callWave, List<String> removeEnemy, List<String> removeProjectile, List<Pair<Integer, String>> enemyDamage,
 	                   List<Integer> damageToBase, List<Pair<String, Tower.Mode>> tuneTower, List<Integer> sellTower)
 	{
@@ -59,7 +63,7 @@ public class EventRecord {
 		return removeProjectile;
 	}
 
-	public List<Pair<Integer, String>> getBuildTower()
+	public List<Pair<Integer, Pair<String, String>>>getBuildTower()
 	{
 		return buildTower;
 	}

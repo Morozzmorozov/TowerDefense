@@ -11,6 +11,7 @@ public class ProjectileInfo {
 	private String type;
 	private Double range;
 	private TowerType.FireType fireType;
+	private Double scale;
 
 	public ProjectileInfo(){}
 
@@ -42,6 +43,11 @@ public class ProjectileInfo {
 	public Vector2<Double> getVelocity()
 	{
 		return velocity;
+	}
+
+	public Double getScale()
+	{
+		return scale;
 	}
 
 	public TowerType.FireType getFireType()
@@ -82,6 +88,11 @@ public class ProjectileInfo {
 	public void setFireType(TowerType.FireType fireType)
 	{
 		this.fireType = fireType;
+	}
+
+	public void setScale(Double scale)
+	{
+		this.scale = scale;
 	}
 
 }

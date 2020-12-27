@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "Arrow",
-    "Speed" : 0.012,
+    "Speed" : 0.2,
     "SelfGuided" : false,
     "BasicDamage" : 9,
     "EnemyTypeDamage" : [
@@ -9,5 +9,6 @@
     "HitBox" : 2,
     "SizeX" : 1.0,
     "SizeY" : 1.0,
-    "Image" : "fireball.png"
+    "Image" : "fireball.png",
+    "Effects" : []
 }
