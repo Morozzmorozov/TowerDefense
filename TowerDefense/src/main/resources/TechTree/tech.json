@@ -1,0 +1,35 @@
+{
+    "Basic" : ["Archer"],
+    "Researches" : [
+        {
+            "Name" : "Basic machinery",
+            "Info" : "Stick plus stick is not just two sticks",
+            "Types" : [],
+            "Cost" : 15
+        },
+        {
+            "Name" : "Crossbows",
+            "Info" : "Faster, higher, stronger",
+            "Types" : ["Crossbowman"],
+            "Cost" : 60
+        },
+        {
+            "Name" : "Advanced machinery",
+            "Info" : "It's a raining stones",
+            "Types" : ["Catapult"],
+            "Cost" : 50
+        },
+        {
+            "Name" : "Future Tech",
+            "Info" : "Future is now, old man",
+            "Types" : ["RocketLauncher", "Wave"],
+            "Cost" : 100
+        }
+    ],
+    "Dependencies" : [
+        ["Basic machinery", "Crossbows"],
+        ["Basic machinery", "Advanced machinery"],
+        ["Crossbows", "Future Tech"],
+        ["Advanced machinery", "Future Tech"]
+    ]
+}

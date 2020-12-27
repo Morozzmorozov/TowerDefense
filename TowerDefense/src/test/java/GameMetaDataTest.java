@@ -5,7 +5,10 @@ import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EnemyType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
+import ru.nsu.fit.towerdefense.metadata.techtree.Research;
+import ru.nsu.fit.towerdefense.metadata.techtree.TechTree;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class GameMetaDataTest {
@@ -74,7 +77,23 @@ public class GameMetaDataTest {
         Assert.assertEquals(5, names.size());
 
     }
-/*
+
+    @Test
+    public void testTech()
+    {
+        GameMetaData data = GameMetaData.getInstance();
+        TechTree tree = data.getTechTree();
+
+        ArrayList<Research> researchArrayList = tree.getResearch();
+
+        Assert.assertEquals(1, tree.getAvailableResearches().size());
+
+        tree.unlock(researchArrayList.get(0).getName());
+
+        Assert.assertEquals(2, tree.getAvailableResearches().size());
+    }
+
+    /*
     @Test
     public void testGetImageName()
     {

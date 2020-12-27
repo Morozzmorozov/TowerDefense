@@ -10,12 +10,15 @@ import ru.nsu.fit.towerdefense.metadata.map.RoadDescription;
 import ru.nsu.fit.towerdefense.metadata.map.TowerBuildingPositions;
 import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
+import ru.nsu.fit.towerdefense.metadata.techtree.Research;
+import ru.nsu.fit.towerdefense.metadata.techtree.TechTree;
 import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EnemyType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class GameMetaData {
@@ -26,12 +29,14 @@ public class GameMetaData {
     private final HashMap<String, EnemyType> loadedEnemies;
     private final HashMap<String, TowerType> loadedTowers;
     private final HashMap<String, ProjectileType> loadedProjectiles;
+    private TechTree tree = null;
 
     private final String mapRoot = "/Maps";//"src/test/resources/Maps/";
     private final String enemiesRoot = "/Enemies";//"src/test/resources/Enemies/";
     private final String towersRoot = "/Towers";//"src/test/resources/Towers/";
     private final String projectileRoot = "/Projectiles";//"src/test/resources/Projectiles/";
     private final String imageRoot = "src/main/resources/ru/nsu/fit/towerdefense/images/";
+    private final String techRoot = "/TechTree";
 
     //private final File mapDir;
     //private final File enemiesDir;
@@ -213,6 +218,87 @@ public class GameMetaData {
             }
         }
     }
+
+    public TechTree getTechTree() throws  NoSuchElementException
+    {
+        if (tree == null)
+            tree = loadTree();
+
+        return tree;
+    }
+
+    private TechTree loadTree()
+    {
+        try
+        {
+            File json = new File(GameMetaData.class.getResource(techRoot + "/tech.json").toURI());
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
+            HashMap<String, Research> nameToNode = new HashMap<>();
+            ArrayList<String> types = new ArrayList<>();
+            ArrayList<Research> research = new ArrayList<>();
+
+
+            for (var x : node.get("Basic"))
+            {
+                types.add(x.asText());
+            }
+
+            ArrayNode arrayNode = node.get("Researches").deepCopy();
+
+            for (var x : arrayNode)
+            {
+                Research r = parseNode(x);
+                research.add(r);
+                nameToNode.put(r.getName(), r);
+            }
+
+
+            arrayNode = node.get("Dependencies").deepCopy();
+
+            for (var x : arrayNode)
+            {
+                String r1 = x.get(0).asText();
+                String r2 = x.get(1).asText();
+                nameToNode.get(r1).addDependency(nameToNode.get(r2));
+            }
+
+            ArrayList<Research> available = new ArrayList<>();
+
+            for (var x : research)
+            {
+                if (x.getLeft() == 0)
+                    available.add(x);
+            }
+
+            TechTree tree = new TechTree(nameToNode);
+            tree.setAvailableResearches(available);
+            tree.setResearch(research);
+            tree.setAvailableTypes(types);
+            return tree;
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            throw new NoSuchElementException();
+        }
+    }
+
+    private Research parseNode(JsonNode root)
+    {
+        String name = root.get("Name").asText();
+        String info = root.get("Info").asText();
+        int cost = root.get("Cost").asInt();
+
+        ArrayNode node = root.get("Types").deepCopy();
+        ArrayList<String> types = new ArrayList<>();
+        for (var x : node)
+        {
+            types.add(x.asText());
+        }
+        return new Research(name, info, types, cost);
+    }
+
 
     private ProjectileType loadProjectileType(String name)
     {

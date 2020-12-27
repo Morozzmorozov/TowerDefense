@@ -1,9 +1,11 @@
 package ru.nsu.fit.towerdefense.replay;
 
 import javafx.util.Pair;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.replay.objectInfo.EnemyInfo;
 import ru.nsu.fit.towerdefense.replay.objectInfo.ProjectileInfo;
 import ru.nsu.fit.towerdefense.replay.objectInfo.TowerInfo;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 
@@ -251,6 +253,7 @@ public class GameStateReader {
 			info.setType(reader.getAttributeValue(4));
 			info.setRange(Double.parseDouble(reader.getAttributeValue(5)));
 			info.setVelocity(new Vector2<>(Double.parseDouble(reader.getAttributeValue(6)), Double.parseDouble(reader.getAttributeValue(7))));
+			info.setFireType(TowerType.FireType.valueOf(reader.getAttributeValue(8)));
 			return info;
 		}
 		catch (Exception e)

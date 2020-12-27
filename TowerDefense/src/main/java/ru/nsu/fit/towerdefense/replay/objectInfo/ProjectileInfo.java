@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.replay.objectInfo;
 
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class ProjectileInfo {
@@ -9,6 +10,8 @@ public class ProjectileInfo {
 	private Vector2<Double> velocity;
 	private String type;
 	private Double range;
+	private TowerType.FireType fireType;
+
 	public ProjectileInfo(){}
 
 	public Double getRange()
@@ -41,6 +44,11 @@ public class ProjectileInfo {
 		return velocity;
 	}
 
+	public TowerType.FireType getFireType()
+	{
+		return fireType;
+	}
+
 	public void setRange(Double range)
 	{
 		this.range = range;
@@ -69,6 +77,11 @@ public class ProjectileInfo {
 	public void setVelocity(Vector2<Double> velocity)
 	{
 		this.velocity = velocity;
+	}
+
+	public void setFireType(TowerType.FireType fireType)
+	{
+		this.fireType = fireType;
 	}
 
 }

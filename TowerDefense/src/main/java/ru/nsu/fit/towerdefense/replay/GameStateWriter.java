@@ -82,10 +82,6 @@ public class GameStateWriter {
 		}
 	}
 
-	private List<Enemy> enemies = new ArrayList<>();
-	private List<Tower> towers = new ArrayList<>();
-	private List<Projectile> projectiles = new ArrayList<>();
-
 	public void fullCopy(List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles, Base base, int money)
 	{
 		if (currentTick % fullCopy != 0)
@@ -168,6 +164,7 @@ public class GameStateWriter {
 				writer.writeAttribute("RemainingRange", Double.toString(x.getRemainingRange()));
 				writer.writeAttribute("VelX", Double.toString(x.getVelocity().getX()));
 				writer.writeAttribute("VelY", Double.toString(x.getVelocity().getY()));
+				writer.writeAttribute("FireType", x.getFireType().name());
 				writer.writeEndElement();
 				writer.writeCharacters(System.getProperty("line.separator"));
 			}
