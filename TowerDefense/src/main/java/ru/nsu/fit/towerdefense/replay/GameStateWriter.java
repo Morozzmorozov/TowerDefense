@@ -165,6 +165,7 @@ public class GameStateWriter {
 				writer.writeAttribute("VelX", Double.toString(x.getVelocity().getX()));
 				writer.writeAttribute("VelY", Double.toString(x.getVelocity().getY()));
 				writer.writeAttribute("FireType", x.getFireType().name());
+				writer.writeAttribute("Scale", Double.toString(x.getScale()));
 				writer.writeEndElement();
 				writer.writeCharacters(System.getProperty("line.separator"));
 			}
@@ -182,7 +183,7 @@ public class GameStateWriter {
 		}
 	}
 
-	public void buildTower(int position, String typeName)
+	public void buildTower(int position, String typeName, String id)
 	{
 		if (currentTick % fullCopy == 0)
 			return;
@@ -192,6 +193,7 @@ public class GameStateWriter {
 			writer.writeStartElement("BuildTower");
 			writer.writeAttribute("Position", Integer.toString(position));
 			writer.writeAttribute("Type", typeName);
+			writer.writeAttribute("ID", id);
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));
 		}

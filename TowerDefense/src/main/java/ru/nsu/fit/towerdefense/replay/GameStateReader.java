@@ -254,6 +254,7 @@ public class GameStateReader {
 			info.setRange(Double.parseDouble(reader.getAttributeValue(5)));
 			info.setVelocity(new Vector2<>(Double.parseDouble(reader.getAttributeValue(6)), Double.parseDouble(reader.getAttributeValue(7))));
 			info.setFireType(TowerType.FireType.valueOf(reader.getAttributeValue(8)));
+			info.setScale(Double.parseDouble(reader.getAttributeValue(9)));
 			return info;
 		}
 		catch (Exception e)
@@ -268,7 +269,7 @@ public class GameStateReader {
 	{
 		try
 		{
-			List<Pair<Integer, String>> buildTower = new LinkedList<>();
+			List<Pair<Integer, Pair<String, String>>> buildTower = new LinkedList<>();
 			List<Pair<Integer, String>> upgradeTower = new LinkedList<>();
 			boolean callWave = false;
 			List<String> removeEnemy = new LinkedList<>();
@@ -287,7 +288,8 @@ public class GameStateReader {
 						case "BuildTower" -> {
 							int position = Integer.parseInt(reader.getAttributeValue(0));
 							String type = reader.getAttributeValue(1);
-							buildTower.add(new Pair<>(position, type));
+							String id = reader.getAttributeValue(2);
+							buildTower.add(new Pair<>(position, new Pair<>(type, id)));
 							break;
 						}
 						case "UpgradeTower" -> {
