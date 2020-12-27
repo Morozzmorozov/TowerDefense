@@ -29,7 +29,7 @@ public class GameStateWriterTest {
 		TowerType archer = metaData.getTowerType("Archer");
 		Wave wave = new Wave();
 		wave.setNumber(0);
-//		enemies.add(new Enemy(goblin, wave, new Vector2<Double>(10.0, 10.0), 5));
+		enemies.add(new Enemy(goblin, 0, new Vector2<Double>(10.0, 10.0), 5));
 		tower.add(new Tower());
 
 		tower.get(0).setType(archer);

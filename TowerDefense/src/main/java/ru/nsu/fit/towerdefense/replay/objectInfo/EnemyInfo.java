@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.replay.objectInfo;
 
+import javafx.util.Pair;
 import ru.nsu.fit.towerdefense.util.Vector2;
 import java.util.List;
 
@@ -10,6 +11,8 @@ public class EnemyInfo {
 	private int wave;
 	private Vector2<Double> position;
 	private List<Vector2<Double>> trajectory;
+
+	private List<Pair<String, Integer>> effects;
 
 	public EnemyInfo() {}
 
@@ -43,6 +46,11 @@ public class EnemyInfo {
 		this.wave = wave;
 	}
 
+	public void setEffects(List<Pair<String, Integer>> effects)
+	{
+		this.effects = effects;
+	}
+
 	public int getHealth()
 	{
 		return health;
@@ -51,6 +59,11 @@ public class EnemyInfo {
 	public int getWave()
 	{
 		return wave;
+	}
+
+	public List<Pair<String, Integer>> getEffects()
+	{
+		return effects;
 	}
 
 	public List<Vector2<Double>> getTrajectory()
@@ -72,5 +85,6 @@ public class EnemyInfo {
 	{
 		return position;
 	}
+
 
 }

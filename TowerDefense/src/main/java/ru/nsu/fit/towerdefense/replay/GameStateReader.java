@@ -177,6 +177,7 @@ public class GameStateReader {
 			int health = 0;
 			ArrayList<Vector2<Double>> trajectory = new ArrayList<>();
 			EnemyInfo info = new EnemyInfo();
+			ArrayList<Pair<String, Integer>> effects = new ArrayList<>();
 			while (true)
 			{
 				int event = reader.getEventType();
@@ -197,6 +198,10 @@ public class GameStateReader {
 					{
 						trajectory.add(new Vector2<>(Double.parseDouble(reader.getAttributeValue(0)), Double.parseDouble(reader.getAttributeValue(1))));
 					}
+					else if (reader.getLocalName().equals("Effect"))
+					{
+						effects.add(new Pair<>(reader.getAttributeValue(0), Integer.parseInt(reader.getAttributeValue(1))));
+					}
 				}
 				else if (event == XMLStreamConstants.END_ELEMENT)
 				{
@@ -211,6 +216,7 @@ public class GameStateReader {
 			info.setType(type);
 			info.setWave(wave);
 			info.setTrajectory(trajectory);
+			info.setEffects(effects);
 			return info;
 		}
 		catch (Exception e)
@@ -278,6 +284,7 @@ public class GameStateReader {
 			List<Integer> damageToBase = new LinkedList<>();
 			List<Pair<String, Tower.Mode>> tuneTower = new LinkedList<>();
 			List<Integer> sellTower = new LinkedList<>();
+			List<Pair<String, String>> applyEffect = new LinkedList<>();
 			while (true)
 			{
 				int eventType = reader.getEventType();
@@ -322,6 +329,7 @@ public class GameStateReader {
 						}
 						case "SellTower" -> sellTower.add(Integer.parseInt(reader.getAttributeValue(0)));
 						case "SwitchMode" -> tuneTower.add(new Pair<>(reader.getAttributeValue(0), Tower.Mode.valueOf(reader.getAttributeValue(1))));
+						case "Apply" -> applyEffect.add(new Pair<>(reader.getAttributeValue(0), reader.getAttributeValue(1)));
 					}
 				}
 				else if (eventType == XMLStreamConstants.END_ELEMENT)
@@ -331,7 +339,7 @@ public class GameStateReader {
 				}
 				reader.next();
 			}
-			return new EventRecord(fid, buildTower, upgradeTower, callWave, removeEnemy, removeProjectile, enemyDamage, damageToBase, tuneTower, sellTower);
+			return new EventRecord(fid, buildTower, upgradeTower, callWave, removeEnemy, removeProjectile, enemyDamage, damageToBase, tuneTower, sellTower, applyEffect);
 		}
 		catch (Exception e)
 		{

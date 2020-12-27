@@ -120,6 +120,21 @@ public class GameStateWriter {
 				writer.writeCharacters(tab.substring(0, 3));
 				writer.writeEndElement();
 				writer.writeCharacters(System.getProperty("line.separator"));
+				writer.writeCharacters(tab.substring(0, 3));
+				writer.writeStartElement("Effects");
+				writer.writeCharacters(System.getProperty("line.separator"));
+				for (var y : x.getEffects())
+				{
+					writer.writeCharacters(tab.substring(0, 4));
+					writer.writeStartElement("Effect");
+					writer.writeAttribute("Name", y.getType().getName());
+					writer.writeAttribute("Duration", Integer.toString(y.getRemainingTicks()));
+					writer.writeEndElement();
+					writer.writeCharacters(System.getProperty("line.separator"));
+				}
+				writer.writeCharacters(tab.substring(0, 3));
+				writer.writeEndElement();
+				writer.writeCharacters(System.getProperty("line.separator"));
 				writer.writeCharacters(tab.substring(0, 2));
 				writer.writeEndElement();
 				writer.writeCharacters(System.getProperty("line.separator"));
@@ -340,6 +355,25 @@ public class GameStateWriter {
 			writer.writeCharacters(tab.substring(0, 2));
 			writer.writeStartElement("SellTower");
 			writer.writeAttribute("Position", Integer.toString(position));
+			writer.writeEndElement();
+			writer.writeCharacters(System.getProperty("line.separator"));
+		}
+		catch (Exception e)
+		{
+
+		}
+	}
+
+	public void applyEffect(Enemy enemy, String effectName)
+	{
+		if (currentTick % fullCopy == 0)
+			return;
+		try
+		{
+			writer.writeCharacters(tab.substring(0, 2));
+			writer.writeStartElement("Apply");
+			writer.writeAttribute("Id", enemy.getId().toString());
+			writer.writeAttribute("Effect", effectName);
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));
 		}
