@@ -2,7 +2,7 @@
 <Save>
 	<WorldState>
 		<Base Health="100"></Base>
-		<Tower TowerId="b0a4774f-3477-461a-8c11-feb2a2b46b81" Type="Archer" PosX="3.0" PosY="3.0" Mode="First" Rotation="0.0" Cooldown="20" SellPrice="0" TargetId="None"></Tower>
+		<Tower TowerId="c211a225-ecae-4dfc-bcb5-be0b9eb436f4" Type="Archer" PosX="3.0" PosY="3.0" Mode="First" Rotation="0.0" Cooldown="20" SellPrice="0" TargetId="None"></Tower>
 		<Money amount="1000"></Money>
 	</WorldState>
 </Save>

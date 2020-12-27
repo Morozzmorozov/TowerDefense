@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "Simple stone",
-    "Speed" : 0.054,
+    "Speed" : 0.9,
     "SelfGuided" : false,
     "BasicDamage" : 30,
     "EnemyTypeDamage" : [
@@ -9,5 +9,6 @@
     "HitBox" : 2,
     "SizeX" : 1.0,
     "SizeY" : 1.0,
-    "Image" : "fireball.png"
+    "Image" : "fireball.png",
+    "Effects" : []
 }

@@ -323,6 +323,11 @@ public class GameMetaData {
             builder.setImage(node.get("Image").asText());
             if (node.has("AngularVelocity"))
                 builder.setAngularVelocity(node.get("AngularVelocity").asDouble());
+            upgrades = node.get("Effects").deepCopy();
+            for (var x : upgrades)
+            {
+                builder.addEffect(x.asText());
+            }
             return builder.build();
         }
         catch (Exception e)
