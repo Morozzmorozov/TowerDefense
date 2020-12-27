@@ -20,7 +20,7 @@ public class WorldCamera {
     private static final double SCALE_DELTA = 1.2d;
     private static final long SCROLL_TIME = 250;
 
-    private final Pane rootPane;
+    private final Pane worldWrapperPane;
     private final Pane worldPane;
 
     private double scale = 1d;
@@ -33,13 +33,13 @@ public class WorldCamera {
      * calculated with stage and world sizes. Calculates how many pixels fit one dimension of game
      * cell.
      *
-     * @param rootPane  pane holding the world pane.
+     * @param worldWrapperPane  pane holding the world pane.
      * @param worldPane world pane.
      * @param stageSize stage size on pixels.
      * @param worldSize stage size in game units.
      */
-    public WorldCamera(Pane rootPane, Pane worldPane, Vector2<Double> stageSize, Vector2<Integer> worldSize) {
-        this.rootPane = rootPane;
+    public WorldCamera(Pane worldWrapperPane, Pane worldPane, Vector2<Double> stageSize, Vector2<Integer> worldSize) {
+        this.worldWrapperPane = worldWrapperPane;
         this.worldPane = worldPane;
         initialTranslateDelta = new Vector2<>(0d, 0d);
 
@@ -126,7 +126,7 @@ public class WorldCamera {
     public void updateMovement(double x, double y) {
         worldPane.setTranslateX(x - initialTranslateDelta.getX());
         worldPane.setTranslateY(y - initialTranslateDelta.getY());
-        rootPane.setCursor(Cursor.MOVE);
+        worldWrapperPane.setCursor(Cursor.MOVE);
     }
 
     /**
@@ -136,6 +136,6 @@ public class WorldCamera {
      * @param y updated world y coordinate.
      */
     public void finishMovement(double x, double y) {
-        rootPane.setCursor(Cursor.DEFAULT);
+        worldWrapperPane.setCursor(Cursor.DEFAULT);
     }
 }

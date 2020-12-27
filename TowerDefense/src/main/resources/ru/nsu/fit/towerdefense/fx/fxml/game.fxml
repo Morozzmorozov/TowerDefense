@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,14 +15,14 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.Group?>
-<StackPane fx:id="rootStackPane" styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/main.css" />
         <URL value="@../css/game.css" />
     </stylesheets>
-    <AnchorPane fx:id="worldAnchorPane" styleClass="world-anchor-pane" />
+    <StackPane fx:id="worldWrapperStackPane">
+        <AnchorPane fx:id="worldAnchorPane" />
+    </StackPane>
     <GridPane pickOnBounds="false">
         <columnConstraints>
             <ColumnConstraints percentWidth="66.67" />
@@ -256,7 +257,7 @@
                     </GridPane>
                 </VBox>
             </VBox>
-            <ImageView fx:id="closeSidePaneImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="close-side-pane, close-icon" />
+            <!--<ImageView fx:id="closeSidePaneImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="close-side-pane, close-icon" />-->
         </StackPane>
     </GridPane>
     <GridPane styleClass="bar-grid-pane" pickOnBounds="false">

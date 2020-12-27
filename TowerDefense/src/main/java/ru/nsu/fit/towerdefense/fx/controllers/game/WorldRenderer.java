@@ -142,6 +142,7 @@ public class WorldRenderer {
             imageView.setOnMouseClicked(mouseEvent -> {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     observer.onGameObjectClicked(renderable);
+                    mouseEvent.consume();
                 }
             });
 

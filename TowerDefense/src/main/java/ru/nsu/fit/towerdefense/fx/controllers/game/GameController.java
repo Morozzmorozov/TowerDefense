@@ -24,7 +24,6 @@ import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
-import ru.nsu.fit.towerdefense.replay.GameStateReader;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
@@ -81,11 +80,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     private enum State { PLAYING, PAUSED, FINISHED }
 
-    @FXML private StackPane rootStackPane;
+    @FXML private StackPane worldWrapperStackPane;
     @FXML private AnchorPane worldAnchorPane;
 
     @FXML private StackPane gameObjectSidePane;
-    @FXML private ImageView closeSidePaneImageView;
+    //@FXML private ImageView closeSidePaneImageView; // todo remove?
 
     @FXML private VBox platformSideVBox;
     @FXML private FlowPane buildTowerFlowPane;
@@ -231,7 +230,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     @FXML
     private void initialize() {
-        worldCamera = new WorldCamera(rootStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
+        worldCamera = new WorldCamera(worldWrapperStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
         worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell(), this);
 
         towerModeToUiNodeMap = new HashMap<>() {{
@@ -243,10 +242,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             put(Tower.Mode.Random, towerModeRandomHBox);
         }};
 
-        closeSidePaneImageView.setOnMouseClicked(mouseEvent -> {
-            hideSideBar();
-            worldRenderer.hideTowerRangeCircle();
-            worldRenderer.hideGameObjectSelection();
+        worldWrapperStackPane.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                hideSideBar();
+                worldRenderer.hideTowerRangeCircle();
+                worldRenderer.hideGameObjectSelection();
+            }
         });
 
         bindUppercase(enemyNameText);
