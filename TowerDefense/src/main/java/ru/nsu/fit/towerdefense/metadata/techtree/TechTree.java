@@ -178,6 +178,6 @@ public class TechTree {
 
 	public boolean canUnlock(String name)
 	{
-		return availableResearches.contains(name);
+		return availableResearches.contains(nameToResearch.get(name));
 	}
 }
