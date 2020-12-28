@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
+<?import javafx.scene.control.Button?>
 <StackPane styleClass="root" xmlns="http://javafx.com/javafx/100.2-internal" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/main.css"/>
@@ -12,6 +13,7 @@
         <URL value="@../css/menu.css"/>
     </stylesheets>
     <VBox styleClass="content">
+        <Button fx:id="techTreeButton">Tech Tree</Button>
         <Label styleClass="header">Levels</Label>
         <FlowPane fx:id="levelsFlowPane" styleClass="levels-flow-pane" />
     </VBox>

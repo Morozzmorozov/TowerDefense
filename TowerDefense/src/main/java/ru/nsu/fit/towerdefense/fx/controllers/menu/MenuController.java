@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -32,6 +33,8 @@ public class MenuController implements Controller {
 
     private static final String FXML_FILE_NAME = "menu.fxml";
 
+    @FXML private Button techTreeButton;
+
     @FXML private Label levelsLabel;
     @FXML private FlowPane levelsFlowPane;
 
@@ -52,6 +55,8 @@ public class MenuController implements Controller {
 
     @FXML
     private void initialize() {
+        techTreeButton.setOnAction(actionEvent -> sceneManager.switchToTechTree());
+
         if (GameMetaData.getInstance().getGameMapNames().isEmpty()) {
             levelsLabel.setText("No levels");
         }
