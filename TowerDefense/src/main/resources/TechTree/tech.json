@@ -4,24 +4,28 @@
         {
             "Name" : "Basic machinery",
             "Info" : "Stick plus stick is not just two sticks",
+            "Image" : "portal.png",
             "Types" : [],
             "Cost" : 15
         },
         {
             "Name" : "Crossbows",
             "Info" : "Faster, higher, stronger",
+            "Image" : "tower.png",
             "Types" : ["Crossbowman"],
             "Cost" : 60
         },
         {
             "Name" : "Advanced machinery",
             "Info" : "It's a raining stones",
+            "Image" : "tower2.png",
             "Types" : ["Catapult"],
             "Cost" : 50
         },
         {
             "Name" : "Future Tech",
             "Info" : "Future is now, old man",
+            "Image" : "rocket_launcher.png",
             "Types" : ["RocketLauncher", "Wave"],
             "Cost" : 100
         }
