@@ -55,7 +55,7 @@ public class TechTree {
 
 	public boolean getIsTypeAvailable(String name)
 	{
-		return availableResearches.contains(name);
+		return availableTypes.contains(name);
 	}
 
 	public ArrayList<String> getUnlocked()
