@@ -1,9 +1,10 @@
 package ru.nsu.fit.towerdefense.metadata.techtree;
 
+import ru.nsu.fit.towerdefense.metadata.UserMetaData;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
-import javax.print.attribute.standard.RequestingUserName;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TechTree {
 	private ArrayList<Research> research;
@@ -160,5 +161,14 @@ public class TechTree {
 		return displayInfo;
 	}
 
+	public void loadUnlocked()
+	{
+
+		var t = UserMetaData.getUnlockedResearchNames(research.stream().map(Research::getName).collect(Collectors.toList()));
+		for (var x : t)
+		{
+			unlock(x);
+		}
+	}
 
 }
