@@ -133,15 +133,23 @@ public class TechTree {
 			}
 		}
 
+		int max = 0;
+		for (var x : displayInfo)
+		{
+			max = Math.max(max, x.size());
+		}
+
 		int xsize = 25 + displayInfo.size() * 75;
-		int ysize = 25;
+		int ysize = 25 + max * 75;
 
 		for (int i = 0; i < displayInfo.size(); i++)
 		{
+			int t = displayInfo.get(i).size();
+			double x = (ysize - 50.0 * t) / (t + 1.0);
 			for (int j = 0; j < displayInfo.get(i).size(); j++)
 			{
-				var t = displayInfo.get(i).get(j);
-				t.setPosition(new Vector2<>(25 + i * 75, 25 + 75 * j));
+				var r = displayInfo.get(i).get(j);
+				r.setPosition(new Vector2<>(25 + i * 75, (int)Math.round(x + (50 + x) * j)));
 			}
 			ysize = Math.max(ysize, 25 + 75 * displayInfo.get(i).size());
 		}
