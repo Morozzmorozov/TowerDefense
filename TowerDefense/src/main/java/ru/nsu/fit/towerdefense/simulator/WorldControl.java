@@ -377,8 +377,9 @@ public class WorldControl {
         int damage = projectile.getType().getEnemyTypeDamageMap()
             .get(enemy.getType().getTypeName());
 
-        List<EffectType> effectsDebug = new ArrayList<>(); // DEBUG! TODO remove
-        //effectsDebug.add(EffectType.POISON);
+        List<EffectType> effectsDebug = projectile.getType().getEffects().stream()
+            .map(name -> GameMetaData.getInstance().getEffectType(name))
+            .collect(Collectors.toList());
 
         for (EffectType effectType : effectsDebug) {
           Optional<Effect> existingEffect = enemy.getEffects().stream().filter(effect -> effect.getType() == effectType).findFirst();
@@ -462,7 +463,7 @@ public class WorldControl {
       }
 
       for (Effect effect : enemy.getEffects()) {
-        effect.setRemainingTicks(effect.getRemainingTicks() - 1);
+        effect.setRemainingTicks(effect.getRemainingTicks() - deltaTime);
       }
 
       enemy.getEffects().removeAll(enemy.getEffects().stream()

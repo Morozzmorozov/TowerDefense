@@ -2,5 +2,5 @@
   "Speed" : 0.5,
   "DamagePerTick" : 1,
   "Duration" : 1000,
-  "Image" : "poison.png"
+  "Image" : "frost.png"
 }

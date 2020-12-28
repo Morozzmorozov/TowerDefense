@@ -1,0 +1,6 @@
+{
+  "Speed" : 1,
+  "DamagePerTick" : 2,
+  "Duration" : 1500,
+  "Image" : "flame.png"
+}
