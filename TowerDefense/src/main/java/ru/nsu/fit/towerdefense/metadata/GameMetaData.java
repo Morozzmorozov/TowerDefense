@@ -330,6 +330,7 @@ public class GameMetaData {
     {
         String name = root.get("Name").asText();
         String info = root.get("Info").asText();
+        String image = root.get("Image").asText();
         int cost = root.get("Cost").asInt();
 
         ArrayNode node = root.get("Types").deepCopy();
@@ -338,7 +339,7 @@ public class GameMetaData {
         {
             types.add(x.asText());
         }
-        return new Research(name, info, types, cost);
+        return new Research(name, info, types, cost, image);
     }
 
 
