@@ -384,8 +384,9 @@ public class WorldControl {
       }
 
       for (Enemy enemy : affectedEnemies) {
-        int damage = projectile.getType().getEnemyTypeDamageMap()
-            .get(enemy.getType().getTypeName());
+        int damage = projectile.getType().getEnemyTypeDamageMap().containsKey(enemy.getType().getTypeName()) ?
+            projectile.getType().getEnemyTypeDamageMap().get(enemy.getType().getTypeName()) :
+            projectile.getType().getBasicDamage();
 
         List<EffectType> effects = projectile.getType().getEffects().stream()
             .map(name -> GameMetaData.getInstance().getEffectType(name))
