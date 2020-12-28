@@ -4,9 +4,11 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
@@ -79,6 +81,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private static final int DELTA_TIME = 1000 / FRAMES_PER_SECOND;
     private static final DecimalFormat DECIMAL_FORMAT =
         new DecimalFormat("#.##", new DecimalFormatSymbols() {{setDecimalSeparator('.');}});
+
+
+    private static final ColorAdjust MONOCHROME_COLOR_ADJUST = new ColorAdjust() {{
+        setBrightness(-0.5);
+        setSaturation(-1);
+    }};
 
     private static final String SLIDER_STYLE_FORMAT =
         "-slider-track-color: linear-gradient(to right, -slider-filled-track-color 0%%, "
@@ -640,6 +648,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 imageView.setPickOnBounds(true);
                 imageView.setPreserveRatio(true);
 
+                if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(towerType.getTypeName())) {
+                    imageView.setEffect(MONOCHROME_COLOR_ADJUST);
+                    imageView.setCache(true);
+                    imageView.setCacheHint(CacheHint.SPEED);
+                }
+
                 Label label = new Label("$" + upgrade.getCost());
 
                 VBox towerTypeVBox = new VBox();
@@ -796,6 +810,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 imageView.setFitHeight(48);
                 imageView.setPickOnBounds(true);
                 imageView.setPreserveRatio(true);
+
+                if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(towerType.getTypeName())) {
+                    imageView.setEffect(MONOCHROME_COLOR_ADJUST);
+                    imageView.setCache(true);
+                    imageView.setCacheHint(CacheHint.SPEED);
+                }
 
                 Label label = new Label("$" + towerType.getPrice());
 
