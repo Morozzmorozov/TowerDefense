@@ -63,6 +63,8 @@ public class ReplayWorldControl extends WorldControl {
 
   private void setWorldState(WorldState state) {
     world.setMoney(state.getMoney());
+    enemiesKilled = state.getKilledEnemies();
+    scienceEarned = state.getScience();
 
     world.getEnemies().removeAll(world.getEnemies().stream()
         .filter(enemy -> state.getEnemies().stream()

@@ -45,6 +45,7 @@ public class WorldControl {
   protected int enemiesKilled = 0;
   protected int wavesDefeated = 0;
   protected boolean isReplay = false;
+  protected int scienceEarned = 0;
 
   private List<Tower> newTowers = new ArrayList<>();
   private List<Tower> removedTowers = new ArrayList<>();
@@ -207,7 +208,7 @@ public class WorldControl {
   }
 
   public int getResearchPoints() {
-    return gameMap.getScienceReward();
+    return scienceEarned;
   }
 
   public int getBaseHealth() {
@@ -253,7 +254,7 @@ public class WorldControl {
 
     GameStateWriter.getInstance().fullCopy(world.getEnemies(), world.getTowers(), world.getProjectiles(),
         world.getBase(), world.getMoney(), world.getCurrentWaveNumber(), world.getCurrentWave().getCurrentEnemyNumber(),
-        world.getCountdown());
+        world.getCountdown(), scienceEarned, enemiesKilled);
     GameStateWriter.getInstance().endFrame();
 
     GameStateWriter.getInstance().newFrame();
@@ -266,6 +267,7 @@ public class WorldControl {
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
       wavesDefeated++;
+      scienceEarned += gameMap.getScienceReward();
       if (!isReplay) {
         UserMetaData.addResearchPoints(gameMap.getScienceReward());
       }

@@ -141,6 +141,8 @@ public class GameStateReader {
 			int waveNumber = 0;
 			int currentEnemyNumber = 0;
 			int countdown = 0;
+			int science = 0;
+			int killedEnemies = 0;
 			while (true)
 			{
 				int event = reader.getEventType();
@@ -158,6 +160,8 @@ public class GameStateReader {
 							countdown = Integer.parseInt(reader.getAttributeValue(1));
 							currentEnemyNumber = Integer.parseInt(reader.getAttributeValue(2));
 						}
+						case "Science" -> science = Integer.parseInt(reader.getAttributeValue(0));
+						case "KilledEnemies" -> killedEnemies = Integer.parseInt(reader.getAttributeValue(0));
 					}
 				}
 				else if (event == XMLStreamConstants.END_ELEMENT)
@@ -166,7 +170,7 @@ public class GameStateReader {
 				}
 				reader.next();
 			}
-			return new WorldState(enemies, towers, projectiles, money, fid, health, waveNumber, currentEnemyNumber, countdown);
+			return new WorldState(enemies, towers, projectiles, money, fid, health, waveNumber, currentEnemyNumber, countdown, science, killedEnemies);
 		}
 		catch (Exception e)
 		{

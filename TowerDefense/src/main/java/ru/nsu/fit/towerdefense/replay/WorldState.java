@@ -16,10 +16,11 @@ public class WorldState {
 	private int waveNumber;
 	private int currentEnemyNumber;
 	private int countdown;
-
+	private int science;
+	private int killedEnemies;
 
 	public WorldState(List<EnemyInfo> enemies, List<TowerInfo> towers, List<ProjectileInfo> projectiles,
-			int money, int id, int baseHealth, int waveNumber, int currentEnemyNumber, int countdown)
+			int money, int id, int baseHealth, int waveNumber, int currentEnemyNumber, int countdown, int science, int killedEnemies)
 	{
 		this.baseHealth = baseHealth;
 		this.enemies = enemies;
@@ -30,6 +31,8 @@ public class WorldState {
 		this.waveNumber = waveNumber;
 		this.currentEnemyNumber = currentEnemyNumber;
 		this.countdown = countdown;
+		this.science = science;
+		this.killedEnemies = killedEnemies;
 	}
 
 	public int getBaseHealth()
@@ -72,5 +75,13 @@ public class WorldState {
 
 	public int getCountdown() {
 		return countdown;
+	}
+
+	public int getScience() {
+		return science;
+	}
+
+	public int getKilledEnemies() {
+		return killedEnemies;
 	}
 }

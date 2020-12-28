@@ -84,7 +84,7 @@ public class GameStateWriter {
 	}
 
 	public void fullCopy(List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles,
-			Base base, int money, int waveNumber, int currentEnemyNumber, int countdown)
+			Base base, int money, int waveNumber, int currentEnemyNumber, int countdown, int science, int killedEnemies)
 	{
 		if (currentTick % fullCopy != 0)
 			return;
@@ -190,6 +190,12 @@ public class GameStateWriter {
 			writer.writeCharacters(tab.substring(0, 2));
 			writer.writeStartElement("Money");
 			writer.writeAttribute("amount", Integer.toString(money));
+			writer.writeEndElement();
+			writer.writeStartElement("Science");
+			writer.writeAttribute("amount", Integer.toString(science));
+			writer.writeEndElement();
+			writer.writeStartElement("KilledEnemies");
+			writer.writeAttribute("amount", Integer.toString(killedEnemies));
 			writer.writeEndElement();
 			writer.writeStartElement("CurrentWave");
 			writer.writeAttribute("waveNumber", Integer.toString(waveNumber));
@@ -420,7 +426,8 @@ public class GameStateWriter {
 		}
 	}
 
-	public void saveGame(String levelName, List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles, Base base, int money, int waveNumber, int currentEnemyNumber, int countdown)
+	public void saveGame(String levelName, List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles,
+			Base base, int money, int waveNumber, int currentEnemyNumber, int countdown, int science, int killedEnemies)
 	{
 		try
 		{
@@ -440,7 +447,7 @@ public class GameStateWriter {
 			writer.writeCharacters(tab.substring(0, 1));
 			writer.writeStartElement("WorldState");
 			writer.writeCharacters(System.getProperty("line.separator"));
-			fullCopy(enemies, towers, projectiles, base, money, waveNumber, currentEnemyNumber, countdown);
+			fullCopy(enemies, towers, projectiles, base, money, waveNumber, currentEnemyNumber, countdown, science, killedEnemies);
 			writer.writeCharacters(tab.substring(0, 1));
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));
