@@ -2,40 +2,33 @@ package ru.nsu.fit.towerdefense.simulator;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import java.util.UUID;
 import java.util.stream.Collectors;
-
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.metadata.UserMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EffectType;
-import ru.nsu.fit.towerdefense.replay.GameStateWriter;
-import ru.nsu.fit.towerdefense.replay.objectInfo.EnemyInfo;
-import ru.nsu.fit.towerdefense.replay.objectInfo.ProjectileInfo;
-import ru.nsu.fit.towerdefense.replay.objectInfo.TowerInfo;
-import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.FireType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.Upgrade;
+import ru.nsu.fit.towerdefense.metadata.map.GameMap;
+import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
-import ru.nsu.fit.towerdefense.replay.WorldState;
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
-import ru.nsu.fit.towerdefense.util.Vector2;
+import ru.nsu.fit.towerdefense.replay.GameStateWriter;
+import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.simulator.world.Wave;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Portal;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
-import ru.nsu.fit.towerdefense.metadata.map.GameMap;
-import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
-import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
-import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
-import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.FireType;
-import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.Upgrade;
+import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class WorldControl {
 
@@ -51,6 +44,7 @@ public class WorldControl {
   protected World world;
   protected int enemiesKilled = 0;
   protected int wavesDefeated = 0;
+  protected boolean isReplay = false;
 
   private List<Tower> newTowers = new ArrayList<>();
   private List<Tower> removedTowers = new ArrayList<>();
@@ -272,8 +266,9 @@ public class WorldControl {
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
       wavesDefeated++;
-      System.out.println("wave " + wave.getNumber() + " defeated");
-      //world.setMoney(world.getMoney() + wave.getDescription().getMoneyReward()); TODO fix me
+      if (!isReplay) {
+        UserMetaData.addResearchPoints(gameMap.getScienceReward());
+      }
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy) && world.getEnemies().size() == 1))
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
         GameStateWriter.getInstance().endFrame();
@@ -348,7 +343,6 @@ public class WorldControl {
                 || (encounterDistance < enemy.getType().getHitBox() && pathToEncounter < projectile.getType().getSpeed())) {
               affectedEnemies.add(enemy);
               removedProjectiles.add(projectile);
-              System.out.println("HIT!");
               break;
             }
           }

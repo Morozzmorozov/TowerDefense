@@ -11,7 +11,6 @@ import ru.nsu.fit.towerdefense.replay.EventRecord;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.replay.WorldState;
 import ru.nsu.fit.towerdefense.simulator.world.Wave;
-import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
@@ -27,6 +26,7 @@ public class ReplayWorldControl extends WorldControl {
   public ReplayWorldControl(GameMap gameMap, int deltaTime, WorldObserver observer, Replay replay) {
     super(gameMap, deltaTime, observer);
     this.replay = replay;
+    isReplay = true;
 
     for (var event : replay.getEventRecords()) {
       idEventMap.put(event.getId(), event);
