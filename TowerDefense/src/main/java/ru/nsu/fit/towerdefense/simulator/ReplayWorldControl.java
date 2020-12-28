@@ -39,10 +39,6 @@ public class ReplayWorldControl extends WorldControl {
     skipToTick((int)tick);
   }
 
-  private void simulateTick2() {
-    super.simulateTick();
-  }
-
   /**
    * Skips to the state after <code>tickIndex</code> tick
    *
@@ -57,7 +53,7 @@ public class ReplayWorldControl extends WorldControl {
       tick = worldStateIndex * replay.getTickRate() + 1;
     }
     while (tick != tickIndex + 1) {
-      simulateTick2();
+      super.simulateTick();
       fireEvents(tick - 1); // we want to access events that happened at the tick we have now simulated
     }
   }
