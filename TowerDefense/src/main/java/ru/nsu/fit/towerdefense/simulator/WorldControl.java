@@ -145,6 +145,9 @@ public class WorldControl {
     if (world.getMoney() < towerType.getPrice()) {
       throw new GameplayException("Not enough money to build the tower");
     }
+    if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(towerType.getTypeName())) {
+      throw new GameplayException("The tower is not yet researched");
+    }
     world.setMoney(world.getMoney() - towerType.getPrice());
     Tower tower = new Tower();
     tower.setPosition(new Vector2<>((int)Math.round(towerPlatform.getPosition().getX()),
@@ -161,6 +164,9 @@ public class WorldControl {
   public void upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
     if (world.getMoney() < upgrade.getCost()) {
       throw new GameplayException("Not enough money to upgrade the tower");
+    }
+    if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(upgrade.getName())) {
+      throw new GameplayException("The tower is not yet researched");
     }
     world.setMoney(world.getMoney() - upgrade.getCost());
     TowerType type = GameMetaData.getInstance().getTowerType(upgrade.getName());
