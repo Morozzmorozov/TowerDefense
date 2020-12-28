@@ -128,7 +128,8 @@ public class ReplayWorldControl extends WorldControl {
         Projectile projectile = savedProjectile.get();
         projectile.setPosition(new Vector2<>(projectileInfo.getPosition()));
         projectile.setRemainingRange(projectileInfo.getRange().floatValue());
-        projectile.setRotation(100500); // todo come up with this
+        projectile.setVelocity(new Vector2<>(projectileInfo.getVelocity()));
+        projectile.setRotation(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX()));
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
         //projectile.setScale();
         projectile.setTarget(
@@ -149,7 +150,9 @@ public class ReplayWorldControl extends WorldControl {
             null);
         projectile.setFireType(projectileInfo.getFireType());
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
-
+        projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
+        projectile.setRemainingRange(projectileInfo.getRange().floatValue());
+        world.getProjectiles().add(projectile);
       }
     }
 

@@ -88,7 +88,7 @@ public class Projectile extends GameObject implements Renderable {
   }
 
   public Vector2<Double> getPosition() { // todo fix temporary solution
-    if (parent.getType().getFireType().equals(FireType.UNIDIRECTIONAL))
+    if (fireType.equals(FireType.UNIDIRECTIONAL))
     return position;
     else return new Vector2<>(position.getX() + 0.5 - 0.5 * scale, position.getY() + 0.5 - 0.5 * scale);
   }

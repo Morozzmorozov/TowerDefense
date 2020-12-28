@@ -308,7 +308,7 @@ public class WorldControl {
       }
 
 
-      if (projectile.getParent().getType().getFireType().equals(FireType.UNIDIRECTIONAL)
+      if (projectile.getFireType().equals(FireType.UNIDIRECTIONAL)
           && projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
 
         double newRotation = (getNewDirection(projectile.getRotation() - 90, projectile.getPosition(), projectile.getTarget().getPosition(), projectile.getRotationSpeed()) + 90) % 360;
@@ -324,7 +324,7 @@ public class WorldControl {
 
       List<Enemy> affectedEnemies = new ArrayList<>();
 
-      switch (projectile.getParent().getType().getFireType()) {
+      switch (projectile.getFireType()) {
         case UNIDIRECTIONAL:
           Vector2<Double> newPosition = new Vector2<>(
               projectile.getPosition().getX() + deltaTime * projectile.getVelocity().getX(),
@@ -348,6 +348,7 @@ public class WorldControl {
                 || (encounterDistance < enemy.getType().getHitBox() && pathToEncounter < projectile.getType().getSpeed())) {
               affectedEnemies.add(enemy);
               removedProjectiles.add(projectile);
+              System.out.println("HIT!");
               break;
             }
           }
@@ -563,6 +564,7 @@ public class WorldControl {
                   direction, tower);
               projectile.setRotation(
                   Math.toDegrees(Math.atan2(direction.getY(), direction.getX())) + 90);
+              projectile.setFireType(FireType.UNIDIRECTIONAL);
               world.getProjectiles().add(projectile);
               tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
             }
@@ -574,6 +576,7 @@ public class WorldControl {
               Projectile projectile = new Projectile(null, tower.getType().getRange(),
                   projectileType, new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
                   null, tower);
+              projectile.setFireType(FireType.OMNIDIRECTIONAL);
               projectile.setScale(0);
               world.getProjectiles().add(projectile);
               tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
