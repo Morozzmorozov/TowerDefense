@@ -2,6 +2,7 @@ package ru.nsu.fit.towerdefense.metadata;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class UserMetaData {
@@ -44,5 +45,15 @@ public class UserMetaData {
 
     public static void saveResearch(String researchName) {
         PREFERENCES.putBoolean(researchName, true);
+    }
+
+    // ----- Debug -----
+
+    public static void clear() {
+        try {
+            PREFERENCES.clear();
+        } catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
     }
 }
