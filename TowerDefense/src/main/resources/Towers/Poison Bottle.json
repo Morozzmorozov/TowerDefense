@@ -1,0 +1,12 @@
+{
+	"DisplayInfo" : "Contains top secret poison",
+	"Price" : 100,
+	"Upgrades": [
+	],
+	"Range" : 3,
+	"FireRate" : 1000,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Poison Drop",
+	"Image" : "venom.png",
+	"RotationSpeed": 3.0
+}

@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "A heavy tank",
-	"Health" : 200,
+	"Health" : 4000,
 	"Speed" : 0.0009,
 	"HitBox" : 0.4,
 	"SizeX" : 1,

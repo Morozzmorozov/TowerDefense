@@ -2,14 +2,14 @@
 	"DisplayInfo" : "This ring can slow down multiple enemies at once",
     "Speed" : 0.05,
     "SelfGuided" : false,
-    "BasicDamage" : 70,
+    "BasicDamage" : 1400,
     "EnemyTypeDamage" : [
-        ["Rebel", 100],
-        ["Light Infantry", 900],
-        ["Heavy Infantry", 80],
-        ["Commandos", 70],
-        ["Tank", 60],
-        ["Helicopter", 50]
+        ["Rebel", 2000],
+        ["Light Infantry", 1800],
+        ["Heavy Infantry", 1600],
+        ["Commandos", 1400],
+        ["Tank", 1200],
+        ["Helicopter", 1000]
     ],
     "HitBox" : 2,
     "SizeX" : 1.0,

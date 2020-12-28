@@ -2,14 +2,14 @@
 	"DisplayInfo" : "Simple but deadly",
     "Speed" : 0.0125,
     "SelfGuided" : false,
-    "BasicDamage" : 100,
+    "BasicDamage" : 2000,
     "EnemyTypeDamage" : [
-        ["Rebel", 120],
-        ["Light Infantry", 100],
-        ["Heavy Infantry", 90],
-        ["Commandos", 80],
-        ["Tank", 50],
-        ["Helicopter", 20]
+        ["Rebel", 2400],
+        ["Light Infantry", 2000],
+        ["Heavy Infantry", 1800],
+        ["Commandos", 1600],
+        ["Tank", 1000],
+        ["Helicopter", 400]
     ],
     "HitBox" : 2,
     "SizeX" : 1.0,

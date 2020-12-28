@@ -2,21 +2,21 @@
     "Basic" : ["Light Cannon"],
     "Researches" : [
         {
-            "Name" : "Basic machinery",
+            "Name" : "Basic Cannons",
             "Info" : "Stick plus stick is not just two sticks",
-            "Image" : "portal.png",
+            "Image" : "snowcannon.png",
             "Types" : ["Heavy Cannon", "SnowTower"],
             "Cost" : 15
         },
         {
-            "Name" : "Crossbows",
+            "Name" : "Chemistry",
             "Info" : "Faster, higher, stronger",
-            "Image" : "tower.png",
-            "Types" : ["Wave"],
+            "Image" : "portal.png",
+            "Types" : ["Wave", "Poison Bottle"],
             "Cost" : 60
         },
         {
-            "Name" : "Advanced machinery",
+            "Name" : "Big Cannons",
             "Info" : "It's a raining stones",
             "Image" : "tower2.png",
             "Types" : ["Anti-Tank Cannon"],
@@ -31,9 +31,9 @@
         }
     ],
     "Dependencies" : [
-        ["Basic machinery", "Crossbows"],
-        ["Basic machinery", "Advanced machinery"],
-        ["Crossbows", "Future Tech"],
-        ["Advanced machinery", "Future Tech"]
+        ["Basic Cannons", "Chemistry"],
+        ["Basic Cannons", "Big Cannons"],
+        ["Chemistry", "Future Tech"],
+        ["Big Cannons", "Future Tech"]
     ]
 }

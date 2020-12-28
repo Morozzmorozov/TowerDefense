@@ -6,7 +6,7 @@
 		"Health" : 500,
 		"PosX" : 1,
 		"PosY" : 2,
-		"Image" : "base.png"
+		"Image" : "castle.png"
 	},
 	"Roads" : [
 		[[5, 1], [5, 2], [1, 2]],

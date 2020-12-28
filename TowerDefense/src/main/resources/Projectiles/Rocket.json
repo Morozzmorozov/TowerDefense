@@ -2,14 +2,14 @@
 	"DisplayInfo" : "This rocket is slow but very deadly. It can chase your enemies down the road",
     "Speed" : 0.004375,
     "SelfGuided" : true,
-    "BasicDamage" : 210,
+    "BasicDamage" : 4200,
     "EnemyTypeDamage" : [
-        ["Rebel", 200],
-        ["Light Infantry", 170],
-        ["Heavy Infantry", 125],
-        ["Commandos", 100],
-        ["Tank", 300],
-        ["Helicopter", 300]
+        ["Rebel", 4000],
+        ["Light Infantry", 3400],
+        ["Heavy Infantry", 2500],
+        ["Commandos", 2000],
+        ["Tank", 6000],
+        ["Helicopter", 6000]
     ],
     "HitBox" : 2,
     "SizeX" : 1.0,

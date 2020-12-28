@@ -1,6 +1,6 @@
 {
 	"DisplayInfo" : "This peasant is unhappy with high taxes. Armed with a pitchfork",
-	"Health" : 80,
+	"Health" : 1600,
 	"Speed" : 0.001,
 	"HitBox" : 0.4,
 	"SizeX" : 1,

@@ -2,14 +2,14 @@
 	"DisplayInfo" : "It can kill even the toughest of your enemies",
     "Speed" : 0.05625,
     "SelfGuided" : false,
-    "BasicDamage" : 75,
+    "BasicDamage" : 3000,
     "EnemyTypeDamage" : [
-        ["Rebel", 200],
-        ["Light Infantry", 170],
-        ["Heavy Infantry", 125],
-        ["Commandos", 100],
-        ["Tank", 300],
-        ["Helicopter", 300]
+        ["Rebel", 4000],
+        ["Light Infantry", 3400],
+        ["Heavy Infantry", 2500],
+        ["Commandos", 2000],
+        ["Tank", 6000],
+        ["Helicopter", 6000]
     ],
     "HitBox" : 2,
     "SizeX" : 1.0,

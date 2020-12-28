@@ -1,0 +1,20 @@
+{
+	"DisplayInfo" : "Poison from a secret lab",
+    "Speed" : 0.004,
+    "SelfGuided" : true,
+    "BasicDamage" : 100,
+    "EnemyTypeDamage" : [
+        ["Rebel", 120],
+        ["Light Infantry", 100],
+        ["Heavy Infantry", 100],
+        ["Commandos", 80],
+        ["Tank", 50],
+        ["Helicopter", 50]
+    ],
+    "HitBox" : 2,
+    "SizeX" : 1.0,
+    "SizeY" : 1.0,
+    "Image" : "poison_drop.png",
+    "AngularVelocity": 1.0,
+    "Effects" : ["Poison"]
+}
