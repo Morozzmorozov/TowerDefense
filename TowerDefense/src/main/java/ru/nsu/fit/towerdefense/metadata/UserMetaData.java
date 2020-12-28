@@ -18,6 +18,10 @@ public class UserMetaData {
         PREFERENCES.putInt(RESEARCH_POINTS_KEY, researchPoints);
     }
 
+    public static void subtractResearchPoints(int researchPoints) {
+        PREFERENCES.putInt(RESEARCH_POINTS_KEY, getResearchPoints() - researchPoints);
+    }
+
     public static void addResearchPoints(int researchPoints) {
         PREFERENCES.putInt(RESEARCH_POINTS_KEY, getResearchPoints() + researchPoints);
     }
