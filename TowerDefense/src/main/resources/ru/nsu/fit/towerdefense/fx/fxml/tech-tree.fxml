@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import java.net.URL?>
 <StackPane styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
@@ -10,6 +16,27 @@
         <URL value="@../css/tech-tree.css" />
     </stylesheets>
     <StackPane fx:id="worldWrapperStackPane" styleClass="world-wrapper">
-        <AnchorPane fx:id="worldAnchorPane" styleClass="debug-world" />
+        <AnchorPane fx:id="worldAnchorPane" />
     </StackPane>
+    <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" />
+            <ColumnConstraints hgrow="ALWAYS" />
+            <ColumnConstraints hgrow="NEVER" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="NEVER" />
+        </rowConstraints>
+        <HBox>
+            <HBox>
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
+                <Label fx:id="researchLabel" />
+            </HBox>
+        </HBox>
+        <HBox GridPane.columnIndex="2">
+            <HBox>
+                <ImageView fx:id="menuImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="menu-icon" />
+            </HBox>
+        </HBox>
+    </GridPane>
 </StackPane>

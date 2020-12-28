@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.fx.controllers.techtree;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -12,15 +13,18 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.game.WorldCamera;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
+import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.metadata.UserMetaData;
 import ru.nsu.fit.towerdefense.metadata.techtree.Research;
-import ru.nsu.fit.towerdefense.metadata.techtree.TechTree;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 import java.util.ArrayList;
@@ -38,6 +42,10 @@ public class TechTreeController implements Controller {
 
     @FXML private StackPane worldWrapperStackPane;
     @FXML private AnchorPane worldAnchorPane;
+
+    @FXML private Label researchLabel;
+
+    @FXML private ImageView menuImageView;
 
     private final SceneManager sceneManager;
 //    private final MyTechTree techTree;
@@ -63,6 +71,10 @@ public class TechTreeController implements Controller {
 
     @FXML
     private void initialize() {
+        menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
+
+        researchLabel.setText(UserMetaData.getResearchPoints() + "");
+
         worldCamera = new WorldCamera(worldWrapperStackPane, worldAnchorPane,
             sceneManager.getStageSize(), GameMetaData.getInstance().getTechTree().getSize());
 

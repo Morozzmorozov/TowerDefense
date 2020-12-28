@@ -54,11 +54,11 @@
     -fx-padding: 10 20;
 }
 
-.buttons-scroll-pane {
-    -fx-fit-to-width: true;
-    -fx-fit-to-height: true;
+.bar-grid-pane HBox {
+    -fx-alignment: center;
 }
 
-.buttons-box {
-    -fx-background-color: rgba(0, 0, 0, 0.1);
+.bar-grid-pane > HBox {
+    -fx-padding: 8;
+    -fx-spacing: 12;
 }

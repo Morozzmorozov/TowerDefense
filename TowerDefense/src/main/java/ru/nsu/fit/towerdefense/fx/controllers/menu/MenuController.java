@@ -19,10 +19,13 @@ import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.metadata.UserMetaData;
 import ru.nsu.fit.towerdefense.replay.GameStateReader;
 import ru.nsu.fit.towerdefense.replay.Replay;
 
 import java.io.File;
+
+import static javafx.scene.input.KeyCode.CONTROL;
 
 /**
  * MenuController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a menu scene.
@@ -33,10 +36,14 @@ public class MenuController implements Controller {
 
     private static final String FXML_FILE_NAME = "menu.fxml";
 
-    @FXML private Button techTreeButton;
+    @FXML private Button clearButton;
+    @FXML private Button addResearchPointsButton;
 
+    @FXML private ImageView techTreeImageView;
     @FXML private Label levelsLabel;
     @FXML private FlowPane levelsFlowPane;
+
+    @FXML private Label researchLabel;
 
     private final SceneManager sceneManager;
 
@@ -55,7 +62,17 @@ public class MenuController implements Controller {
 
     @FXML
     private void initialize() {
-        techTreeButton.setOnAction(actionEvent -> sceneManager.switchToTechTree());
+        clearButton.setOnMouseClicked(mouseEvent -> {
+            UserMetaData.clear();
+            researchLabel.setText(UserMetaData.getResearchPoints() + "");
+        });
+        addResearchPointsButton.setOnMouseClicked(mouseEvent -> {
+            UserMetaData.addResearchPoints(10);
+            researchLabel.setText(UserMetaData.getResearchPoints() + "");
+        });
+
+        researchLabel.setText(UserMetaData.getResearchPoints() + "");
+        techTreeImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToTechTree());
 
         if (GameMetaData.getInstance().getGameMapNames().isEmpty()) {
             levelsLabel.setText("No levels");
@@ -157,5 +174,38 @@ public class MenuController implements Controller {
     @Override
     public String getFXMLFileName() {
         return FXML_FILE_NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void runAfterSceneSet() {
+        sceneManager.getScene().setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(CONTROL)) {
+                clearButton.setManaged(true);
+                clearButton.setVisible(true);
+                addResearchPointsButton.setManaged(true);
+                addResearchPointsButton.setVisible(true);
+            }
+        });
+
+        sceneManager.getScene().setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode().equals(CONTROL)) {
+                clearButton.setManaged(false);
+                clearButton.setVisible(false);
+                addResearchPointsButton.setManaged(false);
+                addResearchPointsButton.setVisible(false);
+            }
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
+        sceneManager.getScene().setOnKeyPressed(null);
+        sceneManager.getScene().setOnKeyReleased(null);
     }
 }

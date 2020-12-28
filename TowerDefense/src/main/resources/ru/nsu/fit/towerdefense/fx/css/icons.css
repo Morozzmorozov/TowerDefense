@@ -84,3 +84,13 @@
 .question-icon {
     -fx-image: url('../icons/question.png');
 }
+
+.tech-tree-icon {
+    -fx-image: url('../icons/tech-tree.png');
+    -fx-cursor: hand;
+}
+
+.menu-icon {
+    -fx-image: url('../icons/menu.png');
+    -fx-cursor: hand;
+}

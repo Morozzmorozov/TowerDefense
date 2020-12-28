@@ -1,14 +1,9 @@
-.debug-world {
-    /*-fx-background-color: green;*/
-}
-
 .root {
     -fx-background-color: rgba(0, 0, 0, 0.95);
     -fx-background-image: url('../icons/root-background.png');
 }
 
 .research-box {
-    -fx-border-width: 5;
     -fx-border-color: transparent;
     -fx-alignment: center;
     -fx-background-color: #2e302f;
@@ -22,4 +17,13 @@
 
 .research-price {
     -fx-alignment: center;
+}
+
+.bar-grid-pane HBox {
+    -fx-alignment: center;
+}
+
+.bar-grid-pane > HBox {
+    -fx-padding: 8;
+    -fx-spacing: 12;
 }
