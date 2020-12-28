@@ -187,6 +187,7 @@ public class GameStateReader {
 			int wave = 0;
 			String id = "";
 			int health = 0;
+			int reward = 0;
 			ArrayList<Vector2<Double>> trajectory = new ArrayList<>();
 			EnemyInfo info = new EnemyInfo();
 			ArrayList<Pair<String, Integer>> effects = new ArrayList<>();
@@ -205,6 +206,7 @@ public class GameStateReader {
 
 						type = reader.getAttributeValue(4);
 						wave = Integer.parseInt(reader.getAttributeValue(5));
+						reward = Integer.parseInt(reader.getAttributeValue(6));
 					}
 					else if (reader.getLocalName().equals("Point")) // trajectory
 					{
@@ -229,6 +231,7 @@ public class GameStateReader {
 			info.setWave(wave);
 			info.setTrajectory(trajectory);
 			info.setEffects(effects);
+			info.setReward(reward);
 			return info;
 		}
 		catch (Exception e)

@@ -11,6 +11,7 @@ public class EnemyInfo {
 	private int wave;
 	private Vector2<Double> position;
 	private List<Vector2<Double>> trajectory;
+	private int reward;
 
 	private List<Pair<String, Integer>> effects;
 
@@ -86,5 +87,11 @@ public class EnemyInfo {
 		return position;
 	}
 
+	public int getReward() {
+		return reward;
+	}
 
+	public void setReward(int reward) {
+		this.reward = reward;
+	}
 }

@@ -168,7 +168,14 @@ public class WorldControl {
     tower.setCooldown(type.getFireRate());
     tower.setTarget(null);
     tower.setSellPrice(tower.getSellPrice() + Math.round(upgrade.getCost() + SELL_MULTIPLIER));
-    GameStateWriter.getInstance().upgradeTower(world.getTowers().indexOf(tower), upgrade.getName()); // todo ask about platform
+
+    for (int i = 0; i < world.getTowerPlatforms().size(); ++i) {
+      TowerPlatform platform = world.getTowerPlatforms().get(i);
+      if (distance(platform.getPosition(), tower.getPosition()) < DELTA) {
+        GameStateWriter.getInstance().upgradeTower(i, upgrade.getName()); // todo ask about platform
+        break;
+      }
+    }
   }
 
   public Tower getTowerOnPlatform(TowerPlatform towerPlatform) {

@@ -48,7 +48,6 @@ public class ReplayWorldControl extends WorldControl {
    * @param tickIndex the tick before the desired state
    */
   public void skipToTick(int tickIndex) {
-    // todo todo
     int worldStateIndex = tickIndex / replay.getTickRate();
     if (!(worldStateIndex == currentWorldStateIndex && tickIndex >= tick)) {
       setWorldState(replay.getWorldStates().get(worldStateIndex)); // move to state after tick No. tickIndex
@@ -121,7 +120,7 @@ public class ReplayWorldControl extends WorldControl {
             GameMetaData.getInstance().getEnemyType(enemyInfo.getType()),
             enemyInfo.getWave(),
             new Vector2<>(enemyInfo.getPosition()),
-            100 // todo something with it
+            enemyInfo.getReward()
             );
         enemy.getTrajectory().clear();
         for (var vertex : enemyInfo.getTrajectory()) {
@@ -256,6 +255,7 @@ public class ReplayWorldControl extends WorldControl {
           .findFirst()
           .ifPresent(upgrade -> world.setMoney(world.getMoney() - upgrade.getCost()));
       tower.setType(GameMetaData.getInstance().getTowerType(upgradeTower.getValue()));
+      tower.setCooldown(tower.getType().getFireRate());
     }
   }
 }
