@@ -354,7 +354,7 @@
                 <Label>Finish game</Label>
             </HBox>
             <HBox fx:id="menuHBox">
-                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="menu-icon" />
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="home-icon" />
                 <Label>Main menu</Label>
             </HBox>
         </VBox>
@@ -396,7 +396,7 @@
                     <Label>Restart</Label>
                 </HBox>
                 <HBox fx:id="resultsMenuHBox" GridPane.columnIndex="2">
-                    <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true" styleClass="menu-icon" />
+                    <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true" styleClass="home-icon" />
                     <Label>Menu</Label>
                 </HBox>
             </GridPane>
