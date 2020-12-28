@@ -141,7 +141,7 @@
                 </VBox>
                 <Region styleClass="side-bar-delimiter" />
                 <VBox fx:id="buildTowerCharacteristicsVBox" visible="false" styleClass="side-bar-content">
-                    <Label>CHARACTERISTICS</Label>
+                    <Text fx:id="buildTowerNameText">TOWER NAME</Text>
                     <HBox>
                         <Region HBox.hgrow="ALWAYS"/>
                         <GridPane styleClass="characteristics-grid-pane">
@@ -175,6 +175,9 @@
                         </GridPane>
                         <Region HBox.hgrow="ALWAYS"/>
                     </HBox>
+                    <TextFlow styleClass="game-object-description">
+                        <Text fx:id="buildTowerDisplayInfoText">Description</Text>
+                    </TextFlow>
                 </VBox>
             </VBox>
             <VBox fx:id="towerSideVBox" visible="false" managed="false" styleClass="side-bar-box">
@@ -186,7 +189,7 @@
                 </VBox>
                 <Region styleClass="side-bar-delimiter" />
                 <VBox styleClass="side-bar-content">
-                    <Label>CHARACTERISTICS</Label>
+                    <Text fx:id="towerCharacteristicsText" />
                     <HBox>
                         <Region HBox.hgrow="ALWAYS"/>
                         <GridPane styleClass="characteristics-grid-pane">
@@ -258,7 +261,7 @@
                     </GridPane>
                 </VBox>
             </VBox>
-            <!--<ImageView fx:id="closeSidePaneImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="close-side-pane, close-icon" />-->
+            <!--<ImageView fx:id="closeSidePaneImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="close-side-pane, close-icon" />todo delete?-->
         </StackPane>
     </GridPane>
     <GridPane styleClass="bar-grid-pane" pickOnBounds="false">

@@ -95,6 +95,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private VBox platformSideVBox;
     @FXML private FlowPane buildTowerFlowPane;
     @FXML private VBox buildTowerCharacteristicsVBox;
+    @FXML private Text buildTowerNameText;
+    @FXML private Text buildTowerDisplayInfoText;
     @FXML private Label buildTowerOmnidirectionalLabel;
     @FXML private Label buildTowerRangeLabel;
     @FXML private Label buildTowerFireRateLabel;
@@ -106,6 +108,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private VBox towerSideVBox;
     @FXML private Text towerNameText;
     @FXML private Text towerDisplayInfoText;
+    @FXML private Text towerCharacteristicsText;
     @FXML private FlowPane upgradeTowerFlowPane;
     @FXML private Label upgradeTowerOmnidirectionalLabel;
     @FXML private Label upgradeTowerRangeLabel;
@@ -260,7 +263,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         bindUppercase(enemyNameText);
         bindUppercase(projectileNameText);
+        bindUppercase(buildTowerNameText);
         bindUppercase(towerNameText);
+        bindUppercase(towerCharacteristicsText);
 
         baseInitialHealthLabel.setText(baseInitialHealth + "");
 
@@ -653,6 +658,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
                 });
                 towerTypeVBox.setOnMouseEntered(mouseEvent -> {
+                    towerCharacteristicsText.setText(towerType.getTypeName());
+
                     ProjectileType projType = GameMetaData.getInstance()
                         .getProjectileType(tower.getType().getProjectileType());
                     ProjectileType newProjType = GameMetaData.getInstance()
@@ -731,6 +738,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void setDefaultTowerCharacteristics(Tower tower) {
+        towerCharacteristicsText.setText("CHARACTERISTICS");
         upgradeTowerOmnidirectionalLabel.getStyleClass().clear();
         upgradeTowerOmnidirectionalLabel.setText(
             tower.getType().getFireType() == TowerType.FireType.OMNIDIRECTIONAL ? "Yes" : "No");
@@ -810,6 +818,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
                 });
                 towerTypeVBox.setOnMouseEntered(mouseEvent -> {
+                    buildTowerNameText.setText(towerType.getTypeName());
+                    buildTowerDisplayInfoText.setText(towerType.getDisplayInfo());
                     buildTowerOmnidirectionalLabel.setText(
                         towerType.getFireType() == TowerType.FireType.OMNIDIRECTIONAL ? "Yes" : "No");
                     buildTowerRangeLabel.setText(DECIMAL_FORMAT.format(towerType.getRange()));

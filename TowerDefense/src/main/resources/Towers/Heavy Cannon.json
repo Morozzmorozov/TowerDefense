@@ -1,5 +1,5 @@
 {
-	"DisplayInfo" : "A reliable guardian of your base, this cannon shoots faster and has a longer range then the Light Cannon",
+	"DisplayInfo" : "A reliable guardian of your base, this cannon shoots faster and has a longer range than the Light Cannon",
 	"Price" : 300,
 	"Upgrades": [
 		["Anti-Tank Cannon", 350]
