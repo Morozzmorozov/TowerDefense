@@ -11,6 +11,7 @@ import javafx.stage.Window;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.game.GameController;
 import ru.nsu.fit.towerdefense.fx.controllers.menu.MenuController;
+import ru.nsu.fit.towerdefense.fx.controllers.techtree.TechTreeController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.replay.Replay;
@@ -135,6 +136,19 @@ public class SceneManager {
             switchScene(new GameController(this,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), replay));
+        } catch (NoSuchElementException e) {
+            new AlertBuilder()
+                .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
+                .build().showAndWait();
+        }
+    }
+
+    /**
+     * Creates new TechTreeController with and switches the scene to a game.
+     */
+    public void switchToTechTree() {
+        try {
+            switchScene(new TechTreeController(this));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
