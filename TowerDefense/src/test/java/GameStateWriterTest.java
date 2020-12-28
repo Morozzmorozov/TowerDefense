@@ -37,7 +37,7 @@ public class GameStateWriterTest {
 		tower.get(0).setPosition(new Vector2<>(3, 3));
 
 		writer.newFrame();
-		writer.fullCopy(enemies, tower, projectiles, base, 100);
+		//writer.fullCopy(enemies, tower, projectiles, base, 100);
 		writer.endFrame();
 		writer.newFrame();
 		writer.endFrame();
@@ -69,8 +69,8 @@ public class GameStateWriterTest {
 		tower.get(0).setCooldown(20);
 		tower.get(0).setPosition(new Vector2<>(3, 3));
 
-		writer.saveGame("map1", enemies, tower, projectiles, base, 1000);
-		writer.saveGame("Level 1", enemies, tower, projectiles, base, 1000);
+		//writer.saveGame("map1", enemies, tower, projectiles, base, 1000);
+		//writer.saveGame("Level 1", enemies, tower, projectiles, base, 1000);
 	}
 
 }

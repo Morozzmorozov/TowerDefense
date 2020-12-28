@@ -138,6 +138,9 @@ public class GameStateReader {
 			ArrayList<ProjectileInfo> projectiles = new ArrayList<>();
 			int money = 0;
 			int health = 0;
+			int waveNumber = 0;
+			int currentEnemyNumber = 0;
+			int countdown = 0;
 			while (true)
 			{
 				int event = reader.getEventType();
@@ -149,7 +152,12 @@ public class GameStateReader {
 						case "Enemy" -> enemies.add(parseEnemy());
 						case "Tower" -> towers.add(parseTower());
 						case "Projectile" -> projectiles.add(parseProjectile());
-						default -> money = Integer.parseInt(reader.getAttributeValue(0));
+						case "Money" -> money = Integer.parseInt(reader.getAttributeValue(0));
+						case "CurrentWave" -> {
+							waveNumber = Integer.parseInt(reader.getAttributeValue(0));
+							countdown = Integer.parseInt(reader.getAttributeValue(1));
+							currentEnemyNumber = Integer.parseInt(reader.getAttributeValue(2));
+						}
 					}
 				}
 				else if (event == XMLStreamConstants.END_ELEMENT)
@@ -158,7 +166,7 @@ public class GameStateReader {
 				}
 				reader.next();
 			}
-			return new WorldState(enemies, towers, projectiles, money, fid, health);
+			return new WorldState(enemies, towers, projectiles, money, fid, health, waveNumber, currentEnemyNumber, countdown);
 		}
 		catch (Exception e)
 		{

@@ -13,8 +13,13 @@ public class WorldState {
 	private int money;
 	private int id;
 	private int baseHealth;
+	private int waveNumber;
+	private int currentEnemyNumber;
+	private int countdown;
 
-	public WorldState(List<EnemyInfo> enemies, List<TowerInfo> towers, List<ProjectileInfo> projectiles, int money, int id, int baseHealth)
+
+	public WorldState(List<EnemyInfo> enemies, List<TowerInfo> towers, List<ProjectileInfo> projectiles,
+			int money, int id, int baseHealth, int waveNumber, int currentEnemyNumber, int countdown)
 	{
 		this.baseHealth = baseHealth;
 		this.enemies = enemies;
@@ -22,6 +27,9 @@ public class WorldState {
 		this.towers = towers;
 		this.projectiles = projectiles;
 		this.id = id;
+		this.waveNumber = waveNumber;
+		this.currentEnemyNumber = currentEnemyNumber;
+		this.countdown = countdown;
 	}
 
 	public int getBaseHealth()
@@ -54,4 +62,15 @@ public class WorldState {
 		return id;
 	}
 
+	public int getWaveNumber() {
+		return waveNumber;
+	}
+
+	public int getCurrentEnemyNumber() {
+		return currentEnemyNumber;
+	}
+
+	public int getCountdown() {
+		return countdown;
+	}
 }

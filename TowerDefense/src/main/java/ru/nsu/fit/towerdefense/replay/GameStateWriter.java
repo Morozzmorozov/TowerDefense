@@ -83,7 +83,8 @@ public class GameStateWriter {
 		}
 	}
 
-	public void fullCopy(List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles, Base base, int money)
+	public void fullCopy(List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles,
+			Base base, int money, int waveNumber, int currentEnemyNumber, int countdown)
 	{
 		if (currentTick % fullCopy != 0)
 			return;
@@ -189,6 +190,11 @@ public class GameStateWriter {
 			writer.writeCharacters(tab.substring(0, 2));
 			writer.writeStartElement("Money");
 			writer.writeAttribute("amount", Integer.toString(money));
+			writer.writeEndElement();
+			writer.writeStartElement("CurrentWave");
+			writer.writeAttribute("waveNumber", Integer.toString(waveNumber));
+			writer.writeAttribute("countdown", Integer.toString(countdown));
+			writer.writeAttribute("currentEnemyNumber", Integer.toString(currentEnemyNumber));
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));
 
@@ -414,7 +420,7 @@ public class GameStateWriter {
 		}
 	}
 
-	public void saveGame(String levelName, List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles, Base base, int money)
+	public void saveGame(String levelName, List<Enemy> enemies, List<Tower> towers, List<Projectile> projectiles, Base base, int money, int waveNumber, int currentEnemyNumber, int countdown)
 	{
 		try
 		{
@@ -434,7 +440,7 @@ public class GameStateWriter {
 			writer.writeCharacters(tab.substring(0, 1));
 			writer.writeStartElement("WorldState");
 			writer.writeCharacters(System.getProperty("line.separator"));
-			fullCopy(enemies, towers, projectiles, base, money);
+			fullCopy(enemies, towers, projectiles, base, money, waveNumber, currentEnemyNumber, countdown);
 			writer.writeCharacters(tab.substring(0, 1));
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));

@@ -6,9 +6,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
+import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.replay.EventRecord;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.replay.WorldState;
+import ru.nsu.fit.towerdefense.simulator.world.Wave;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
@@ -61,21 +63,33 @@ public class ReplayWorldControl extends WorldControl {
 
   private void setWorldState(WorldState state) {
     world.setMoney(state.getMoney());
-    System.out.println("==================");
-
-
 
     world.getEnemies().removeAll(world.getEnemies().stream()
         .filter(enemy -> state.getEnemies().stream()
             .noneMatch(candidate -> candidate.getId().equals(enemy.getId().toString())))
         .collect(Collectors.toList()));
 
+    world.setCountdown(state.getCountdown());
+    world.clearWaves();
+    Wave currentWave = new Wave();
+    currentWave.setCurrentEnemyNumber(state.getCurrentEnemyNumber());
+    currentWave.setNumber(state.getWaveNumber());
+    currentWave.setRemainingEnemiesCount(gameMap.getWaves().get(currentWave.getNumber()).getEnemiesList().stream().mapToInt(
+        WaveEnemies::getCount).sum() - currentWave.getCurrentEnemyNumber());
+    world.setCurrentWave(currentWave);
 
     for (var enemyInfo : state.getEnemies()) {
-      for (var heh : enemyInfo.getTrajectory()) {
-        System.out.println(heh.getX() + " " + heh.getY());
+
+      if (world.getWaveByNumber(enemyInfo.getWave()) == null) {
+        Wave wave = new Wave();
+        wave.setNumber(enemyInfo.getWave());
+        wave.setRemainingEnemiesCount(1);
+        world.addWave(wave);
+      } else {
+        Wave wave = world.getWaveByNumber(enemyInfo.getWave());
+        wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() + 1);
       }
-      System.out.println(" --- ");
+
       var savedEnemy = world.getEnemies().stream()
           .dropWhile(enemy -> !enemy.getId().toString().equals(enemyInfo.getId()))
           .findFirst();
@@ -182,9 +196,7 @@ public class ReplayWorldControl extends WorldControl {
 
   private void fireEvents(long tickIndex) {
     var event = idEventMap.get((int)tickIndex);
-    if (tickIndex == 120) {
-      System.out.println(event.getBuildTower().size());
-    }
+
     if (event == null) {
       return;
     }

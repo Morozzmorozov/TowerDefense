@@ -56,7 +56,6 @@ public class WorldControl {
   private List<Tower> removedTowers = new ArrayList<>();
 
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
-    System.out.println();
     this.gameMap = gameMap;
     this.deltaTime = deltaTime;
     this.worldObserver = worldObserver;
@@ -258,7 +257,9 @@ public class WorldControl {
     removedTowers.clear();
 
 
-    GameStateWriter.getInstance().fullCopy(world.getEnemies(), world.getTowers(), world.getProjectiles(), world.getBase(), world.getMoney());
+    GameStateWriter.getInstance().fullCopy(world.getEnemies(), world.getTowers(), world.getProjectiles(),
+        world.getBase(), world.getMoney(), world.getCurrentWaveNumber(), world.getCurrentWave().getCurrentEnemyNumber(),
+        world.getCountdown());
     GameStateWriter.getInstance().endFrame();
 
     GameStateWriter.getInstance().newFrame();

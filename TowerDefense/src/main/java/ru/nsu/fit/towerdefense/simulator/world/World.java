@@ -37,7 +37,7 @@ public class World {
   private int money;
   private int currentWaveNumber = 0;
   private Wave currentWave;
-  private List<Wave> waves = new ArrayList<>();
+  private List<Wave> waves = new ArrayList<>(); // probably not needed anymore
   private Map<Integer, Wave> waveMap = new HashMap<>();
 
   public List<Wave> getWaves() {
@@ -46,6 +46,20 @@ public class World {
 
   public Wave getWaveByNumber(int number) {
     return waveMap.get(number);
+  }
+
+  public void clearWaves() {
+    waveMap.clear();
+    waves.clear();
+    currentWave = null;
+  }
+
+  public void addWave(Wave wave) {
+    if (waveMap.containsKey(wave.getNumber())) {
+      return;
+    }
+    waveMap.put(wave.getNumber(), wave);
+    waves.add(wave);
   }
 
   public List<Portal> getPortals() {
@@ -66,8 +80,8 @@ public class World {
 
   public void setCurrentWave(Wave currentWave) {
     this.currentWave = currentWave;
-    waves.add(currentWave);
-    waveMap.put(currentWave.getNumber(), currentWave);
+    currentWaveNumber = currentWave.getNumber();
+    addWave(currentWave);
   }
 
   public int getCurrentWaveNumber() {
