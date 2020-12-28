@@ -341,7 +341,7 @@
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="resume-icon" />
                 <Label>Resume</Label>
             </HBox>
-            <HBox fx:id="restartHBox">
+            <!--<HBox fx:id="restartHBox"> todo uncomment
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="restart-icon" />
                 <Label>Restart</Label>
             </HBox>
@@ -352,7 +352,7 @@
             <HBox fx:id="finishHBox">
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="finish-icon" />
                 <Label>Finish game</Label>
-            </HBox>
+            </HBox>-->
             <HBox fx:id="menuHBox">
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="home-icon" />
                 <Label>Main menu</Label>
@@ -387,15 +387,15 @@
                     <ColumnConstraints prefWidth="100" />
                     <ColumnConstraints prefWidth="100" />
                 </columnConstraints>
-                <HBox fx:id="resultsSaveReplayHBox">
+                <!--<HBox fx:id="resultsSaveReplayHBox"> todo uncomment
                     <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true" styleClass="save-icon" />
                     <Label>Save replay</Label>
                 </HBox>
                 <HBox fx:id="resultsRestartHBox" GridPane.columnIndex="1">
                     <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true" styleClass="restart-icon" />
                     <Label>Restart</Label>
-                </HBox>
-                <HBox fx:id="resultsMenuHBox" GridPane.columnIndex="2">
+                </HBox>-->
+                <HBox fx:id="resultsMenuHBox" GridPane.columnIndex="1"><!--todo change to 2-->
                     <ImageView fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true" styleClass="home-icon" />
                     <Label>Menu</Label>
                 </HBox>
