@@ -9,13 +9,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
@@ -24,11 +27,17 @@ import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.UserMetaData;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.techtree.Research;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * TechTreeController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a tech tree
@@ -39,6 +48,8 @@ import java.util.List;
 public class TechTreeController implements Controller {
 
     private static final String FXML_FILE_NAME = "tech-tree.fxml";
+    private static final DecimalFormat DECIMAL_FORMAT =
+        new DecimalFormat("#.##", new DecimalFormatSymbols() {{setDecimalSeparator('.');}});
 
     @FXML private StackPane worldWrapperStackPane;
     @FXML private AnchorPane worldAnchorPane;
@@ -47,8 +58,25 @@ public class TechTreeController implements Controller {
 
     @FXML private ImageView menuImageView;
 
+    @FXML private StackPane gameObjectSidePane;
+    @FXML private VBox platformSideVBox;
+    @FXML private Text researchNameText;
+    @FXML private Text researchDisplayInfoText;
+    @FXML private HBox researchBuyHBox;
+    @FXML private Label researchBuyLabel;
+    @FXML private FlowPane buildTowerFlowPane;
+    @FXML private VBox buildTowerCharacteristicsVBox;
+    @FXML private Text buildTowerNameText;
+    @FXML private Text buildTowerDisplayInfoText;
+    @FXML private Label buildTowerOmnidirectionalLabel;
+    @FXML private Label buildTowerRangeLabel;
+    @FXML private Label buildTowerFireRateLabel;
+    @FXML private Label buildTowerRotationSpeedLabel;
+    @FXML private Label buildTowerSelfGuidedLabel;
+    @FXML private Label buildTowerProjectileSpeedLabel;
+    @FXML private Label buildTowerDamageLabel;
+
     private final SceneManager sceneManager;
-//    private final MyTechTree techTree;
 
     private WorldCamera worldCamera;
 
@@ -59,14 +87,6 @@ public class TechTreeController implements Controller {
      */
     public TechTreeController(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
-        /*this.techTree = new MyTechTree(new Vector2<>(1600, 900), new ArrayList<>() {{
-            add(new MyResearch("First", "First Info", "circle.png", 2,
-                new Vector2<>(100, 100), new Vector2<>(100, 100)));
-            add(new MyResearch("Second", "Second Info", "triangle.png", 13,
-                new Vector2<>(200, 200), new Vector2<>(100, 100)));
-            add(new MyResearch("Third", "Third Info", "uni.png", 1499,
-                new Vector2<>(900, 200), new Vector2<>(100, 100)));
-        }});*/
     }
 
     @FXML
@@ -78,9 +98,47 @@ public class TechTreeController implements Controller {
         worldCamera = new WorldCamera(worldWrapperStackPane, worldAnchorPane,
             sceneManager.getStageSize(), GameMetaData.getInstance().getTechTree().getSize());
 
+        bindUppercase(researchNameText);
+        bindUppercase(buildTowerNameText);
+
+        worldWrapperStackPane.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                gameObjectSidePane.setVisible(false);
+            }
+        });
+
+        drawTechTree();
+    }
+
+    private void drawTechTree() {
+        worldAnchorPane.getChildren().clear();
         for (Research research : GameMetaData.getInstance().getTechTree().getResearch()) {
             worldAnchorPane.getChildren().add(createResearchGridPane(research));
+            worldAnchorPane.getChildren().addAll(createLines(research));
         }
+    }
+
+    private List<Line> createLines(Research research) {
+        List<Line> lines = new ArrayList<>();
+
+        boolean isResearched = UserMetaData.isResearched(research.getName());
+
+        for (Research destinationResearch : research.getInfluence()) {
+            Line line = new Line(
+                (research.getPosition().getX() + research.getSize().getX()) * worldCamera.getPixelsPerGameCell(),
+                (research.getPosition().getY() + research.getSize().getY() * 0.5d) * worldCamera.getPixelsPerGameCell(),
+                destinationResearch.getPosition().getX() * worldCamera.getPixelsPerGameCell(),
+                (destinationResearch.getPosition().getY() + destinationResearch.getSize().getY() * 0.5d) * worldCamera.getPixelsPerGameCell()
+            );
+
+            line.setStrokeWidth(research.getSize().getY() * worldCamera.getPixelsPerGameCell() * 0.01d);
+            line.setStroke(isResearched ? Color.web("rgba(0, 255, 0, 0.5)") : Color.web("rgba(255, 255, 255, 0.5)"));
+            line.setViewOrder(Double.POSITIVE_INFINITY);
+
+            lines.add(line);
+        }
+
+        return lines;
     }
 
     private GridPane createResearchGridPane(Research research) {
@@ -88,14 +146,27 @@ public class TechTreeController implements Controller {
         double height = research.getSize().getY() * worldCamera.getPixelsPerGameCell();
         double imageHeight = height * 0.35d;
         double fontSize = height * 0.15d;
+        double borderWidth = height * 0.01d;
 
-        GridPane gridPane = new GridPane(); // todo border width
+        GridPane gridPane = new GridPane();
         gridPane.setOnMouseClicked(mouseEvent -> {
-            System.out.println(research.getName());
-            GameMetaData.getInstance().getTechTree().unlock(research.getName());
+            if (!mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                return;
+            }
+
+            mouseEvent.consume();
+
+            gameObjectSidePane.setVisible(true);
+            updateSideBar(research);
         });
 
         gridPane.getStyleClass().add("research-box");
+        if (UserMetaData.isResearched(research.getName())) {
+            gridPane.getStyleClass().add("research-box-researched");
+        } else if (GameMetaData.getInstance().getTechTree().canUnlock(research.getName())) {
+            gridPane.getStyleClass().add("research-box-available");
+        }
+        gridPane.setStyle("-fx-border-width: " + borderWidth + ";");
         gridPane.getColumnConstraints().addAll(createColumn());
         gridPane.getRowConstraints().addAll(createRow(25), createRow(50), createRow(25));
 
@@ -156,6 +227,90 @@ public class TechTreeController implements Controller {
         }};
     }
 
+    private void updateSideBar(Research research) {
+        researchNameText.setText(research.getName());
+        researchDisplayInfoText.setText(research.getInfo());
+
+        if (UserMetaData.isResearched(research.getName())) {
+            researchBuyLabel.setText("Researched");
+            researchBuyHBox.setStyle("-fx-background-color: green;");
+            researchBuyHBox.setOnMouseClicked(null);
+        } else if (GameMetaData.getInstance().getTechTree().canUnlock(research.getName())) {
+            researchBuyLabel.setText("Research");
+            researchBuyHBox.setStyle("-fx-background-color: firebrick;");
+            researchBuyHBox.setOnMouseClicked(mouseEvent -> {
+                if (UserMetaData.getResearchPoints() >= research.getCost()) {
+                    GameMetaData.getInstance().getTechTree().unlock(research.getName());
+                    UserMetaData.subtractResearchPoints(research.getCost());
+
+                    researchLabel.setText(UserMetaData.getResearchPoints() + "");
+                    drawTechTree();
+
+                    researchBuyLabel.setText("Researched");
+                    researchBuyHBox.setStyle("-fx-background-color: green;");
+                    researchBuyHBox.setOnMouseClicked(null);
+                } else {
+                    new AlertBuilder()
+                        .setAlertType(Alert.AlertType.INFORMATION)
+                        .setHeaderText("Not enough research points")
+                        .setContentText("")
+                        .setOwner(sceneManager.getWindowOwner())
+                        .build().showAndWait();
+                }
+            });
+        } else {
+            researchBuyLabel.setText("Not available");
+            researchBuyHBox.setStyle("-fx-background-color: grey;");
+            researchBuyHBox.setOnMouseClicked(null);
+        }
+
+        List<TowerType> towerTypes = research.getTowerNames().stream()
+            .map(towerName -> GameMetaData.getInstance().getTowerType(towerName))
+            .sorted(Comparator.comparingInt(TowerType::getPrice))
+            .collect(Collectors.toList());
+
+        buildTowerFlowPane.getChildren().clear();
+        for (TowerType towerType : towerTypes) {
+            try {
+                ImageView imageView = new ImageView(
+                    Images.getInstance().getImage(towerType.getImage()));
+                imageView.setFitWidth(48);
+                imageView.setFitHeight(48);
+                imageView.setPickOnBounds(true);
+                imageView.setPreserveRatio(true);
+
+                Label label = new Label("$" + towerType.getPrice());
+
+                VBox towerTypeVBox = new VBox();
+                towerTypeVBox.getStyleClass().add("tower-upgrade-box");
+                towerTypeVBox.getChildren().addAll(imageView, label);
+                towerTypeVBox.setOnMouseEntered(mouseEvent -> {
+                    buildTowerNameText.setText(towerType.getTypeName());
+                    buildTowerDisplayInfoText.setText(towerType.getDisplayInfo());
+                    buildTowerOmnidirectionalLabel.setText(
+                        towerType.getFireType() == TowerType.FireType.OMNIDIRECTIONAL ? "Yes" : "No");
+                    buildTowerRangeLabel.setText(DECIMAL_FORMAT.format(towerType.getRange()));
+                    buildTowerFireRateLabel.setText(DECIMAL_FORMAT.format(1000d / towerType.getFireRate()));
+                    buildTowerRotationSpeedLabel.setText(DECIMAL_FORMAT.format(towerType.getRotationSpeed()));
+                    ProjectileType projectileType =
+                        GameMetaData.getInstance().getProjectileType(towerType.getProjectileType());
+                    buildTowerSelfGuidedLabel.setText(projectileType.isSelfGuided() ? "Yes" : "No");
+                    buildTowerProjectileSpeedLabel.setText(DECIMAL_FORMAT.format(projectileType.getSpeed() * 1000));
+                    buildTowerDamageLabel.setText(DECIMAL_FORMAT.format(projectileType.getBasicDamage()));
+
+                    buildTowerCharacteristicsVBox.setVisible(true);
+                });
+                towerTypeVBox.setOnMouseExited(mouseEvent -> {
+                    buildTowerCharacteristicsVBox.setVisible(false);
+                });
+
+                buildTowerFlowPane.getChildren().add(towerTypeVBox);
+            } catch (RenderException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -195,6 +350,12 @@ public class TechTreeController implements Controller {
     @Override
     public String getFXMLFileName() {
         return FXML_FILE_NAME;
+    }
+
+    private void bindUppercase(Text text) {
+        text.textProperty().addListener((observable, oldValue, newValue) -> {
+            text.setText(newValue.toUpperCase());
+        });
     }
 
     // ----- Stubs -----

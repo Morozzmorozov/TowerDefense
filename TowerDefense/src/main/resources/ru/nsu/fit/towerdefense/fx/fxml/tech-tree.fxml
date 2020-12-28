@@ -4,10 +4,15 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 <?import java.net.URL?>
 <StackPane styleClass="root" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
@@ -18,6 +23,82 @@
     <StackPane fx:id="worldWrapperStackPane" styleClass="world-wrapper">
         <AnchorPane fx:id="worldAnchorPane" />
     </StackPane>
+    <GridPane pickOnBounds="false">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="66.67" />
+            <ColumnConstraints percentWidth="33.33" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="ALWAYS" />
+        </rowConstraints>
+        <StackPane fx:id="gameObjectSidePane" visible="false" GridPane.columnIndex="1" styleClass="side-bar">
+            <VBox fx:id="platformSideVBox" styleClass="side-bar-box">
+                <VBox styleClass="side-bar-header">
+                    <Text fx:id="researchNameText">PLATFORM</Text>
+                    <TextFlow styleClass="game-object-description">
+                        <Text fx:id="researchDisplayInfoText">Used as the basis for towers</Text>
+                    </TextFlow>
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox styleClass="side-bar-content">
+                    <GridPane>
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="33.33" />
+                            <ColumnConstraints percentWidth="33.34" />
+                            <ColumnConstraints percentWidth="33.33" />
+                        </columnConstraints>
+                        <HBox fx:id="researchBuyHBox" styleClass="sell-box" GridPane.columnIndex="1">
+                            <Label fx:id="researchBuyLabel" minWidth="-Infinity">Research</Label>
+                        </HBox>
+                    </GridPane>
+                </VBox>
+                <VBox styleClass="side-bar-content">
+                    <Label>LETS YOU BUILD:</Label>
+                    <FlowPane fx:id="buildTowerFlowPane" styleClass="tower-upgrades-box" />
+                </VBox>
+                <Region styleClass="side-bar-delimiter" />
+                <VBox fx:id="buildTowerCharacteristicsVBox" visible="false" styleClass="side-bar-content">
+                    <Text fx:id="buildTowerNameText">TOWER NAME</Text>
+                    <HBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <GridPane styleClass="characteristics-grid-pane">
+                            <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints halignment="CENTER" />
+                            </columnConstraints>
+                            <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Tower</Label>
+                            <Label GridPane.rowIndex="1">Omnidirectional</Label>
+                            <Label fx:id="buildTowerOmnidirectionalLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                            <Label GridPane.rowIndex="2">Range</Label>
+                            <Label fx:id="buildTowerRangeLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                            <Label GridPane.rowIndex="3">Fire rate</Label>
+                            <Label fx:id="buildTowerFireRateLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                            <Label GridPane.rowIndex="4">Rotation speed</Label>
+                            <Label fx:id="buildTowerRotationSpeedLabel" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+                        </GridPane>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <GridPane styleClass="characteristics-grid-pane">
+                            <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints halignment="CENTER" />
+                            </columnConstraints>
+                            <Label GridPane.columnSpan="2" GridPane.halignment="CENTER">Projectile</Label>
+                            <Label GridPane.rowIndex="1">Self guided</Label>
+                            <Label fx:id="buildTowerSelfGuidedLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                            <Label GridPane.rowIndex="2">Speed</Label>
+                            <Label fx:id="buildTowerProjectileSpeedLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                            <Label GridPane.rowIndex="3">Damage</Label>
+                            <Label fx:id="buildTowerDamageLabel" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                        </GridPane>
+                        <Region HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                    <TextFlow styleClass="game-object-description">
+                        <Text fx:id="buildTowerDisplayInfoText">Description</Text>
+                    </TextFlow>
+                </VBox>
+            </VBox>
+        </StackPane>
+    </GridPane>
     <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
             <ColumnConstraints hgrow="NEVER" />

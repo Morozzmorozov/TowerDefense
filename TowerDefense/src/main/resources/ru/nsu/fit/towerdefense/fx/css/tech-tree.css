@@ -4,15 +4,25 @@
 }
 
 .research-box {
-    -fx-border-color: transparent;
     -fx-alignment: center;
     -fx-background-color: #2e302f;
     -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 5);
     -fx-cursor: hand;
 }
 
-.research-box:hover {
-    -fx-border-color: rgba(0, 255, 255, 0.5);
+.research-box-researched {
+    -fx-border-color: rgba(0, 255, 0, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(0, 255, 0, 0.75), 15, 0, 0, 5);
+}
+
+.research-box-available {
+    -fx-border-color: rgba(255, 255, 0, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 0, 0.75), 15, 0, 0, 5);
+}
+
+.research-box-available:hover {
+    -fx-border-color: rgba(0, 255, 0, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(0, 255, 0, 0.75), 15, 0, 0, 5);
 }
 
 .research-price {
@@ -26,4 +36,69 @@
 .bar-grid-pane > HBox {
     -fx-padding: 8;
     -fx-spacing: 12;
+}
+
+.side-bar {
+    -fx-padding: 50 10 10 10;
+    -fx-spacing: 20;
+    -fx-alignment: bottom-left;
+    -fx-background-color: #2e302f;
+    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 5);
+}
+
+.side-bar-delimiter {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 1;
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.side-bar-box {
+    -fx-padding: 0 10;
+    -fx-spacing: 8;
+}
+
+.side-bar-header {
+    -fx-alignment: center;
+}
+
+.game-object-description {
+    -fx-font-size: 14;
+    -fx-text-alignment: center;
+}
+
+.side-bar-content {
+    -fx-spacing: 8;
+    -fx-font-size: 12;
+    -fx-alignment: center;
+}
+
+.characteristics-grid-pane {
+    -fx-hgap: 8;
+}
+
+.tower-upgrades-box {
+    -fx-alignment: center;
+}
+
+.tower-upgrade-box {
+    -fx-padding: 5 10;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+}
+
+.tower-upgrade-box:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.25);
+}
+
+.research-label {
+    -fx-padding: 10 20;
+    -fx-background-color: #bf1e1e;
+    -fx-cursor: hand;
+}
+
+.sell-box {
+    -fx-padding: 5 10;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+    -fx-background-color: #bf1e1e;
 }
