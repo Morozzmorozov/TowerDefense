@@ -1,0 +1,12 @@
+{
+	"DisplayInfo" : "Does not deal damage but freezes enemies",
+	"Price" : 100,
+	"Upgrades": [
+	],
+	"Range" : 3,
+	"FireRate" : 500,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Snowball",
+	"Image" : "snowcannon.png",
+	"RotationSpeed": 3.0
+}

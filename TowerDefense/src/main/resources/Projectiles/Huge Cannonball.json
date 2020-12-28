@@ -1,8 +1,8 @@
 {
-	"DisplayInfo" : "This rocket is slow but very deadly. It can chase your enemies down the road",
-    "Speed" : 0.004375,
-    "SelfGuided" : true,
-    "BasicDamage" : 210,
+	"DisplayInfo" : "It can kill even the toughest of your enemies",
+    "Speed" : 0.05625,
+    "SelfGuided" : false,
+    "BasicDamage" : 75,
     "EnemyTypeDamage" : [
         ["Rebel", 200],
         ["Light Infantry", 170],
@@ -14,7 +14,6 @@
     "HitBox" : 2,
     "SizeX" : 1.0,
     "SizeY" : 1.0,
-    "Image" : "rocket.png",
-    "AngularVelocity": 3.0,
+    "Image" : "fireball.png",
     "Effects" : []
 }

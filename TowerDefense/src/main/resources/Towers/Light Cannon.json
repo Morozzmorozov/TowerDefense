@@ -1,0 +1,14 @@
+{
+	"DisplayInfo" : "This basic cannon is cheap but not very powerful",
+	"Price" : 100,
+	"Upgrades": [
+		["Heavy Cannon", 250],
+		["Anti-Tank Cannon", 400]
+	],
+	"Range" : 3,
+	"FireRate" : 833,
+	"FireType" : "Unidirectional",
+	"ProjectileType" : "Cannonball",
+	"Image" : "tower.png",
+	"RotationSpeed": 3.0
+}

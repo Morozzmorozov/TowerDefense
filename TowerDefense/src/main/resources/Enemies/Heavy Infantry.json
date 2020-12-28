@@ -1,0 +1,10 @@
+{
+	"DisplayInfo" : "A professional soldier",
+	"Health" : 200,
+	"Speed" : 0.001,
+	"HitBox" : 0.4,
+	"SizeX" : 1,
+	"SizeY" : 1,
+	"Image" : "enemy3.png",
+	"Damage" : 30
+}

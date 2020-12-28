@@ -1,5 +1,5 @@
 {
-	"DisplayInfo" : "Crossbowman",
+	"DisplayInfo" : "A reliable guardian of your base, this cannon shoots faster and has a longer range then the Light Cannon",
 	"Price" : 300,
 	"Upgrades": [
 		["Catapult", 350]
@@ -7,7 +7,7 @@
 	"Range" : 6,
 	"FireRate" : 666,
 	"FireType" : "Unidirectional",
-	"ProjectileType" : "Arrow",
+	"ProjectileType" : "Cannonball",
 	"Image" : "tower2.png",
 	"RotationSpeed": 3.0
 }

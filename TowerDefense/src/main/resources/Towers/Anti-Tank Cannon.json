@@ -1,5 +1,5 @@
 {
-	"DisplayInfo" : "Catapult",
+	"DisplayInfo" : "This 8\" caliber gun is a nightmare of your enemies!",
 	"Price" : 450,
 	"Upgrades": [
 
@@ -7,7 +7,7 @@
 	"Range" : 10,
 	"FireRate" : 500,
 	"FireType" : "Unidirectional",
-	"ProjectileType" : "Stone",
+	"ProjectileType" : "Huge Cannonball",
 	"Image" : "tower3.png",
 	"RotationSpeed": 3.0
 }

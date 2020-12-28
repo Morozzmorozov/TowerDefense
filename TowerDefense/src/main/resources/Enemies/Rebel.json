@@ -1,0 +1,10 @@
+{
+	"DisplayInfo" : "This peasant is unhappy with high taxes. Armed with a pitchfork",
+	"Health" : 80,
+	"Speed" : 0.001,
+	"HitBox" : 0.4,
+	"SizeX" : 1,
+	"SizeY" : 1,
+	"Image" : "peasant.png",
+	"Damage" : 10
+}

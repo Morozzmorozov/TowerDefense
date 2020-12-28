@@ -1,14 +1,19 @@
 {
-	"DisplayInfo" : "Ring of fire matter",
+	"DisplayInfo" : "This ring can slow down multiple enemies at once",
     "Speed" : 0.05,
     "SelfGuided" : false,
-    "BasicDamage" : 3,
+    "BasicDamage" : 70,
     "EnemyTypeDamage" : [
-        ["Cyclops", 6], ["Goblin", 5], ["Orc", 4]
+        ["Rebel", 100],
+        ["Light Infantry", 900],
+        ["Heavy Infantry", 80],
+        ["Commandos", 70],
+        ["Tank", 60],
+        ["Helicopter", 50]
     ],
     "HitBox" : 2,
     "SizeX" : 1.0,
     "SizeY" : 1.0,
     "Image" : "ring.png",
-    "Effects" : []
+    "Effects" : ["Freeze"]
 }

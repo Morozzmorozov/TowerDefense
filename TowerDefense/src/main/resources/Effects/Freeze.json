@@ -1,6 +1,6 @@
 {
-  "Speed" : 0.5,
-  "DamagePerTick" : 1,
+  "Speed" : 0.25,
+  "DamagePerTick" : 0,
   "Duration" : 1000,
   "Image" : "frost.png"
 }

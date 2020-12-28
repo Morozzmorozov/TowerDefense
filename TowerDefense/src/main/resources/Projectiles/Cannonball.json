@@ -1,0 +1,19 @@
+{
+	"DisplayInfo" : "Simple but deadly",
+    "Speed" : 0.0125,
+    "SelfGuided" : false,
+    "BasicDamage" : 100,
+    "EnemyTypeDamage" : [
+        ["Rebel", 120],
+        ["Light Infantry", 100],
+        ["Heavy Infantry", 90],
+        ["Commandos", 80],
+        ["Tank", 50],
+        ["Helicopter", 20]
+    ],
+    "HitBox" : 2,
+    "SizeX" : 1.0,
+    "SizeY" : 1.0,
+    "Image" : "fireball.png",
+    "Effects" : []
+}

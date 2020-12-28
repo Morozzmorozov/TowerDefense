@@ -1,0 +1,13 @@
+{
+	"DisplayInfo" : "Freezes enemies",
+    "Speed" : 0.01,
+    "SelfGuided" : false,
+    "BasicDamage" : 0,
+    "EnemyTypeDamage" : [
+    ],
+    "HitBox" : 2,
+    "SizeX" : 1.0,
+    "SizeY" : 1.0,
+    "Image" : "snowball.png",
+    "Effects" : ["Freeze"]
+}

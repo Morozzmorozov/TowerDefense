@@ -1,0 +1,10 @@
+{
+	"DisplayInfo" : "An experienced and merciless navy SEAL",
+	"Health" : 300,
+	"Speed" : 0.0014,
+	"HitBox" : 0.4,
+	"SizeX" : 1,
+	"SizeY" : 1,
+	"Image" : "enemy2.png",
+	"Damage" : 75
+}

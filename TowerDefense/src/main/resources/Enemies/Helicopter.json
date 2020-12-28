@@ -1,0 +1,10 @@
+{
+	"DisplayInfo" : "An armored chopper",
+	"Health" : 500,
+	"Speed" : 0.0020,
+	"HitBox" : 0.4,
+	"SizeX" : 1,
+	"SizeY" : 1,
+	"Image" : "propeller.gif",
+	"Damage" : 75
+}

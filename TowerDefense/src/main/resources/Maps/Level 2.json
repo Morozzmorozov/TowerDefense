@@ -32,25 +32,31 @@
 			"ScaleFactor" : 1.0,
 			"SpawnInterval" : 1666.667,
 			"TimeTillNextWave" : 5000.0,
-			"ScienceReward" : 1000,
+			"ScienceReward" : 100,
 			"Enemies" : [
 				{
 					"MoneyReward": 5,
 					"SpawnPosition" : 0,
 					"Count" : 7,
-					"Type" : "Goblin"
+					"Type" : "Rebel"
 				},
 				{
 					"MoneyReward": 5,
 					"SpawnPosition" : 1,
 					"Count" : 3,
-					"Type" : "Orc"
+					"Type" : "Rebel"
 				},
 				{
 					"MoneyReward": 5,
 					"SpawnPosition" : 2,
 					"Count" : 1,
-					"Type" : "Cyclops"
+					"Type" : "Rebel"
+				},
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 3,
+					"Count" : 5,
+					"Type" : "Rebel"
 				}
 			]
 		},
@@ -58,25 +64,31 @@
 			"ScaleFactor" : 1.05,
 			"SpawnInterval" : 1666.667,
 			"TimeTillNextWave" : 5000.0,
-			"ScienceReward" : 1000,
+			"ScienceReward" : 500,
 			"Enemies" : [
 				{
 					"MoneyReward": 5,
 					"SpawnPosition" : 0,
 					"Count" : 13,
-					"Type" : "Goblin"
+					"Type" : "Light Infantry"
 				},
 				{
 					"MoneyReward": 5,
 					"SpawnPosition" : 1,
 					"Count" : 5,
-					"Type" : "Goblin"
+					"Type" : "Heavy Infantry"
 				},
 				{
 					"MoneyReward": 5,
 					"SpawnPosition" : 2,
 					"Count" : 3,
-					"Type" : "Goblin"
+					"Type" : "Light Infantry"
+				},
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 3,
+					"Count" : 5,
+					"Type" : "Heavy Infantry"
 				}
 			]
 		},
@@ -89,20 +101,90 @@
 				{
 					"MoneyReward": 5,
 					"SpawnPosition" : 0,
-					"Count" : 5,
-					"Type" : "Orc"
+					"Count" : 2,
+					"Type" : "Commandos"
 				},
 				{
 					"MoneyReward": 5,
 					"SpawnPosition" : 1,
 					"Count" : 5,
-					"Type" : "Orc"
+					"Type" : "Heavy Infantry"
 				},
 				{
 					"MoneyReward": 5,
 					"SpawnPosition" : 2,
 					"Count" : 5,
-					"Type" : "Orc"
+					"Type" : "Commandos"
+				},
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 3,
+					"Count" : 5,
+					"Type" : "Heavy Infantry"
+				}
+			]
+		},
+		{
+			"ScaleFactor" : 1.2,
+			"SpawnInterval" : 1500,
+			"TimeTillNextWave" : 1000.0,
+			"ScienceReward" : 2000,
+			"Enemies" : [
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 0,
+					"Count" : 2,
+					"Type" : "Commandos"
+				},
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 1,
+					"Count" : 5,
+					"Type" : "Commandos"
+				},
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 2,
+					"Count" : 5,
+					"Type" : "Commandos"
+				},
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 3,
+					"Count" : 5,
+					"Type" : "Commandos"
+				}
+			]
+		},
+		{
+			"ScaleFactor" : 1.5,
+			"SpawnInterval" : 1200,
+			"TimeTillNextWave" : 1000.0,
+			"ScienceReward" : 4000,
+			"Enemies" : [
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 0,
+					"Count" : 2,
+					"Type" : "Helicopter"
+				},
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 1,
+					"Count" : 5,
+					"Type" : "Helicopter"
+				},
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 2,
+					"Count" : 5,
+					"Type" : "Helicopter"
+				},
+				{
+					"MoneyReward": 5,
+					"SpawnPosition" : 3,
+					"Count" : 5,
+					"Type" : "Helicopter"
 				}
 			]
 		}
