@@ -895,10 +895,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     private void bindUppercase(Text text) {
         text.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue.equalsIgnoreCase(newValue)) {
-                return;
-            }
-
             text.setText(newValue.toUpperCase());
         });
     }
