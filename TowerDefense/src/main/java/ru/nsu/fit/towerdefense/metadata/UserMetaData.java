@@ -34,6 +34,10 @@ public class UserMetaData {
         return unlockedResearchNames;
     }
 
+    public static boolean isResearched(String researchName) {
+        return PREFERENCES.getBoolean(researchName, false);
+    }
+
     public static void saveResearch(String researchName) {
         PREFERENCES.putBoolean(researchName, true);
     }
