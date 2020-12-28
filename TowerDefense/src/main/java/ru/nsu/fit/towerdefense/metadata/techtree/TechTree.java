@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class TechTree {
 	private ArrayList<Research> research;
 	private HashMap<String, Research> nameToResearch;
-	private ArrayList<String> availableTypes;
+	private HashSet<String> availableTypes;
 
 	private ArrayList<Research> availableResearches;
 
@@ -34,6 +34,7 @@ public class TechTree {
 		availableResearches.addAll(t);
 		availableResearches.remove(r);
 		unlocked.add(name);
+		UserMetaData.saveResearch(name);
 	}
 
 
@@ -47,11 +48,15 @@ public class TechTree {
 		return research;
 	}
 
-	public ArrayList<String> getAvailableTypes()
+	public HashSet<String> getAvailableTypes()
 	{
 		return availableTypes;
 	}
 
+	public boolean getIsTypeAvailable(String name)
+	{
+		return availableResearches.contains(name);
+	}
 
 	public ArrayList<String> getUnlocked()
 	{
@@ -64,7 +69,7 @@ public class TechTree {
 		this.availableResearches = availableResearches;
 	}
 
-	public void setAvailableTypes(ArrayList<String> availableTypes)
+	public void setAvailableTypes(HashSet<String> availableTypes)
 	{
 		this.availableTypes = availableTypes;
 	}

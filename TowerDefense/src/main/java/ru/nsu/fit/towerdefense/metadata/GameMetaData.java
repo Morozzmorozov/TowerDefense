@@ -279,7 +279,7 @@ public class GameMetaData {
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode node = objectMapper.readValue(json, ObjectNode.class);
             HashMap<String, Research> nameToNode = new HashMap<>();
-            ArrayList<String> types = new ArrayList<>();
+            HashSet<String> types = new HashSet<>();
             ArrayList<Research> research = new ArrayList<>();
 
 
