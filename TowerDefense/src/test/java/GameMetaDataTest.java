@@ -89,9 +89,15 @@ public class GameMetaDataTest {
 
         Assert.assertEquals(1, tree.getAvailableResearches().size());
 
+
+        var t = tree.getSortedResearches();
+
+        Assert.assertEquals(3, t.size());
+
         tree.unlock(researchArrayList.get(0).getName());
 
         Assert.assertEquals(2, tree.getAvailableResearches().size());
+
     }
 
     @Test
