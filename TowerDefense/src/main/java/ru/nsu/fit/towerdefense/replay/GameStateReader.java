@@ -276,6 +276,7 @@ public class GameStateReader {
 			info.setVelocity(new Vector2<>(Double.parseDouble(reader.getAttributeValue(6)), Double.parseDouble(reader.getAttributeValue(7))));
 			info.setFireType(TowerType.FireType.valueOf(reader.getAttributeValue(8)));
 			info.setScale(Double.parseDouble(reader.getAttributeValue(9)));
+			info.setParentPosition(new Vector2<>(Double.parseDouble(reader.getAttributeValue(10)), Double.parseDouble(reader.getAttributeValue(11))));
 			return info;
 		}
 		catch (Exception e)

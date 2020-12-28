@@ -15,6 +15,7 @@ public class Projectile extends GameObject implements Renderable {
   private double scale = 1.0;
   private double rotationSpeed = 3.0; // DEBUG
   private FireType fireType = null; // todo change
+  private Vector2<Double> parentPosition;
 
   public FireType getFireType() {
     if (fireType != null) return fireType;
@@ -119,5 +120,13 @@ public class Projectile extends GameObject implements Renderable {
   @Override
   public double getZIndex() {
     return 6;
+  }
+
+  public Vector2<Double> getParentPosition() {
+    return parentPosition;
+  }
+
+  public void setParentPosition(Vector2<Double> parentPosition) {
+    this.parentPosition = parentPosition;
   }
 }

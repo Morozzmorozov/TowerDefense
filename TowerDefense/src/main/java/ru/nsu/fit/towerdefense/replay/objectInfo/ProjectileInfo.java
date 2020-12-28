@@ -12,6 +12,7 @@ public class ProjectileInfo {
 	private Double range;
 	private TowerType.FireType fireType;
 	private Double scale;
+	private Vector2<Double> parentPosition;
 
 	public ProjectileInfo(){}
 
@@ -95,4 +96,11 @@ public class ProjectileInfo {
 		this.scale = scale;
 	}
 
+	public Vector2<Double> getParentPosition() {
+		return parentPosition;
+	}
+
+	public void setParentPosition(Vector2<Double> parentPosition) {
+		this.parentPosition = parentPosition;
+	}
 }

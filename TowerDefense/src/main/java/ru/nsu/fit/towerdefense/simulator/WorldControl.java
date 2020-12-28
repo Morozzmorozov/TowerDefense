@@ -142,7 +142,7 @@ public class WorldControl {
       throw new GameplayException("Not enough money to build the tower");
     }
     if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(towerType.getTypeName())) {
-      throw new GameplayException("The tower is not yet researched");
+      //throw new GameplayException("The tower is not yet researched");
     }
     world.setMoney(world.getMoney() - towerType.getPrice());
     Tower tower = new Tower();
@@ -197,7 +197,7 @@ public class WorldControl {
     GameStateWriter.getInstance().switchMode(tower, towerMode);
   }
 
-  public long getTicksTillNextWave() { // todo
+  public long getTicksTillNextWave() {
     if (world.getCurrentWave().getCurrentEnemyNumber() == 0) {
       return world.getCountdown() / deltaTime;
     } else {
@@ -301,7 +301,7 @@ public class WorldControl {
 
 
       if (projectile.getFireType().equals(FireType.UNIDIRECTIONAL)
-          && projectile.getType().isSelfGuided() && !projectile.getTarget().isDead()) {
+          && projectile.getType().isSelfGuided() && !(projectile.getTarget() == null || projectile.getTarget().isDead())) {
 
         double newRotation = (getNewDirection(projectile.getRotation() - 90,
             projectile.getPosition(), projectile.getTarget().getPosition(), projectile.getRotationSpeed()) + 90) % 360;
@@ -354,7 +354,7 @@ public class WorldControl {
           double newScale = projectile.getScale() + Math.min(projectile.getRemainingRange() * 2, projectile.getType().getSpeed() * 2);
 
           for (Enemy enemy : world.getEnemies()) {
-            double distanceToEnemy = Vector2.distance(projectile.getParent().getPosition(), enemy.getPosition());
+            double distanceToEnemy = Vector2.distance(projectile.getParentPosition(), enemy.getPosition());
             if (distanceToEnemy >= projectile.getScale() / 2 && distanceToEnemy < newScale / 2) {
               affectedEnemies.add(enemy);
             }
@@ -441,7 +441,7 @@ public class WorldControl {
       }
 
       int effectDamage = enemy.getEffects().stream()
-          .mapToInt((effect) -> effect.getType().getDamagePerTick())
+          .mapToInt((effect) -> effect.getType().getDamagePerTick() * deltaTime)
           .reduce(0, Integer::sum);
 
       enemy.setHealth(enemy.getHealth() - effectDamage);
@@ -546,6 +546,7 @@ public class WorldControl {
                   tower.getTarget(), tower.getType().getRange(), projectileType,
                   new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
                   direction, tower);
+              projectile.setParentPosition(new Vector2<>(tower.getPosition()));
               projectile.setRotation(
                   Math.toDegrees(Math.atan2(direction.getY(), direction.getX())) + 90);
               projectile.setFireType(FireType.UNIDIRECTIONAL);
@@ -559,9 +560,10 @@ public class WorldControl {
 
               Projectile projectile = new Projectile(null, tower.getType().getRange(),
                   projectileType, new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
-                  null, tower);
+                  new Vector2<>(0d, 0d), tower);
               projectile.setFireType(FireType.OMNIDIRECTIONAL);
               projectile.setScale(0);
+              projectile.setParentPosition(new Vector2<>(tower.getPosition()));
               world.getProjectiles().add(projectile);
               tower.setCooldown(tower.getType().getFireRate() + tower.getCooldown());
             }

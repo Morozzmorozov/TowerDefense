@@ -184,6 +184,8 @@ public class GameStateWriter {
 				writer.writeAttribute("VelY", Double.toString(x.getVelocity().getY()));
 				writer.writeAttribute("FireType", x.getFireType().name());
 				writer.writeAttribute("Scale", Double.toString(x.getScale()));
+				writer.writeAttribute("ParentX", Double.toString(x.getParentPosition().getX()));
+				writer.writeAttribute("ParentY", Double.toString(x.getParentPosition().getY()));
 				writer.writeEndElement();
 				writer.writeCharacters(System.getProperty("line.separator"));
 			}

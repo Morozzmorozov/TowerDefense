@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.FireType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.replay.EventRecord;
@@ -47,8 +48,10 @@ public class ReplayWorldControl extends WorldControl {
   public void skipToTick(int tickIndex) {
     int worldStateIndex = tickIndex / replay.getTickRate();
     if (!(worldStateIndex == currentWorldStateIndex && tickIndex >= tick)) {
-      System.out.println(worldStateIndex);
-      setWorldState(replay.getWorldStates().get(worldStateIndex)); // move to state after tick No. tickIndex
+      if (replay.getWorldStates().size() > worldStateIndex) {
+        setWorldState(
+            replay.getWorldStates().get(worldStateIndex)); // move to state after tick No. tickIndex
+      }
       currentWorldStateIndex = worldStateIndex;
       tick = worldStateIndex * replay.getTickRate() + 1;
     }
@@ -159,12 +162,16 @@ public class ReplayWorldControl extends WorldControl {
             projectileInfo.getVelocity().getY()));
         projectile.setRotation((Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 450) % 360);
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
-        //projectile.setScale();
+        projectile.setScale(projectileInfo.getScale());
         projectile.setTarget(
             world.getEnemies().stream()
                 .dropWhile(enemy -> enemy.getId().toString().equals(projectileInfo.getTarget()))
                 .findFirst()
                 .orElse(null));
+        projectile.setParentPosition(new Vector2<>(projectileInfo.getParentPosition()));
+        if (projectile.getFireType().equals(FireType.OMNIDIRECTIONAL)) {
+          projectile.setPosition(projectileInfo.getParentPosition());
+        }
       } else {
         Projectile projectile = new Projectile(
             world.getEnemies().stream()
@@ -181,6 +188,11 @@ public class ReplayWorldControl extends WorldControl {
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
         projectile.setRemainingRange(projectileInfo.getRange().floatValue());
         projectile.setRotation((Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 450) % 360);
+        projectile.setParentPosition(new Vector2<>(projectileInfo.getParentPosition()));
+        projectile.setScale(projectileInfo.getScale());
+        if (projectile.getFireType().equals(FireType.OMNIDIRECTIONAL)) {
+          projectile.setPosition(projectileInfo.getParentPosition());
+        }
         world.getProjectiles().add(projectile);
       }
     }
