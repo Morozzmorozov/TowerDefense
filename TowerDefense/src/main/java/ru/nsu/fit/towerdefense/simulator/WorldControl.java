@@ -341,7 +341,7 @@ public class WorldControl {
                 newPosition.getX() - projectile.getPosition().getX(),
                 newPosition.getY() - projectile.getPosition().getY());
 
-            double angle = Math.acos((oldVectorToEnemy.getX() * pathVector.getX() + oldVectorToEnemy.getY() + pathVector.getY())
+            double angle = Math.acos((oldVectorToEnemy.getX() * pathVector.getX() + oldVectorToEnemy.getY() * pathVector.getY())
                 / distance(newPosition, projectile.getPosition()) / distance(projectile.getPosition(), enemy.getPosition()));
 
             double encounterDistance = Math.sin(angle) * distance(enemy.getPosition(), projectile.getPosition());
@@ -349,7 +349,8 @@ public class WorldControl {
             double pathToEncounter = Math.cos(angle) * distance(enemy.getPosition(), projectile.getPosition());
 
             if (distance(newPosition, enemy.getPosition()) < enemy.getType().getHitBox()
-                || (encounterDistance < enemy.getType().getHitBox() && pathToEncounter < projectile.getType().getSpeed())) {
+                || (encounterDistance < enemy.getType().getHitBox() && pathToEncounter < projectile.getType().getSpeed()
+                && (oldVectorToEnemy.getX() * pathVector.getX() + oldVectorToEnemy.getY() * pathVector.getY() > 0))) {
               affectedEnemies.add(enemy);
               removedProjectiles.add(projectile);
               break;
