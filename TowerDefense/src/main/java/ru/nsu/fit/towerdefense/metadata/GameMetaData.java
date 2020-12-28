@@ -227,8 +227,10 @@ public class GameMetaData {
     public TechTree getTechTree() throws  NoSuchElementException
     {
         if (tree == null)
+        {
             tree = loadTree();
-
+            tree.loadUnlocked();
+        }
         return tree;
     }
 
