@@ -80,13 +80,10 @@ public class ReplayWorldControl extends WorldControl {
               WaveEnemies::getCount).sum() - currentWave.getCurrentEnemyNumber());
       world.setCurrentWave(currentWave);
     } else {
-      Wave currentWave = new Wave();
-      currentWave.setCurrentEnemyNumber(state.getCurrentEnemyNumber());
-      currentWave.setNumber(state.getWaveNumber());
-      currentWave.setRemainingEnemiesCount(
-          gameMap.getWaves().get(currentWave.getNumber()).getEnemiesList().stream().mapToInt(
-              WaveEnemies::getCount).sum() - currentWave.getCurrentEnemyNumber());
-      world.setCurrentWave(currentWave);
+      Wave wave = new Wave();
+      wave.setCurrentEnemyNumber(Integer.MAX_VALUE);
+      world.setCurrentWave(wave);
+      world.setCurrentWaveNumber(state.getWaveNumber());
     }
 
     world.getBase().setHealth(state.getBaseHealth());
@@ -149,7 +146,7 @@ public class ReplayWorldControl extends WorldControl {
         projectile.setRemainingRange(projectileInfo.getRange().floatValue());
         projectile.setVelocity(new Vector2<>(projectileInfo.getVelocity().getX(),
             projectileInfo.getVelocity().getY()));
-        projectile.setRotation(Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 90);
+        projectile.setRotation((Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 450) % 360);
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
         //projectile.setScale();
         projectile.setTarget(
@@ -172,7 +169,7 @@ public class ReplayWorldControl extends WorldControl {
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
         projectile.setRemainingRange(projectileInfo.getRange().floatValue());
-        projectile.setRotation(Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 90);
+        projectile.setRotation((Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 450) % 360);
         world.getProjectiles().add(projectile);
       }
     }
