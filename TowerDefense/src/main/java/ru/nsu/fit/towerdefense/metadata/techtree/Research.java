@@ -8,6 +8,7 @@ public class Research {
 
 	private String name = "";
 	private String info = "";
+	private String image = "";
 
 	//List of towertype names, which this research
 	private List<String> towerNames;
@@ -19,7 +20,7 @@ public class Research {
 
 	private List<Research> influence;
 
-	public Research(String name, String info, List<String> towerNames, int cost)
+	public Research(String name, String info, List<String> towerNames, int cost, String image)
 	{
 		this.name = name;
 		this.info = info;
@@ -27,6 +28,7 @@ public class Research {
 		this.cost = cost;
 		left = 0;
 		influence = new ArrayList<>();
+		this.image = image;
 	}
 
 	/**
@@ -51,6 +53,12 @@ public class Research {
 	{
 		to.left++;
 		influence.add(to);
+	}
+
+
+	public String getImage()
+	{
+		return image;
 	}
 
 	public int getCost()
@@ -107,4 +115,10 @@ public class Research {
 	{
 		this.name = name;
 	}
+
+	public void setImage(String image)
+	{
+		this.image = image;
+	}
+
 }
