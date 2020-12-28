@@ -3,6 +3,10 @@
 build/
 out/
 
+levelsnapshots/
+Replays/
+Saves/
+
 *.class
 
 # virtual machine crash logs
