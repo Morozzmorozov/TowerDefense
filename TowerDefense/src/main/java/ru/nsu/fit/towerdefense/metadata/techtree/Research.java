@@ -34,7 +34,7 @@ public class Research {
 		left = 0;
 		influence = new ArrayList<>();
 		this.image = image;
-		size = new Vector2<>(200, 50);
+		size = new Vector2<>(50, 50);
 		position = new Vector2<>(0, 0);
 	}
 
