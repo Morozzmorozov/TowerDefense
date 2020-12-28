@@ -292,7 +292,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         resultsMenuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         try {
-            worldControl.simulateTick();
             worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
             renderAll();
         } catch (RenderException e) {

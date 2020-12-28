@@ -53,8 +53,8 @@ public class ReplayWorldControl extends WorldControl {
     if (!(worldStateIndex == currentWorldStateIndex && tickIndex >= tick)) {
       setWorldState(replay.getWorldStates().get(worldStateIndex)); // move to state after tick No. tickIndex
       currentWorldStateIndex = worldStateIndex;
+      tick = worldStateIndex * replay.getTickRate() + 1;
     }
-
     while (tick != tickIndex + 1) {
       simulateTick2();
       fireEvents(tick - 1); // we want to access events that happened at the tick we have now simulated
@@ -71,12 +71,25 @@ public class ReplayWorldControl extends WorldControl {
 
     world.setCountdown(state.getCountdown());
     world.clearWaves();
-    Wave currentWave = new Wave();
-    currentWave.setCurrentEnemyNumber(state.getCurrentEnemyNumber());
-    currentWave.setNumber(state.getWaveNumber());
-    currentWave.setRemainingEnemiesCount(gameMap.getWaves().get(currentWave.getNumber()).getEnemiesList().stream().mapToInt(
-        WaveEnemies::getCount).sum() - currentWave.getCurrentEnemyNumber());
-    world.setCurrentWave(currentWave);
+    if (gameMap.getWaves().size() > state.getWaveNumber()) {
+      Wave currentWave = new Wave();
+      currentWave.setCurrentEnemyNumber(state.getCurrentEnemyNumber());
+      currentWave.setNumber(state.getWaveNumber());
+      currentWave.setRemainingEnemiesCount(
+          gameMap.getWaves().get(currentWave.getNumber()).getEnemiesList().stream().mapToInt(
+              WaveEnemies::getCount).sum() - currentWave.getCurrentEnemyNumber());
+      world.setCurrentWave(currentWave);
+    } else {
+      Wave currentWave = new Wave();
+      currentWave.setCurrentEnemyNumber(state.getCurrentEnemyNumber());
+      currentWave.setNumber(state.getWaveNumber());
+      currentWave.setRemainingEnemiesCount(
+          gameMap.getWaves().get(currentWave.getNumber()).getEnemiesList().stream().mapToInt(
+              WaveEnemies::getCount).sum() - currentWave.getCurrentEnemyNumber());
+      world.setCurrentWave(currentWave);
+    }
+
+    world.getBase().setHealth(state.getBaseHealth());
 
     for (var enemyInfo : state.getEnemies()) {
 
@@ -97,18 +110,24 @@ public class ReplayWorldControl extends WorldControl {
       if (savedEnemy.isPresent()) {
         Enemy enemy = savedEnemy.get();
         enemy.setHealth(enemyInfo.getHealth());
-        enemy.setPosition(enemyInfo.getPosition());
+        enemy.setPosition(new Vector2<>(enemyInfo.getPosition()));
         enemy.getTrajectory().clear();
-        enemy.getTrajectory().addAll(enemyInfo.getTrajectory());
+        enemy.getTrajectory().clear();
+        for (var vertex : enemyInfo.getTrajectory()) {
+          enemy.getTrajectory().add(new Vector2<>(vertex));
+        }
         // todo effects
       } else {
         Enemy enemy = new Enemy(
             GameMetaData.getInstance().getEnemyType(enemyInfo.getType()),
             enemyInfo.getWave(),
-            enemyInfo.getPosition(),
+            new Vector2<>(enemyInfo.getPosition()),
             100 // todo something with it
             );
-        enemy.getTrajectory().addAll(enemyInfo.getTrajectory());
+        enemy.getTrajectory().clear();
+        for (var vertex : enemyInfo.getTrajectory()) {
+          enemy.getTrajectory().add(new Vector2<>(vertex));
+        }
         world.getEnemies().add(enemy);
       }
     }
