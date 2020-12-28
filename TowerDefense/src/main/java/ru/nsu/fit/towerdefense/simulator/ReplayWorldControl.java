@@ -11,6 +11,7 @@ import ru.nsu.fit.towerdefense.replay.EventRecord;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.replay.WorldState;
 import ru.nsu.fit.towerdefense.simulator.world.Wave;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
@@ -50,6 +51,7 @@ public class ReplayWorldControl extends WorldControl {
   public void skipToTick(int tickIndex) {
     int worldStateIndex = tickIndex / replay.getTickRate();
     if (!(worldStateIndex == currentWorldStateIndex && tickIndex >= tick)) {
+      System.out.println(worldStateIndex);
       setWorldState(replay.getWorldStates().get(worldStateIndex)); // move to state after tick No. tickIndex
       currentWorldStateIndex = worldStateIndex;
       tick = worldStateIndex * replay.getTickRate() + 1;
@@ -114,7 +116,13 @@ public class ReplayWorldControl extends WorldControl {
         for (var vertex : enemyInfo.getTrajectory()) {
           enemy.getTrajectory().add(new Vector2<>(vertex));
         }
-        // todo effects
+        enemy.getEffects().clear();
+        for (var effectInfo : enemyInfo.getEffects()) {
+          Effect effect = new Effect(enemy, GameMetaData.getInstance().getEffectType(
+              effectInfo.getKey()));
+          effect.setRemainingTicks(effectInfo.getValue());
+          enemy.getEffects().add(effect);
+        }
       } else {
         Enemy enemy = new Enemy(
             GameMetaData.getInstance().getEnemyType(enemyInfo.getType()),
@@ -125,6 +133,12 @@ public class ReplayWorldControl extends WorldControl {
         enemy.getTrajectory().clear();
         for (var vertex : enemyInfo.getTrajectory()) {
           enemy.getTrajectory().add(new Vector2<>(vertex));
+        }
+        for (var effectInfo : enemyInfo.getEffects()) {
+          Effect effect = new Effect(enemy, GameMetaData.getInstance().getEffectType(
+              effectInfo.getKey()));
+          effect.setRemainingTicks(effectInfo.getValue());
+          enemy.getEffects().add(effect);
         }
         world.getEnemies().add(enemy);
       }

@@ -11,5 +11,5 @@
     "SizeY" : 1.0,
     "Image" : "rocket.png",
     "AngularVelocity": 3.0,
-    "Effects" : []
+    "Effects" : ["Poison"]
 }

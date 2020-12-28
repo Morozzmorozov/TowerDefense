@@ -35,7 +35,7 @@ public class WorldControl {
   protected static final int DEBUG_MONEY = 600;
   protected static final float SELL_MULTIPLIER = 0.4f;
   protected static final double DELTA = 1e-12;
-  protected static final int DEBUG_TICK_RATE = 360;
+  protected static final int DEBUG_TICK_RATE = 60;
 
   protected long tick; // Beware: this field shows the index of the FOLLOWING frame
   protected final GameMap gameMap;
@@ -386,11 +386,11 @@ public class WorldControl {
         int damage = projectile.getType().getEnemyTypeDamageMap()
             .get(enemy.getType().getTypeName());
 
-        List<EffectType> effectsDebug = projectile.getType().getEffects().stream()
+        List<EffectType> effects = projectile.getType().getEffects().stream()
             .map(name -> GameMetaData.getInstance().getEffectType(name))
             .collect(Collectors.toList());
 
-        for (EffectType effectType : effectsDebug) {
+        for (EffectType effectType : effects) {
           Optional<Effect> existingEffect = enemy.getEffects().stream().filter(effect -> effect.getType() == effectType).findFirst();
           if (existingEffect.isPresent()) {
             existingEffect.get().setRemainingTicks(effectType.getDuration());
