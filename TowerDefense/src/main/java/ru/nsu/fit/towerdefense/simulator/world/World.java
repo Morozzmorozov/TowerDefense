@@ -2,8 +2,10 @@ package ru.nsu.fit.towerdefense.simulator.world;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
@@ -36,9 +38,14 @@ public class World {
   private int currentWaveNumber = 0;
   private Wave currentWave;
   private List<Wave> waves = new ArrayList<>();
+  private Map<Integer, Wave> waveMap = new HashMap<>();
 
   public List<Wave> getWaves() {
     return waves;
+  }
+
+  public Wave getWaveByNumber(int number) {
+    return waveMap.get(number);
   }
 
   public List<Portal> getPortals() {
@@ -60,6 +67,7 @@ public class World {
   public void setCurrentWave(Wave currentWave) {
     this.currentWave = currentWave;
     waves.add(currentWave);
+    waveMap.put(currentWave.getNumber(), currentWave);
   }
 
   public int getCurrentWaveNumber() {

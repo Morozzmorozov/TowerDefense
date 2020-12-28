@@ -267,7 +267,7 @@ public class WorldControl {
 
   private void enemyDeath(Enemy enemy) {
     enemy.setDead(true);
-    Wave wave = world.getWaves().get(enemy.getWaveNumber());
+    Wave wave = world.getWaveByNumber(enemy.getWaveNumber());
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
       wavesDefeated++;
@@ -620,14 +620,16 @@ public class WorldControl {
               .round(gameMap.getWaves().get(world.getCurrentWaveNumber()).getTimeTillNextWave()));
           world.setCurrentWaveNumber(world.getCurrentWaveNumber() + 1);
           if (world.getCurrentWaveNumber() < gameMap.getWaves().size()) {
-            world.setCurrentWave(new Wave());
-            world.getCurrentWave().setNumber(world.getCurrentWaveNumber());
-            world.getCurrentWave().setCurrentEnemyNumber(0);
-            world.getCurrentWave().setRemainingEnemiesCount(gameMap.getWaves().get(
+            Wave wave = new Wave();
+            wave.setNumber(world.getCurrentWaveNumber());
+            wave.setCurrentEnemyNumber(0);
+            wave.setRemainingEnemiesCount(gameMap.getWaves().get(
                 world.getCurrentWaveNumber()).getEnemiesList().stream()
                 .mapToInt(WaveEnemies::getCount).sum());
-            world.getCurrentWave().setDescription(gameMap.getWaves().get(
+            wave.setDescription(gameMap.getWaves().get(
                 world.getCurrentWaveNumber()));
+            world.setCurrentWave(wave);
+
           }
         } else {
           // next enemy in this wave
