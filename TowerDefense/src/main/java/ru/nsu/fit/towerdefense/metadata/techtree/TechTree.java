@@ -176,4 +176,8 @@ public class TechTree {
 		}
 	}
 
+	public boolean canUnlock(String name)
+	{
+		return availableResearches.contains(name);
+	}
 }
