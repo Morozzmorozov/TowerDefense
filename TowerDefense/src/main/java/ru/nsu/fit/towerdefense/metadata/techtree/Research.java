@@ -1,5 +1,7 @@
 package ru.nsu.fit.towerdefense.metadata.techtree;
 
+import ru.nsu.fit.towerdefense.util.Vector2;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +22,9 @@ public class Research {
 
 	private List<Research> influence;
 
+	private Vector2<Integer> size;
+	private Vector2<Integer> position;
+
 	public Research(String name, String info, List<String> towerNames, int cost, String image)
 	{
 		this.name = name;
@@ -29,6 +34,8 @@ public class Research {
 		left = 0;
 		influence = new ArrayList<>();
 		this.image = image;
+		size = new Vector2<>(200, 50);
+		position = new Vector2<>(0, 0);
 	}
 
 	/**
@@ -81,6 +88,16 @@ public class Research {
 		return info;
 	}
 
+	public Vector2<Integer> getSize()
+	{
+		return size;
+	}
+
+	public Vector2<Integer> getPosition()
+	{
+		return position;
+	}
+
 	public List<Research> getInfluence()
 	{
 		return influence;
@@ -119,6 +136,16 @@ public class Research {
 	public void setImage(String image)
 	{
 		this.image = image;
+	}
+
+	public void setSize(Vector2<Integer> size)
+	{
+		this.size = size;
+	}
+
+	public void setPosition(Vector2<Integer> position)
+	{
+		this.position = position;
 	}
 
 }

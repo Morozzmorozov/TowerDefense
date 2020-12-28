@@ -317,6 +317,7 @@ public class GameMetaData {
             tree.setAvailableResearches(available);
             tree.setResearch(research);
             tree.setAvailableTypes(types);
+            tree.process();
             return tree;
         }
         catch (Exception e)
