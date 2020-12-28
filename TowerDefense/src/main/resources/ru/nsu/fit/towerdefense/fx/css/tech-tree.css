@@ -1,0 +1,25 @@
+.debug-world {
+    /*-fx-background-color: green;*/
+}
+
+.root {
+    -fx-background-color: rgba(0, 0, 0, 0.95);
+    -fx-background-image: url('../icons/root-background.png');
+}
+
+.research-box {
+    -fx-border-width: 5;
+    -fx-border-color: transparent;
+    -fx-alignment: center;
+    -fx-background-color: #2e302f;
+    -fx-effect: dropshadow(gaussian, black, 15, 0, 0, 5);
+    -fx-cursor: hand;
+}
+
+.research-box:hover {
+    -fx-border-color: rgba(0, 255, 255, 0.5);
+}
+
+.research-price {
+    -fx-alignment: center;
+}
