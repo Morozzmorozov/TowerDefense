@@ -145,10 +145,11 @@ public class ReplayWorldControl extends WorldControl {
 
       if (savedProjectile.isPresent()) {
         Projectile projectile = savedProjectile.get();
-        projectile.setPosition(new Vector2<>(projectileInfo.getPosition()));
+        projectile.setPosition(new Vector2<>(projectileInfo.getPosition().getX(), projectileInfo.getPosition().getY()));
         projectile.setRemainingRange(projectileInfo.getRange().floatValue());
-        projectile.setVelocity(new Vector2<>(projectileInfo.getVelocity()));
-        projectile.setRotation(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX()));
+        projectile.setVelocity(new Vector2<>(projectileInfo.getVelocity().getX(),
+            projectileInfo.getVelocity().getY()));
+        projectile.setRotation(Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 90);
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
         //projectile.setScale();
         projectile.setTarget(
@@ -164,13 +165,14 @@ public class ReplayWorldControl extends WorldControl {
               .orElse(null),
             projectileInfo.getRange().floatValue(),
             GameMetaData.getInstance().getProjectileType(projectileInfo.getType()),
-            new Vector2<>(projectileInfo.getPosition()),
-            new Vector2<>(projectileInfo.getVelocity()),
+            new Vector2<>(projectileInfo.getPosition().getX(), projectileInfo.getPosition().getY()),
+            new Vector2<>(projectileInfo.getVelocity().getX(), projectileInfo.getVelocity().getY()),
             null);
         projectile.setFireType(projectileInfo.getFireType());
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
         projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
         projectile.setRemainingRange(projectileInfo.getRange().floatValue());
+        projectile.setRotation(Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 90);
         world.getProjectiles().add(projectile);
       }
     }
@@ -212,6 +214,7 @@ public class ReplayWorldControl extends WorldControl {
             Math.round(towerInfo.getPosition().getX().floatValue()),
             Math.round(towerInfo.getPosition().getY().floatValue())
             ));
+        world.getTowers().add(tower);
       }
     }
   }
