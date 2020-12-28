@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<Save>
-	<WorldState>
-		<Base Health="100"></Base>
-		<Tower TowerId="b9a26d75-6da8-436d-84ac-96d8a1d7ba5c" Type="Archer" PosX="3.0" PosY="3.0" Mode="First" Rotation="0.0" Cooldown="20" SellPrice="0" TargetId="None"></Tower>
-		<Money amount="1000"></Money>
-	</WorldState>
-</Save>
