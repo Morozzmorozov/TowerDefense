@@ -5,7 +5,7 @@
             "Name" : "Basic Cannons",
             "Info" : "Stick plus stick is not just two sticks",
             "Image" : "snowcannon.png",
-            "Types" : ["Heavy Cannon", "SnowTower"],
+            "Types" : ["Heavy Cannon", "Snow Tower"],
             "Cost" : 15
         },
         {
@@ -13,21 +13,21 @@
             "Info" : "Faster, higher, stronger",
             "Image" : "portal.png",
             "Types" : ["Wave", "Poison Bottle"],
-            "Cost" : 60
+            "Cost" : 20
         },
         {
             "Name" : "Big Cannons",
             "Info" : "It's a raining stones",
-            "Image" : "tower2.png",
+            "Image" : "tower3.png",
             "Types" : ["Anti-Tank Cannon"],
-            "Cost" : 50
+            "Cost" : 20
         },
         {
             "Name" : "Future Tech",
             "Info" : "Future is now, old man",
             "Image" : "rocket_launcher.png",
-            "Types" : ["RocketLauncher"],
-            "Cost" : 100
+            "Types" : ["Rocket Launcher"],
+            "Cost" : 25
         }
     ],
     "Dependencies" : [

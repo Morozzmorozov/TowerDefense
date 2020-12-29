@@ -1,7 +1,7 @@
 {
 	"SizeX" : 10,
 	"SizeY" : 10,
-	"Reward" : 4,
+	"Reward" : 15,
 	"Base" : {
 		"Health" : 500,
 		"PosX" : 1,

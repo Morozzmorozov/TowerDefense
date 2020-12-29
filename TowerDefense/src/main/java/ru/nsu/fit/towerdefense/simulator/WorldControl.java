@@ -142,7 +142,7 @@ public class WorldControl {
       throw new GameplayException("Not enough money to build the tower");
     }
     if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(towerType.getTypeName())) {
-      //throw new GameplayException("The tower is not yet researched");
+      throw new GameplayException("The tower is not yet researched");
     }
     world.setMoney(world.getMoney() - towerType.getPrice());
     Tower tower = new Tower();
