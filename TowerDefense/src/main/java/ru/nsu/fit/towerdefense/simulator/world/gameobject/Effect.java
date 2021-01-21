@@ -1,7 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EffectType;
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.Visitor;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class Effect extends GameObject implements Renderable {
@@ -55,7 +54,7 @@ public class Effect extends GameObject implements Renderable {
    * {@inheritDoc}
    */
   @Override
-  public void accept(Visitor visitor) {
-    visitor.visit(this);
+  public void accept(ClickVisitor visitor) {
+    visitor.onClicked(this);
   }
 }

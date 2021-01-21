@@ -35,6 +35,7 @@ import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.ClickVisitor;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Portal;
@@ -43,8 +44,6 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.ClickVisitor;
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.Visitor;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 import javax.imageio.ImageIO;
@@ -76,7 +75,7 @@ import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.RENDER_WORLD_ERROR_HE
  *
  * @author Oleg Markelov
  */
-public class GameController implements Controller, WorldObserver, WorldRendererObserver {
+public class GameController implements Controller, WorldObserver, WorldRendererObserver, ClickVisitor {
 
     private static final String FXML_FILE_NAME = "game.fxml";
     private static final int FRAMES_PER_SECOND = 60;
@@ -548,54 +547,54 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldRenderer.hideTowerRangeCircle();
         worldRenderer.showGameObjectSelection(renderable);
 
-        renderable.accept(new ClickVisitor(this));
+        renderable.accept(this);
     }
 
     @Override
-    public void onBaseClicked(Base base) {
+    public void onClicked(Base base) {
         showSideBar(baseSideVBox);
     }
 
     @Override
-    public void onEnemyClicked(Enemy enemy) {
+    public void onClicked(Enemy enemy) {
         updateEnemySideBar(enemy);
         showSideBar(enemySideVBox);
     }
 
     @Override
-    public void onEffectClicked(Effect effect) {
-        onEnemyClicked(effect.getHost());
+    public void onClicked(Effect effect) {
+        onClicked(effect.getHost());
     }
 
     @Override
-    public void onPortalClicked(Portal portal) {
+    public void onClicked(Portal portal) {
         showSideBar(portalSideVBox);
     }
 
     @Override
-    public void onProjectileClicked(Projectile projectile) {
+    public void onClicked(Projectile projectile) {
         updateProjectileSideBar(projectile);
         showSideBar(projectileSideVBox);
     }
 
     @Override
-    public void onRoadTileClicked(RoadTile roadTile) {
+    public void onClicked(RoadTile roadTile) {
         showSideBar(roadSideVBox);
     }
 
     @Override
-    public void onTowerPlatformClicked(TowerPlatform towerPlatform) {
+    public void onClicked(TowerPlatform towerPlatform) {
         Tower towerOnPlatform = worldControl.getTowerOnPlatform(towerPlatform);
         if (towerOnPlatform == null) {
             updatePlatformSideBar(towerPlatform);
             showSideBar(platformSideVBox);
         } else {
-            onTowerClicked(towerOnPlatform);
+            onClicked(towerOnPlatform);
         }
     }
 
     @Override
-    public void onTowerClicked(Tower tower) {
+    public void onClicked(Tower tower) {
         worldRenderer.showTowerRange(tower, tower.getType().getRange());
         updateTowerSideBar(tower);
         showSideBar(towerSideVBox);
@@ -652,7 +651,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
                     try {
                         worldControl.upgradeTower(tower, upgrade);
-                        onTowerClicked(tower);
+                        onClicked(tower);
                     } catch (GameplayException e) {
                         handleGameplayException(e);
                     }
@@ -733,7 +732,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             TowerPlatform towerPlatform = worldControl.sellTower(tower);
             worldRenderer.remove(tower);
 
-            onTowerPlatformClicked(towerPlatform);
+            onClicked(towerPlatform);
         });
     }
 
@@ -816,7 +815,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     try {
                         Tower tower = worldControl.buildTower(towerPlatform, towerType);
                         worldRenderer.add(tower);
-                        onTowerClicked(tower);
+                        onClicked(tower);
                     } catch (GameplayException e) {
                         handleGameplayException(e);
                     } catch (RenderException e) {
@@ -1030,7 +1029,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             }
 
             @Override
-            public void accept(Visitor visitor) {}
+            public void accept(ClickVisitor visitor) {}
         }
 
         private class Triangle extends GameObject {

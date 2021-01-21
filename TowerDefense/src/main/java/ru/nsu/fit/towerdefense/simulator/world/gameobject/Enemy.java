@@ -3,9 +3,7 @@ package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.Visitor;
 import ru.nsu.fit.towerdefense.util.Vector2;
-import ru.nsu.fit.towerdefense.simulator.world.Wave;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EnemyType;
 
 public class Enemy extends GameObject implements Renderable {
@@ -100,7 +98,7 @@ public class Enemy extends GameObject implements Renderable {
    * {@inheritDoc}
    */
   @Override
-  public void accept(Visitor visitor) {
-    visitor.visit(this);
+  public void accept(ClickVisitor visitor) {
+    visitor.onClicked(this);
   }
 }

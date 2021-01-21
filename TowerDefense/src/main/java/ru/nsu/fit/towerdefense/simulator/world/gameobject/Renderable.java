@@ -1,6 +1,5 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.Visitor;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public interface Renderable {
@@ -30,5 +29,5 @@ public interface Renderable {
    *
    * @param visitor a visitor to be applied.
    */
-  void accept(Visitor visitor);
+  void accept(ClickVisitor visitor);
 }
