@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.Visitor;
 import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.FireType;
@@ -83,11 +84,6 @@ public class Projectile extends GameObject implements Renderable {
     this.rotation = rotation;
   }
 
-  @Override
-  public Type getGameObjectType() {
-    return Type.PROJECTILE;
-  }
-
   public Vector2<Double> getPosition() { // todo fix temporary solution
     if (fireType.equals(FireType.UNIDIRECTIONAL))
     return position;
@@ -128,5 +124,13 @@ public class Projectile extends GameObject implements Renderable {
 
   public void setParentPosition(Vector2<Double> parentPosition) {
     this.parentPosition = parentPosition;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void accept(Visitor visitor) {
+    visitor.visit(this);
   }
 }

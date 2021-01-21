@@ -43,6 +43,8 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.ClickVisitor;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.Visitor;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 import javax.imageio.ImageIO;
@@ -537,9 +539,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         finishGame(true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onGameObjectClicked(Renderable renderable) {
         if (state != State.PLAYING) {
@@ -549,57 +548,43 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldRenderer.hideTowerRangeCircle();
         worldRenderer.showGameObjectSelection(renderable);
 
-        switch (renderable.getGameObjectType()) {
-            case BASE:
-                onBaseClicked((Base) renderable);
-                break;
-            case ENEMY:
-                onEnemyClicked((Enemy) renderable);
-                break;
-            case EFFECT:
-                onEnemyClicked(((Effect) renderable).getHost());
-                break;
-            case ENEMY_PORTAL:
-                onPortalClicked((Portal) renderable);
-                break;
-            case PROJECTILE:
-                onProjectileClicked((Projectile) renderable);
-                break;
-            case ROAD_TILE:
-                onRoadTileClicked((RoadTile) renderable);
-                break;
-            case TOWER:
-                onTowerClicked((Tower) renderable);
-                break;
-            case TOWER_PLATFORM:
-                onTowerPlatformClicked((TowerPlatform) renderable);
-                break;
-        }
+        renderable.accept(new ClickVisitor(this));
     }
 
-    private void onBaseClicked(Base base) {
+    @Override
+    public void onBaseClicked(Base base) {
         showSideBar(baseSideVBox);
     }
 
-    private void onEnemyClicked(Enemy enemy) {
+    @Override
+    public void onEnemyClicked(Enemy enemy) {
         updateEnemySideBar(enemy);
         showSideBar(enemySideVBox);
     }
 
-    private void onPortalClicked(Portal portal) {
+    @Override
+    public void onEffectClicked(Effect effect) {
+        onEnemyClicked(effect.getHost());
+    }
+
+    @Override
+    public void onPortalClicked(Portal portal) {
         showSideBar(portalSideVBox);
     }
 
-    private void onProjectileClicked(Projectile projectile) {
+    @Override
+    public void onProjectileClicked(Projectile projectile) {
         updateProjectileSideBar(projectile);
         showSideBar(projectileSideVBox);
     }
 
-    private void onRoadTileClicked(RoadTile roadTile) {
+    @Override
+    public void onRoadTileClicked(RoadTile roadTile) {
         showSideBar(roadSideVBox);
     }
 
-    private void onTowerPlatformClicked(TowerPlatform towerPlatform) {
+    @Override
+    public void onTowerPlatformClicked(TowerPlatform towerPlatform) {
         Tower towerOnPlatform = worldControl.getTowerOnPlatform(towerPlatform);
         if (towerOnPlatform == null) {
             updatePlatformSideBar(towerPlatform);
@@ -609,7 +594,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         }
     }
 
-    private void onTowerClicked(Tower tower) {
+    @Override
+    public void onTowerClicked(Tower tower) {
         worldRenderer.showTowerRange(tower, tower.getType().getRange());
         updateTowerSideBar(tower);
         showSideBar(towerSideVBox);
@@ -1027,11 +1013,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             private final Vector2<Double> size = new Vector2<>(GAME_OBJECT_SIZE, GAME_OBJECT_SIZE);
 
             @Override
-            public Type getGameObjectType() {
-                return null;
-            }
-
-            @Override
             public Vector2<Double> getPosition() {
                 return position;
             }
@@ -1047,6 +1028,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             public Vector2<Double> getVelocity() {
                 return velocity;
             }
+
+            @Override
+            public void accept(Visitor visitor) {}
         }
 
         private class Triangle extends GameObject {

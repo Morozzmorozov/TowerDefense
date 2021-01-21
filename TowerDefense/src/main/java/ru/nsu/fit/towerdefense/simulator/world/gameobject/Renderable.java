@@ -1,14 +1,9 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.Visitor;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public interface Renderable {
-
-  enum Type {
-    BASE, ENEMY, ENEMY_PORTAL, PROJECTILE, ROAD_TILE, TOWER, TOWER_PLATFORM, EFFECT
-  }
-
-  Type getGameObjectType();
 
   Vector2<Double> getPosition();
   Vector2<Double> getSize();
@@ -29,4 +24,11 @@ public interface Renderable {
    * @return z-index.
    */
   double getZIndex();
+
+  /**
+   * Applies a visitor to this renderable.
+   *
+   * @param visitor a visitor to be applied.
+   */
+  void accept(Visitor visitor);
 }

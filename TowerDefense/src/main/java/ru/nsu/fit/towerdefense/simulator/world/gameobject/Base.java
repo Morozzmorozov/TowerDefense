@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.Visitor;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class Base extends GameObject implements Renderable {
@@ -25,11 +26,6 @@ public class Base extends GameObject implements Renderable {
   }
 
   @Override
-  public Type getGameObjectType() {
-    return Type.BASE;
-  }
-
-  @Override
   public Vector2<Double> getPosition() {
     return new Vector2<>((double)position.getX(), (double)position.getY());
   }
@@ -47,5 +43,13 @@ public class Base extends GameObject implements Renderable {
   @Override
   public double getZIndex() {
     return 1;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void accept(Visitor visitor) {
+    visitor.visit(this);
   }
 }

@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.visitor.Visitor;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class TowerPlatform extends GameObject implements Renderable {
@@ -9,11 +10,6 @@ public class TowerPlatform extends GameObject implements Renderable {
   public TowerPlatform(Vector2<Integer> position, String image) {
     this.position = position;
     this.image = image;
-  }
-
-  @Override
-  public Type getGameObjectType() {
-    return Type.TOWER_PLATFORM;
   }
 
   @Override
@@ -34,5 +30,13 @@ public class TowerPlatform extends GameObject implements Renderable {
   @Override
   public double getZIndex() {
     return 2;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void accept(Visitor visitor) {
+    visitor.visit(this);
   }
 }
