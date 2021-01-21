@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
+import ru.nsu.fit.towerdefense.fx.controllers.Camera;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
@@ -202,7 +203,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private final int baseInitialHealth;
 
     private final WorldControl worldControl;
-    private WorldCamera worldCamera;
+    private Camera camera;
     private WorldRenderer worldRenderer;
 
     private Replay replay;
@@ -250,8 +251,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     @FXML
     private void initialize() {
-        worldCamera = new WorldCamera(worldWrapperStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
-        worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), worldCamera.getPixelsPerGameCell(), this);
+        camera = new Camera(worldWrapperStackPane, worldAnchorPane, sceneManager.getStageSize(), worldSize);
+        worldRenderer = new WorldRenderer(worldAnchorPane.getChildren(), camera.getPixelsPerGameCell(), this);
 
         towerModeToUiNodeMap = new HashMap<>() {{
             put(Tower.Mode.First, towerModeFirstHBox);
@@ -446,7 +447,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 return;
             }
 
-            worldCamera.scale(scrollEvent.getDeltaY() > 0,
+            camera.scale(scrollEvent.getDeltaY() > 0,
                 scrollEvent.getSceneX(), scrollEvent.getSceneY());
         });
 
@@ -456,7 +457,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             }
 
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                worldCamera.initMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                camera.initMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -466,7 +467,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             }
 
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                worldCamera.updateMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                camera.updateMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
@@ -476,7 +477,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             }
 
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                worldCamera.finishMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                camera.finishMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 

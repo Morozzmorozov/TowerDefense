@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.fx.controllers.game;
+package ru.nsu.fit.towerdefense.fx.controllers;
 
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -8,11 +8,11 @@ import javafx.util.Duration;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 /**
- * WorldCamera class is used for scaling and moving the world on the screen.
+ * Camera class is used for scaling and moving the target pane on the screen.
  *
  * @author Oleg Markelov
  */
-public class WorldCamera {
+public class Camera {
 
     private static final double WORLD_TO_STAGE_INITIAL_RATIO = 0.9d;
     private static final double MAX_SCALE = 4.0d;
@@ -20,7 +20,7 @@ public class WorldCamera {
     private static final double SCALE_DELTA = 1.2d;
     private static final long SCROLL_TIME = 250;
 
-    private final Pane worldWrapperPane;
+    private final Pane wrapperPane;
     private final Pane worldPane;
 
     private double scale = 1d;
@@ -29,17 +29,17 @@ public class WorldCamera {
     private double pixelsPerGameCell;
 
     /**
-     * Creates new WorldCamera with specified root and world panes. Sets world pane bounds
+     * Creates new Camera with specified wrapper and world panes. Sets world pane bounds
      * calculated with stage and world sizes. Calculates how many pixels fit one dimension of game
      * cell.
      *
-     * @param worldWrapperPane  pane holding the world pane.
+     * @param wrapperPane  pane holding the world pane.
      * @param worldPane world pane.
      * @param stageSize stage size on pixels.
      * @param worldSize stage size in game units.
      */
-    public WorldCamera(Pane worldWrapperPane, Pane worldPane, Vector2<Double> stageSize, Vector2<Integer> worldSize) {
-        this.worldWrapperPane = worldWrapperPane;
+    public Camera(Pane wrapperPane, Pane worldPane, Vector2<Double> stageSize, Vector2<Integer> worldSize) {
+        this.wrapperPane = wrapperPane;
         this.worldPane = worldPane;
         initialTranslateDelta = new Vector2<>(0d, 0d);
 
@@ -126,7 +126,7 @@ public class WorldCamera {
     public void updateMovement(double x, double y) {
         worldPane.setTranslateX(x - initialTranslateDelta.getX());
         worldPane.setTranslateY(y - initialTranslateDelta.getY());
-        worldWrapperPane.setCursor(Cursor.MOVE);
+        wrapperPane.setCursor(Cursor.MOVE);
     }
 
     /**
@@ -136,6 +136,6 @@ public class WorldCamera {
      * @param y updated world y coordinate.
      */
     public void finishMovement(double x, double y) {
-        worldWrapperPane.setCursor(Cursor.DEFAULT);
+        wrapperPane.setCursor(Cursor.DEFAULT);
     }
 }

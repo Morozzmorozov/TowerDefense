@@ -22,7 +22,7 @@ import javafx.scene.text.Text;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
-import ru.nsu.fit.towerdefense.fx.controllers.game.WorldCamera;
+import ru.nsu.fit.towerdefense.fx.controllers.Camera;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
@@ -78,7 +78,7 @@ public class TechTreeController implements Controller {
 
     private final SceneManager sceneManager;
 
-    private WorldCamera worldCamera;
+    private Camera camera;
 
     /**
      * Creates new TechTreeController with specified SceneManager.
@@ -95,7 +95,7 @@ public class TechTreeController implements Controller {
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
 
-        worldCamera = new WorldCamera(worldWrapperStackPane, worldAnchorPane,
+        camera = new Camera(worldWrapperStackPane, worldAnchorPane,
             sceneManager.getStageSize(), GameMetaData.getInstance().getTechTree().getSize());
 
         bindUppercase(researchNameText);
@@ -125,13 +125,13 @@ public class TechTreeController implements Controller {
 
         for (Research destinationResearch : research.getInfluence()) {
             Line line = new Line(
-                (research.getPosition().getX() + research.getSize().getX()) * worldCamera.getPixelsPerGameCell(),
-                (research.getPosition().getY() + research.getSize().getY() * 0.5d) * worldCamera.getPixelsPerGameCell(),
-                destinationResearch.getPosition().getX() * worldCamera.getPixelsPerGameCell(),
-                (destinationResearch.getPosition().getY() + destinationResearch.getSize().getY() * 0.5d) * worldCamera.getPixelsPerGameCell()
+                (research.getPosition().getX() + research.getSize().getX()) * camera.getPixelsPerGameCell(),
+                (research.getPosition().getY() + research.getSize().getY() * 0.5d) * camera.getPixelsPerGameCell(),
+                destinationResearch.getPosition().getX() * camera.getPixelsPerGameCell(),
+                (destinationResearch.getPosition().getY() + destinationResearch.getSize().getY() * 0.5d) * camera.getPixelsPerGameCell()
             );
 
-            line.setStrokeWidth(research.getSize().getY() * worldCamera.getPixelsPerGameCell() * 0.01d);
+            line.setStrokeWidth(research.getSize().getY() * camera.getPixelsPerGameCell() * 0.01d);
             line.setStroke(isResearched ? Color.web("rgba(0, 255, 0, 0.5)") : Color.web("rgba(255, 255, 255, 0.5)"));
             line.setViewOrder(Double.POSITIVE_INFINITY);
 
@@ -142,8 +142,8 @@ public class TechTreeController implements Controller {
     }
 
     private GridPane createResearchGridPane(Research research) {
-        double width = research.getSize().getX() * worldCamera.getPixelsPerGameCell();
-        double height = research.getSize().getY() * worldCamera.getPixelsPerGameCell();
+        double width = research.getSize().getX() * camera.getPixelsPerGameCell();
+        double height = research.getSize().getY() * camera.getPixelsPerGameCell();
         double imageHeight = height * 0.35d;
         double fontSize = height * 0.15d;
         double borderWidth = height * 0.01d;
@@ -176,8 +176,8 @@ public class TechTreeController implements Controller {
         gridPane.setMaxHeight(height);
 
         gridPane.relocate(
-            research.getPosition().getX() * worldCamera.getPixelsPerGameCell(),
-            research.getPosition().getY() * worldCamera.getPixelsPerGameCell()
+            research.getPosition().getX() * camera.getPixelsPerGameCell(),
+            research.getPosition().getY() * camera.getPixelsPerGameCell()
         );
 
         Label label = new Label(research.getName());
@@ -321,25 +321,25 @@ public class TechTreeController implements Controller {
                 return;
             }
 
-            worldCamera.scale(scrollEvent.getDeltaY() > 0,
+            camera.scale(scrollEvent.getDeltaY() > 0,
                 scrollEvent.getSceneX(), scrollEvent.getSceneY());
         });
 
         sceneManager.getScene().setOnMousePressed(mouseEvent -> {
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                worldCamera.initMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                camera.initMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
         sceneManager.getScene().setOnMouseDragged(mouseEvent -> {
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                worldCamera.updateMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                camera.updateMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
 
         sceneManager.getScene().setOnMouseReleased(mouseEvent -> {
             if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
-                worldCamera.finishMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+                camera.finishMovement(mouseEvent.getSceneX(), mouseEvent.getSceneY());
             }
         });
     }
