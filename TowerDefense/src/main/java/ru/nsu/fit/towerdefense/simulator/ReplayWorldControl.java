@@ -19,6 +19,7 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class ReplayWorldControl extends WorldControl {
+
   private Replay replay;
 
   private int currentWorldStateIndex = 0;
@@ -37,7 +38,7 @@ public class ReplayWorldControl extends WorldControl {
 
   @Override
   public void simulateTick() {
-    skipToTick((int)tick);
+    skipToTick((int) tick);
   }
 
   /**
@@ -57,7 +58,8 @@ public class ReplayWorldControl extends WorldControl {
     }
     while (tick != tickIndex + 1) {
       super.simulateTick();
-      fireEvents(tick - 1); // we want to access events that happened at the tick we have now simulated
+      fireEvents(
+          tick - 1); // we want to access events that happened at the tick we have now simulated
     }
   }
 
@@ -128,7 +130,7 @@ public class ReplayWorldControl extends WorldControl {
             enemyInfo.getWave(),
             new Vector2<>(enemyInfo.getPosition()),
             enemyInfo.getReward()
-            );
+        );
         enemy.getTrajectory().clear();
         for (var vertex : enemyInfo.getTrajectory()) {
           enemy.getTrajectory().add(new Vector2<>(vertex));
@@ -156,12 +158,17 @@ public class ReplayWorldControl extends WorldControl {
 
       if (savedProjectile.isPresent()) {
         Projectile projectile = savedProjectile.get();
-        projectile.setPosition(new Vector2<>(projectileInfo.getPosition().getX(), projectileInfo.getPosition().getY()));
+        projectile.setPosition(new Vector2<>(projectileInfo.getPosition().getX(),
+            projectileInfo.getPosition().getY()));
         projectile.setRemainingRange(projectileInfo.getRange().floatValue());
         projectile.setVelocity(new Vector2<>(projectileInfo.getVelocity().getX(),
             projectileInfo.getVelocity().getY()));
-        projectile.setRotation((Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 450) % 360);
-        projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
+        projectile.setRotation((Math
+            .toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX()))
+            + 450) % 360);
+        projectile.setRotationSpeed(
+            GameMetaData.getInstance().getProjectileType(projectileInfo.getType())
+                .getAngularVelocity());
         projectile.setScale(projectileInfo.getScale());
         projectile.setTarget(
             world.getEnemies().stream()
@@ -175,19 +182,25 @@ public class ReplayWorldControl extends WorldControl {
       } else {
         Projectile projectile = new Projectile(
             world.getEnemies().stream()
-              .dropWhile(enemy -> enemy.getId().toString().equals(projectileInfo.getTarget()))
-              .findFirst()
-              .orElse(null),
+                .dropWhile(enemy -> enemy.getId().toString().equals(projectileInfo.getTarget()))
+                .findFirst()
+                .orElse(null),
             projectileInfo.getRange().floatValue(),
             GameMetaData.getInstance().getProjectileType(projectileInfo.getType()),
             new Vector2<>(projectileInfo.getPosition().getX(), projectileInfo.getPosition().getY()),
             new Vector2<>(projectileInfo.getVelocity().getX(), projectileInfo.getVelocity().getY()),
             null);
         projectile.setFireType(projectileInfo.getFireType());
-        projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
-        projectile.setRotationSpeed(GameMetaData.getInstance().getProjectileType(projectileInfo.getType()).getAngularVelocity());
+        projectile.setRotationSpeed(
+            GameMetaData.getInstance().getProjectileType(projectileInfo.getType())
+                .getAngularVelocity());
+        projectile.setRotationSpeed(
+            GameMetaData.getInstance().getProjectileType(projectileInfo.getType())
+                .getAngularVelocity());
         projectile.setRemainingRange(projectileInfo.getRange().floatValue());
-        projectile.setRotation((Math.toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX())) + 450) % 360);
+        projectile.setRotation((Math
+            .toDegrees(Math.atan2(projectile.getVelocity().getY(), projectile.getVelocity().getX()))
+            + 450) % 360);
         projectile.setParentPosition(new Vector2<>(projectileInfo.getParentPosition()));
         projectile.setScale(projectileInfo.getScale());
         if (projectile.getFireType().equals(FireType.OMNIDIRECTIONAL)) {
@@ -196,7 +209,6 @@ public class ReplayWorldControl extends WorldControl {
         world.getProjectiles().add(projectile);
       }
     }
-
 
     world.getTowers().removeAll(world.getTowers().stream()
         .filter(tower -> state.getTowers().stream()
@@ -233,14 +245,14 @@ public class ReplayWorldControl extends WorldControl {
         tower.setPosition(new Vector2<>(
             Math.round(towerInfo.getPosition().getX().floatValue()),
             Math.round(towerInfo.getPosition().getY().floatValue())
-            ));
+        ));
         world.getTowers().add(tower);
       }
     }
   }
 
   private void fireEvents(long tickIndex) {
-    var event = idEventMap.get((int)tickIndex);
+    var event = idEventMap.get((int) tickIndex);
 
     if (event == null) {
       return;
@@ -249,8 +261,9 @@ public class ReplayWorldControl extends WorldControl {
       Tower tower = new Tower();
       tower.setType(GameMetaData.getInstance().getTowerType(buildTower.getValue().getKey()));
       tower.setPosition(new Vector2<>(
-          (int)Math.round(world.getTowerPlatforms().get(buildTower.getKey()).getPosition().getX()),
-          (int)Math.round(world.getTowerPlatforms().get(buildTower.getKey()).getPosition().getY())));
+          (int) Math.round(world.getTowerPlatforms().get(buildTower.getKey()).getPosition().getX()),
+          (int) Math
+              .round(world.getTowerPlatforms().get(buildTower.getKey()).getPosition().getY())));
       tower.setId(UUID.fromString(buildTower.getValue().getValue()));
       world.getTowers().add(tower);
       world.setMoney(world.getMoney() - tower.getType().getPrice());

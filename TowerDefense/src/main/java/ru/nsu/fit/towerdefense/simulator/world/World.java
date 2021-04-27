@@ -39,6 +39,7 @@ public class World {
   private Wave currentWave;
   private List<Wave> waves = new ArrayList<>(); // probably not needed anymore
   private Map<Integer, Wave> waveMap = new HashMap<>();
+  private Map<Integer, Integer> moneyMap = new HashMap<>();
 
   public List<Wave> getWaves() {
     return waves;
@@ -100,12 +101,12 @@ public class World {
     this.base = base;
   }
 
-  public int getMoney() {
-    return money;
+  public int getMoney() { // TODO pass player id or something
+    return moneyMap.get(0);
   }
 
   public void setMoney(int money) {
-    this.money = money;
+    moneyMap.put(0, money);
   }
 
   public List<Enemy> getEnemies() {
