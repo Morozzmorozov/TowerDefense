@@ -11,15 +11,13 @@ public class Projectile extends GameObject implements Renderable {
   private Vector2<Double> position;
   private Vector2<Double> velocity;
   private double rotation;
-  private Tower parent;
   private double scale = 1.0;
   private double rotationSpeed = 3.0; // DEBUG
-  private FireType fireType = null; // todo change
+  private FireType fireType;
   private Vector2<Double> parentPosition;
 
   public FireType getFireType() {
-    if (fireType != null) return fireType;
-    return parent.getType().getFireType();
+    return fireType;
   }
 
   public void setFireType(FireType fireType) {
@@ -70,10 +68,6 @@ public class Projectile extends GameObject implements Renderable {
     return type;
   }
 
-  public Tower getParent() {
-    return parent;
-  }
-
   @Override
   public double getRotation() {
     return rotation;
@@ -83,7 +77,8 @@ public class Projectile extends GameObject implements Renderable {
     this.rotation = rotation;
   }
 
-  public Vector2<Double> getPosition() { // todo fix temporary solution
+  @Override
+  public Vector2<Double> getPosition() {
     if (fireType.equals(FireType.UNIDIRECTIONAL))
     return position;
     else return new Vector2<>(position.getX() + 0.5 - 0.5 * scale, position.getY() + 0.5 - 0.5 * scale);
@@ -109,7 +104,8 @@ public class Projectile extends GameObject implements Renderable {
     this.type = type;
     this.position = position;
     this.velocity = velocity;
-    this.parent = parent;
+    fireType = parent.getType().getFireType();
+    parentPosition = new Vector2<>(parent.getPosition());
   }
 
   @Override
