@@ -59,6 +59,8 @@ public class World {
       }
       return new Tower(tower, e);
     }).collect(Collectors.toList());
+
+    tick = oldWorld.tick;
   }
 
   public int getCountdown() {
@@ -81,6 +83,15 @@ public class World {
   private Wave currentWave;
   private Map<Integer, Wave> waveMap = new HashMap<>();
   private Map<Integer, Integer> moneyMap = new HashMap<>();
+  private long tick = 0;
+
+  public long getTick() {
+    return tick;
+  }
+
+  public void setTick(long tick) {
+    this.tick = tick;
+  }
 
   public Wave getWaveByNumber(int number) {
     return waveMap.get(number);

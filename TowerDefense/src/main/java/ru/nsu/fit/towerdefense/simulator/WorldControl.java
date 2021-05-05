@@ -41,7 +41,7 @@ public class WorldControl {
   public static final double EPS = 1e-12;
   public static final int DEBUG_TICK_RATE = 60;
 
-  protected long tick; // Beware: this field shows the index of the FOLLOWING frame
+  //protected long tick; // Beware: this field shows the index of the FOLLOWING frame
   protected final GameMap gameMap;
   protected final int deltaTime;
   protected final WorldObserver worldObserver;
@@ -132,7 +132,7 @@ public class WorldControl {
 
   public TowerPlatform sellTower(Tower tower) {
     synchronized (this) {
-      new SellTowerEvent(tick + 1, tower).fire(world);
+      new SellTowerEvent(getTick() + 1, tower).fire(world);
       for (TowerPlatform platform : world.getTowerPlatforms()) {
         if (Vector2.distance(tower.getPosition(), platform.getPosition()) < EPS) {
           return platform;
@@ -146,7 +146,7 @@ public class WorldControl {
       throws GameplayException {
 
     synchronized (this) {
-      new BuildTowerEvent((int) tick, towerPlatform, towerType).fire(world);
+      new BuildTowerEvent((int) getTick(), towerPlatform, towerType).fire(world);
     }
     return getTowerOnPlatform(towerPlatform);
   }
@@ -154,7 +154,7 @@ public class WorldControl {
 
   public void upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
     synchronized (this) {
-      new UpgradeTowerEvent(upgrade, tower, tick).fire(world);
+      new UpgradeTowerEvent(upgrade, tower, getTick()).fire(world);
     }
   }
 
@@ -169,7 +169,7 @@ public class WorldControl {
 
   public void tuneTower(Tower tower, Tower.Mode towerMode) {
     synchronized (this) {
-      new TuneTowerEvent(tick, towerMode, tower).fire(world);
+      new TuneTowerEvent(getTick(), towerMode, tower).fire(world);
     }
 
 
@@ -214,7 +214,7 @@ public class WorldControl {
   }
 
   public long getTick() {
-    return tick;
+    return world.getTick();
   }
 
   public int getWavesDefeated() {
@@ -237,7 +237,7 @@ public class WorldControl {
 
       GameStateWriter.getInstance().newFrame();
 
-      ++tick;
+      world.setTick(world.getTick() + 1);
     }
   }
 
