@@ -5,6 +5,20 @@ import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 
 public class Tower extends GameObject implements Renderable {
 
+  public Tower() {
+
+  }
+
+  public Tower(Tower oldTower, Enemy target) {
+    type = oldTower.type;
+    cooldown = oldTower.cooldown;
+    rotation = oldTower.rotation;
+    this.target = target;
+    position = new Vector2<>(oldTower.position);
+    mode = oldTower.mode;
+    sellPrice = oldTower.sellPrice;
+  }
+
   public enum Mode { First, Last, Nearest, Farthest, Weakest, Strongest, Random }
 
   private TowerType type;

@@ -5,9 +5,15 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 public class Base extends GameObject implements Renderable {
   private int health;
 
-  private String image;
+  private final String image;
 
-  private Vector2<Integer> position;
+  private final Vector2<Integer> position;
+
+  public Base(Base oldBase) {
+    health = oldBase.health;
+    image = oldBase.image;
+    position = new Vector2<>(oldBase.position);
+  }
 
   public Base(int health, String image,
       Vector2<Integer> position) {

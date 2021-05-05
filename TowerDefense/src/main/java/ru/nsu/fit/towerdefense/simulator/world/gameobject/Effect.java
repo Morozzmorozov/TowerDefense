@@ -14,6 +14,12 @@ public class Effect extends GameObject implements Renderable {
     remainingTicks = type.getDuration();
   }
 
+  public Effect(Effect oldEffect, Enemy host) {
+    this.host = host;
+    this.type = oldEffect.type;
+    this.remainingTicks = oldEffect.remainingTicks;
+  }
+
   public Enemy getHost() {
     return host;
   }

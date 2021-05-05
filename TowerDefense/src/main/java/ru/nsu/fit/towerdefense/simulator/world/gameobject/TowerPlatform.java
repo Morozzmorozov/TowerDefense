@@ -3,12 +3,17 @@ package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class TowerPlatform extends GameObject implements Renderable {
-  private Vector2<Integer> position;
-  private String image;
+  private final Vector2<Integer> position;
+  private final String image;
 
   public TowerPlatform(Vector2<Integer> position, String image) {
     this.position = position;
     this.image = image;
+  }
+
+  public TowerPlatform(TowerPlatform oldPlatform) {
+    position = new Vector2<>(oldPlatform.position);
+    image = oldPlatform.image;
   }
 
   @Override

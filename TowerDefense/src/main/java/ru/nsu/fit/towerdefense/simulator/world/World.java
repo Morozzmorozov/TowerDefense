@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Portal;
@@ -17,6 +18,48 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
 
 public class World {
+
+  public World() {
+
+  }
+
+  public World(World oldWorld) {
+    countdown = oldWorld.countdown;
+    enemies = oldWorld.enemies.stream().map(Enemy::new).collect(Collectors.toList());
+    projectiles = oldWorld.projectiles.stream().map(projectile -> {
+      var e = projectile.getTarget();
+      if (e != null) {
+        e = enemies.get(oldWorld.enemies.indexOf(e));
+      }
+      return new Projectile(projectile, e);
+    }).collect(Collectors.toList());
+    towerPlatforms = oldWorld.towerPlatforms.stream().map(TowerPlatform::new)
+        .collect(Collectors.toList());
+    roadTiles = oldWorld.roadTiles.stream().map(RoadTile::new).collect(Collectors.toList());
+    portals = oldWorld.portals.stream().map(Portal::new).collect(Collectors.toList());
+    base = new Base(oldWorld.base);
+    currentWaveNumber = oldWorld.currentWaveNumber;
+
+    waveMap = new HashMap<>(waveMap);
+    for (var e : waveMap.entrySet()) {
+      Wave wave = new Wave(e.getValue());
+      if (e.getValue() == oldWorld.currentWave) {
+        currentWave = wave;
+      }
+      e.setValue(new Wave(e.getValue()));
+    }
+
+    moneyMap = new HashMap<>(oldWorld.moneyMap);
+
+
+    towers = oldWorld.towers.stream().map(tower -> {
+      var e = tower.getTarget();
+      if (e != null) {
+        e = enemies.get(oldWorld.enemies.indexOf(e));
+      }
+      return new Tower(tower, e);
+    }).collect(Collectors.toList());
+  }
 
   public int getCountdown() {
     return countdown;
@@ -34,16 +77,10 @@ public class World {
   private List<RoadTile> roadTiles = new ArrayList<>();
   private List<Portal> portals = new ArrayList<>();
   private Base base;
-  private int money;
   private int currentWaveNumber = 0;
   private Wave currentWave;
-  private List<Wave> waves = new ArrayList<>(); // probably not needed anymore
   private Map<Integer, Wave> waveMap = new HashMap<>();
   private Map<Integer, Integer> moneyMap = new HashMap<>();
-
-  public List<Wave> getWaves() {
-    return waves;
-  }
 
   public Wave getWaveByNumber(int number) {
     return waveMap.get(number);
@@ -51,7 +88,6 @@ public class World {
 
   public void clearWaves() {
     waveMap.clear();
-    waves.clear();
     currentWave = null;
   }
 
@@ -60,7 +96,6 @@ public class World {
       return;
     }
     waveMap.put(wave.getNumber(), wave);
-    waves.add(wave);
   }
 
   public List<Portal> getPortals() {
@@ -144,6 +179,7 @@ public class World {
   }
 
   private class WorldIterator implements Iterator<Renderable> {
+
     private List<Iterator<? extends Renderable>> iterators;
 
     public WorldIterator() {

@@ -3,6 +3,18 @@ package ru.nsu.fit.towerdefense.simulator.world;
 import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 
 public class Wave {
+
+  public Wave() {
+
+  }
+
+  public Wave(Wave oldWave) {
+    number = oldWave.number;
+    remainingEnemiesCount = oldWave.remainingEnemiesCount;
+    currentEnemyNumber = oldWave.currentEnemyNumber;
+    description = oldWave.description;
+  }
+
   private int number;
   private int remainingEnemiesCount;
   private int currentEnemyNumber = 0;

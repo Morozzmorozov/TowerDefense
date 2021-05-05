@@ -3,8 +3,13 @@ package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class RoadTile extends GameObject implements Renderable {
-  private String image;
-  private Vector2<Integer> position;
+  private final String image;
+  private final Vector2<Integer> position;
+
+  public RoadTile(RoadTile oldTile) {
+    image = oldTile.image;
+    position = new Vector2<>(oldTile.position);
+  }
 
   public RoadTile(String image,
       Vector2<Integer> position) {

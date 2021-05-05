@@ -3,9 +3,14 @@ package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class Portal extends GameObject implements Renderable {
-  private String image;
+  private final String image;
 
-  private Vector2<Integer> position;
+  private final Vector2<Integer> position;
+
+  public Portal(Portal oldPortal) {
+    image = oldPortal.image;
+    position = new Vector2<>(oldPortal.position);
+  }
 
   public Portal(String image, Vector2<Integer> position) {
     this.image = image;

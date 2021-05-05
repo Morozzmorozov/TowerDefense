@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import ru.nsu.fit.towerdefense.util.Vector2;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.EnemyType;
 
@@ -24,6 +25,18 @@ public class Enemy extends GameObject implements Renderable {
     this.moneyReward = moneyReward;
     health = type.getHealth();
     velocity = type.getSpeed();
+  }
+
+  public Enemy(Enemy oldEnemy) {
+    health = oldEnemy.health;
+    type = oldEnemy.type;
+    velocity = oldEnemy.velocity;
+    waveNumber = oldEnemy.waveNumber;
+    isDead = oldEnemy.isDead;
+    position = new Vector2<>(oldEnemy.position);
+    trajectory = oldEnemy.trajectory.stream().map(Vector2::new).collect(Collectors.toList());
+    moneyReward = oldEnemy.moneyReward;
+    effects = oldEnemy.effects.stream().map(effect -> new Effect(effect, this)).collect(Collectors.toList());
   }
 
   public List<Effect> getEffects() {

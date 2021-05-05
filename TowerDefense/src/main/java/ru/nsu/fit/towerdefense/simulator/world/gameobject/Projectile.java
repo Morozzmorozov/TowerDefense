@@ -16,6 +16,23 @@ public class Projectile extends GameObject implements Renderable {
   private FireType fireType;
   private Vector2<Double> parentPosition;
 
+  public Projectile() {
+
+  }
+
+  public Projectile(Projectile oldProjectile, Enemy target) {
+    this.target = target;
+    remainingRange = oldProjectile.remainingRange;
+    type = oldProjectile.type;
+    position = new Vector2<>(oldProjectile.position);
+    velocity = new Vector2<>(oldProjectile.velocity);
+    rotation = oldProjectile.rotation;
+    scale = oldProjectile.scale;
+    rotationSpeed = oldProjectile.rotationSpeed;
+    fireType = oldProjectile.fireType;
+    parentPosition = new Vector2<>(oldProjectile.parentPosition);
+  }
+
   public FireType getFireType() {
     return fireType;
   }
