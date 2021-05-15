@@ -2,7 +2,9 @@ package ru.nsu.fit.towerdefense.simulator;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -18,6 +20,7 @@ import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
 import ru.nsu.fit.towerdefense.replay.GameStateWriter;
 import ru.nsu.fit.towerdefense.simulator.events.BuildTowerEvent;
+import ru.nsu.fit.towerdefense.simulator.events.Event;
 import ru.nsu.fit.towerdefense.simulator.events.SellTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.events.TuneTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.events.UpgradeTowerEvent;
@@ -34,7 +37,7 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
-public class WorldControl {
+public class WorldControl implements ServerSimulator {
 
   public static final int DEBUG_MONEY = 600;
   public static final float SELL_MULTIPLIER = 0.4f;
@@ -46,10 +49,62 @@ public class WorldControl {
   protected final int deltaTime;
   protected final WorldObserver worldObserver;
   protected World world;
-  protected int enemiesKilled = 0;
+  protected int enemiesKilled = 0; // todo move this to World
   protected int wavesDefeated = 0;
   protected boolean isReplay = false;
   protected int scienceEarned = 0;
+
+  private final EventContainer eventContainer = new EventContainer();
+  private final StateContainer stateContainer = new StateContainer(50);
+
+  private static class EventContainer {
+    private final Map<Long, List<Event>> eventMap = new HashMap<>();
+    private final List<Event> allEvents = new ArrayList<>();
+
+    public void putEvent(Event event) {
+      if (!eventMap.containsKey(event.getFrameNumber())) {
+        List<Event> list = new ArrayList<>();
+        list.add(event);
+        eventMap.put(event.getFrameNumber(), list);
+      } else {
+        eventMap.get(event.getFrameNumber()).add(event);
+      }
+    }
+
+    public List<Event> getEvents(long tick) {
+      if (eventMap.containsKey(tick)) {
+        return eventMap.get(tick);
+      } else {
+        return new ArrayList<>();
+      }
+    }
+
+    public List<Event> getAllEvents() {
+      return allEvents;
+    }
+  }
+
+  /**
+   * Contains world states before events for them fire on their respective ticks
+   */
+  private static class StateContainer {
+    private final long interval;
+    private final Map<Long, World> stateMap = new HashMap<>();
+
+    public StateContainer(long interval) {
+      this.interval = interval;
+    }
+
+    public void putState(World world) {
+      if (world.getTick() % interval == 0) {
+        stateMap.put(world.getTick(), new World(world));
+      }
+    }
+
+    public World getLatestState(long tick) {
+      return stateMap.get(tick - (tick % interval));
+    }
+  }
 
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
     this.gameMap = gameMap;
@@ -128,11 +183,41 @@ public class WorldControl {
         .ifPresent(name -> GameStateWriter.getInstance().startNewReplay(DEBUG_TICK_RATE, name));
 
     GameStateWriter.getInstance().newFrame();
+
+    stateContainer.putState(world);
+  }
+
+  @Override
+  public void submitEvent(Event event) {
+    synchronized (this) {
+      eventContainer.putEvent(event);
+      if (event.getFrameNumber() <= world.getTick()) {
+        try {
+          simulateForNewEvents(event.getFrameNumber());
+        } catch (GameplayException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  @Override
+  public List<Event> getEvents() {
+    return eventContainer.getAllEvents();
+  }
+
+  @Override
+  public World getState() {
+    synchronized (this) {
+      return new World(world);
+    }
   }
 
   public TowerPlatform sellTower(Tower tower) {
     synchronized (this) {
-      new SellTowerEvent(getTick() + 1, tower).fire(world);
+      var event = new SellTowerEvent(getTick() + 1, tower);
+      event.fire(world);
+      eventContainer.putEvent(event);
       for (TowerPlatform platform : world.getTowerPlatforms()) {
         if (Vector2.distance(tower.getPosition(), platform.getPosition()) < EPS) {
           return platform;
@@ -146,7 +231,9 @@ public class WorldControl {
       throws GameplayException {
 
     synchronized (this) {
-      new BuildTowerEvent((int) getTick(), towerPlatform, towerType).fire(world);
+      Event event = new BuildTowerEvent((int) getTick(), towerPlatform, towerType);
+      event.fire(world);
+      eventContainer.putEvent(event);
     }
     return getTowerOnPlatform(towerPlatform);
   }
@@ -154,7 +241,9 @@ public class WorldControl {
 
   public void upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
     synchronized (this) {
-      new UpgradeTowerEvent(upgrade, tower, getTick()).fire(world);
+      Event event = new UpgradeTowerEvent(upgrade, tower, getTick());
+      event.fire(world);
+      eventContainer.putEvent(event);
     }
   }
 
@@ -169,7 +258,9 @@ public class WorldControl {
 
   public void tuneTower(Tower tower, Tower.Mode towerMode) {
     synchronized (this) {
-      new TuneTowerEvent(getTick(), towerMode, tower).fire(world);
+      var event = new TuneTowerEvent(getTick(), towerMode, tower);
+      event.fire(world);
+      eventContainer.putEvent(event);
     }
 
 
@@ -221,6 +312,16 @@ public class WorldControl {
     return wavesDefeated;
   }
 
+  private void simulateForNewEvents(long from) throws GameplayException {
+    long tick = world.getTick();
+    world = stateContainer.getLatestState(from);
+
+    while (world.getTick() < tick) {
+      simulateTick();
+    }
+  }
+
+
   public void simulateTick() {
     synchronized (this) {
       towerSequence();
@@ -238,6 +339,16 @@ public class WorldControl {
       GameStateWriter.getInstance().newFrame();
 
       world.setTick(world.getTick() + 1);
+
+      stateContainer.putState(world);
+
+      for (var event : eventContainer.getEvents(world.getTick())) {
+        try {
+          event.fire(world); // todo remove event if unable to fire (e.g. not enough money)
+        } catch (GameplayException e) {
+          e.printStackTrace();
+        }
+      }
     }
   }
 
@@ -671,4 +782,6 @@ public class WorldControl {
       }
     }
   }
+
+
 }
