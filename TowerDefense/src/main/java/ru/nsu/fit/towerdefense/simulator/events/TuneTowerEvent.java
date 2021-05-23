@@ -10,17 +10,24 @@ public class TuneTowerEvent implements Event {
   private final long frameNumber;
   private final Tower.Mode towerMode;
   private final Tower tower;
+  private final String player;
 
   public TuneTowerEvent(long frameNumber,
-      Mode towerMode, Tower tower) {
+      Mode towerMode, Tower tower, String player) {
     this.frameNumber = frameNumber;
     this.towerMode = towerMode;
     this.tower = tower;
+    this.player = player;
   }
 
   @Override
   public EventType getType() {
     return EventType.TUNE_TOWER;
+  }
+
+  @Override
+  public String getPlayer() {
+    return player;
   }
 
   @Override

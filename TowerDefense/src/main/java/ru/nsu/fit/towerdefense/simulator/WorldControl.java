@@ -126,7 +126,7 @@ public class WorldControl implements ServerSimulator {
         gameMap.getWaves().get(0).getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum());
     wave.setDescription(gameMap.getWaves().get(0));
     world.setCurrentWave(wave);
-    world.setMoney(DEBUG_MONEY); // todo starting money
+    world.setMoney("player", DEBUG_MONEY); // todo starting money
 
     Base base = new Base(gameMap.getBaseDescription().getHealth(),
         gameMap.getBaseDescription().getImage(),
@@ -215,7 +215,7 @@ public class WorldControl implements ServerSimulator {
 
   public TowerPlatform sellTower(Tower tower) {
     synchronized (this) {
-      var event = new SellTowerEvent(getTick() + 1, tower);
+      var event = new SellTowerEvent(getTick() + 1, tower, "player");
       event.fire(world);
       eventContainer.putEvent(event);
       for (TowerPlatform platform : world.getTowerPlatforms()) {
@@ -231,7 +231,7 @@ public class WorldControl implements ServerSimulator {
       throws GameplayException {
 
     synchronized (this) {
-      Event event = new BuildTowerEvent((int) getTick(), towerPlatform, towerType);
+      Event event = new BuildTowerEvent((int) getTick(), towerPlatform, towerType, "player");
       event.fire(world);
       eventContainer.putEvent(event);
     }
@@ -241,7 +241,7 @@ public class WorldControl implements ServerSimulator {
 
   public void upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
     synchronized (this) {
-      Event event = new UpgradeTowerEvent(upgrade, tower, getTick());
+      Event event = new UpgradeTowerEvent(upgrade, tower, getTick(), "player");
       event.fire(world);
       eventContainer.putEvent(event);
     }
@@ -258,7 +258,7 @@ public class WorldControl implements ServerSimulator {
 
   public void tuneTower(Tower tower, Tower.Mode towerMode) {
     synchronized (this) {
-      var event = new TuneTowerEvent(getTick(), towerMode, tower);
+      var event = new TuneTowerEvent(getTick(), towerMode, tower, "player");
       event.fire(world);
       eventContainer.putEvent(event);
     }
@@ -294,7 +294,7 @@ public class WorldControl implements ServerSimulator {
   }
 
   public int getMoney() {
-    return world.getMoney();
+    return world.getMoney("player"); // todo change signature
   }
 
   public int getWaveNumber() {
@@ -331,9 +331,9 @@ public class WorldControl implements ServerSimulator {
 
       GameStateWriter.getInstance()
           .fullCopy(world.getEnemies(), world.getTowers(), world.getProjectiles(),
-              world.getBase(), world.getMoney(), world.getCurrentWaveNumber(),
+              world.getBase(), world.getMoney("player"), world.getCurrentWaveNumber(),
               world.getCurrentWave().getCurrentEnemyNumber(),
-              world.getCountdown(), scienceEarned, enemiesKilled);
+              world.getCountdown(), scienceEarned, enemiesKilled); // todo remake replays for multiplayer
       GameStateWriter.getInstance().endFrame();
 
       GameStateWriter.getInstance().newFrame();
@@ -492,7 +492,7 @@ public class WorldControl implements ServerSimulator {
         enemy.setHealth(enemy.getHealth() - damage);
         if (enemy.getHealth() <= 0) {
           enemiesKilled++;
-          world.setMoney(world.getMoney() + enemy.getMoneyReward());
+          world.setMoney("player", world.getMoney("player") + enemy.getMoneyReward());
           enemyDeath(enemy);
           world.getEnemies().remove(enemy);
         }
@@ -556,7 +556,7 @@ public class WorldControl implements ServerSimulator {
 
       if (enemy.getHealth() <= 0) {
         enemiesKilled++;
-        world.setMoney(world.getMoney() + enemy.getMoneyReward());
+        world.setMoney("player", world.getMoney("player") + enemy.getMoneyReward());
         enemyDeath(enemy);
         removedEnemies.add(enemy);
       }

@@ -64,7 +64,7 @@ public class ReplayWorldControl extends WorldControl {
   }
 
   private void setWorldState(WorldState state) {
-    world.setMoney(state.getMoney());
+    world.setMoney("player", state.getMoney()); // todo make replays for multiplayer
     enemiesKilled = state.getKilledEnemies();
     scienceEarned = state.getScience();
 
@@ -266,7 +266,7 @@ public class ReplayWorldControl extends WorldControl {
               .round(world.getTowerPlatforms().get(buildTower.getKey()).getPosition().getY())));
       tower.setId(UUID.fromString(buildTower.getValue().getValue()));
       world.getTowers().add(tower);
-      world.setMoney(world.getMoney() - tower.getType().getPrice());
+      world.setMoney("player", world.getMoney("player") - tower.getType().getPrice());
     }
 
     for (var tuneTower : event.getTuneTower()) {
@@ -288,7 +288,7 @@ public class ReplayWorldControl extends WorldControl {
       tower.getType().getUpgrades().stream()
           .dropWhile(upgrade -> upgrade.getName().equals(upgradeTower.getValue()))
           .findFirst()
-          .ifPresent(upgrade -> world.setMoney(world.getMoney() - upgrade.getCost()));
+          .ifPresent(upgrade -> world.setMoney("player", world.getMoney("player") - upgrade.getCost()));
       tower.setType(GameMetaData.getInstance().getTowerType(upgradeTower.getValue()));
       tower.setCooldown(tower.getType().getFireRate());
     }

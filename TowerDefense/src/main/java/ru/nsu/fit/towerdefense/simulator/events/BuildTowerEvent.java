@@ -18,16 +18,24 @@ public class BuildTowerEvent implements Event {
 
   private final TowerType towerType;
 
+  private final String player;
+
   public BuildTowerEvent(long frameNumber,
-      TowerPlatform towerPlatform, TowerType towerType) {
+      TowerPlatform towerPlatform, TowerType towerType, String player) {
     this.frameNumber = frameNumber;
     this.towerPlatform = towerPlatform;
     this.towerType = towerType;
+    this.player = player;
   }
 
   @Override
   public EventType getType() {
     return EventType.BUILD_TOWER;
+  }
+
+  @Override
+  public String getPlayer() {
+    return player;
   }
 
   @Override
@@ -37,13 +45,13 @@ public class BuildTowerEvent implements Event {
 
   @Override
   public void fire(World world) throws GameplayException {
-    if (world.getMoney() < towerType.getPrice()) {
+    if (world.getMoney(player) < towerType.getPrice()) {
       throw new GameplayException("Not enough money to build the tower");
     }
     if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(towerType.getTypeName())) {
       throw new GameplayException("The tower is not yet researched");
     }
-    world.setMoney(world.getMoney() - towerType.getPrice());
+    world.setMoney(player, world.getMoney(player) - towerType.getPrice());
     Tower tower = new Tower();
     tower.setPosition(new Vector2<>((int) Math.round(towerPlatform.getPosition().getX()),
         (int) Math.round(towerPlatform.getPosition().getY())));

@@ -8,15 +8,23 @@ public class SellTowerEvent implements Event {
   private final long frameNumber;
   private final Tower tower;
 
+  private final String player;
+
   public SellTowerEvent(long frameNumber,
-      Tower tower) {
+      Tower tower, String player) {
     this.frameNumber = frameNumber;
     this.tower = tower;
+    this.player = player;
   }
 
   @Override
   public EventType getType() {
     return EventType.SELL_TOWER;
+  }
+
+  @Override
+  public String getPlayer() {
+    return player;
   }
 
   @Override
@@ -26,7 +34,7 @@ public class SellTowerEvent implements Event {
 
   @Override
   public void fire(World world) {
-    world.setMoney(world.getMoney() + tower.getSellPrice());
+    world.setMoney(player, world.getMoney(player) + tower.getSellPrice());
     world.getTowers().remove(tower);
   }
 }
