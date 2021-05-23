@@ -9,6 +9,7 @@ import java.util.List;
 public class GameMap {
     private Vector2<Integer> size;
     private Integer scienceReward;
+    private Integer playersNumber = 1;
 
     private BaseDescription baseDescription;
     private TowerBuildingPositions positions;
@@ -18,7 +19,7 @@ public class GameMap {
     private Iterator<WaveDescription> descriptionIterator;
 
     private GameMap(Vector2<Integer> size, Integer scienceReward, BaseDescription baseDescription,
-                    TowerBuildingPositions positions, RoadDescription roads, List<WaveDescription> waves)
+                    TowerBuildingPositions positions, RoadDescription roads, List<WaveDescription> waves, int playersNumber)
     {
         this.size = size;
         this.scienceReward = scienceReward;
@@ -27,6 +28,7 @@ public class GameMap {
         this.roads = roads;
         this.waves = waves;
         descriptionIterator = waves.iterator();
+        this.playersNumber = playersNumber;
     }
 
     public static class Builder
@@ -38,6 +40,8 @@ public class GameMap {
         private TowerBuildingPositions positions;
         private RoadDescription roads;
         private List<WaveDescription> waves;
+        private int playersNumber = 1;
+
 
         public Builder()
         {
@@ -54,6 +58,10 @@ public class GameMap {
         {
             this.size.setX(x);
             this.size.setY(y);
+        }
+
+        public void setPlayersNumber(int number){
+            this.playersNumber = number;
         }
 
         public void setScienceReward(Integer scienceReward)
@@ -78,7 +86,7 @@ public class GameMap {
 
         public GameMap build()
         {
-            return new GameMap(size, scienceReward, baseDescription, positions, roads, waves);
+            return new GameMap(size, scienceReward, baseDescription, positions, roads, waves, playersNumber);
         }
     }
 
@@ -93,6 +101,11 @@ public class GameMap {
         {
             return null;
         }
+    }
+
+    public Integer getPlayersNumber()
+    {
+        return playersNumber;
     }
 
     public TowerBuildingPositions getPositions() {

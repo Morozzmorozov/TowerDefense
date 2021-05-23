@@ -456,6 +456,11 @@ public class GameMetaData {
             BaseDescription base = readBase(node.get("Base"));
             builder.setBaseDescription(base);
 
+            if (node.get("Players") != null){
+                builder.setPlayersNumber(node.get("Players").asInt());
+            }
+
+
             RoadDescription road = readRoads(node.get("Roads"));
             builder.setRoads(road);
 
