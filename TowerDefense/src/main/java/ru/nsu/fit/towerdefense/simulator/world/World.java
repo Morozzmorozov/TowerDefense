@@ -28,7 +28,7 @@ public class World {
     enemies = oldWorld.enemies.stream().map(Enemy::new).collect(Collectors.toList());
     projectiles = oldWorld.projectiles.stream().map(projectile -> {
       var e = projectile.getTarget();
-      if (e != null) {
+      if (e != null && !e.isDead()) {
         e = enemies.get(oldWorld.enemies.indexOf(e));
       }
       return new Projectile(projectile, e);
