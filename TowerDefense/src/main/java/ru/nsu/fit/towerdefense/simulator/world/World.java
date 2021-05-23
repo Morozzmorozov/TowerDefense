@@ -82,7 +82,7 @@ public class World {
   private int currentWaveNumber = 0;
   private Wave currentWave;
   private Map<Integer, Wave> waveMap = new HashMap<>();
-  private Map<Integer, Integer> moneyMap = new HashMap<>();
+  private Map<String, Integer> moneyMap = new HashMap<>();
   private long tick = 0;
 
   public long getTick() {
@@ -147,12 +147,12 @@ public class World {
     this.base = base;
   }
 
-  public int getMoney() { // TODO pass player id or something
-    return moneyMap.get(0);
+  public int getMoney(String player) { // TODO pass player id or something
+    return moneyMap.get(player);
   }
 
-  public void setMoney(int money) {
-    moneyMap.put(0, money);
+  public void setMoney(String player, int money) {
+    moneyMap.put(player, money);
   }
 
   public List<Enemy> getEnemies() {

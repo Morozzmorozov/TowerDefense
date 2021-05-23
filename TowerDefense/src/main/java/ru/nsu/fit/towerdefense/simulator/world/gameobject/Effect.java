@@ -7,17 +7,28 @@ public class Effect extends GameObject implements Renderable {
   private final Enemy host;
   private final EffectType type;
   private int remainingTicks;
+  private String owner;
 
-  public Effect(Enemy host, EffectType type) {
+  public String getOwner() {
+    return owner;
+  }
+
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
+
+  public Effect(Enemy host, EffectType type, String owner) {
     this.host = host;
     this.type = type;
     remainingTicks = type.getDuration();
+    this.owner = owner;
   }
 
   public Effect(Effect oldEffect, Enemy host) {
     this.host = host;
     this.type = oldEffect.type;
     this.remainingTicks = oldEffect.remainingTicks;
+    this.owner = oldEffect.owner;
   }
 
   public Enemy getHost() {

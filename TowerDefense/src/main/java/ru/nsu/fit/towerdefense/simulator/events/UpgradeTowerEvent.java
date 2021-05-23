@@ -18,17 +18,24 @@ public class UpgradeTowerEvent implements Event {
   private final Upgrade upgrade;
   private final Tower tower;
   private final long frameNumber;
+  private final String player;
 
   public UpgradeTowerEvent(Upgrade upgrade,
-      Tower tower, long frameNumber) {
+      Tower tower, long frameNumber, String player) {
     this.upgrade = upgrade;
     this.tower = tower;
     this.frameNumber = frameNumber;
+    this.player = player;
   }
 
   @Override
   public EventType getType() {
     return EventType.UPGRADE_TOWER;
+  }
+
+  @Override
+  public String getPlayer() {
+    return player;
   }
 
   @Override
@@ -38,13 +45,13 @@ public class UpgradeTowerEvent implements Event {
 
   @Override
   public void fire(World world) throws GameplayException {
-    if (world.getMoney() < upgrade.getCost()) {
+    if (world.getMoney(player) < upgrade.getCost()) {
       throw new GameplayException("Not enough money to upgrade the tower");
     }
     if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(upgrade.getName())) {
       throw new GameplayException("The tower is not yet researched");
     }
-    world.setMoney(world.getMoney() - upgrade.getCost());
+    world.setMoney(player, world.getMoney(player) - upgrade.getCost());
     TowerType type = GameMetaData.getInstance().getTowerType(upgrade.getName());
     tower.setType(type);
     tower.setCooldown(type.getFireRate());

@@ -10,4 +10,6 @@ public interface Event {
   long getFrameNumber();
 
   EventType getType();
+
+  String getPlayer();
 }
