@@ -485,14 +485,20 @@ public class WorldControl implements ServerSimulator {
           if (existingEffect.isPresent()) {
             existingEffect.get().setRemainingTicks(effectType.getDuration());
           } else {
-            enemy.getEffects().add(new Effect(enemy, effectType));
+            enemy.getEffects().add(new Effect(enemy, effectType, projectile.getOwner()));
           }
         }
 
+        damage = Math.min(enemy.getHealth(), damage);
         enemy.setHealth(enemy.getHealth() - damage);
+        enemy.addDamageToMap(projectile.getOwner(), damage);
         if (enemy.getHealth() <= 0) {
           enemiesKilled++;
-          world.setMoney("player", world.getMoney("player") + enemy.getMoneyReward());
+
+          for (var entry : enemy.getDamageMap().entrySet()) {
+            world.setMoney(entry.getKey(), world.getMoney(entry.getKey()) + (int)Math.round(enemy.getMoneyReward() * ((double)entry.getValue() / enemy.getType().getHealth())));
+          }
+        //  world.setMoney("player", world.getMoney("player") + enemy.getMoneyReward());
           enemyDeath(enemy);
           world.getEnemies().remove(enemy);
         }
@@ -548,17 +554,21 @@ public class WorldControl implements ServerSimulator {
 
       }
 
-      int effectDamage = enemy.getEffects().stream()
-          .mapToInt((effect) -> effect.getType().getDamagePerTick() * deltaTime)
-          .reduce(0, Integer::sum);
+      for (Effect effect : enemy.getEffects()) {
+        int effectDamage = effect.getType().getDamagePerTick() * deltaTime;
+        effectDamage = Math.min(enemy.getHealth(), effectDamage);
 
-      enemy.setHealth(enemy.getHealth() - effectDamage);
+        enemy.setHealth(enemy.getHealth() - effectDamage);
+        enemy.addDamageToMap(effect.getOwner(), effectDamage);
 
-      if (enemy.getHealth() <= 0) {
-        enemiesKilled++;
-        world.setMoney("player", world.getMoney("player") + enemy.getMoneyReward());
-        enemyDeath(enemy);
-        removedEnemies.add(enemy);
+        if (enemy.getHealth() <= 0) {
+          enemiesKilled++;
+          for (var entry : enemy.getDamageMap().entrySet()) {
+            world.setMoney(entry.getKey(), world.getMoney(entry.getKey()) + (int)Math.round(enemy.getMoneyReward() * ((double)entry.getValue() / enemy.getType().getHealth())));
+          }
+          enemyDeath(enemy);
+          removedEnemies.add(enemy);
+        }
       }
 
       for (Effect effect : enemy.getEffects()) {
@@ -663,6 +673,7 @@ public class WorldControl implements ServerSimulator {
                   new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
                   direction, tower);
               projectile.setParentPosition(new Vector2<>(tower.getPosition()));
+              projectile.setOwner(tower.getOwner());
               projectile.setRotation(
                   Math.toDegrees(Math.atan2(direction.getY(), direction.getX())) + 90);
               projectile.setFireType(FireType.UNIDIRECTIONAL);
@@ -679,6 +690,7 @@ public class WorldControl implements ServerSimulator {
                   projectileType,
                   new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
                   new Vector2<>(0d, 0d), tower);
+              projectile.setOwner(tower.getOwner());
               projectile.setFireType(FireType.OMNIDIRECTIONAL);
               projectile.setScale(0);
               projectile.setParentPosition(new Vector2<>(tower.getPosition()));

@@ -59,6 +59,7 @@ public class BuildTowerEvent implements Event {
     tower.setRotation(0);
     tower.setCooldown(towerType.getFireRate());
     tower.setSellPrice(Math.round(towerType.getPrice() * WorldControl.SELL_MULTIPLIER));
+    tower.setOwner(player);
     world.getTowers().add(tower);
     GameStateWriter
         .getInstance()

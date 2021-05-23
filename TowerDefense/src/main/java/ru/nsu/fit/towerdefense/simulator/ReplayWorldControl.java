@@ -120,7 +120,7 @@ public class ReplayWorldControl extends WorldControl {
         enemy.getEffects().clear();
         for (var effectInfo : enemyInfo.getEffects()) {
           Effect effect = new Effect(enemy, GameMetaData.getInstance().getEffectType(
-              effectInfo.getKey()));
+              effectInfo.getKey()), "player");
           effect.setRemainingTicks(effectInfo.getValue());
           enemy.getEffects().add(effect);
         }
@@ -137,7 +137,7 @@ public class ReplayWorldControl extends WorldControl {
         }
         for (var effectInfo : enemyInfo.getEffects()) {
           Effect effect = new Effect(enemy, GameMetaData.getInstance().getEffectType(
-              effectInfo.getKey()));
+              effectInfo.getKey()), "player");
           effect.setRemainingTicks(effectInfo.getValue());
           enemy.getEffects().add(effect);
         }

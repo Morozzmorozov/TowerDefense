@@ -15,6 +15,15 @@ public class Projectile extends GameObject implements Renderable {
   private double rotationSpeed = 3.0; // DEBUG
   private FireType fireType;
   private Vector2<Double> parentPosition;
+  private String owner;
+
+  public String getOwner() {
+    return owner;
+  }
+
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
 
   public Projectile() {
 
@@ -31,6 +40,7 @@ public class Projectile extends GameObject implements Renderable {
     rotationSpeed = oldProjectile.rotationSpeed;
     fireType = oldProjectile.fireType;
     parentPosition = new Vector2<>(oldProjectile.parentPosition);
+    owner = oldProjectile.owner;
   }
 
   public FireType getFireType() {
@@ -123,6 +133,7 @@ public class Projectile extends GameObject implements Renderable {
     this.velocity = velocity;
     fireType = parent.getType().getFireType();
     parentPosition = new Vector2<>(parent.getPosition());
+
   }
 
   @Override

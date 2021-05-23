@@ -17,6 +17,7 @@ public class Tower extends GameObject implements Renderable {
     position = new Vector2<>(oldTower.position);
     mode = oldTower.mode;
     sellPrice = oldTower.sellPrice;
+    owner = oldTower.owner;
   }
 
   public enum Mode { First, Last, Nearest, Farthest, Weakest, Strongest, Random }
@@ -28,6 +29,15 @@ public class Tower extends GameObject implements Renderable {
   private Vector2<Integer> position;
   private Mode mode = Mode.First;
   private int sellPrice;
+  private String owner;
+
+  public String getOwner() {
+    return owner;
+  }
+
+  public void setOwner(String owner) {
+    this.owner = owner;
+  }
 
   public int getSellPrice() {
     return sellPrice;
