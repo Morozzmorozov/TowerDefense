@@ -54,7 +54,7 @@ public class World {
 
     towers = oldWorld.towers.stream().map(tower -> {
       var e = tower.getTarget();
-      if (e != null) {
+      if (e != null && !e.isDead()) {
         e = enemies.get(oldWorld.enemies.indexOf(e));
       }
       return new Tower(tower, e);
