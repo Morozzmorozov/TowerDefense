@@ -1,6 +1,7 @@
 package ru.nsu.fit.towerdefense.simulator;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class ReplayWorldControl extends WorldControl {
   private Map<Integer, EventRecord> idEventMap = new HashMap<>();
 
   public ReplayWorldControl(GameMap gameMap, int deltaTime, WorldObserver observer, Replay replay) {
-    super(gameMap, deltaTime, observer);
+    super(gameMap, deltaTime, observer, List.of("player")); // todo fix
     this.replay = replay;
     isReplay = true;
 

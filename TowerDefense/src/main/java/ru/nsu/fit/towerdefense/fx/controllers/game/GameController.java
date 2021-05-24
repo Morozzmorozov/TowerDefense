@@ -232,7 +232,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         speed = 0;
 
         if (replay == null) {
-            worldControl = new WorldControl(gameMap, DELTA_TIME, this);
+            worldControl = new WorldControl(gameMap, DELTA_TIME, this, List.of("player")); // todo proper list
         } else {
             this.replay = replay;
             worldControl = new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
@@ -357,10 +357,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         try {
             worldRenderer.render();
 
-            researchLabel.setText(worldControl.getResearchPoints() + "");
-            moneyLabel.setText(worldControl.getMoney() + "");
+            researchLabel.setText(worldControl.getResearchPoints("player") + ""); // todo player name
+            moneyLabel.setText(worldControl.getMoney("player") + "");
             healthLabel.setText(worldControl.getBaseHealth() + "");
-            enemyLabel.setText(worldControl.getEnemiesKilled() + "");
+            enemyLabel.setText(worldControl.getEnemiesKilled("player") + "");
             long ticksTillNextWave = worldControl.getTicksTillNextWave();
             if (ticksTillNextWave > 0) {
                 nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
@@ -942,7 +942,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         private int frame;
 
         public WorldControlStub(GameMap gameMap) {
-            super(gameMap, DELTA_TIME, GameController.this);
+            super(gameMap, DELTA_TIME, GameController.this, List.of("player"));
 
             for (int i = 0; i < 100; i++) {
                 world.getGameObjectStubs().add(generateRandomGameObject());

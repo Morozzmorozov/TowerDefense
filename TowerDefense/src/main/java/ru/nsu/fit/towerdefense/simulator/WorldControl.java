@@ -106,7 +106,8 @@ public class WorldControl implements ServerSimulator {
     }
   }
 
-  public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver) {
+  // todo generate money and other stuff for each player
+  public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver, List<String> players) {
     this.gameMap = gameMap;
     this.deltaTime = deltaTime;
     this.worldObserver = worldObserver;
@@ -273,20 +274,20 @@ public class WorldControl implements ServerSimulator {
     return world;
   }
 
-  public int getResearchPoints() {
-    return scienceEarned;
+  public int getResearchPoints(String player) {
+    return scienceEarned; // todo for each player
   }
 
   public int getBaseHealth() {
     return world.getBase().getHealth();
   }
 
-  public int getEnemiesKilled() {
-    return enemiesKilled;
+  public int getEnemiesKilled(String player) {
+    return enemiesKilled; // todo for each player
   }
 
-  public int getMoney() {
-    return world.getMoney("player"); // todo change signature
+  public int getMoney(String player) {
+    return world.getMoney(player); // todo change signature
   }
 
   public int getWaveNumber() {
