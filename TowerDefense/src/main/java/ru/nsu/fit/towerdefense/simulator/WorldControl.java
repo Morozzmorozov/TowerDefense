@@ -213,37 +213,33 @@ public class WorldControl implements ServerSimulator {
     }
   }
 
-  public TowerPlatform sellTower(Tower tower) {
+  public SellTowerEvent sellTower(Tower tower) {
     synchronized (this) {
-      var event = new SellTowerEvent(getTick() + 1, tower, "player");
+      SellTowerEvent event = new SellTowerEvent(getTick() + 1, tower, "player");
       event.fire(world);
       eventContainer.putEvent(event);
-      for (TowerPlatform platform : world.getTowerPlatforms()) {
-        if (Vector2.distance(tower.getPosition(), platform.getPosition()) < EPS) {
-          return platform;
-        }
-      }
+      return event;
     }
-    return null; // should never be reached
   }
 
-  public Tower buildTower(TowerPlatform towerPlatform, TowerType towerType)
+  public BuildTowerEvent buildTower(TowerPlatform towerPlatform, TowerType towerType)
       throws GameplayException {
 
     synchronized (this) {
-      Event event = new BuildTowerEvent((int) getTick(), towerPlatform, towerType, "player");
+      var event = new BuildTowerEvent((int) getTick(), towerPlatform, towerType, "player");
       event.fire(world);
       eventContainer.putEvent(event);
+      return event;
     }
-    return getTowerOnPlatform(towerPlatform);
   }
 
 
-  public void upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
+  public UpgradeTowerEvent upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
     synchronized (this) {
-      Event event = new UpgradeTowerEvent(upgrade, tower, getTick(), "player");
+      var event = new UpgradeTowerEvent(upgrade, tower, getTick(), "player");
       event.fire(world);
       eventContainer.putEvent(event);
+      return event;
     }
   }
 
@@ -256,17 +252,13 @@ public class WorldControl implements ServerSimulator {
     return null;
   }
 
-  public void tuneTower(Tower tower, Tower.Mode towerMode) {
+  public TuneTowerEvent tuneTower(Tower tower, Tower.Mode towerMode) {
     synchronized (this) {
       var event = new TuneTowerEvent(getTick(), towerMode, tower, "player");
       event.fire(world);
       eventContainer.putEvent(event);
+      return event;
     }
-
-
-    /*tower.setMode(towerMode);
-    tower.setTarget(null);
-    GameStateWriter.getInstance().switchMode(tower, towerMode);*/
   }
 
   public long getTicksTillNextWave() {

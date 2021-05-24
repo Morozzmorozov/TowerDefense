@@ -730,7 +730,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 return;
             }
 
-            TowerPlatform towerPlatform = worldControl.sellTower(tower);
+            TowerPlatform towerPlatform = worldControl.sellTower(tower).getPlatform();
             worldRenderer.remove(tower);
 
             onClicked(towerPlatform);
@@ -814,7 +814,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     try {
-                        Tower tower = worldControl.buildTower(towerPlatform, towerType);
+                        Tower tower = worldControl.buildTower(towerPlatform, towerType).getTower();
                         worldRenderer.add(tower);
                         onClicked(tower);
                     } catch (GameplayException e) {

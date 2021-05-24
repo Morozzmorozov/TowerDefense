@@ -20,6 +20,8 @@ public class BuildTowerEvent implements Event {
 
   private final String player;
 
+  private Tower tower;
+
   public BuildTowerEvent(long frameNumber,
       TowerPlatform towerPlatform, TowerType towerType, String player) {
     this.frameNumber = frameNumber;
@@ -52,7 +54,7 @@ public class BuildTowerEvent implements Event {
       throw new GameplayException("The tower is not yet researched");
     }
     world.setMoney(player, world.getMoney(player) - towerType.getPrice());
-    Tower tower = new Tower();
+    tower = new Tower();
     tower.setPosition(new Vector2<>((int) Math.round(towerPlatform.getPosition().getX()),
         (int) Math.round(towerPlatform.getPosition().getY())));
     tower.setType(towerType);
@@ -65,5 +67,9 @@ public class BuildTowerEvent implements Event {
         .getInstance()
         .buildTower(world.getTowerPlatforms().indexOf(towerPlatform), towerType.getTypeName(),
             tower.getId().toString());
+  }
+
+  public Tower getTower() {
+    return tower;
   }
 }
