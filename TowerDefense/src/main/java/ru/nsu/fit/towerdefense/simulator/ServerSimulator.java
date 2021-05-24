@@ -2,7 +2,7 @@ package ru.nsu.fit.towerdefense.simulator;
 
 import java.util.List;
 import ru.nsu.fit.towerdefense.simulator.events.Event;
-import ru.nsu.fit.towerdefense.simulator.world.World;
+import ru.nsu.fit.towerdefense.simulator.world.SerializableWorld;
 
 public interface ServerSimulator {
 
@@ -27,5 +27,5 @@ public interface ServerSimulator {
    *
    * @return the current state of the world processed by this Simulator
    */
-  World getState();
+  SerializableWorld getState();
 }

@@ -63,6 +63,14 @@ public class World {
     tick = oldWorld.tick;
   }
 
+  public World(SerializableWorld world) {
+
+  }
+
+  public SerializableWorld getSerializableWorld() {
+    return new SerializableWorld();// todo
+  }
+
   public int getCountdown() {
     return countdown;
   }

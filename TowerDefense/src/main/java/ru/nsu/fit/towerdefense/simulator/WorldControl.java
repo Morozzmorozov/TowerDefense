@@ -25,6 +25,7 @@ import ru.nsu.fit.towerdefense.simulator.events.SellTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.events.TuneTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.events.UpgradeTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
+import ru.nsu.fit.towerdefense.simulator.world.SerializableWorld;
 import ru.nsu.fit.towerdefense.simulator.world.Wave;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
@@ -188,6 +189,12 @@ public class WorldControl implements ServerSimulator {
     stateContainer.putState(world);
   }
 
+  public void updateWorld(SerializableWorld world) {
+    synchronized(this) {
+      this.world = new World(world);
+    }
+  }
+
   @Override
   public void submitEvent(Event event) {
     synchronized (this) {
@@ -208,9 +215,9 @@ public class WorldControl implements ServerSimulator {
   }
 
   @Override
-  public World getState() {
+  public SerializableWorld getState() {
     synchronized (this) {
-      return new World(world);
+      return world.getSerializableWorld();
     }
   }
 
