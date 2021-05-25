@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.multiplayer;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Session;
 import ru.nsu.fit.towerdefense.server.Mappings;
@@ -27,6 +28,7 @@ public class UserManager {
     private Credentials credentials = new Credentials();
 
     private WebSocketClient webSocketClient;
+    private MyWebSocketAdapter socketAdapter;
     private org.eclipse.jetty.websocket.api.Session session;
 
     public String getUsername() {
@@ -169,22 +171,29 @@ public class UserManager {
             webSocketClient = new WebSocketClient();
             webSocketClient.start();
 
-            MyWebSocketAdapter socketAdapter = new MyWebSocketAdapter();
+            socketAdapter = new MyWebSocketAdapter();
             session = webSocketClient.connect(socketAdapter, URI.create("ws://localhost:8080/game")).get();
-
-            socketAdapter.sendMessage("{\"Token\": \"" + token + "\", \"LobbyId\" : " + lobbyId + "}");
-
-            Thread.sleep(500);
-
-            socketAdapter.sendMessage("{\"ChangeStatus\" : \"Ready\"}");
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void sendMessage(String message) {
+        if (socketAdapter != null) {
+            socketAdapter.sendMessage(message);
+        }
+    }
+
+    public void setServerMessageListener(ServerMessageListener serverMessageListener) {
+        if (socketAdapter != null) {
+            socketAdapter.setServerMessageListener(serverMessageListener);
         }
     }
 
     public void closeSocketConnection() {
         try {
             session.close();
+            socketAdapter = null;
             webSocketClient.stop();
         } catch (Exception e) {
             e.printStackTrace();
