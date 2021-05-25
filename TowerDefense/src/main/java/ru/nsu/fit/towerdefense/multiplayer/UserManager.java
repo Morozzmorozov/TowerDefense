@@ -174,6 +174,8 @@ public class UserManager {
 
             socketAdapter = new MyWebSocketAdapter();
             session = webSocketClient.connect(socketAdapter, URI.create("ws://localhost:8080/game")).get();
+
+            socketAdapter.sendMessage("{\"Token\": \"" + token + "\", \"lobbyId\" : " + lobbyId + "}");
         } catch (Exception e) {
             e.printStackTrace();
         }

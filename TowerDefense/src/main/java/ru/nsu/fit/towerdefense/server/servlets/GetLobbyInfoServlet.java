@@ -17,7 +17,7 @@ public class GetLobbyInfoServlet  extends HttpServlet {
 	{
 		try
 		{
-			long id = Long.parseLong(req.getParameter("LobbyId"));
+			long id = Long.parseLong(req.getParameter("lobbyId"));
 			Lobby lobby = LobbyManager.getInstance().getLobbyByID(id).serialize();
 
 			if (lobby == null){

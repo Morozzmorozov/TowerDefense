@@ -169,6 +169,7 @@ public class LobbyControl
                 userToToken.put(receiver, token);
                 gameThread.interrupt();
                 gameThread = new Thread(this::notifyConnections);
+                gameThread.start();
                 return true;
             }
             else if (awaitingTokens.contains(token))
@@ -180,6 +181,9 @@ public class LobbyControl
                     tokenToUser.put(token, receiver);
                     userToToken.put(receiver, token);
                     System.err.println("Connected!");
+                    gameThread.interrupt();
+                    gameThread = new Thread(this::notifyConnections);
+                    gameThread.start();
                     return true;
                 }
                 System.err.println("Lobby is full");
@@ -192,6 +196,7 @@ public class LobbyControl
     {
         while (true)
         {
+            System.out.println("notifyConnections");
             synchronized (userToToken)
             {
                 for (var x : userToToken.entrySet())
