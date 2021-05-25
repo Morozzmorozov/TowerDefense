@@ -1,10 +1,12 @@
 package ru.nsu.fit.towerdefense.server.servlets;
 
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
 
 import java.io.IOException;
@@ -18,7 +20,10 @@ public class CreateLobbyServlet  extends HttpServlet {
 		resp.setStatus(200);
 		String id = LobbyManager.getInstance().createLobby();
 
-		resp.getWriter().println("{ \"LobbyId\" : \"" + id + "\"}");
+		Lobby lobby = new Lobby();
+		lobby.setId(id);
+
+		resp.getWriter().println(new Gson().toJson(lobby));
 
 	}
 }

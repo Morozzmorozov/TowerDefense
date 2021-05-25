@@ -36,8 +36,8 @@ public class UserManager {
     }
 
     public Boolean login(String username, String password) {
-        if (true)
-            return true; // todo delete
+        /*if (true)
+            return true; // todo delete*/
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -54,6 +54,7 @@ public class UserManager {
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
                 credentials.setUsername(username);
                 credentials.setUserToken(response.body());
+                System.out.println(credentials.getUserToken());
                 return true;
             }
 
@@ -70,7 +71,7 @@ public class UserManager {
     }
 
     public List<Lobby> getLobbies() {
-        if (true)
+        /*if (true)
             return new ArrayList<>() {{ // todo delete
                 add(new Lobby() {{
                     setId("111");
@@ -84,7 +85,7 @@ public class UserManager {
                     setMaxPlayers(3);
                     setPlayers(List.of("Jane"));
                 }});
-            }};
+            }};*/
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -111,14 +112,14 @@ public class UserManager {
     }
 
     public String createLobby(String gameMapName) {
-        if (true)
-            return "id_123"; // todo delete
+        /*if (true)
+            return "id_123"; // todo delete*/
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.CREATE_LOBBY_MAPPING +
-                    "?userToken=" + credentials.getUserToken() +
-                    "&levelName=" + gameMapName))
+                    "?userToken=" + credentials.getUserToken()/* +
+                    "&levelName=" + gameMapName*/))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
 
@@ -139,8 +140,8 @@ public class UserManager {
     }
 
     public String joinLobby(String lobbyId) {
-        if (true)
-            return "id_123"; // todo delete
+        /*if (true)
+            return "id_123"; // todo delete*/
 
         try {
             HttpRequest request = HttpRequest.newBuilder()

@@ -231,16 +231,23 @@ public class MenuController implements Controller {
         new Thread(() -> {
             String lobbyId = userManager.createLobby(gameMapName);
             if (lobbyId == null) {
+                System.out.println("lobbyId: " + lobbyId);
                 return;
             }
 
             String sessionToken = userManager.joinLobby(lobbyId);
             if (sessionToken == null) {
+                System.out.println("sessionToken: " + sessionToken);
                 return;
             }
 
             // open connection
-            Platform.runLater(() -> sceneManager.switchToLobby());
+            userManager.openSocketConnection(lobbyId, sessionToken);
+
+            Platform.runLater(() -> {
+                System.out.println("switchToLobby");
+                sceneManager.switchToLobby();
+            });
         }).start();
     }
 

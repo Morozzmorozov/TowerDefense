@@ -46,6 +46,7 @@ public class LobbyController implements Controller, ServerMessageListener {
 
     @FXML
     private void initialize() {
+        userManager.setServerMessageListener(this);
         root.getChildren().add(new Label(lobby.getLevelName()));
         root.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
         for (String playerName : lobby.getPlayers()) {

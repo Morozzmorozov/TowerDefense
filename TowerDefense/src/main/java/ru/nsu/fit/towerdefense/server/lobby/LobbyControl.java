@@ -20,7 +20,7 @@ public class LobbyControl
     }
 
     private static final int AWAITINGLIMIT = 10;
-    private static final int TIMEOUT = 30000;
+    private static final int TIMEOUT = 30000 * 100;
     private final Lobby lobby;
     private final HashSet<String> joinedTokens;
     private final HashMap<String, String> tokenToUsername;
