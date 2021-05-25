@@ -225,17 +225,20 @@ public class MenuController implements Controller {
     }
 
     private void startCooperativeGame(String gameMapName) {
-        String lobbyId = userManager.createLobby(gameMapName);
-        if (lobbyId == null) {
-            return;
-        }
+        new Thread(() -> {
+            String lobbyId = userManager.createLobby(gameMapName);
+            if (lobbyId == null) {
+                return;
+            }
 
-        String sessionToken = userManager.joinLobby(lobbyId);
-        if (sessionToken == null) {
-            return;
-        }
+            String sessionToken = userManager.joinLobby(lobbyId);
+            if (sessionToken == null) {
+                return;
+            }
 
-        // open connection
+            // open connection
+            Platform.runLater(() -> sceneManager.switchToLobby());
+        }).start();
     }
 
     /**
