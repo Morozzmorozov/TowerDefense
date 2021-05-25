@@ -21,7 +21,7 @@ public class UserManager {
     private static final String RAW_MOVIES = "/raw-movies";
     private static final String RAW_PHRASE = "/raw-phrase";
 
-    private final Credentials credentials = new Credentials();
+    private Credentials credentials = new Credentials();
 
     public String getUsername() {
         return credentials.getUsername();
@@ -42,7 +42,8 @@ public class UserManager {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
-                credentials.updateCredentials(username, password);
+                credentials.setUsername(username);
+                credentials.setPassword(password);
                 return true;
             }
 
@@ -55,6 +56,6 @@ public class UserManager {
     }
 
     public void logout() {
-        credentials.clearCredentials();
+        credentials = new Credentials();
     }
 }
