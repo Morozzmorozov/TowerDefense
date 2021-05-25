@@ -94,3 +94,7 @@
     -fx-image: url('../icons/menu.png');
     -fx-cursor: hand;
 }
+
+.user-icon {
+    -fx-image: url('../icons/user.png');
+}

@@ -31,6 +31,10 @@
             <RowConstraints vgrow="NEVER" />
         </rowConstraints>
         <HBox>
+            <HBox fx:id="userHBox" styleClass="user-box">
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="user-icon" />
+                <Label fx:id="userLabel">User</Label>
+            </HBox>
             <HBox>
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
                 <Label fx:id="researchLabel" />

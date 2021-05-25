@@ -3,6 +3,10 @@
     -fx-background-image: url('../icons/root-background.png');
 }
 
+.user-box {
+    -fx-cursor: hand;
+}
+
 .content {
     -fx-alignment: top-center;
     -fx-padding: 50 20 0 20;

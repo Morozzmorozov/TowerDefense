@@ -40,6 +40,7 @@ public class MenuController implements Controller {
     @FXML private Button addResearchPointsButton;
 
     @FXML private ImageView techTreeImageView;
+    @FXML private HBox userHBox;
     @FXML private Label levelsLabel;
     @FXML private FlowPane levelsFlowPane;
 
@@ -71,6 +72,7 @@ public class MenuController implements Controller {
             researchLabel.setText(UserMetaData.getResearchPoints() + "");
         });
 
+        userHBox.setOnMouseClicked(mouseEvent -> System.out.println("User"));
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
         techTreeImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToTechTree());
 
