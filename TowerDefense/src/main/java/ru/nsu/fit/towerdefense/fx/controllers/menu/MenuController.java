@@ -192,7 +192,7 @@ public class MenuController implements Controller {
         //gridPane.add(createLevelButton("idle-icon", "Idle game", null), 1, 3); // todo uncomment
 
         gridPane.add(createLevelButton("cooperative-icon", "Cooperative",
-            mouseEvent -> sceneManager.switchToGame(gameMapName)), 0, 3);
+            mouseEvent -> startCooperativeGame(gameMapName)), 0, 3);
 
         return gridPane;
     }
@@ -222,6 +222,20 @@ public class MenuController implements Controller {
         hBox.getChildren().addAll(imageView, label);
 
         return hBox;
+    }
+
+    private void startCooperativeGame(String gameMapName) {
+        String lobbyId = userManager.createLobby(gameMapName);
+        if (lobbyId == null) {
+            return;
+        }
+
+        String sessionToken = userManager.joinLobby(lobbyId);
+        if (sessionToken == null) {
+            return;
+        }
+
+        // open connection
     }
 
     /**

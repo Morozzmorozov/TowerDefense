@@ -1,5 +1,10 @@
 package ru.nsu.fit.towerdefense.multiplayer;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.Session;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,13 +20,10 @@ public class UserManager {
     private static final String SITE_URI = "http://127.0.0.1:8080";
 
     private static final String LOGIN_MAPPING = "/login";
-    private static final String LOGOUT_MAPPING = "/logout";
-    private static final String PING_MAPPING = "/ping";
-    private static final String RAW_MOVIE = "/raw-movie";
-    private static final String RAW_MOVIES = "/raw-movies";
-    private static final String RAW_PHRASE = "/raw-phrase";
+    private static final String CREATE_LOBBY_MAPPING = "/createlobby";
+    private static final String JOIN_LOBBY_MAPPING = "/lobby/join";
 
-    private final Credentials credentials = new Credentials();
+    private Credentials credentials = new Credentials();
 
     public String getUsername() {
         return credentials.getUsername();
@@ -42,7 +44,8 @@ public class UserManager {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
-                credentials.updateCredentials(username, password);
+                credentials.setUsername(username);
+                credentials.setPassword(password);
                 return true;
             }
 
@@ -55,6 +58,64 @@ public class UserManager {
     }
 
     public void logout() {
-        credentials.clearCredentials();
+        credentials = new Credentials();
+    }
+
+    public String createLobby(String gameMapName) {
+        if (true)
+            return "id_123"; // todo delete
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(SITE_URI + CREATE_LOBBY_MAPPING +
+                    "?username=" + credentials.getUsername() +
+                    "&password=" + credentials.getPassword() +
+                    "&map=" + gameMapName))
+                .timeout(Duration.of(15, SECONDS))
+                .build();
+
+            HttpResponse<String> response = HttpClient.newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                return new Gson().fromJson(response.body(), Lobby.class).getId();
+            }
+
+            System.out.println("Bad status code: " + response.statusCode());
+            return null;
+        } catch (URISyntaxException | IOException | InterruptedException | JsonSyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String joinLobby(String lobbyId) {
+        if (true)
+            return "id_123"; // todo delete
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(SITE_URI + JOIN_LOBBY_MAPPING +
+                    "?username=" + credentials.getUsername() +
+                    "&password=" + credentials.getPassword() +
+                    "&lobbyId=" + lobbyId))
+                .timeout(Duration.of(15, SECONDS))
+                .build();
+
+            HttpResponse<String> response = HttpClient.newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                return new Gson().fromJson(response.body(), Session.class).getToken();
+            }
+
+            System.out.println("Bad status code: " + response.statusCode());
+            return null;
+        } catch (URISyntaxException | IOException | InterruptedException | JsonSyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
