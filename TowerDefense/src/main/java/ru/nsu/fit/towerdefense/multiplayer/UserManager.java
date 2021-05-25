@@ -2,8 +2,10 @@ package ru.nsu.fit.towerdefense.multiplayer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Session;
+import ru.nsu.fit.towerdefense.server.ClientSocket;
 import ru.nsu.fit.towerdefense.server.Mappings;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.concurrent.Future;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
@@ -21,6 +24,9 @@ public class UserManager {
     private static final String SITE_URI = "http://127.0.0.1:8080";
 
     private Credentials credentials = new Credentials();
+
+    private WebSocketClient webSocketClient;
+    private org.eclipse.jetty.websocket.api.Session session;
 
     public String getUsername() {
         return credentials.getUsername();
@@ -115,6 +121,33 @@ public class UserManager {
         } catch (URISyntaxException | IOException | InterruptedException | JsonSyntaxException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void openSocketConnection(String lobbyId, String token) {
+        try {
+            webSocketClient = new WebSocketClient();
+            webSocketClient.start();
+
+            MyWebSocketAdapter socketAdapter = new MyWebSocketAdapter();
+            session = webSocketClient.connect(socketAdapter, URI.create("ws://localhost:8080/game")).get();
+
+            socketAdapter.sendMessage("{\"Token\": \"" + token + "\", \"LobbyId\" : " + lobbyId + "}");
+
+            Thread.sleep(500);
+
+            socketAdapter.sendMessage("{\"ChangeStatus\" : \"Ready\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeSocketConnection() {
+        try {
+            session.close();
+            webSocketClient.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
+import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.multiplayer.UserManager;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author Oleg Markelov
  */
-public class LobbyController implements Controller {
+public class LobbyController implements Controller, ServerMessageListener {
 
     private static final String FXML_FILE_NAME = "lobby.fxml";
 
@@ -63,5 +64,10 @@ public class LobbyController implements Controller {
     @Override
     public String getFXMLFileName() {
         return FXML_FILE_NAME;
+    }
+
+    @Override
+    public void onServerMessageReceived(String message) {
+        System.out.println(message);
     }
 }
