@@ -1,6 +1,9 @@
 package ru.nsu.fit.towerdefense.server.lobby;
 
 
+import ru.nsu.fit.towerdefense.server.sockets.UserConnection;
+import ru.nsu.fit.towerdefense.server.sockets.receivers.MessageReceiver;
+
 import java.security.MessageDigest;
 import java.util.*;
 
@@ -42,9 +45,9 @@ public class LobbyManager {
 		return list;
 	}
 
-	public synchronized void removeLobby(Lobby lobby)
+	public synchronized void removeLobby(LobbyControl lobby)
 	{
-		lobbies.remove(lobby);
+		lobbies.remove(lobby.getId(), lobby);
 	}
 
 
@@ -55,8 +58,8 @@ public class LobbyManager {
 		return null;
 	}
 
-	public boolean isLobbyExists(String id){
-		return lobbies.get(Long.parseLong(id)) != null;
+	public boolean isLobbyExists(Long id){
+		return lobbies.get(id) != null;
 	}
 
 	public synchronized void leaveLobby(Long lobbyId, String token){
@@ -64,5 +67,26 @@ public class LobbyManager {
 			lobbies.remove(lobbyId);
 		}
 	}
+
+
+	public boolean isTokenValid(Long lobbyId, String token)
+	{
+		synchronized (lobbies)
+		{
+			if (!lobbies.containsKey(lobbyId)) return false;
+			return lobbies.get(lobbyId).isTokenValid(token);
+		}
+	}
+
+	public LobbyControl tryConnect(MessageReceiver receiver, String token, Long lobbyId)
+	{
+		synchronized (lobbies.get(lobbyId))
+		{
+			if (lobbies.get(lobbyId).addMessageReceiver(token, receiver)) return lobbies.get(lobbyId);
+			return null;
+		}
+	}
+
+
 
 }

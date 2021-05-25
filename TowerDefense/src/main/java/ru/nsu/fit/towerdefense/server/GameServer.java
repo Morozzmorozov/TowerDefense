@@ -5,11 +5,13 @@ import jakarta.servlet.Filter;
 import jakarta.servlet.Servlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 import ru.nsu.fit.towerdefense.server.servlets.CreateLobbyServlet;
 import ru.nsu.fit.towerdefense.server.servlets.GetLobbiesServlet;
 import ru.nsu.fit.towerdefense.server.filters.LobbyExistenceFilter;
 import ru.nsu.fit.towerdefense.server.servlets.LobbyJoinServlet;
 import ru.nsu.fit.towerdefense.server.servlets.LobbyLeaveServlet;
+import ru.nsu.fit.towerdefense.server.sockets.GameSocket;
 
 import java.util.EnumSet;
 
@@ -22,6 +24,14 @@ public class GameServer {
 		this.port = port;
 		server = new Server(port);
 		handler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		JettyWebSocketServletContainerInitializer.configure(handler, (servletContext, wsContainer) ->
+		{
+			// Configure default max size
+			wsContainer.setMaxTextMessageSize(65535);
+
+			// Add websockets
+			wsContainer.addMapping("/game", GameSocket.class);
+		});
 	}
 
 	public void addFilter(String addr, Class<? extends Filter> clazz)
@@ -57,6 +67,7 @@ public class GameServer {
 		server.addServlet("/lobby/leave", LobbyLeaveServlet.class);
 		server.addServlet("/lobbies", GetLobbiesServlet.class);
 		server.addServlet("/createlobby", CreateLobbyServlet.class);
+
 		try
 		{
 			server.start();

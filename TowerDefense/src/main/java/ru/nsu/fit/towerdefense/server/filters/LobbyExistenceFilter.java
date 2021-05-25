@@ -20,7 +20,8 @@ public class LobbyExistenceFilter implements Filter {
 	{
 		HttpServletRequest req = (HttpServletRequest)request;
 		String id = req.getParameter("lobbyId");
-		if (!LobbyManager.getInstance().isLobbyExists(id)){
+		Long lId = Long.parseLong(id);
+ 		if (!LobbyManager.getInstance().isLobbyExists(lId)){
 			((HttpServletResponse)response).setStatus(400);
 		}
 		else
