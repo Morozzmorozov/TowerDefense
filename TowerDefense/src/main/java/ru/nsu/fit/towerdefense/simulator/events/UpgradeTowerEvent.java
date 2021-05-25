@@ -16,16 +16,20 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 public class UpgradeTowerEvent implements Event {
 
   private final Upgrade upgrade;
-  private final Tower tower;
   private final long frameNumber;
   private final String player;
+  private final String upgradeName;
+  private final int x;
+  private final int y;
 
   public UpgradeTowerEvent(Upgrade upgrade,
       Tower tower, long frameNumber, String player) {
     this.upgrade = upgrade;
-    this.tower = tower;
     this.frameNumber = frameNumber;
     this.player = player;
+    upgradeName = upgrade.getName();
+    x = tower.getCell().getX();
+    y = tower.getCell().getY();
   }
 
   @Override
@@ -45,6 +49,19 @@ public class UpgradeTowerEvent implements Event {
 
   @Override
   public void fire(World world) throws GameplayException {
+    Tower tower = null;
+    for (Tower candidate : world.getTowers()) {
+      if (candidate.getCell().getX() == x && candidate.getCell().getY() == y) {
+        tower = candidate;
+        break;
+      }
+    }
+    if (tower == null) {
+      System.err.println("Tower not found");
+      return;
+    }
+
+
     if (world.getMoney(player) < upgrade.getCost()) {
       throw new GameplayException("Not enough money to upgrade the tower");
     }

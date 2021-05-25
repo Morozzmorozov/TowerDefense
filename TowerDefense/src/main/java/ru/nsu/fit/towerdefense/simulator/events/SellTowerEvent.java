@@ -10,17 +10,19 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 public class SellTowerEvent implements Event {
 
   private final long frameNumber;
-  private final Tower tower;
+  private final int x;
+  private final int y;
 
   private final String player;
 
-  private TowerPlatform platform;
+  private TowerPlatform platform; // no serialization
 
   public SellTowerEvent(long frameNumber,
       Tower tower, String player) {
     this.frameNumber = frameNumber;
-    this.tower = tower;
     this.player = player;
+    this.x = tower.getCell().getX();
+    this.y = tower.getCell().getY();
   }
 
   @Override
@@ -40,6 +42,18 @@ public class SellTowerEvent implements Event {
 
   @Override
   public void fire(World world) {
+    Tower tower = null;
+    for (Tower candidate : world.getTowers()) {
+      if (candidate.getCell().getX() == x && candidate.getCell().getY() == y) {
+        tower = candidate;
+        break;
+      }
+    }
+    if (tower == null) {
+      System.err.println("Tower not found");
+      return;
+    }
+
     world.setMoney(player, world.getMoney(player) + tower.getSellPrice());
     world.getTowers().remove(tower);
     for (TowerPlatform platform : world.getTowerPlatforms()) {

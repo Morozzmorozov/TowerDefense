@@ -14,20 +14,24 @@ public class BuildTowerEvent implements Event {
 
   private final long frameNumber;
 
-  private final TowerPlatform towerPlatform;
 
-  private final TowerType towerType;
+  private final int x;
+  private final int y;
+
+  private final String towerTypeName;
+
 
   private final String player;
 
-  private Tower tower;
+  private Tower tower; //
 
   public BuildTowerEvent(long frameNumber,
       TowerPlatform towerPlatform, TowerType towerType, String player) {
     this.frameNumber = frameNumber;
-    this.towerPlatform = towerPlatform;
-    this.towerType = towerType;
+    towerTypeName = towerType.getTypeName();
     this.player = player;
+    x = (int)Math.round(towerPlatform.getPosition().getX());
+    y = (int)Math.round(towerPlatform.getPosition().getY());
   }
 
   @Override
@@ -47,6 +51,7 @@ public class BuildTowerEvent implements Event {
 
   @Override
   public void fire(World world) throws GameplayException {
+    var towerType = GameMetaData.getInstance().getTowerType(towerTypeName);
     if (world.getMoney(player) < towerType.getPrice()) {
       throw new GameplayException("Not enough money to build the tower");
     }
@@ -55,18 +60,17 @@ public class BuildTowerEvent implements Event {
     }
     world.setMoney(player, world.getMoney(player) - towerType.getPrice());
     tower = new Tower();
-    tower.setPosition(new Vector2<>((int) Math.round(towerPlatform.getPosition().getX()),
-        (int) Math.round(towerPlatform.getPosition().getY())));
+    tower.setPosition(new Vector2<>(x, y));
     tower.setType(towerType);
     tower.setRotation(0);
     tower.setCooldown(towerType.getFireRate());
     tower.setSellPrice(Math.round(towerType.getPrice() * WorldControl.SELL_MULTIPLIER));
     tower.setOwner(player);
     world.getTowers().add(tower);
-    GameStateWriter
-        .getInstance()
-        .buildTower(world.getTowerPlatforms().indexOf(towerPlatform), towerType.getTypeName(),
-            tower.getId().toString());
+    //GameStateWriter
+   //     .getInstance()
+   //     .buildTower(world.getTowerPlatforms().indexOf(towerPlatform), towerType.getTypeName(),
+    //        tower.getId().toString());
   }
 
   public Tower getTower() {
