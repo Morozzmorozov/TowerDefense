@@ -41,6 +41,7 @@ public class MenuController implements Controller {
 
     @FXML private Button clearButton;
     @FXML private Button addResearchPointsButton;
+    @FXML private Button lobbiesButton;
 
     @FXML private ImageView techTreeImageView;
     @FXML private HBox userHBox;
@@ -78,6 +79,8 @@ public class MenuController implements Controller {
             UserMetaData.addResearchPoints(10);
             researchLabel.setText(UserMetaData.getResearchPoints() + "");
         });
+
+        lobbiesButton.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
 
         setLoggedIn(null);
 
@@ -228,16 +231,23 @@ public class MenuController implements Controller {
         new Thread(() -> {
             String lobbyId = userManager.createLobby(gameMapName);
             if (lobbyId == null) {
+                System.out.println("lobbyId: " + lobbyId);
                 return;
             }
 
             String sessionToken = userManager.joinLobby(lobbyId);
             if (sessionToken == null) {
+                System.out.println("sessionToken: " + sessionToken);
                 return;
             }
 
             // open connection
-            Platform.runLater(() -> sceneManager.switchToLobby());
+            userManager.openSocketConnection(lobbyId, sessionToken);
+
+            Platform.runLater(() -> {
+                System.out.println("switchToLobby");
+                sceneManager.switchToLobby();
+            });
         }).start();
     }
 

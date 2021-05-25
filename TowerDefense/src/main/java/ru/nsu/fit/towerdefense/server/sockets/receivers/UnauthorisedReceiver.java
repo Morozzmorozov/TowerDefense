@@ -25,7 +25,7 @@ public class UnauthorisedReceiver implements MessageReceiver {
 		try
 		{
 			JsonNode node = mapper.readValue(message, JsonNode.class);
-			Long lobbyId = node.get("LobbyId").asLong();
+			Long lobbyId = node.get("lobbyId").asLong();
 			String token = node.get("Token").asText();
 
 			if (LobbyManager.getInstance().isTokenValid(lobbyId, token))
@@ -47,6 +47,12 @@ public class UnauthorisedReceiver implements MessageReceiver {
 		catch (Exception e){
 			owner.sendMessage("{\"status\" : \"Invalid message\"}");
 		}
+	}
+
+	@Override
+	public void sendMessage(String message)
+	{
+		owner.sendMessage(message);
 	}
 
 	@Override

@@ -34,9 +34,9 @@ public class TestClient {
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode root = objectMapper.readValue(response.toString(), ObjectNode.class);
 
-		long lobbyId = root.get("LobbyId").asLong();
+		long lobbyId = root.get("lobbyId").asLong();
 
-		URL join = new URL("http://localhost:8080/lobby/join?LobbyId=" + lobbyId);
+		URL join = new URL("http://localhost:8080/lobby/join?lobbyId=" + lobbyId);
 
 		HttpURLConnection joining = (HttpURLConnection)join.openConnection();
 		in = new BufferedReader(new InputStreamReader(joining.getInputStream()));
@@ -63,7 +63,7 @@ public class TestClient {
 		Session session = fut.get();
 		//Thread.sleep(1000);
 
-		String auth = "{\"Token\": \"" + token + "\", \"LobbyId\" : " + lobbyId + "}";
+		String auth = "{\"Token\": \"" + token + "\", \"lobbyId\" : " + lobbyId + "}";
 
 		socket.sendMessage(auth);
 

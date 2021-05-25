@@ -5,27 +5,36 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Session;
+import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.server.database.UserManager;
 import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
 
 import java.io.IOException;
 
-public class LobbyJoinServlet  extends HttpServlet {
+public class LoginServlet  extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		try
 		{
-			Session session = new Session();
-			String token = LobbyManager.getInstance().createToken(req.getParameter("lobbyId"));
-			if (token == null){
-				resp.setStatus(409);
+			String login = req.getParameter("username");
+			String password = req.getParameter("password");
+
+			if (login == null || password == null)
+			{
+				resp.setStatus(401);
+				return;
+			}
+
+			String token = UserManager.getInstance().validate(login, password);
+			if (token == null)
+			{
+				resp.setStatus(401);
 			}
 			else
 			{
-				session.setToken(token);
 				resp.setStatus(200);
-				resp.getWriter().println(new Gson().toJson(session));
+				resp.getWriter().print(token);
 			}
 		}
 		catch (Exception e){
