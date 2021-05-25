@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Session;
+import ru.nsu.fit.towerdefense.server.Mappings;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,10 +20,6 @@ public class UserManager {
 
     private static final String SITE_URI = "http://127.0.0.1:8080";
 
-    private static final String LOGIN_MAPPING = "/login";
-    private static final String CREATE_LOBBY_MAPPING = "/createlobby";
-    private static final String JOIN_LOBBY_MAPPING = "/lobby/join";
-
     private Credentials credentials = new Credentials();
 
     public String getUsername() {
@@ -35,7 +32,9 @@ public class UserManager {
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(SITE_URI + LOGIN_MAPPING + "?username=" + username + "&password=" + password))
+                .uri(new URI(SITE_URI + Mappings.LOGIN_MAPPING +
+                    "?username=" + username +
+                    "&password=" + password))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
 
@@ -67,7 +66,7 @@ public class UserManager {
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(SITE_URI + CREATE_LOBBY_MAPPING +
+                .uri(new URI(SITE_URI + Mappings.CREATE_LOBBY_MAPPING +
                     "?username=" + credentials.getUsername() +
                     "&password=" + credentials.getPassword() +
                     "&levelName=" + gameMapName))
@@ -96,7 +95,7 @@ public class UserManager {
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(SITE_URI + JOIN_LOBBY_MAPPING +
+                .uri(new URI(SITE_URI + Mappings.JOIN_LOBBY_MAPPING +
                     "?username=" + credentials.getUsername() +
                     "&password=" + credentials.getPassword() +
                     "&lobbyId=" + lobbyId))
