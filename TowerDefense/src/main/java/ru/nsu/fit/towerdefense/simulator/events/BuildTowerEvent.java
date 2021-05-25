@@ -23,7 +23,7 @@ public class BuildTowerEvent implements Event {
 
   private final String player;
 
-  private Tower tower; //
+  private transient Tower tower;
 
   public BuildTowerEvent(long frameNumber,
       TowerPlatform towerPlatform, TowerType towerType, String player) {

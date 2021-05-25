@@ -15,7 +15,6 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class UpgradeTowerEvent implements Event {
 
-  private final Upgrade upgrade;
   private final long frameNumber;
   private final String player;
   private final String upgradeName;
@@ -24,7 +23,6 @@ public class UpgradeTowerEvent implements Event {
 
   public UpgradeTowerEvent(Upgrade upgrade,
       Tower tower, long frameNumber, String player) {
-    this.upgrade = upgrade;
     this.frameNumber = frameNumber;
     this.player = player;
     upgradeName = upgrade.getName();
@@ -58,6 +56,19 @@ public class UpgradeTowerEvent implements Event {
     }
     if (tower == null) {
       System.err.println("Tower not found");
+      return;
+    }
+
+    Upgrade upgrade = null;
+
+    for (var candidate : tower.getType().getUpgrades()) {
+      if (candidate.getName().equals(upgradeName)) {
+        upgrade = candidate;
+        break;
+      }
+    }
+    if (upgrade == null) {
+      System.err.println("Upgrade not found");
       return;
     }
 
