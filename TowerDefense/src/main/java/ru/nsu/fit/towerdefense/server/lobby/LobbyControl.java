@@ -104,14 +104,6 @@ public class LobbyControl
         }
     }
 
-
-    public synchronized void join(String token){
-        if (awaitingTokens.contains(token)){
-            awaitingTokens.remove(token);
-            joinedTokens.add(token);
-        }
-    }
-
     public synchronized boolean userLeaves(String token)
     {
         awaitingTokens.remove(token);
@@ -161,15 +153,6 @@ public class LobbyControl
         }
     }
 
-    public boolean addConnection(String token)
-    {
-        synchronized (this)
-        {
-
-        }
-        return false;
-    }
-
     public boolean addMessageReceiver(String token, MessageReceiver receiver)
     {
         synchronized (this)
@@ -184,6 +167,8 @@ public class LobbyControl
                 System.err.println("Connected!");
                 tokenToUser.put(token, receiver);
                 userToToken.put(receiver, token);
+                gameThread.interrupt();
+                gameThread = new Thread(this::notifyConnections);
                 return true;
             }
             else if (awaitingTokens.contains(token))
@@ -203,6 +188,28 @@ public class LobbyControl
         }
     }
 
+    private void notifyConnections()
+    {
+        while (true)
+        {
+            synchronized (userToToken)
+            {
+                for (var x : userToToken.entrySet())
+                {
+                    try
+                    {
+                        x.getKey().sendMessage("Server pings user!");
+                    }
+                    catch (Exception e){}
+                }
+            }
+            try
+            {
+                Thread.sleep(500);
+            }
+            catch (Exception e){}
+        }
+    }
 
 
 

@@ -18,6 +18,12 @@ public class EventReceiver implements MessageReceiver {
 	}
 
 	@Override
+	public void sendMessage(String message)
+	{
+		owner.sendMessage(message);
+	}
+
+	@Override
 	public void disconnect()
 	{
 		lobby.connectedUserLeaves(this);

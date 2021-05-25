@@ -50,6 +50,12 @@ public class UnauthorisedReceiver implements MessageReceiver {
 	}
 
 	@Override
+	public void sendMessage(String message)
+	{
+		owner.sendMessage(message);
+	}
+
+	@Override
 	public void disconnect()
 	{
 	}
