@@ -15,7 +15,7 @@ public class SellTowerEvent implements Event {
 
   private final String player;
 
-  private TowerPlatform platform; // no serialization
+  private transient TowerPlatform platform; // no serialization
 
   public SellTowerEvent(long frameNumber,
       Tower tower, String player) {
