@@ -6,11 +6,8 @@ import jakarta.servlet.Servlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
-import ru.nsu.fit.towerdefense.server.servlets.CreateLobbyServlet;
-import ru.nsu.fit.towerdefense.server.servlets.GetLobbiesServlet;
+import ru.nsu.fit.towerdefense.server.servlets.*;
 import ru.nsu.fit.towerdefense.server.filters.LobbyExistenceFilter;
-import ru.nsu.fit.towerdefense.server.servlets.LobbyJoinServlet;
-import ru.nsu.fit.towerdefense.server.servlets.LobbyLeaveServlet;
 import ru.nsu.fit.towerdefense.server.sockets.GameSocket;
 
 import java.util.EnumSet;
@@ -62,11 +59,12 @@ public class GameServer {
 	public static void main(String[] args)
 	{
 		GameServer server = new GameServer(8080);
-		server.addFilter("/lobby/*", LobbyExistenceFilter.class);
-		server.addServlet("/lobby/join", LobbyJoinServlet.class);
-		server.addServlet("/lobby/leave", LobbyLeaveServlet.class);
-		server.addServlet("/lobbies", GetLobbiesServlet.class);
-		server.addServlet("/createlobby", CreateLobbyServlet.class);
+		server.addFilter(Mappings.LOBBY_MAPPING, LobbyExistenceFilter.class);
+		server.addServlet(Mappings.JOIN_LOBBY_MAPPING, LobbyJoinServlet.class);
+		server.addServlet(Mappings.LEAVE_LOBBY_MAPPING, LobbyLeaveServlet.class);
+		server.addServlet(Mappings.INFO_LOBBY_MAPPING, GetLobbyInfoServlet.class);
+		server.addServlet(Mappings.LOBBIES_MAPPING, GetLobbiesServlet.class);
+		server.addServlet(Mappings.CREATE_LOBBY_MAPPING, CreateLobbyServlet.class);
 
 		try
 		{

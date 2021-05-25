@@ -1,14 +1,19 @@
 package ru.nsu.fit.towerdefense.server.servlets;
 
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.server.lobby.LobbyControl;
 import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/lobbies")
 public class GetLobbiesServlet extends HttpServlet {
@@ -19,15 +24,10 @@ public class GetLobbiesServlet extends HttpServlet {
 
 		var lobbies = LobbyManager.getInstance().getLobbies();
 		PrintWriter writer = resp.getWriter();
-		writer.print("{ \"Lobbies\" : [");
-		for (int id = lobbies.size() - 1; id >= 0; id--){
-			writer.print("{\"LobbyId\" : " + lobbies.get(id).getId() + ", \"PlayersInLobby\" : " + lobbies.get(id).getJoined()
-					             + ", \"MaxPlayers\" : " + lobbies.get(id).getPlayersNumber() + ", \"Level name\" : \"" + lobbies.get(id).getLevelName() + "\"}\n");
-			if (id > 0){
-				writer.print(",");
-			}
-		}
-		writer.print("]}");
+
+		List<Lobby> list = lobbies.stream().map(LobbyControl::serialize).collect(Collectors.toList());
+
+		writer.print(new Gson().toJson(list));
 
 	}
 }

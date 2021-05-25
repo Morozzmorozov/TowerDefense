@@ -36,10 +36,13 @@ public class LobbyManager {
 	public List<LobbyControl> getLobbies()
 	{
 		ArrayList<LobbyControl> list = new ArrayList<>();
-		for (var x : lobbies.entrySet())
+		synchronized (lobbies)
 		{
-			if (x.getValue().canJoin())
-				list.add(x.getValue());
+			for (var x : lobbies.entrySet())
+			{
+				if (x.getValue().canJoin())
+					list.add(x.getValue());
+			}
 		}
 		list.sort((a, b) -> Integer.signum(a.getPlayersNumber() - b.getPlayersNumber() - a.getJoined() + b.getJoined()));
 		return list;
@@ -87,6 +90,9 @@ public class LobbyManager {
 		}
 	}
 
-
+	public LobbyControl getLobbyByID(long id)
+	{
+		return lobbies.get(id);
+	}
 
 }

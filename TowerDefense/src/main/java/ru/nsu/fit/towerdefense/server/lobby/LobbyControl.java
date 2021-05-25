@@ -7,6 +7,7 @@ import ru.nsu.fit.towerdefense.server.sockets.receivers.MessageReceiver;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 public class LobbyControl
@@ -22,10 +23,11 @@ public class LobbyControl
     private static final int TIMEOUT = 30000;
     private final Lobby lobby;
     private final HashSet<String> joinedTokens;
+    private final HashMap<String, String> tokenToUsername;
     private final HashSet<String> awaitingTokens;
 
-    private HashMap<MessageReceiver, String> userToToken;
-    private HashMap<String, MessageReceiver> tokenToUser;
+    private final HashMap<MessageReceiver, String> userToToken;
+    private final HashMap<String, MessageReceiver> tokenToUser;
 
     private Thread gameThread;
     private HashSet<String> readyUsers;
@@ -37,6 +39,8 @@ public class LobbyControl
         awaitingTokens = new HashSet<>();
         userToToken = new HashMap<>();
         tokenToUser = new HashMap<>();
+        tokenToUsername = new HashMap<>();
+        readyUsers = new HashSet<>();
         this.setLevel("Level 1_4");
         gameThread = new Thread(() -> {
             try
@@ -49,8 +53,31 @@ public class LobbyControl
         gameThread.start();
     }
 
-    public int getPlayersNumber()
+
+    public ru.nsu.fit.towerdefense.multiplayer.entities.Lobby serialize()
     {
+        ru.nsu.fit.towerdefense.multiplayer.entities.Lobby lobby = new ru.nsu.fit.towerdefense.multiplayer.entities.Lobby();
+        lobby.setId(Long.toString(getId()));
+        lobby.setLevelName(getLevelName());
+        lobby.setMaxPlayers(getPlayersNumber());
+        lobby.setPlayers(getPlayers());
+        return lobby;
+    }
+
+
+
+    public List<String> getPlayers()
+    {
+        List<String> result = new LinkedList<>();
+        synchronized (tokenToUsername)
+        {
+            tokenToUsername.forEach((k, v) -> result.add(v));
+        }
+        return result;
+    }
+
+
+    public int getPlayersNumber() {
         return lobby.getPlayersNumber();
     }
 
