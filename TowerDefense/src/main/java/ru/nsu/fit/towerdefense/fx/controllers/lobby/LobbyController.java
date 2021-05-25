@@ -1,5 +1,7 @@
 package ru.nsu.fit.towerdefense.fx.controllers.lobby;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,6 +10,8 @@ import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
+import ru.nsu.fit.towerdefense.multiplayer.Message;
+import ru.nsu.fit.towerdefense.multiplayer.MessageType;
 import ru.nsu.fit.towerdefense.multiplayer.UserManager;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 
@@ -52,12 +56,13 @@ public class LobbyController implements Controller, ServerMessageListener {
         for (String playerName : lobby.getPlayers()) {
             root.getChildren().add(new Label(playerName));
         }
-        Button startButton = new Button("Start");
-        startButton.setOnAction(actionEvent -> {
-            // todo send start
-
+        Button readyButton = new Button("Start");
+        readyButton.setOnAction(actionEvent -> {
+            Message message = new Message();
+            message.setType(MessageType.READY);
+            userManager.sendMessage(new Gson().toJson(message));
         });
-        root.getChildren().add(startButton);
+        root.getChildren().add(readyButton);
     }
 
     /**
@@ -69,11 +74,18 @@ public class LobbyController implements Controller, ServerMessageListener {
     }
 
     @Override
-    public void onServerMessageReceived(String message) {
-        System.out.println(message);
-
-        if (false) { // todo del
-            Platform.runLater(() -> sceneManager.switchToCooperativeGame(lobby.getLevelName(), lobby.getPlayers()));
+    public void onServerMessageReceived(String messageStr) {
+        try {
+            Message message = new Gson().fromJson(messageStr, Message.class);
+            switch (message.getType()) {
+                case START -> {
+                    System.out.println("START");
+                    //Platform.runLater(() -> sceneManager.switchToCooperativeGame(lobby.getLevelName(), lobby.getPlayers()));
+                }
+                default -> System.out.println("default");
+            }
+        } catch (JsonSyntaxException e) {
+            System.err.println("json parsing error: " + messageStr);
         }
     }
 }
