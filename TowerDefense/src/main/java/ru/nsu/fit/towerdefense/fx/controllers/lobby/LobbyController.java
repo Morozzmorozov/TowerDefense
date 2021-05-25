@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.fx.controllers.lobby;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -69,5 +70,9 @@ public class LobbyController implements Controller, ServerMessageListener {
     @Override
     public void onServerMessageReceived(String message) {
         System.out.println(message);
+
+        if (false) { // todo del
+            Platform.runLater(() -> sceneManager.switchToCooperativeGame(lobby.getLevelName(), lobby.getPlayers()));
+        }
     }
 }

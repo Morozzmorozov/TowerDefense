@@ -192,6 +192,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     private final SceneManager sceneManager;
     private final File snapshotFile;
+    private final List<String> playerNames;
 
     private ScheduledExecutorService worldSimulationExecutor;
 
@@ -217,9 +218,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      * @param gameMap      game map.
      * @param replay       replay.
      */
-    public GameController(SceneManager sceneManager, File snapshotFile, GameMap gameMap, Replay replay) {
+    public GameController(SceneManager sceneManager, File snapshotFile, GameMap gameMap, List<String> playerNames, Replay replay) {
         this.sceneManager = sceneManager;
         this.snapshotFile = snapshotFile;
+        this.playerNames = playerNames;
 
         worldSize = gameMap.getSize();
         baseInitialHealth = gameMap.getBaseDescription().getHealth();
@@ -228,7 +230,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         speed = 0;
 
         if (replay == null) {
-            worldControl = new WorldControl(gameMap, DELTA_TIME, this, List.of("player")); // todo proper list
+            worldControl = new WorldControl(gameMap, DELTA_TIME, this, playerNames);
         } else {
             this.replay = replay;
             worldControl = new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
@@ -241,8 +243,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      * @param sceneManager scene manager.
      * @param gameMap      game map.
      */
-    public GameController(SceneManager sceneManager, File snapshotFile, GameMap gameMap) {
-        this(sceneManager, snapshotFile, gameMap, null);
+    public GameController(SceneManager sceneManager, File snapshotFile, GameMap gameMap, List<String> playerNames) {
+        this(sceneManager, snapshotFile, gameMap, playerNames, null);
     }
 
     @FXML

@@ -22,6 +22,7 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static javafx.scene.input.KeyCode.ENTER;
@@ -130,7 +131,19 @@ public class SceneManager {
         try {
             switchScene(new GameController(this,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
-                GameMetaData.getInstance().getMapDescription(gameMapName)));
+                GameMetaData.getInstance().getMapDescription(gameMapName), List.of("Player")));
+        } catch (NoSuchElementException e) {
+            new AlertBuilder()
+                .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
+                .build().showAndWait();
+        }
+    }
+
+    public void switchToCooperativeGame(String gameMapName, List<String> playerNames) {
+        try {
+            switchScene(new GameController(this,
+                new File(".\\levelsnapshots\\" + gameMapName + ".png"),
+                GameMetaData.getInstance().getMapDescription(gameMapName), playerNames));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
@@ -148,7 +161,7 @@ public class SceneManager {
         try {
             switchScene(new GameController(this,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
-                GameMetaData.getInstance().getMapDescription(gameMapName), replay));
+                GameMetaData.getInstance().getMapDescription(gameMapName), List.of("Player"), replay));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
