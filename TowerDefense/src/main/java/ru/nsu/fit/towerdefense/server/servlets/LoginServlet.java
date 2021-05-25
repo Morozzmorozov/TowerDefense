@@ -17,7 +17,7 @@ public class LoginServlet  extends HttpServlet {
 	{
 		try
 		{
-			String login = req.getParameter("login");
+			String login = req.getParameter("username");
 			String password = req.getParameter("password");
 
 			if (login == null || password == null)

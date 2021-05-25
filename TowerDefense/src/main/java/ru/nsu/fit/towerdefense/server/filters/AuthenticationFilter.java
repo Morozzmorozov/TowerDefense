@@ -21,7 +21,7 @@ public class AuthenticationFilter implements Filter {
 	{
 
 		HttpServletRequest req = (HttpServletRequest) request;
-		String login = req.getParameter("login");
+		String login = req.getParameter("username");
 		String password = req.getParameter("password");
 		String userToken = req.getParameter("userToken");
 		if (login != null && password != null)
