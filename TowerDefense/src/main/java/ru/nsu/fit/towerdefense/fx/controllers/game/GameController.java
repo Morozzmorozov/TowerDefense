@@ -34,7 +34,6 @@ import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
-import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.ClickVisitor;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
@@ -53,8 +52,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,7 +60,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -928,133 +924,5 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         if (Math.abs(a - b) < 0.01d) return 0;
         if (a > b) return 1;
         return -1;
-    }
-
-    // ---------- Stubs ----------
-
-    private static final int WORLD_WIDTH = 20;
-    private static final int WORLD_HEIGHT = 10;
-    private static final double GAME_OBJECT_SIZE = 0.25d;
-
-    private class WorldControlStub extends WorldControl {
-
-        private final WorldStub world = new WorldStub();
-        private int frame;
-
-        public WorldControlStub(GameMap gameMap) {
-            super(gameMap, DELTA_TIME, GameController.this, List.of("player"));
-
-            for (int i = 0; i < 100; i++) {
-                world.getGameObjectStubs().add(generateRandomGameObject());
-            }
-        }
-
-        @Override
-        public void simulateTick() {
-            if (frame++ % 10 == 0) {
-                if (world.getGameObjectStubs().size() > 0) {
-                    world.getGameObjectStubs().remove(
-                        ThreadLocalRandom.current().nextInt(world.getGameObjectStubs().size()));
-                }
-
-                world.getGameObjectStubs().add(generateRandomGameObject());
-            }
-
-            for (GameObject gameObject : world.getGameObjectStubs()) {
-                gameObject.getPosition().setX(gameObject.getPosition().getX() +
-                    gameObject.getVelocity().getX() * DELTA_TIME);
-                gameObject.getPosition().setY(gameObject.getPosition().getY() +
-                    gameObject.getVelocity().getY() * DELTA_TIME);
-            }
-        }
-
-        @Override
-        public WorldStub getWorld() {
-            return world;
-        }
-
-        private GameObject generateRandomGameObject() {
-            GameObject gameObject =
-                ThreadLocalRandom.current().nextBoolean() ? new Triangle() : new Circle();
-
-            gameObject.getPosition().setX(ThreadLocalRandom.current().nextDouble(WORLD_WIDTH - GAME_OBJECT_SIZE));
-            gameObject.getPosition().setY(ThreadLocalRandom.current().nextDouble(WORLD_HEIGHT - GAME_OBJECT_SIZE));
-
-            if (ThreadLocalRandom.current().nextDouble() < 0.9d) {
-                int dirX = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
-                int dirY = ThreadLocalRandom.current().nextBoolean() ? 1 : -1;
-                gameObject.getVelocity().setX(
-                    dirX * ThreadLocalRandom.current().nextDouble(0.001d * GAME_OBJECT_SIZE,0.02d * GAME_OBJECT_SIZE));
-                gameObject.getVelocity().setY(
-                    dirY * ThreadLocalRandom.current().nextDouble(0.001d * GAME_OBJECT_SIZE,0.02d * GAME_OBJECT_SIZE));
-            }
-
-            return gameObject;
-        }
-
-        private class WorldStub extends World {
-
-            private final List<GameObject> gameObjects = new ArrayList<>();
-
-            public List<GameObject> getGameObjectStubs() {
-                return gameObjects;
-            }
-
-            @SuppressWarnings("unchecked")
-            public Collection<Renderable> getRenderables() {
-                return (List<Renderable>) (List<? extends Renderable>) gameObjects;
-            }
-        }
-
-        private abstract class GameObject implements Renderable {
-
-            private final Vector2<Double> position = new Vector2<>(-1d, 0d);
-            private final Vector2<Double> velocity = new Vector2<>(0d, 0d);
-            private final Vector2<Double> size = new Vector2<>(GAME_OBJECT_SIZE, GAME_OBJECT_SIZE);
-
-            @Override
-            public Vector2<Double> getPosition() {
-                return position;
-            }
-
-            @Override
-            public Vector2<Double> getSize() {
-                return size;
-            }
-
-            @Override
-            public abstract String getImageName();
-
-            public Vector2<Double> getVelocity() {
-                return velocity;
-            }
-
-            @Override
-            public void accept(ClickVisitor visitor) {}
-        }
-
-        private class Triangle extends GameObject {
-            @Override
-            public String getImageName() {
-                return "triangle";
-            }
-
-            @Override
-            public double getZIndex() {
-                return 0;
-            }
-        }
-
-        private class Circle extends GameObject {
-            @Override
-            public String getImageName() {
-                return "circle";
-            }
-
-            @Override
-            public double getZIndex() {
-                return 0;
-            }
-        }
     }
 }

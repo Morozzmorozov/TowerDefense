@@ -94,3 +94,11 @@
     -fx-image: url('../icons/menu.png');
     -fx-cursor: hand;
 }
+
+.cooperative-icon {
+    -fx-image: url('../icons/cooperative.png');
+}
+
+.user-icon {
+    -fx-image: url('../icons/user.png');
+}

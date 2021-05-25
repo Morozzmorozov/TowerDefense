@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.fx.controllers.menu;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
@@ -15,11 +16,13 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.util.Pair;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.UserMetaData;
+import ru.nsu.fit.towerdefense.multiplayer.UserManager;
 import ru.nsu.fit.towerdefense.replay.GameStateReader;
 import ru.nsu.fit.towerdefense.replay.Replay;
 
@@ -40,22 +43,27 @@ public class MenuController implements Controller {
     @FXML private Button addResearchPointsButton;
 
     @FXML private ImageView techTreeImageView;
+    @FXML private HBox userHBox;
+    @FXML private Label userLabel;
     @FXML private Label levelsLabel;
     @FXML private FlowPane levelsFlowPane;
 
     @FXML private Label researchLabel;
 
     private final SceneManager sceneManager;
+    private final UserManager userManager;
 
     private final ComboBox<String> comboBox;
 
     /**
-     * Creates new MenuController with specified SceneManager.
+     * Creates new MenuController with specified SceneManager and UserManager.
      *
      * @param sceneManager scene manager.
+     * @param userManager  user manager.
      */
-    public MenuController(SceneManager sceneManager) {
+    public MenuController(SceneManager sceneManager, UserManager userManager) {
         this.sceneManager = sceneManager;
+        this.userManager = userManager;
 
         comboBox = new ComboBox<>();
     }
@@ -71,6 +79,8 @@ public class MenuController implements Controller {
             researchLabel.setText(UserMetaData.getResearchPoints() + "");
         });
 
+        setLoggedIn(null);
+
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
         techTreeImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToTechTree());
 
@@ -80,6 +90,45 @@ public class MenuController implements Controller {
 
         for (String gameMapName : GameMetaData.getInstance().getGameMapNames()) {
             levelsFlowPane.getChildren().add(createLevelGridPane(gameMapName));
+        }
+    }
+
+    private void showLoginDialog() {
+        new LoginDialog(sceneManager.getWindowOwner()).show(this::login);
+    }
+
+    private void login(Pair<String, String> usernamePassword) {
+        new Thread(() -> {
+            String username = usernamePassword.getKey();
+            String password = usernamePassword.getValue();
+
+            Boolean loggedIn = userManager.login(username, password);
+
+            Platform.runLater(() -> {
+                if (loggedIn != null && loggedIn) {
+                    setLoggedIn(username);
+                    return;
+                }
+
+                new LoginDialog(sceneManager.getWindowOwner()).show(
+                    loggedIn == null ? "Check your internet connection and try again" : "Wrong password",
+                    usernamePassword, this::login);
+            });
+        }).start();
+    }
+
+    private void logout() {
+        setLoggedIn(null);
+        new Thread(userManager::logout).start();
+    }
+
+    private void setLoggedIn(String username) {
+        if (username != null) {
+            userLabel.setText(username);
+            userHBox.setOnMouseClicked(mouseEvent -> logout());
+        } else {
+            userLabel.setText("User");
+            userHBox.setOnMouseClicked(mouseEvent -> showLoginDialog());
         }
     }
 
@@ -141,6 +190,9 @@ public class MenuController implements Controller {
                 }
             }), 1, 2); // todo change to 0, 3
         //gridPane.add(createLevelButton("idle-icon", "Idle game", null), 1, 3); // todo uncomment
+
+        gridPane.add(createLevelButton("cooperative-icon", "Cooperative",
+            mouseEvent -> sceneManager.switchToGame(gameMapName)), 0, 3);
 
         return gridPane;
     }
