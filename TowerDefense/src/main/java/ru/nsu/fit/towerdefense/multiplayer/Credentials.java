@@ -3,7 +3,7 @@ package ru.nsu.fit.towerdefense.multiplayer;
 public class Credentials {
 
     private String username;
-    private String password;
+    private String userToken;
     private String sessionToken;
 
     public String getUsername() {
@@ -14,12 +14,12 @@ public class Credentials {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserToken() {
+        return userToken;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
     public String getSessionToken() {

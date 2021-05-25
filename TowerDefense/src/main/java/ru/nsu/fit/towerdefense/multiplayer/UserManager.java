@@ -51,7 +51,7 @@ public class UserManager {
 
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
                 credentials.setUsername(username);
-                credentials.setPassword(password);
+                credentials.setUserToken(response.body());
                 return true;
             }
 
@@ -87,8 +87,7 @@ public class UserManager {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.LOBBIES_MAPPING +
-                    "?username=" + credentials.getUsername() +
-                    "&password=" + credentials.getPassword()))
+                    "?userToken=" + credentials.getUserToken()))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
 
@@ -116,8 +115,7 @@ public class UserManager {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.CREATE_LOBBY_MAPPING +
-                    "?username=" + credentials.getUsername() +
-                    "&password=" + credentials.getPassword() +
+                    "?userToken=" + credentials.getUserToken() +
                     "&levelName=" + gameMapName))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
@@ -145,8 +143,7 @@ public class UserManager {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.JOIN_LOBBY_MAPPING +
-                    "?username=" + credentials.getUsername() +
-                    "&password=" + credentials.getPassword() +
+                    "?userToken=" + credentials.getUserToken() +
                     "&lobbyId=" + lobbyId))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
