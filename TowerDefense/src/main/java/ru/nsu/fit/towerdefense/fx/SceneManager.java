@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.game.GameController;
+import ru.nsu.fit.towerdefense.fx.controllers.lobby.LobbyController;
 import ru.nsu.fit.towerdefense.fx.controllers.menu.MenuController;
 import ru.nsu.fit.towerdefense.fx.controllers.techtree.TechTreeController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
@@ -108,6 +109,10 @@ public class SceneManager {
      */
     public void switchToMenu() {
         switchScene(new MenuController(this, userManager));
+    }
+
+    public void switchToLobby() {
+        switchScene(new LobbyController(this, userManager));
     }
 
     /**

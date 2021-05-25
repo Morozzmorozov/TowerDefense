@@ -70,7 +70,7 @@ public class UserManager {
                 .uri(new URI(SITE_URI + CREATE_LOBBY_MAPPING +
                     "?username=" + credentials.getUsername() +
                     "&password=" + credentials.getPassword() +
-                    "&map=" + gameMapName))
+                    "&levelName=" + gameMapName))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
 

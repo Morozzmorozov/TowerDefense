@@ -18,7 +18,7 @@ public class CreateLobbyServlet  extends HttpServlet {
 		resp.setStatus(200);
 		String id = LobbyManager.getInstance().createLobby();
 
-		resp.getWriter().println("{ \"lobbyId\" : \"" + id + "\"}");
+		resp.getWriter().println("{ \"LobbyId\" : \"" + id + "\"}");
 
 	}
 }
