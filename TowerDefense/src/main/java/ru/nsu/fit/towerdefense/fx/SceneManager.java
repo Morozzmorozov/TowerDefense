@@ -14,6 +14,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.menu.MenuController;
 import ru.nsu.fit.towerdefense.fx.controllers.techtree.TechTreeController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
+import ru.nsu.fit.towerdefense.multiplayer.UserManager;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
@@ -39,6 +40,7 @@ public class SceneManager {
     private static final KeyCodeCombination EXPAND_COMBINATION = new KeyCodeCombination(ENTER, ALT_DOWN);
 
     private final Stage stage;
+    private final UserManager userManager;
     private Controller controller;
 
     /**
@@ -48,6 +50,7 @@ public class SceneManager {
      */
     public SceneManager(Stage stage)  {
         this.stage = stage;
+        userManager = new UserManager();
 
         initStage();
     }
@@ -104,7 +107,7 @@ public class SceneManager {
      * Creates new MenuController and switches the scene to a menu.
      */
     public void switchToMenu() {
-        switchScene(new MenuController(this));
+        switchScene(new MenuController(this, userManager));
     }
 
     /**
