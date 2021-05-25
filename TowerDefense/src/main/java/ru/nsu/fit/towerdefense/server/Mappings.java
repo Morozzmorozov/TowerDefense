@@ -8,4 +8,5 @@ public class Mappings {
     public static final String LOBBIES_MAPPING = "/lobbies";
     public static final String CREATE_LOBBY_MAPPING = "/createlobby";
     public static final String INFO_LOBBY_MAPPING = "/lobby/info";
+    public static final String USER_FILTER_MAPPING = "/*";
 }
