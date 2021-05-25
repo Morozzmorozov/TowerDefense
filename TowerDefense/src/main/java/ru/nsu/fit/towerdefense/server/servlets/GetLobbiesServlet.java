@@ -19,9 +19,9 @@ public class GetLobbiesServlet extends HttpServlet {
 
 		var lobbies = LobbyManager.getInstance().getLobbies();
 		PrintWriter writer = resp.getWriter();
-		writer.print("{ \"lobbies\" : [");
+		writer.print("{ \"Lobbies\" : [");
 		for (int id = lobbies.size() - 1; id >= 0; id--){
-			writer.print("{\"lobbyId\" : " + lobbies.get(id).getId() + ", \"PlayersInLobby\" : " + lobbies.get(id).getJoined()
+			writer.print("{\"LobbyId\" : " + lobbies.get(id).getId() + ", \"PlayersInLobby\" : " + lobbies.get(id).getJoined()
 					             + ", \"MaxPlayers\" : " + lobbies.get(id).getPlayersNumber() + ", \"Level name\" : \"" + lobbies.get(id).getLevelName() + "\"}\n");
 			if (id > 0){
 				writer.print(",");
