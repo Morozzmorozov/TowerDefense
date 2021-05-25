@@ -329,14 +329,14 @@ public class WorldControl implements ServerSimulator {
       enemySequence();
       spawnSequence();
 
-      GameStateWriter.getInstance()
+      /*GameStateWriter.getInstance()
           .fullCopy(world.getEnemies(), world.getTowers(), world.getProjectiles(),
               world.getBase(), world.getMoney("player"), world.getCurrentWaveNumber(),
               world.getCurrentWave().getCurrentEnemyNumber(),
               world.getCountdown(), scienceEarned, enemiesKilled); // todo remake replays for multiplayer
       GameStateWriter.getInstance().endFrame();
 
-      GameStateWriter.getInstance().newFrame();
+      GameStateWriter.getInstance().newFrame();*/
 
       world.setTick(world.getTick() + 1);
 

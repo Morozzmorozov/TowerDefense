@@ -40,13 +40,14 @@ public class World {
     base = new Base(oldWorld.base);
     currentWaveNumber = oldWorld.currentWaveNumber;
 
+    currentWave = new Wave(oldWorld.currentWave);
     waveMap = new HashMap<>(waveMap);
-    for (var e : waveMap.entrySet()) {
+    for (var e : oldWorld.waveMap.entrySet()) {
       Wave wave = new Wave(e.getValue());
       if (e.getValue() == oldWorld.currentWave) {
         currentWave = wave;
       }
-      e.setValue(new Wave(e.getValue()));
+      waveMap.put(e.getKey(), wave);
     }
 
     moneyMap = new HashMap<>(oldWorld.moneyMap);
@@ -61,6 +62,8 @@ public class World {
     }).collect(Collectors.toList());
 
     tick = oldWorld.tick;
+
+
   }
 
   public World(SerializableWorld world) {
