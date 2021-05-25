@@ -55,6 +55,23 @@ public class Enemy extends GameObject implements Renderable {
     }
   }
 
+  public void setVelocity(float velocity) {
+    this.velocity = velocity;
+  }
+
+  public void setTrajectory(
+      List<Vector2<Double>> trajectory) {
+    this.trajectory = trajectory;
+  }
+
+  public void setEffects(List<Effect> effects) {
+    this.effects = effects;
+  }
+
+  public void setDamageMap(Map<String, Integer> damageMap) {
+    this.damageMap = damageMap;
+  }
+
   public Map<String, Integer> getDamageMap() {
     return damageMap;
   }

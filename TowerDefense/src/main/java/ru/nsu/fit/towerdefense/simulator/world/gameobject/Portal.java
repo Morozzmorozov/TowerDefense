@@ -17,6 +17,10 @@ public class Portal extends GameObject implements Renderable {
     this.position = position;
   }
 
+  public Vector2<Integer> getCell() {
+    return position;
+  }
+
   @Override
   public Vector2<Double> getPosition() {
     return new Vector2<>((double)position.getX(), (double)position.getY());

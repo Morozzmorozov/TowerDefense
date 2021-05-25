@@ -136,6 +136,10 @@ public class Projectile extends GameObject implements Renderable {
 
   }
 
+  public void setType(ProjectileType type) {
+    this.type = type;
+  }
+
   @Override
   public double getZIndex() {
     return 6;

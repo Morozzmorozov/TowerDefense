@@ -35,6 +35,10 @@ public class Base extends GameObject implements Renderable {
     return new Vector2<>((double)position.getX(), (double)position.getY());
   }
 
+  public Vector2<Integer> getCell() {
+    return position;
+  }
+
   @Override
   public Vector2<Double> getSize() {
     return new Vector2<>(1d, 1d);
