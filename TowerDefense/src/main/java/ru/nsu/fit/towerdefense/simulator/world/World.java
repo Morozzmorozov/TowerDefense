@@ -1,5 +1,7 @@
 package ru.nsu.fit.towerdefense.simulator.world;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +20,15 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
 
 public class World {
+
+  public String serialize() {
+    return new Gson().toJson(new SerializableWorld(this));
+  }
+
+  public static World deserialize(String json) {
+    Gson gson = new GsonBuilder().registerTypeAdapter(SerializableWorld.class, new SerializableWorld.WorldDeserializer()).create();
+    return gson.fromJson(json, SerializableWorld.class).generateWorld();
+  }
 
   public World() {
 
@@ -71,7 +82,7 @@ public class World {
   }
 
   public SerializableWorld getSerializableWorld() {
-    return new SerializableWorld();// todo
+    return new SerializableWorld(this);// todo
   }
 
   public int getCountdown() {
@@ -92,8 +103,8 @@ public class World {
   private Base base;
   private int currentWaveNumber = 0;
   private Wave currentWave;
-  private Map<Integer, Wave> waveMap = new HashMap<>();
-  private Map<String, Integer> moneyMap = new HashMap<>();
+  public Map<Integer, Wave> waveMap = new HashMap<>();
+  public Map<String, Integer> moneyMap = new HashMap<>();
   private long tick = 0;
 
   public long getTick() {
@@ -106,6 +117,33 @@ public class World {
 
   public Wave getWaveByNumber(int number) {
     return waveMap.get(number);
+  }
+
+  public void setEnemies(List<Enemy> enemies) {
+    this.enemies = enemies;
+  }
+
+  public void setTowers(List<Tower> towers) {
+    this.towers = towers;
+  }
+
+  public void setProjectiles(
+      List<Projectile> projectiles) {
+    this.projectiles = projectiles;
+  }
+
+  public void setTowerPlatforms(
+      List<TowerPlatform> towerPlatforms) {
+    this.towerPlatforms = towerPlatforms;
+  }
+
+  public void setRoadTiles(
+      List<RoadTile> roadTiles) {
+    this.roadTiles = roadTiles;
+  }
+
+  public void setPortals(List<Portal> portals) {
+    this.portals = portals;
   }
 
   public void clearWaves() {
