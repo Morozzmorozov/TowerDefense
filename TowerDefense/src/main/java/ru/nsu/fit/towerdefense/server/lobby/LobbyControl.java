@@ -34,6 +34,8 @@ public class LobbyControl
 
     private Thread gameThread;
     private HashSet<String> readyUsers;
+    private State currentState;
+
 
     public LobbyControl(long id)
     {
@@ -44,6 +46,7 @@ public class LobbyControl
         tokenToUser = new HashMap<>();
         tokenToUsername = new HashMap<>();
         readyUsers = new HashSet<>();
+        currentState = State.PREGAME;
         this.setLevel("Level 1_4");
         gameThread = new Thread(() -> {
             try
@@ -140,19 +143,25 @@ public class LobbyControl
     }
 
     public void switchReady(MessageReceiver receiver) {
-        String token = userToToken.get(receiver);
-        if (readyUsers.contains(token))
+        if (currentState == State.PREGAME)
         {
-            readyUsers.remove(token);
-        }
-        else
-        {
-            readyUsers.add(token);
-            if (readyUsers.size() == getPlayersNumber())
+            String token = userToToken.get(receiver);
+            if (readyUsers.contains(token))
             {
-                Message message = new Message();
-                message.setType(MessageType.START);
-                sendMessageToClients(new Gson().toJson(message));
+                readyUsers.remove(token);
+            }
+            else
+            {
+                readyUsers.add(token);
+                if (readyUsers.size() == getPlayersNumber())
+                {
+                    Message message = new Message();
+                    message.setType(MessageType.START);
+                    sendMessageToClients(new Gson().toJson(message));
+                    gameThread = new Thread(this::gameRun);
+                    currentState = State.INGAME;
+                    gameThread.start();
+                }
             }
         }
     }
@@ -206,9 +215,9 @@ public class LobbyControl
                 System.err.println("Connected!");
                 tokenToUser.put(token, receiver);
                 userToToken.put(receiver, token);
-                gameThread.interrupt();
-                gameThread = new Thread(this::notifyConnections);
-                gameThread.start();
+//                gameThread.interrupt();
+//                gameThread = new Thread(this::notifyConnections);
+//                gameThread.start();
                 return true;
             }
             else if (awaitingTokens.contains(token))
@@ -220,9 +229,9 @@ public class LobbyControl
                     tokenToUser.put(token, receiver);
                     userToToken.put(receiver, token);
                     System.err.println("Connected!");
-                    gameThread.interrupt();
-                    gameThread = new Thread(this::notifyConnections);
-                    gameThread.start();
+//                    gameThread.interrupt();
+//                    gameThread = new Thread(this::notifyConnections);
+//                    gameThread.start();
                     return true;
                 }
                 System.err.println("Lobby is full");
@@ -231,22 +240,22 @@ public class LobbyControl
         }
     }
 
-    private void notifyConnections()
-    {
-        while (true)
-        {
-            System.out.println("notifyConnections");
-            synchronized (userToToken)
-            {
-
-            }
-            try
-            {
-                Thread.sleep(500);
-            }
-            catch (Exception e){}
-        }
-    }
+//    private void notifyConnections()
+//    {
+//        while (true)
+//        {
+//            System.out.println("notifyConnections");
+//            synchronized (userToToken)
+//            {
+//
+//            }
+//            try
+//            {
+//                Thread.sleep(500);
+//            }
+//            catch (Exception e){}
+//        }
+//    }
 
     public void sendMessageToClients(String message)
     {
