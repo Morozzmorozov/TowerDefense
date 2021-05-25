@@ -5,7 +5,6 @@ import com.google.gson.JsonSyntaxException;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Session;
-import ru.nsu.fit.towerdefense.server.ClientSocket;
 import ru.nsu.fit.towerdefense.server.Mappings;
 
 import java.io.IOException;
@@ -15,7 +14,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.concurrent.Future;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
@@ -64,6 +65,48 @@ public class UserManager {
 
     public void logout() {
         credentials = new Credentials();
+    }
+
+    public List<Lobby> getLobbies() {
+        if (true)
+            return new ArrayList<>() {{ // todo delete
+                add(new Lobby() {{
+                    setId("111");
+                    setLevelName("Level 1");
+                    setMaxPlayers(2);
+                    setPlayers(List.of("John"));
+                }});
+                add(new Lobby() {{
+                    setId("222");
+                    setLevelName("Level 2");
+                    setMaxPlayers(3);
+                    setPlayers(List.of("Jane"));
+                }});
+            }};
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(SITE_URI + Mappings.LOBBIES_MAPPING +
+                    "?username=" + credentials.getUsername() +
+                    "&password=" + credentials.getPassword()))
+                .timeout(Duration.of(15, SECONDS))
+                .build();
+
+            HttpResponse<String> response = HttpClient.newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                Lobby[] lobbies = new Gson().fromJson(response.body(), Lobby[].class);
+                return Arrays.asList(lobbies);
+            }
+
+            System.out.println("Bad status code: " + response.statusCode());
+            return null;
+        } catch (URISyntaxException | IOException | InterruptedException | JsonSyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public String createLobby(String gameMapName) {

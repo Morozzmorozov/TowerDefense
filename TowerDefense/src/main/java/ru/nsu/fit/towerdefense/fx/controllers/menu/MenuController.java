@@ -41,6 +41,7 @@ public class MenuController implements Controller {
 
     @FXML private Button clearButton;
     @FXML private Button addResearchPointsButton;
+    @FXML private Button lobbiesButton;
 
     @FXML private ImageView techTreeImageView;
     @FXML private HBox userHBox;
@@ -78,6 +79,8 @@ public class MenuController implements Controller {
             UserMetaData.addResearchPoints(10);
             researchLabel.setText(UserMetaData.getResearchPoints() + "");
         });
+
+        lobbiesButton.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
 
         setLoggedIn(null);
 

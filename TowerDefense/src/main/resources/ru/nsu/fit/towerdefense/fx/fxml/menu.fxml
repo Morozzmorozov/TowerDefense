@@ -46,6 +46,7 @@
             </HBox>
         </HBox>
     </GridPane>
+    <Button fx:id="lobbiesButton" StackPane.alignment="TOP_CENTER">Lobbies</Button>
     <Button fx:id="clearButton" visible="false" managed="false" StackPane.alignment="BOTTOM_LEFT" style="-fx-background-color: red;">Clear saves</Button>
     <Button fx:id="addResearchPointsButton" visible="false" managed="false" StackPane.alignment="BOTTOM_RIGHT">Add 10 research points</Button>
 </StackPane>
