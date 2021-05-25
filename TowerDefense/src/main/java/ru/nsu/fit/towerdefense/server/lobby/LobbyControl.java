@@ -1,7 +1,10 @@
 package ru.nsu.fit.towerdefense.server.lobby;
 
+import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
+import ru.nsu.fit.towerdefense.multiplayer.Message;
+import ru.nsu.fit.towerdefense.multiplayer.MessageType;
 import ru.nsu.fit.towerdefense.server.sockets.UserConnection;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.MessageReceiver;
 
@@ -136,6 +139,42 @@ public class LobbyControl
         tokenToUser.remove(token, receiver);
     }
 
+    public void switchReady(MessageReceiver receiver) {
+        String token = userToToken.get(receiver);
+        if (readyUsers.contains(token))
+        {
+            readyUsers.remove(token);
+        }
+        else
+        {
+            readyUsers.add(token);
+            if (readyUsers.size() == getPlayersNumber())
+            {
+                Message message = new Message();
+                message.setType(MessageType.START);
+                sendMessageToClients(new Gson().toJson(message));
+            }
+        }
+    }
+
+    public void gameRun()
+    {
+        Message message = new Message();
+        message.setType(MessageType.STATE);
+        message.setMessage("Game is running, ping!");
+        String res = new Gson().toJson(message);
+        while (true)
+        {
+            try
+            {
+                Thread.sleep(500);
+            }
+            catch (Exception e){}
+
+            sendMessageToClients(res);
+        }
+    }
+
 
     private void checkIfEmpty()
     {
@@ -199,14 +238,7 @@ public class LobbyControl
             System.out.println("notifyConnections");
             synchronized (userToToken)
             {
-                for (var x : userToToken.entrySet())
-                {
-                    try
-                    {
-                        x.getKey().sendMessage("Server pings user!");
-                    }
-                    catch (Exception e){}
-                }
+
             }
             try
             {
@@ -216,6 +248,17 @@ public class LobbyControl
         }
     }
 
+    public void sendMessageToClients(String message)
+    {
+        for (var x : userToToken.entrySet())
+        {
+            try
+            {
+                x.getKey().sendMessage(message);
+            }
+            catch (Exception e){}
+        }
+    }
 
 
 }
