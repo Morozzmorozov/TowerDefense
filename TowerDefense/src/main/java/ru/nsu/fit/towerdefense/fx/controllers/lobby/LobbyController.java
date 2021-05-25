@@ -77,6 +77,10 @@ public class LobbyController implements Controller, ServerMessageListener {
     public void onServerMessageReceived(String messageStr) {
         try {
             Message message = new Gson().fromJson(messageStr, Message.class);
+            if (message.getType() == null) {
+                return;
+            }
+
             switch (message.getType()) {
                 case START -> {
                     System.out.println("START");
