@@ -128,7 +128,10 @@ public class WorldControl implements ServerSimulator {
         gameMap.getWaves().get(0).getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum());
     wave.setDescription(gameMap.getWaves().get(0));
     world.setCurrentWave(wave);
-    world.setMoney("player", DEBUG_MONEY); // todo starting money
+
+    for (var player : players) {
+      world.setMoney(player, DEBUG_MONEY);
+    }
 
     Base base = new Base(gameMap.getBaseDescription().getHealth(),
         gameMap.getBaseDescription().getImage(),
