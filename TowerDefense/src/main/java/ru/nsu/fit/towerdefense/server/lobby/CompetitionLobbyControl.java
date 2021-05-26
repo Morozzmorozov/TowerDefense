@@ -6,8 +6,8 @@ public class CompetitionLobbyControl extends LobbyControl {
 
     private Map<Long, GamePerformance> userIdToGamePerformanceMap;
 
-    public CompetitionLobbyControl(long id) {
-        super(id);
+    public CompetitionLobbyControl(long id, String levelName) {
+        super(id, levelName);
     }
 
     public void updateGamePerformance(Long userId, GamePerformance gamePerformance) {
