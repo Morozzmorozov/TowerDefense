@@ -37,7 +37,7 @@ public class EventReceiver implements MessageReceiver {
 		switch (message1.getType())
 		{
 			case READY -> {System.out.println("Got switch ready message!"); lobby.switchReady(this);}
-			case EVENT -> {System.out.println("Got event message!"); lobby.sendEvent(message);}
+			case EVENT -> {System.out.println("Got event message!"); lobby.sendEvent(message1.getSerializedEvent());}
 			default -> {}
 		}
 	}

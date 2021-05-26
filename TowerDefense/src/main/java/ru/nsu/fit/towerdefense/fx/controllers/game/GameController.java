@@ -239,7 +239,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         baseInitialHealth = gameMap.getBaseDescription().getHealth();
 
         state = State.PLAYING;
-        speed = 0;
+        speed = 1; // todo think
 
         if (replay == null) {
             worldControl = new WorldControl(gameMap, DELTA_TIME, this, playerNames);
@@ -686,7 +686,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     try {
-                        UpgradeTowerEvent event = worldControl.upgradeTower(tower, upgrade);
+                        UpgradeTowerEvent event = worldControl.upgradeTower(userManager.getUsername(), tower, upgrade);
                         sendEventToServer(event);
 
                         onClicked(tower);
@@ -751,7 +751,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     return;
                 }
 
-                TuneTowerEvent event = worldControl.tuneTower(tower, mode);
+                TuneTowerEvent event = worldControl.tuneTower(userManager.getUsername(), tower, mode);
                 sendEventToServer(event);
                 for (Node _node : towerModeToUiNodeMap.values()) {
                     _node.getStyleClass().removeIf(className -> className.equals("target-box-selected"));
@@ -768,7 +768,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 return;
             }
 
-            SellTowerEvent event = worldControl.sellTower(tower);
+            SellTowerEvent event = worldControl.sellTower(userManager.getUsername(), tower);
             sendEventToServer(event);
 
             TowerPlatform towerPlatform = event.getPlatform();
@@ -855,7 +855,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     try {
-                        BuildTowerEvent event = worldControl.buildTower(towerPlatform, towerType);
+                        BuildTowerEvent event = worldControl.buildTower(userManager.getUsername(), towerPlatform, towerType);
                         sendEventToServer(event);
 
                         Tower tower = event.getTower();

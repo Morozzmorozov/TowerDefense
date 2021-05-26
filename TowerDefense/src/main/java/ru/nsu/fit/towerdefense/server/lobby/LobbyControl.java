@@ -291,7 +291,7 @@ public class LobbyControl
     {
         if (currentState == State.INGAME)
         {
-            Event event = new Gson().fromJson(message, Event.class);
+            Event event = Event.deserialize(message);
             simulator.submitEvent(event);
         }
     }

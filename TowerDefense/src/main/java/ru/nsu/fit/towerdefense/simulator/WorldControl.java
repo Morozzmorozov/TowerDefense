@@ -224,20 +224,20 @@ public class WorldControl implements ServerSimulator {
     }
   }
 
-  public SellTowerEvent sellTower(Tower tower) {
+  public SellTowerEvent sellTower(String playerName, Tower tower) {
     synchronized (this) {
-      SellTowerEvent event = new SellTowerEvent(getTick() + 1, tower, "player");
+      SellTowerEvent event = new SellTowerEvent(getTick() + 1, tower, playerName);
       event.fire(world);
       eventContainer.putEvent(event);
       return event;
     }
   }
 
-  public BuildTowerEvent buildTower(TowerPlatform towerPlatform, TowerType towerType)
+  public BuildTowerEvent buildTower(String playerName, TowerPlatform towerPlatform, TowerType towerType)
       throws GameplayException {
 
     synchronized (this) {
-      var event = new BuildTowerEvent((int) getTick(), towerPlatform, towerType, "player");
+      var event = new BuildTowerEvent((int) getTick(), towerPlatform, towerType, playerName);
       event.fire(world);
       eventContainer.putEvent(event);
       return event;
@@ -245,9 +245,9 @@ public class WorldControl implements ServerSimulator {
   }
 
 
-  public UpgradeTowerEvent upgradeTower(Tower tower, Upgrade upgrade) throws GameplayException {
+  public UpgradeTowerEvent upgradeTower(String playerName, Tower tower, Upgrade upgrade) throws GameplayException {
     synchronized (this) {
-      var event = new UpgradeTowerEvent(upgrade, tower, getTick(), "player");
+      var event = new UpgradeTowerEvent(upgrade, tower, getTick(), playerName);
       event.fire(world);
       eventContainer.putEvent(event);
       return event;
@@ -263,9 +263,9 @@ public class WorldControl implements ServerSimulator {
     return null;
   }
 
-  public TuneTowerEvent tuneTower(Tower tower, Tower.Mode towerMode) {
+  public TuneTowerEvent tuneTower(String playerName, Tower tower, Tower.Mode towerMode) {
     synchronized (this) {
-      var event = new TuneTowerEvent(getTick(), towerMode, tower, "player");
+      var event = new TuneTowerEvent(getTick(), towerMode, tower, playerName);
       event.fire(world);
       eventContainer.putEvent(event);
       return event;
