@@ -25,9 +25,9 @@ public class LobbyManager {
 		return instance;
 	}
 
-	public synchronized String createLobby()
+	public synchronized String createLobby(String levelName)
 	{
-		LobbyControl lobby = new CooperativeLobbyControl(ids);
+		LobbyControl lobby = new CooperativeLobbyControl(ids, levelName);
 		lobbies.put(ids, lobby);
 		ids++;
 		return Long.toString(lobby.getId());
