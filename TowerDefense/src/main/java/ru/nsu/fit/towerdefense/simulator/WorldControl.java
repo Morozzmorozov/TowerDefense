@@ -194,7 +194,11 @@ public class WorldControl implements ServerSimulator {
 
   public void updateWorld(World world) {
     synchronized(this) {
+      long oldTick = this.world.getTick();
       this.world = world;
+      while(this.world.getTick() < oldTick) {
+        simulateTick();
+      }
     }
   }
 
