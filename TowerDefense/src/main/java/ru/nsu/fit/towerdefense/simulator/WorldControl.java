@@ -128,7 +128,10 @@ public class WorldControl implements ServerSimulator {
         gameMap.getWaves().get(0).getEnemiesList().stream().mapToInt(WaveEnemies::getCount).sum());
     wave.setDescription(gameMap.getWaves().get(0));
     world.setCurrentWave(wave);
-    world.setMoney("player", DEBUG_MONEY); // todo starting money
+
+    for (var player : players) {
+      world.setMoney(player, DEBUG_MONEY);
+    }
 
     Base base = new Base(gameMap.getBaseDescription().getHealth(),
         gameMap.getBaseDescription().getImage(),
@@ -367,7 +370,9 @@ public class WorldControl implements ServerSimulator {
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
         GameStateWriter.getInstance().endFrame();
         GameStateWriter.getInstance().close();
-        worldObserver.onVictory();
+        if (worldObserver != null) {
+          worldObserver.onVictory(); // todo fix temporary solution
+        }
       }
     }
   }
@@ -546,7 +551,9 @@ public class WorldControl implements ServerSimulator {
           removedEnemies.add(enemy);
           GameStateWriter.getInstance().endFrame();
           GameStateWriter.getInstance().close();
-          worldObserver.onDefeat();
+          if (worldObserver != null) {
+            worldObserver.onDefeat(); // todo fix temporary solution
+          }
         } else {
           removedEnemies.add(enemy); // not sure if I should leave this
           enemyDeath(enemy);
