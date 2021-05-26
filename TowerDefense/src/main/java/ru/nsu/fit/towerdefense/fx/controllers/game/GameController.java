@@ -44,6 +44,7 @@ import ru.nsu.fit.towerdefense.simulator.events.SellTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.events.TuneTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.events.UpgradeTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
+import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.ClickVisitor;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
@@ -627,7 +628,16 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         return;
                     }
 
+                    System.out.println("onServerMessageReceived EVENT: " + message.getSerializedEvent());
                     Platform.runLater(() -> worldControl.submitEvent(Event.deserialize(message.getSerializedEvent())));
+                }
+                case STATE -> {
+                    if (message.getSerializedWorld() == null) {
+                        System.err.println("world is null");
+                        return;
+                    }
+
+                    Platform.runLater(() -> worldControl.updateWorld(World.deserialize(message.getSerializedWorld())));
                 }
                 default -> System.out.println("default");
             }

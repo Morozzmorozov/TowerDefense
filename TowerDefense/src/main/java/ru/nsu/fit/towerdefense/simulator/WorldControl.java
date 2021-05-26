@@ -192,9 +192,9 @@ public class WorldControl implements ServerSimulator {
     stateContainer.putState(world);
   }
 
-  public void updateWorld(SerializableWorld world) {
+  public void updateWorld(World world) {
     synchronized(this) {
-      this.world = new World(world);
+      this.world = world;
     }
   }
 
