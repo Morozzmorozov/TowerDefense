@@ -8,6 +8,8 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower.Mode;
 
 public class TuneTowerEvent implements Event {
 
+  private final EventType type = EventType.TUNE_TOWER;
+
   private final long frameNumber;
   private final Tower.Mode towerMode;
   private final int x;

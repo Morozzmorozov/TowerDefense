@@ -10,6 +10,8 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class SellTowerEvent implements Event {
 
+  private final EventType type = EventType.SELL_TOWER;
+
   private final long frameNumber;
   private final int x;
   private final int y;

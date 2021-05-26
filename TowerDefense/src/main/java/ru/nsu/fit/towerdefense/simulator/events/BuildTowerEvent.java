@@ -15,6 +15,7 @@ public class BuildTowerEvent implements Event {
 
   private final long frameNumber;
 
+  private final EventType type = EventType.BUILD_TOWER;
 
   private final int x;
   private final int y;

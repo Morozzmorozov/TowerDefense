@@ -16,6 +16,8 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class UpgradeTowerEvent implements Event {
 
+  private final EventType type = EventType.UPGRADE_TOWER;
+
   private final long frameNumber;
   private final String player;
   private final String upgradeName;
