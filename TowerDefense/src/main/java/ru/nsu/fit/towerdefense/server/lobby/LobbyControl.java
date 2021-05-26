@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
-import ru.nsu.fit.towerdefense.multiplayer.MessageType;
 import ru.nsu.fit.towerdefense.server.database.UserManager;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.MessageReceiver;
 import ru.nsu.fit.towerdefense.simulator.ServerSimulator;
@@ -183,7 +182,7 @@ public class LobbyControl
                 if (readyUsers.size() == getPlayersNumber())
                 {
                     Message message = new Message();
-                    message.setType(MessageType.START);
+                    message.setType(Message.Type.START);
                     sendMessageToClients(new Gson().toJson(message));
                     gameThread = new Thread(this::gameRun);
                     currentState = State.INGAME;

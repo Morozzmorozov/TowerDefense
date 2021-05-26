@@ -2,7 +2,6 @@ package ru.nsu.fit.towerdefense.fx.controllers.lobby;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,7 +10,6 @@ import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
-import ru.nsu.fit.towerdefense.multiplayer.MessageType;
 import ru.nsu.fit.towerdefense.multiplayer.UserManager;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 
@@ -59,7 +57,7 @@ public class LobbyController implements Controller, ServerMessageListener {
         Button readyButton = new Button("Start");
         readyButton.setOnAction(actionEvent -> {
             Message message = new Message();
-            message.setType(MessageType.READY);
+            message.setType(Message.Type.READY);
             userManager.sendMessage(new Gson().toJson(message));
         });
         root.getChildren().add(readyButton);
