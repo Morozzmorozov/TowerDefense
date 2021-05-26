@@ -11,6 +11,7 @@ import ru.nsu.fit.towerdefense.server.servlets.*;
 import ru.nsu.fit.towerdefense.server.filters.LobbyExistenceFilter;
 import ru.nsu.fit.towerdefense.server.sockets.GameSocket;
 
+import java.time.Duration;
 import java.util.EnumSet;
 
 public class GameServer {
@@ -26,6 +27,7 @@ public class GameServer {
 		{
 			// Configure default max size
 			wsContainer.setMaxTextMessageSize(65535);
+			wsContainer.setIdleTimeout(Duration.ofDays(10));
 
 			// Add websockets
 			wsContainer.addMapping("/game", GameSocket.class);
