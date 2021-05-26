@@ -58,7 +58,8 @@ public class LobbiesController implements Controller {
                             return;
                         }
 
-                        // open connection
+                        userManager.openSocketConnection(lobby.getId(), sessionToken);
+
                         Platform.runLater(() -> sceneManager.switchToLobby());
                     }).start());
                     root.getChildren().add(hBox);

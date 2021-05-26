@@ -241,7 +241,6 @@ public class MenuController implements Controller {
                 return;
             }
 
-            // open connection
             userManager.openSocketConnection(lobbyId, sessionToken);
 
             Platform.runLater(() -> {
