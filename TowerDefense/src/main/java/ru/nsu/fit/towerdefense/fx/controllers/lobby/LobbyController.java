@@ -2,6 +2,7 @@ package ru.nsu.fit.towerdefense.fx.controllers.lobby;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -76,13 +77,19 @@ public class LobbyController implements Controller, ServerMessageListener {
         try {
             Message message = new Gson().fromJson(messageStr, Message.class);
             if (message.getType() == null) {
+                System.err.println("message type is null");
                 return;
             }
 
             switch (message.getType()) {
                 case START -> {
                     System.out.println("START");
-                    //Platform.runLater(() -> sceneManager.switchToCooperativeGame(lobby.getLevelName(), lobby.getPlayers()));
+                    if (message.getPlayerNames() == null) {
+                        System.err.println("player names is null");
+                        return;
+                    }
+
+                    Platform.runLater(() -> sceneManager.switchToCooperativeGame(lobby.getLevelName(), message.getPlayerNames()));
                 }
                 default -> System.out.println("default");
             }
