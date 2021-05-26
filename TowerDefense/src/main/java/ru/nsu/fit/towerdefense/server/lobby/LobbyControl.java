@@ -183,6 +183,7 @@ public class LobbyControl
                 {
                     Message message = new Message();
                     message.setType(Message.Type.START);
+                    message.setPlayerNames(getPlayers());
                     sendMessageToClients(new Gson().toJson(message));
                     gameThread = new Thread(this::gameRun);
                     currentState = State.INGAME;
