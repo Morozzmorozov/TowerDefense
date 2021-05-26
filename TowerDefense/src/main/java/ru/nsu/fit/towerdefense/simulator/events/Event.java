@@ -8,9 +8,14 @@ public interface Event {
 
   String serialize();
 
+  class Helper {
+    String type;
+  }
+
   static Event deserialize(String str) {
     Gson gson = new Gson();
-    String type = gson.toJsonTree(str).getAsJsonObject().get("type").getAsString();
+    String type = gson.fromJson(str, Helper.class).type;
+    //String type = gson.(str).getAsJsonObject().get("type").getAsString();
     return switch (type) {
       case "BUILD_TOWER" -> gson.fromJson(str, BuildTowerEvent.class);
       case "SELL_TOWER" -> gson.fromJson(str, SellTowerEvent.class);
