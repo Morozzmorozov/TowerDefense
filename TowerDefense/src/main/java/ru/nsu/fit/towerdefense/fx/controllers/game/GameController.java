@@ -1,5 +1,7 @@
 package ru.nsu.fit.towerdefense.fx.controllers.game;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.embed.swing.SwingFXUtils;
@@ -23,16 +25,24 @@ import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Camera;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
+import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
+import ru.nsu.fit.towerdefense.multiplayer.Message;
+import ru.nsu.fit.towerdefense.multiplayer.UserManager;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldObserver;
+import ru.nsu.fit.towerdefense.simulator.events.BuildTowerEvent;
+import ru.nsu.fit.towerdefense.simulator.events.Event;
+import ru.nsu.fit.towerdefense.simulator.events.SellTowerEvent;
+import ru.nsu.fit.towerdefense.simulator.events.TuneTowerEvent;
+import ru.nsu.fit.towerdefense.simulator.events.UpgradeTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.ClickVisitor;
@@ -72,7 +82,7 @@ import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.RENDER_WORLD_ERROR_HE
  *
  * @author Oleg Markelov
  */
-public class GameController implements Controller, WorldObserver, WorldRendererObserver, ClickVisitor {
+public class GameController implements Controller, WorldObserver, WorldRendererObserver, ClickVisitor, ServerMessageListener {
 
     private static final String FXML_FILE_NAME = "game.fxml";
     private static final int FRAMES_PER_SECOND = 60;
@@ -191,6 +201,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private HBox resultsMenuHBox;
 
     private final SceneManager sceneManager;
+    private final UserManager userManager;
     private final File snapshotFile;
     private final List<String> playerNames;
 
@@ -218,8 +229,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      * @param gameMap      game map.
      * @param replay       replay.
      */
-    public GameController(SceneManager sceneManager, File snapshotFile, GameMap gameMap, List<String> playerNames, Replay replay) {
+    public GameController(SceneManager sceneManager, UserManager userManager, File snapshotFile, GameMap gameMap, List<String> playerNames, Replay replay) {
         this.sceneManager = sceneManager;
+        this.userManager = userManager;
         this.snapshotFile = snapshotFile;
         this.playerNames = playerNames;
 
@@ -243,8 +255,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      * @param sceneManager scene manager.
      * @param gameMap      game map.
      */
-    public GameController(SceneManager sceneManager, File snapshotFile, GameMap gameMap, List<String> playerNames) {
-        this(sceneManager, snapshotFile, gameMap, playerNames, null);
+    public GameController(SceneManager sceneManager, UserManager userManager, File snapshotFile, GameMap gameMap, List<String> playerNames) {
+        this(sceneManager, userManager, snapshotFile, gameMap, playerNames, null);
     }
 
     @FXML
@@ -355,10 +367,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         try {
             worldRenderer.render();
 
-            researchLabel.setText(worldControl.getResearchPoints("player") + ""); // todo player name
-            moneyLabel.setText(worldControl.getMoney("player") + "");
+            researchLabel.setText(worldControl.getResearchPoints(userManager.getUsername()) + "");
+            moneyLabel.setText(worldControl.getMoney(userManager.getUsername()) + "");
             healthLabel.setText(worldControl.getBaseHealth() + "");
-            enemyLabel.setText(worldControl.getEnemiesKilled("player") + "");
+            enemyLabel.setText(worldControl.getEnemiesKilled(userManager.getUsername()) + "");
             long ticksTillNextWave = worldControl.getTicksTillNextWave();
             if (ticksTillNextWave > 0) {
                 nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
@@ -599,6 +611,31 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         showSideBar(towerSideVBox);
     }
 
+    @Override
+    public void onServerMessageReceived(String messageStr) {
+        try {
+            Message message = new Gson().fromJson(messageStr, Message.class);
+            if (message.getType() == null) {
+                System.err.println("message type is null");
+                return;
+            }
+
+            switch (message.getType()) {
+                case EVENT -> {
+                    if (message.getSerializedEvent() == null) {
+                        System.err.println("event is null");
+                        return;
+                    }
+
+                    Platform.runLater(() -> worldControl.submitEvent(Event.deserialize(message.getSerializedEvent())));
+                }
+                default -> System.out.println("default");
+            }
+        } catch (JsonSyntaxException e) {
+            System.err.println("json parsing error: " + messageStr);
+        }
+    }
+
     private void updateEnemySideBar(Enemy enemy) {
         enemyNameText.setText(enemy.getType().getTypeName());
         enemyDisplayInfoText.setText(enemy.getType().getDisplayInfo());
@@ -649,7 +686,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     try {
-                        worldControl.upgradeTower(tower, upgrade);
+                        UpgradeTowerEvent event = worldControl.upgradeTower(tower, upgrade);
+                        sendEventToServer(event);
+
                         onClicked(tower);
                     } catch (GameplayException e) {
                         handleGameplayException(e);
@@ -712,7 +751,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     return;
                 }
 
-                worldControl.tuneTower(tower, mode);
+                TuneTowerEvent event = worldControl.tuneTower(tower, mode);
+                sendEventToServer(event);
                 for (Node _node : towerModeToUiNodeMap.values()) {
                     _node.getStyleClass().removeIf(className -> className.equals("target-box-selected"));
                 }
@@ -728,7 +768,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 return;
             }
 
-            TowerPlatform towerPlatform = worldControl.sellTower(tower).getPlatform();
+            SellTowerEvent event = worldControl.sellTower(tower);
+            sendEventToServer(event);
+
+            TowerPlatform towerPlatform = event.getPlatform();
             worldRenderer.remove(tower);
 
             onClicked(towerPlatform);
@@ -812,7 +855,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     try {
-                        Tower tower = worldControl.buildTower(towerPlatform, towerType).getTower();
+                        BuildTowerEvent event = worldControl.buildTower(towerPlatform, towerType);
+                        sendEventToServer(event);
+
+                        Tower tower = event.getTower();
                         worldRenderer.add(tower);
                         onClicked(tower);
                     } catch (GameplayException e) {
@@ -926,5 +972,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         if (Math.abs(a - b) < 0.01d) return 0;
         if (a > b) return 1;
         return -1;
+    }
+
+    private void sendEventToServer(Event event) {
+        Message message = new Message();
+        message.setType(Message.Type.EVENT);
+        message.setSerializedEvent(event.serialize());
+        userManager.sendMessage(new Gson().toJson(message));
     }
 }

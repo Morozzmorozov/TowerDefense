@@ -170,6 +170,7 @@ public class UserManager {
     public void openSocketConnection(String lobbyId, String token) {
         try {
             webSocketClient = new WebSocketClient();
+            webSocketClient.setIdleTimeout(Duration.ofDays(10));
             webSocketClient.start();
 
             socketAdapter = new MyWebSocketAdapter();

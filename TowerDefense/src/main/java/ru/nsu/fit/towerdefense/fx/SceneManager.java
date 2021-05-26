@@ -129,7 +129,7 @@ public class SceneManager {
      */
     public void switchToGame(String gameMapName) {
         try {
-            switchScene(new GameController(this,
+            switchScene(new GameController(this, userManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), List.of("player")));
         } catch (NoSuchElementException e) {
@@ -141,9 +141,11 @@ public class SceneManager {
 
     public void switchToCooperativeGame(String gameMapName, List<String> playerNames) {
         try {
-            switchScene(new GameController(this,
+            GameController gameController = new GameController(this, userManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
-                GameMetaData.getInstance().getMapDescription(gameMapName), playerNames));
+                GameMetaData.getInstance().getMapDescription(gameMapName), playerNames);
+            userManager.setServerMessageListener(gameController);
+            switchScene(gameController);
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
@@ -159,7 +161,7 @@ public class SceneManager {
      */
     public void switchToGame(String gameMapName, Replay replay) {
         try {
-            switchScene(new GameController(this,
+            switchScene(new GameController(this, userManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), List.of("player"), replay));
         } catch (NoSuchElementException e) {
