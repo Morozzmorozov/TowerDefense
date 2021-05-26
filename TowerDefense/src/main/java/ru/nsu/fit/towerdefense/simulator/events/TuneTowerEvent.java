@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.events;
 
+import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.replay.GameStateWriter;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
@@ -20,6 +21,11 @@ public class TuneTowerEvent implements Event {
     this.player = player;
     x = tower.getCell().getX();
     y = tower.getCell().getY();
+  }
+
+  @Override
+  public String serialize() {
+    return new Gson().toJson(this);
   }
 
   @Override

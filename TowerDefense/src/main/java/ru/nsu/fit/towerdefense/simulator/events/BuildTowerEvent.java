@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.events;
 
+import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.replay.GameStateWriter;
@@ -47,6 +48,11 @@ public class BuildTowerEvent implements Event {
   @Override
   public long getFrameNumber() {
     return frameNumber;
+  }
+
+  @Override
+  public String serialize() {
+    return new Gson().toJson(this);
   }
 
   @Override

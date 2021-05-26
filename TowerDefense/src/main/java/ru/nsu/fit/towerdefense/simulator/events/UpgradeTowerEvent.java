@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.simulator.events;
 import static ru.nsu.fit.towerdefense.simulator.WorldControl.EPS;
 import static ru.nsu.fit.towerdefense.simulator.WorldControl.SELL_MULTIPLIER;
 
+import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.Upgrade;
@@ -28,6 +29,11 @@ public class UpgradeTowerEvent implements Event {
     upgradeName = upgrade.getName();
     x = tower.getCell().getX();
     y = tower.getCell().getY();
+  }
+
+  @Override
+  public String serialize() {
+    return new Gson().toJson(this);
   }
 
   @Override

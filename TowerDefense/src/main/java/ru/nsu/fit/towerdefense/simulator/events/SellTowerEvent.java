@@ -2,6 +2,7 @@ package ru.nsu.fit.towerdefense.simulator.events;
 
 import static ru.nsu.fit.towerdefense.simulator.WorldControl.EPS;
 
+import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
@@ -23,6 +24,11 @@ public class SellTowerEvent implements Event {
     this.player = player;
     this.x = tower.getCell().getX();
     this.y = tower.getCell().getY();
+  }
+
+  @Override
+  public String serialize() {
+    return new Gson().toJson(this);
   }
 
   @Override
