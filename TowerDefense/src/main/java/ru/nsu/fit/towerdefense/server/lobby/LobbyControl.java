@@ -44,7 +44,7 @@ public class LobbyControl
 
 
     private WorldObserver observer;
-    private ServerSimulator simulator;
+    private WorldControl simulator;
 
     public LobbyControl(long id, String levelName)
     {
@@ -196,7 +196,7 @@ public class LobbyControl
 
     public void gameRun()
     {
-        WorldControl simulator = new WorldControl(GameMetaData.getInstance().getMapDescription(getLevelName()), 1000/60, null, getPlayers());
+        simulator = new WorldControl(GameMetaData.getInstance().getMapDescription(getLevelName()), 1000/60, null, getPlayers());
 
         int tick = 0;
 
