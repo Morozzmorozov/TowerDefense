@@ -17,8 +17,10 @@ public class CreateLobbyServlet  extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
+		String levelName = req.getParameter("levelName");
+		if (levelName == null) levelName = "Level 1_4";
 		resp.setStatus(200);
-		String id = LobbyManager.getInstance().createLobby();
+		String id = LobbyManager.getInstance().createLobby(levelName);
 
 		Lobby lobby = new Lobby();
 		lobby.setId(id);
