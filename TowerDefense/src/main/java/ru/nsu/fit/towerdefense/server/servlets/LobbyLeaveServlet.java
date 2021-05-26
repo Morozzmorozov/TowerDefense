@@ -14,7 +14,7 @@ public class LobbyLeaveServlet extends HttpServlet {
 	{
 		try
 		{
-			LobbyManager.getInstance().leaveLobby(Long.parseLong(req.getParameter("lobbyId")), req.getParameter("Token"));
+			LobbyManager.getInstance().leaveLobby(Long.parseLong(req.getParameter("lobbyId")), req.getParameter("token"), req.getParameter("userToken"));
 			resp.setStatus(200);
 			resp.getWriter().println("{ \"Status\" : \"success\"}");
 		}

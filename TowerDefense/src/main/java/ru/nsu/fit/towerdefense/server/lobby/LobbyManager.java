@@ -54,10 +54,10 @@ public class LobbyManager {
 	}
 
 
-	public String createToken(String id) throws Exception{
+	public String createToken(String id, String userToken) throws Exception{
 		LobbyControl control = lobbies.get(Long.parseLong(id));
 		String token = Base64.getEncoder().encodeToString(MessageDigest.getInstance("SHA-256").digest((control.getId() + " : " + System.nanoTime()).getBytes()));
-		if (control.addAwaitingToken(token)) return token;
+		if (control.addAwaitingToken(token, userToken)) return token;
 		return null;
 	}
 
@@ -65,8 +65,8 @@ public class LobbyManager {
 		return lobbies.get(id) != null;
 	}
 
-	public synchronized void leaveLobby(Long lobbyId, String token){
-		if (lobbies.get(lobbyId).userLeaves(token)){
+	public synchronized void leaveLobby(Long lobbyId, String token, String userToken){
+		if (lobbies.get(lobbyId).userLeaves(token, userToken)){
 			lobbies.remove(lobbyId);
 		}
 	}

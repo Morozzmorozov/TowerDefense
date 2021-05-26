@@ -5,8 +5,11 @@ import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.MessageType;
-import ru.nsu.fit.towerdefense.server.sockets.UserConnection;
+import ru.nsu.fit.towerdefense.server.database.UserManager;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.MessageReceiver;
+import ru.nsu.fit.towerdefense.simulator.ServerSimulator;
+import ru.nsu.fit.towerdefense.simulator.WorldObserver;
+import ru.nsu.fit.towerdefense.simulator.events.Event;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,28 +29,41 @@ public class LobbyControl
     private static final int TIMEOUT = 30000 * 100;
     private final Lobby lobby;
     private final HashSet<String> joinedTokens;
-    private final HashMap<String, String> tokenToUsername;
     private final HashSet<String> awaitingTokens;
 
     private final HashMap<MessageReceiver, String> userToToken;
     private final HashMap<String, MessageReceiver> tokenToUser;
+
+    private final HashMap<String, String> tokenToName;
+    private final HashMap<String, String> nameToToken;
+
 
     private Thread gameThread;
     private HashSet<String> readyUsers;
     private State currentState;
 
 
-    public LobbyControl(long id)
+    private WorldObserver observer;
+    private ServerSimulator simulator;
+
+    public LobbyControl(long id, String levelName)
     {
         lobby = new Lobby(id);
         joinedTokens = new HashSet<>();
         awaitingTokens = new HashSet<>();
         userToToken = new HashMap<>();
         tokenToUser = new HashMap<>();
-        tokenToUsername = new HashMap<>();
+
+        nameToToken = new HashMap<>();
+        tokenToName = new HashMap<>();
+
+//        tokenToId = new HashMap<>();
+//        idToToken = new HashMap<>();
+
         readyUsers = new HashSet<>();
         currentState = State.PREGAME;
-        this.setLevel("Level 1_4");
+//        this.setLevel("Level 1_4");
+        this.setLevel(levelName);
         gameThread = new Thread(() -> {
             try
             {
@@ -75,9 +91,9 @@ public class LobbyControl
     public List<String> getPlayers()
     {
         List<String> result = new LinkedList<>();
-        synchronized (tokenToUsername)
+        synchronized (tokenToName)
         {
-            tokenToUsername.forEach((k, v) -> result.add(v));
+            tokenToName.forEach((k, v) -> result.add(UserManager.getInstance().getNameByToken(v)));
         }
         return result;
     }
@@ -110,20 +126,31 @@ public class LobbyControl
         }
     }
 
-    public synchronized boolean userLeaves(String token)
+    public boolean userLeaves(String token, String userToken)
     {
-        awaitingTokens.remove(token);
-        joinedTokens.remove(token);
-        return joinedTokens.size() == 0;
+        synchronized (this)
+        {
+            tokenToName.remove(token, userToken);
+            nameToToken.remove(userToken, token);
+            awaitingTokens.remove(token);
+            joinedTokens.remove(token);
+            return joinedTokens.size() == 0;
+        }
     }
 
-    public synchronized boolean addAwaitingToken(String token){
-        if (awaitingTokens.size() < AWAITINGLIMIT)
+    public boolean addAwaitingToken(String token, String userToken){
+        synchronized (this)
         {
-            awaitingTokens.add(token);
-            return true;
+            if (nameToToken.containsKey(userToken)) return false;
+            if (awaitingTokens.size() < AWAITINGLIMIT)
+            {
+                awaitingTokens.add(token);
+                nameToToken.put(userToken, token);
+                tokenToName.put(token, userToken);
+                return true;
+            }
+            return false;
         }
-        return false;
     }
 
     public boolean canJoin() {
@@ -168,20 +195,7 @@ public class LobbyControl
 
     public void gameRun()
     {
-        Message message = new Message();
-        message.setType(MessageType.STATE);
-        message.setMessage("Game is running, ping!");
-        String res = new Gson().toJson(message);
-        while (true)
-        {
-            try
-            {
-                Thread.sleep(500);
-            }
-            catch (Exception e){}
 
-            sendMessageToClients(res);
-        }
     }
 
 
@@ -229,9 +243,6 @@ public class LobbyControl
                     tokenToUser.put(token, receiver);
                     userToToken.put(receiver, token);
                     System.err.println("Connected!");
-//                    gameThread.interrupt();
-//                    gameThread = new Thread(this::notifyConnections);
-//                    gameThread.start();
                     return true;
                 }
                 System.err.println("Lobby is full");
@@ -239,23 +250,6 @@ public class LobbyControl
             return false;
         }
     }
-
-//    private void notifyConnections()
-//    {
-//        while (true)
-//        {
-//            System.out.println("notifyConnections");
-//            synchronized (userToToken)
-//            {
-//
-//            }
-//            try
-//            {
-//                Thread.sleep(500);
-//            }
-//            catch (Exception e){}
-//        }
-//    }
 
     public void sendMessageToClients(String message)
     {
@@ -269,5 +263,20 @@ public class LobbyControl
         }
     }
 
+    public void sendEvent(String message)
+    {
+        if (currentState == State.INGAME)
+        {
+            Event event = new Gson().fromJson(message, Event.class);
+            simulator.submitEvent(event);
+        }
+    }
 
+    public void setPlatform(int id)
+    {
+        if (currentState == State.PREGAME)
+        {
+//            if (idToToken)
+        }
+    }
 }

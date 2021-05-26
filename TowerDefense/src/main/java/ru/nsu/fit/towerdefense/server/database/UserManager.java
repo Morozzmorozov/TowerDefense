@@ -55,5 +55,6 @@ public class UserManager {
 		return generateUserToken(user); //TODO: add credentials check
 	}
 
+	public String getNameByToken(String token) {return tokenToPlayer.get(token);}
 
 }

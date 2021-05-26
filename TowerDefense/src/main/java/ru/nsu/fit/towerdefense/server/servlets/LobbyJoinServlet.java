@@ -17,7 +17,7 @@ public class LobbyJoinServlet  extends HttpServlet {
 		try
 		{
 			Session session = new Session();
-			String token = LobbyManager.getInstance().createToken(req.getParameter("lobbyId"));
+			String token = LobbyManager.getInstance().createToken(req.getParameter("lobbyId"), req.getParameter("userToken"));
 			if (token == null){
 				resp.setStatus(409);
 			}

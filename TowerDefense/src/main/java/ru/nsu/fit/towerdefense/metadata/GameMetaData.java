@@ -148,15 +148,21 @@ public class GameMetaData {
      */
     public GameMap getMapDescription(String name) throws NoSuchElementException
     {
-        if (loadedMaps.containsKey(name))
+        synchronized (loadedMaps)
         {
-            return loadedMaps.get(name);
+            if (loadedMaps.containsKey(name))
+            {
+                return loadedMaps.get(name);
+            }
         }
         GameMap map = loadMap(mapRoot + "/" + name + ".json");
-        if (map != null)
+        synchronized (loadedMaps)
         {
-            loadedMaps.put(name, map);
-            return map;
+            if (map != null)
+            {
+                loadedMaps.put(name, map);
+                return map;
+            }
         }
         throw new NoSuchElementException("Invalid map description or name");
     }
@@ -168,43 +174,61 @@ public class GameMetaData {
      */
     public EnemyType getEnemyType(String name) throws NoSuchElementException
     {
-        if (loadedEnemies.containsKey(name))
+        synchronized (loadedEnemies)
         {
-            return loadedEnemies.get(name);
+            if (loadedEnemies.containsKey(name))
+            {
+                return loadedEnemies.get(name);
+            }
         }
         EnemyType type = loadEnemyType(name);
-        if (type != null)
+        synchronized (loadedEnemies)
         {
-            loadedEnemies.put(name, type);
-            return type;
+            if (type != null)
+            {
+                loadedEnemies.put(name, type);
+                return type;
+            }
         }
         throw new NoSuchElementException("Invalid enemy type or file");
     }
 
     public TowerType getTowerType(String name) throws NoSuchElementException
     {
-        if (loadedTowers.containsKey(name))
-            return loadedTowers.get(name);
-        TowerType type = loadTowerType(name);
-        if (type != null)
+        synchronized (loadedTowers)
         {
-            loadedTowers.put(name, type);
-            return type;
+            if (loadedTowers.containsKey(name))
+                return loadedTowers.get(name);
+        }
+        TowerType type = loadTowerType(name);
+        synchronized (loadedTowers)
+        {
+            if (type != null)
+            {
+                loadedTowers.put(name, type);
+                return type;
+            }
         }
         throw new NoSuchElementException("Invalid enemy type or file");
     }
 
     public ProjectileType getProjectileType(String name) throws NoSuchElementException
     {
-        if (loadedProjectiles.containsKey(name))
+        synchronized (loadedProjectiles)
         {
-            return loadedProjectiles.get(name);
+            if (loadedProjectiles.containsKey(name))
+            {
+                return loadedProjectiles.get(name);
+            }
         }
         ProjectileType projectileType = loadProjectileType(name);
-        if (projectileType != null)
+        synchronized (loadedProjectiles)
         {
-            loadedProjectiles.put(name, projectileType);
-            return projectileType;
+            if (projectileType != null)
+            {
+                loadedProjectiles.put(name, projectileType);
+                return projectileType;
+            }
         }
         throw new NoSuchElementException("Invalid enemy type or file");
     }
@@ -236,15 +260,21 @@ public class GameMetaData {
 
     public EffectType getEffectType(String name) throws NoSuchElementException
     {
-        if (loadedEffects.containsKey(name))
+        synchronized (loadedEffects)
         {
-            return loadedEffects.get(name);
+            if (loadedEffects.containsKey(name))
+            {
+                return loadedEffects.get(name);
+            }
         }
         EffectType type = loadEffect(name);
-        if (type != null)
+        synchronized (loadedEffects)
         {
-            loadedEffects.put(name, type);
-            return type;
+            if (type != null)
+            {
+                loadedEffects.put(name, type);
+                return type;
+            }
         }
         throw new NoSuchElementException("Invalid name or configuration");
     }
