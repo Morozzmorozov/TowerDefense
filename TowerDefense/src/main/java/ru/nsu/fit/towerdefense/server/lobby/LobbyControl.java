@@ -7,6 +7,7 @@ import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.server.database.UserManager;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.MessageReceiver;
 import ru.nsu.fit.towerdefense.simulator.ServerSimulator;
+import ru.nsu.fit.towerdefense.simulator.WorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.events.Event;
 
@@ -195,7 +196,30 @@ public class LobbyControl
 
     public void gameRun()
     {
+        WorldControl simulator = new WorldControl(GameMetaData.getInstance().getMapDescription(getLevelName()), 1000/60, null, getPlayers());
 
+        int tick = 0;
+
+        while (true)
+        {
+            tick ++;
+            simulator.simulateTick();
+
+            try
+            {
+                Thread.sleep(17);
+            }
+            catch (Exception e){}
+
+            if (tick == 60)
+            {
+                tick = 0;
+                Message message = new Message();
+                message.setType(Message.Type.STATE);
+                message.setSerializedWorld(new Gson().toJson(simulator.getState()));
+                sendMessageToClients(new Gson().toJson(message));
+            }
+        }
     }
 
 
