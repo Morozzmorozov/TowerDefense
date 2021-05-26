@@ -63,6 +63,7 @@ public class WorldControl implements ServerSimulator {
     private final List<Event> allEvents = new ArrayList<>();
 
     public void putEvent(Event event) {
+      allEvents.add(event);
       if (!eventMap.containsKey(event.getFrameNumber())) {
         List<Event> list = new ArrayList<>();
         list.add(event);
@@ -107,7 +108,6 @@ public class WorldControl implements ServerSimulator {
     }
   }
 
-  // todo generate money and other stuff for each player
   public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver, List<String> players) {
     this.gameMap = gameMap;
     this.deltaTime = deltaTime;
