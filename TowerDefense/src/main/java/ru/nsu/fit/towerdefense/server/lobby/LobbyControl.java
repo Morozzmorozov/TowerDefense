@@ -293,6 +293,10 @@ public class LobbyControl
         {
             Event event = Event.deserialize(message);
             simulator.submitEvent(event);
+            Message message1 = new Message();
+            message1.setType(Message.Type.EVENT);
+            message1.setSerializedEvent(message);
+            sendMessageToClients(new Gson().toJson(message1));
         }
     }
 
