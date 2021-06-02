@@ -66,7 +66,7 @@ public class ReplayWorldControl extends WorldControl {
 
   private void setWorldState(WorldState state) {
     world.setMoney("player", state.getMoney()); // todo make replays for multiplayer
-    enemiesKilled = state.getKilledEnemies();
+   // enemiesKilled = state.getKilledEnemies();
     scienceEarned = state.getScience();
 
     world.getEnemies().removeAll(world.getEnemies().stream()

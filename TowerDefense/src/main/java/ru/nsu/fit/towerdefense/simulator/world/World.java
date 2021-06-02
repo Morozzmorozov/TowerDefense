@@ -35,6 +35,7 @@ public class World {
   }
 
   public World(World oldWorld) {
+    killedEnemies = oldWorld.killedEnemies;
     countdown = oldWorld.countdown;
     enemies = oldWorld.enemies.stream().map(Enemy::new).collect(Collectors.toList());
     projectiles = oldWorld.projectiles.stream().map(projectile -> {
@@ -93,6 +94,7 @@ public class World {
     this.countdown = countdown;
   }
 
+  private int killedEnemies = 0;
   private int countdown;
   private List<Enemy> enemies = new ArrayList<>();
   private List<Tower> towers = new ArrayList<>();
@@ -106,6 +108,14 @@ public class World {
   public Map<Integer, Wave> waveMap = new HashMap<>();
   public Map<String, Integer> moneyMap = new HashMap<>();
   private long tick = 0;
+
+  public int getKilledEnemies() {
+    return killedEnemies;
+  }
+
+  public void setKilledEnemies(int killedEnemies) {
+    this.killedEnemies = killedEnemies;
+  }
 
   public long getTick() {
     return tick;

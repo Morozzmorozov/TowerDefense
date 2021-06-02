@@ -50,7 +50,6 @@ public class WorldControl implements ServerSimulator {
   protected final int deltaTime;
   protected final WorldObserver worldObserver;
   protected World world;
-  protected int enemiesKilled = 0; // todo move this to World
   protected int wavesDefeated = 0;
   protected boolean isReplay = false;
   protected int scienceEarned = 0;
@@ -297,7 +296,7 @@ public class WorldControl implements ServerSimulator {
   }
 
   public int getEnemiesKilled(String player) {
-    return enemiesKilled; // todo for each player
+    return world.getKilledEnemies(); // todo for each player
   }
 
   public int getMoney(String player) {
@@ -502,7 +501,7 @@ public class WorldControl implements ServerSimulator {
         enemy.setHealth(enemy.getHealth() - damage);
         enemy.addDamageToMap(projectile.getOwner(), damage);
         if (enemy.getHealth() <= 0) {
-          enemiesKilled++;
+          world.setKilledEnemies(world.getKilledEnemies() + 1);
 
           for (var entry : enemy.getDamageMap().entrySet()) {
             world.setMoney(entry.getKey(), world.getMoney(entry.getKey()) + (int)Math.round(enemy.getMoneyReward() * ((double)entry.getValue() / enemy.getType().getHealth())));
@@ -573,7 +572,7 @@ public class WorldControl implements ServerSimulator {
         enemy.addDamageToMap(effect.getOwner(), effectDamage);
 
         if (enemy.getHealth() <= 0) {
-          enemiesKilled++;
+          world.setKilledEnemies(world.getKilledEnemies() + 1);
           for (var entry : enemy.getDamageMap().entrySet()) {
             world.setMoney(entry.getKey(), world.getMoney(entry.getKey()) + (int)Math.round(enemy.getMoneyReward() * ((double)entry.getValue() / enemy.getType().getHealth())));
           }
