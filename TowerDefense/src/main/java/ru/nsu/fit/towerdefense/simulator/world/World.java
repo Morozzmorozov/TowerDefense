@@ -206,7 +206,7 @@ public class World {
     this.base = base;
   }
 
-  public int getMoney(String player) { // TODO pass player id or something
+  public int getMoney(String player) {
     return moneyMap.get(player);
   }
 
