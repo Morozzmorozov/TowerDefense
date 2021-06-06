@@ -57,6 +57,8 @@ public class WorldControl implements ServerSimulator {
   private final EventContainer eventContainer = new EventContainer();
   private final StateContainer stateContainer = new StateContainer(50);
 
+  private long latestInputStateTick = -1;
+
   private static class EventContainer {
     private final Map<Long, List<Event>> eventMap = new HashMap<>();
     private final List<Event> allEvents = new ArrayList<>();
@@ -193,11 +195,15 @@ public class WorldControl implements ServerSimulator {
 
   public void updateWorld(World world) {
     synchronized(this) {
+      if (world.getTick() < latestInputStateTick) {
+        return;
+      }
       long oldTick = this.world.getTick();
       this.world = world;
       while(this.world.getTick() < oldTick) {
         simulateTick();
       }
+      latestInputStateTick = world.getTick();
     }
   }
 
