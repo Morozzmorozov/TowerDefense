@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.fx;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -39,6 +40,7 @@ public class SceneManager {
 
     private static final String DEFAULT_TITLE = "Tower Defense";
     private static final String FXML_DIRECTORY = "/ru/nsu/fit/towerdefense/fx/fxml/";
+    private static final String APP_ICON = "/ru/nsu/fit/towerdefense/fx/icons/kremlin.png";
 
     private static final KeyCodeCombination EXPAND_COMBINATION = new KeyCodeCombination(ENTER, ALT_DOWN);
 
@@ -61,6 +63,9 @@ public class SceneManager {
     private void initStage() {
         stage.setTitle(DEFAULT_TITLE);
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        try {
+            stage.getIcons().add(new Image(APP_ICON));
+        } catch (NullPointerException | IllegalArgumentException ignored) {}
     }
 
     /**
