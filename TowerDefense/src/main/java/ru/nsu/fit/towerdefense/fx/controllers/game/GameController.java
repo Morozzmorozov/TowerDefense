@@ -107,7 +107,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private AnchorPane worldAnchorPane;
 
     @FXML private StackPane gameObjectSidePane;
-    //@FXML private ImageView closeSidePaneImageView; // todo remove?
 
     @FXML private VBox platformSideVBox;
     @FXML private FlowPane buildTowerFlowPane;

@@ -261,7 +261,6 @@
                     </GridPane>
                 </VBox>
             </VBox>
-            <!--<ImageView fx:id="closeSidePaneImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="close-side-pane, close-icon" />todo delete?-->
         </StackPane>
     </GridPane>
     <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
