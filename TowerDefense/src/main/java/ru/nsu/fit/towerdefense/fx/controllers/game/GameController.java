@@ -33,7 +33,7 @@ import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
-import ru.nsu.fit.towerdefense.multiplayer.UserManager;
+import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
@@ -202,7 +202,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private HBox resultsMenuHBox;
 
     private final SceneManager sceneManager;
-    private final UserManager userManager;
+    private final ConnectionManager connectionManager;
     private final File snapshotFile;
     private final List<String> playerNames;
 
@@ -230,9 +230,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      * @param gameMap      game map.
      * @param replay       replay.
      */
-    public GameController(SceneManager sceneManager, UserManager userManager, File snapshotFile, GameMap gameMap, List<String> playerNames, Replay replay) {
+    public GameController(SceneManager sceneManager, ConnectionManager connectionManager, File snapshotFile, GameMap gameMap, List<String> playerNames, Replay replay) {
         this.sceneManager = sceneManager;
-        this.userManager = userManager;
+        this.connectionManager = connectionManager;
         this.snapshotFile = snapshotFile;
         this.playerNames = playerNames;
 
@@ -256,8 +256,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
      * @param sceneManager scene manager.
      * @param gameMap      game map.
      */
-    public GameController(SceneManager sceneManager, UserManager userManager, File snapshotFile, GameMap gameMap, List<String> playerNames) {
-        this(sceneManager, userManager, snapshotFile, gameMap, playerNames, null);
+    public GameController(SceneManager sceneManager, ConnectionManager connectionManager, File snapshotFile, GameMap gameMap, List<String> playerNames) {
+        this(sceneManager, connectionManager, snapshotFile, gameMap, playerNames, null);
     }
 
     @FXML
@@ -368,10 +368,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         try {
             worldRenderer.render();
 
-            researchLabel.setText(worldControl.getResearchPoints(userManager.getUsername()) + "");
-            moneyLabel.setText(worldControl.getMoney(userManager.getUsername()) + "");
+            researchLabel.setText(worldControl.getResearchPoints(connectionManager.getUsername()) + "");
+            moneyLabel.setText(worldControl.getMoney(connectionManager.getUsername()) + "");
             healthLabel.setText(worldControl.getBaseHealth() + "");
-            enemyLabel.setText(worldControl.getEnemiesKilled(userManager.getUsername()) + "");
+            enemyLabel.setText(worldControl.getEnemiesKilled(connectionManager.getUsername()) + "");
             long ticksTillNextWave = worldControl.getTicksTillNextWave();
             if (ticksTillNextWave > 0) {
                 nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
@@ -696,7 +696,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     try {
-                        UpgradeTowerEvent event = worldControl.upgradeTower(userManager.getUsername(), tower, upgrade);
+                        UpgradeTowerEvent event = worldControl.upgradeTower(connectionManager.getUsername(), tower, upgrade);
                         sendEventToServer(event);
 
                         onClicked(tower);
@@ -761,7 +761,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     return;
                 }
 
-                TuneTowerEvent event = worldControl.tuneTower(userManager.getUsername(), tower, mode);
+                TuneTowerEvent event = worldControl.tuneTower(connectionManager.getUsername(), tower, mode);
                 sendEventToServer(event);
                 for (Node _node : towerModeToUiNodeMap.values()) {
                     _node.getStyleClass().removeIf(className -> className.equals("target-box-selected"));
@@ -778,7 +778,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 return;
             }
 
-            SellTowerEvent event = worldControl.sellTower(userManager.getUsername(), tower);
+            SellTowerEvent event = worldControl.sellTower(connectionManager.getUsername(), tower);
             sendEventToServer(event);
 
             TowerPlatform towerPlatform = event.getPlatform();
@@ -865,7 +865,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     try {
-                        BuildTowerEvent event = worldControl.buildTower(userManager.getUsername(), towerPlatform, towerType);
+                        BuildTowerEvent event = worldControl.buildTower(connectionManager.getUsername(), towerPlatform, towerType);
                         sendEventToServer(event);
 
                         Tower tower = event.getTower();
@@ -988,6 +988,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         Message message = new Message();
         message.setType(Message.Type.EVENT);
         message.setSerializedEvent(event.serialize());
-        userManager.sendMessage(new Gson().toJson(message));
+        connectionManager.sendMessage(new Gson().toJson(message));
     }
 }

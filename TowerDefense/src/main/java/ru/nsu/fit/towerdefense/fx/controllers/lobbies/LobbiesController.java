@@ -2,14 +2,12 @@ package ru.nsu.fit.towerdefense.fx.controllers.lobbies;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
-import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
-import ru.nsu.fit.towerdefense.multiplayer.UserManager;
+import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 
 import java.util.List;
@@ -26,23 +24,23 @@ public class LobbiesController implements Controller {
     @FXML private VBox root;
 
     private final SceneManager sceneManager;
-    private final UserManager userManager;
+    private final ConnectionManager connectionManager;
 
     /**
      * Creates new LobbiesController with specified SceneManager and UserManager.
      *
      * @param sceneManager scene manager.
-     * @param userManager  user manager.
+     * @param connectionManager  user manager.
      */
-    public LobbiesController(SceneManager sceneManager, UserManager userManager) {
+    public LobbiesController(SceneManager sceneManager, ConnectionManager connectionManager) {
         this.sceneManager = sceneManager;
-        this.userManager = userManager;
+        this.connectionManager = connectionManager;
     }
 
     @FXML
     private void initialize() {
         new Thread(() -> {
-            List<Lobby> lobbies = userManager.getLobbies();
+            List<Lobby> lobbies = connectionManager.getLobbies();
 
             Platform.runLater(() -> {
                 for (Lobby lobby : lobbies) {
@@ -53,12 +51,12 @@ public class LobbiesController implements Controller {
                         hBox.getChildren().add(new Label(playerName));
                     }
                     hBox.setOnMouseClicked(mouseEvent -> new Thread(() -> {
-                        String sessionToken = userManager.joinLobby(lobby.getId());
+                        String sessionToken = connectionManager.joinLobby(lobby.getId());
                         if (sessionToken == null) {
                             return;
                         }
 
-                        userManager.openSocketConnection(lobby.getId(), sessionToken);
+                        connectionManager.openSocketConnection(lobby.getId(), sessionToken);
 
                         Platform.runLater(() -> sceneManager.switchToLobby());
                     }).start());

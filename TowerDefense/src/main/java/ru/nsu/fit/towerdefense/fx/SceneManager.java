@@ -16,7 +16,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.menu.MenuController;
 import ru.nsu.fit.towerdefense.fx.controllers.techtree.TechTreeController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
-import ru.nsu.fit.towerdefense.multiplayer.UserManager;
+import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
@@ -43,7 +43,7 @@ public class SceneManager {
     private static final KeyCodeCombination EXPAND_COMBINATION = new KeyCodeCombination(ENTER, ALT_DOWN);
 
     private final Stage stage;
-    private final UserManager userManager;
+    private final ConnectionManager connectionManager;
     private Controller controller;
 
     /**
@@ -51,9 +51,9 @@ public class SceneManager {
      *
      * @param stage JavaFX stage.
      */
-    public SceneManager(Stage stage)  {
+    public SceneManager(Stage stage, ConnectionManager connectionManager)  {
         this.stage = stage;
-        userManager = new UserManager();
+        this.connectionManager = connectionManager;
 
         initStage();
     }
@@ -110,15 +110,15 @@ public class SceneManager {
      * Creates new MenuController and switches the scene to a menu.
      */
     public void switchToMenu() {
-        switchScene(new MenuController(this, userManager));
+        switchScene(new MenuController(this, connectionManager));
     }
 
     public void switchToLobbies() {
-        switchScene(new LobbiesController(this, userManager));
+        switchScene(new LobbiesController(this, connectionManager));
     }
 
     public void switchToLobby() {
-        switchScene(new LobbyController(this, userManager));
+        switchScene(new LobbyController(this, connectionManager));
     }
 
     /**
@@ -129,7 +129,7 @@ public class SceneManager {
      */
     public void switchToGame(String gameMapName) {
         try {
-            switchScene(new GameController(this, userManager,
+            switchScene(new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), List.of("player")));
         } catch (NoSuchElementException e) {
@@ -141,10 +141,10 @@ public class SceneManager {
 
     public void switchToCooperativeGame(String gameMapName, List<String> playerNames) {
         try {
-            GameController gameController = new GameController(this, userManager,
+            GameController gameController = new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), playerNames);
-            userManager.setServerMessageListener(gameController);
+            connectionManager.setServerMessageListener(gameController);
             switchScene(gameController);
         } catch (NoSuchElementException e) {
             new AlertBuilder()
@@ -161,7 +161,7 @@ public class SceneManager {
      */
     public void switchToGame(String gameMapName, Replay replay) {
         try {
-            switchScene(new GameController(this, userManager,
+            switchScene(new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), List.of("player"), replay));
         } catch (NoSuchElementException e) {
