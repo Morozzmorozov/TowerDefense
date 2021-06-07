@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
@@ -12,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -28,12 +26,13 @@ import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
+import ru.nsu.fit.towerdefense.fx.util.Snapshot;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
-import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
@@ -57,10 +56,7 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Comparator;
@@ -501,19 +497,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             }
         });
 
-        if (!snapshotFile.exists()) { // todo move somewhere?
-            try {
-                File parent = snapshotFile.getParentFile();
-                if (!parent.exists() && !parent.mkdirs()) {
-                    throw new IOException("Couldn't create dir: " + parent);
-                }
-
-                WritableImage snapshot = worldWrapperStackPane.snapshot(null, null);
-                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
-                ImageIO.write(bufferedImage, "png", snapshotFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (!snapshotFile.exists()) {
+            Snapshot.make(snapshotFile, worldWrapperStackPane);
         }
     }
 
