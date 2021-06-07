@@ -948,9 +948,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void bindUppercase(Text text) {
-        text.textProperty().addListener((observable, oldValue, newValue) -> {
-            text.setText(newValue.toUpperCase());
-        });
+        text.textProperty().addListener((observable, oldValue, newValue) ->
+            text.setText(newValue.toUpperCase()));
     }
 
     private String formatWaveTime(long milliseconds) {
