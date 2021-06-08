@@ -382,10 +382,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         try {
             worldRenderer.render();
 
-            researchLabel.setText(worldControl.getResearchPoints(connectionManager.getUsername()) + "");
-            moneyLabel.setText(worldControl.getMoney(connectionManager.getUsername()) + "");
+            researchLabel.setText(worldControl.getResearchPoints(userName) + "");
+            moneyLabel.setText(worldControl.getMoney(userName) + "");
             healthLabel.setText(worldControl.getBaseHealth() + "");
-            enemyLabel.setText(worldControl.getEnemiesKilled(connectionManager.getUsername()) + "");
+            enemyLabel.setText(worldControl.getEnemiesKilled(userName) + "");
             long ticksTillNextWave = worldControl.getTicksTillNextWave();
             if (ticksTillNextWave > 0) {
                 nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
@@ -699,7 +699,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     try {
-                        UpgradeTowerEvent event = worldControl.upgradeTower(connectionManager.getUsername(), tower, upgrade);
+                        UpgradeTowerEvent event = worldControl.upgradeTower(userName, tower, upgrade);
                         sendEventToServer(event);
 
                         onClicked(tower);
@@ -764,7 +764,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     return;
                 }
 
-                TuneTowerEvent event = worldControl.tuneTower(connectionManager.getUsername(), tower, mode);
+                TuneTowerEvent event = worldControl.tuneTower(userName, tower, mode);
                 sendEventToServer(event);
                 for (Node _node : towerModeToUiNodeMap.values()) {
                     _node.getStyleClass().removeIf(className -> className.equals("target-box-selected"));
@@ -781,7 +781,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 return;
             }
 
-            SellTowerEvent event = worldControl.sellTower(connectionManager.getUsername(), tower);
+            SellTowerEvent event = worldControl.sellTower(userName, tower);
             sendEventToServer(event);
 
             TowerPlatform towerPlatform = event.getPlatform();
@@ -868,7 +868,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     try {
-                        BuildTowerEvent event = worldControl.buildTower(connectionManager.getUsername(), towerPlatform, towerType);
+                        BuildTowerEvent event = worldControl.buildTower(userName, towerPlatform, towerType);
                         sendEventToServer(event);
 
                         Tower tower = event.getTower();
