@@ -210,7 +210,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private Camera camera;
     private WorldRenderer worldRenderer;
 
-    private Replay replay;
+    private final boolean multiplayer;
+    private final Replay replay;
+    private String userName;
 
     private Map<Tower.Mode, Node> towerModeToUiNodeMap;
 
@@ -218,41 +220,49 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private int speed;
     private VBox currentSideVBox;
 
-    /**
-     * Creates new GameController with specified SceneManager, GameMap and Replay.
-     *
-     * @param sceneManager scene manager.
-     * @param gameMap      game map.
-     * @param replay       replay.
-     */
-    public GameController(SceneManager sceneManager, ConnectionManager connectionManager, File snapshotFile, GameMap gameMap, List<String> playerNames, Replay replay) {
+    public GameController(SceneManager sceneManager,
+                          ConnectionManager connectionManager,
+                          File snapshotFile,
+                          GameMap gameMap,
+                          List<String> playerNames,
+                          Replay replay) {
+
+        multiplayer = playerNames != null;
+        userName = multiplayer ? connectionManager.getUsername() : "Player";
+
         this.sceneManager = sceneManager;
         this.connectionManager = connectionManager;
         this.snapshotFile = snapshotFile;
-        this.playerNames = playerNames;
+        this.playerNames = multiplayer ? playerNames : List.of(userName);
+        this.replay = replay;
+
+        state = State.PLAYING;
+        speed = multiplayer ? 1 : 0;
 
         worldSize = gameMap.getSize();
         baseInitialHealth = gameMap.getBaseDescription().getHealth();
 
-        state = State.PLAYING;
-        speed = 1; // todo think
-
-        if (replay == null) {
-            worldControl = new WorldControl(gameMap, DELTA_TIME, this, playerNames);
-        } else {
-            this.replay = replay;
-            worldControl = new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
-        }
+        worldControl = replay == null ?
+            new WorldControl(gameMap, DELTA_TIME, this, this.playerNames) :
+            new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
     }
 
-    /**
-     * Creates new GameController with specified SceneManager and GameMap.
-     *
-     * @param sceneManager scene manager.
-     * @param gameMap      game map.
-     */
-    public GameController(SceneManager sceneManager, ConnectionManager connectionManager, File snapshotFile, GameMap gameMap, List<String> playerNames) {
+    // single
+    public GameController(SceneManager sceneManager, ConnectionManager connectionManager,
+                          File snapshotFile, GameMap gameMap) {
+        this(sceneManager, connectionManager, snapshotFile, gameMap, null, null);
+    }
+
+    // multiplayer
+    public GameController(SceneManager sceneManager, ConnectionManager connectionManager,
+                          File snapshotFile, GameMap gameMap, List<String> playerNames) {
         this(sceneManager, connectionManager, snapshotFile, gameMap, playerNames, null);
+    }
+
+    // replay
+    public GameController(SceneManager sceneManager, ConnectionManager connectionManager,
+                          File snapshotFile, GameMap gameMap, Replay replay) {
+        this(sceneManager, connectionManager, snapshotFile, gameMap, null, replay);
     }
 
     @FXML

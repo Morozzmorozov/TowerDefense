@@ -136,7 +136,7 @@ public class SceneManager {
         try {
             switchScene(new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
-                GameMetaData.getInstance().getMapDescription(gameMapName), List.of("player")));
+                GameMetaData.getInstance().getMapDescription(gameMapName)));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
@@ -168,7 +168,7 @@ public class SceneManager {
         try {
             switchScene(new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
-                GameMetaData.getInstance().getMapDescription(gameMapName), List.of("player"), replay));
+                GameMetaData.getInstance().getMapDescription(gameMapName), replay));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
