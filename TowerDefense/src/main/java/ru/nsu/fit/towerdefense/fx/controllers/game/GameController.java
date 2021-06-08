@@ -173,6 +173,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private ImageView speed2xImageView;
     @FXML private ImageView speed3xImageView;
 
+    @FXML private HBox controlsHBox;
     @FXML private HBox replayHBox;
     @FXML private ImageView skipLeftImageView;
     @FXML private ImageView skipRightImageView;
@@ -295,10 +296,15 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         baseInitialHealthLabel.setText(baseInitialHealth + "");
 
-        speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
-        speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
-        speed2xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(2));
-        speed3xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(3));
+        if (!multiplayer) {
+            controlsHBox.setVisible(true);
+            controlsHBox.setManaged(true);
+
+            speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
+            speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
+            speed2xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(2));
+            speed3xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(3));
+        }
 
         if (isReplaying()) {
             replayHBox.setVisible(true);
