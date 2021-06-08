@@ -214,7 +214,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     private final boolean multiplayer;
     private final boolean replaying;
-    private String userName;
+    private final String userName;
 
     private Map<Tower.Mode, Node> towerModeToUiNodeMap;
 
@@ -346,15 +346,19 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private void pauseGame() {
         state = State.PAUSED;
 
-        worldSimulationExecutor.shutdown();
         pausePopupGridPane.setVisible(true);
+        if (!multiplayer) {
+            worldSimulationExecutor.shutdown();
+        }
     }
 
     private void resumeGame() {
         state = State.PLAYING;
 
         pausePopupGridPane.setVisible(false);
-        activateGame();
+        if (!multiplayer) {
+            activateGame();
+        }
     }
 
     private void activateGame() {
@@ -983,6 +987,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void sendEventToServer(Event event) {
+        if (!multiplayer) {
+            return;
+        }
+
         Message message = new Message();
         message.setType(Message.Type.EVENT);
         message.setSerializedEvent(event.serialize());
