@@ -206,13 +206,14 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     private final Vector2<Integer> worldSize;
     private final int baseInitialHealth;
+    private final int replayLength;
 
     private final WorldControl worldControl;
     private Camera camera;
     private WorldRenderer worldRenderer;
 
     private final boolean multiplayer;
-    private final Replay replay;
+    private final boolean replaying;
     private String userName;
 
     private Map<Tower.Mode, Node> towerModeToUiNodeMap;
@@ -229,21 +230,23 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                           Replay replay) {
 
         multiplayer = playerNames != null;
+        replaying = replay != null;
+
         userName = multiplayer ? connectionManager.getUsername() : "Player";
 
         this.sceneManager = sceneManager;
         this.connectionManager = connectionManager;
         this.snapshotFile = snapshotFile;
         this.playerNames = multiplayer ? playerNames : List.of(userName);
-        this.replay = replay;
 
         state = State.PLAYING;
         speed = multiplayer ? 1 : 0;
 
         worldSize = gameMap.getSize();
         baseInitialHealth = gameMap.getBaseDescription().getHealth();
+        replayLength = replaying ? replay.getReplayLength() : 0;
 
-        worldControl = replay == null ?
+        worldControl = !replaying ?
             new WorldControl(gameMap, DELTA_TIME, this, this.playerNames) :
             new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
     }
@@ -306,11 +309,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             speed3xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(3));
         }
 
-        if (isReplaying()) {
+        if (replaying) {
             replayHBox.setVisible(true);
             replayHBox.setManaged(true);
 
-            replaySlider.setMax(replay.getReplayLength());
+            replaySlider.setMax(replayLength);
 
             replaySlider.setOnMousePressed(mouseEvent -> onSliderPressedOrDragged());
             replaySlider.setOnMouseDragged(mouseEvent -> onSliderPressedOrDragged());
@@ -395,7 +398,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             waveLabel.setText(worldControl.getWaveNumber() + "");
             playingTimeLabel.setText(formatPlayingTime(worldControl.getTick() * DELTA_TIME));
 
-            if (isReplaying()) {
+            if (replaying) {
                 replaySlider.setValue(worldControl.getTick());
             }
         } catch (RenderException e) {
@@ -691,7 +694,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 towerTypeVBox.getStyleClass().add("tower-upgrade-box");
                 towerTypeVBox.getChildren().addAll(imageView, label);
                 towerTypeVBox.setOnMouseClicked(mouseEvent -> {
-                    if (isReplaying()) {
+                    if (replaying) {
                         return;
                     }
 
@@ -757,7 +760,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             Node node = entry.getValue();
 
             node.setOnMouseClicked(mouseEvent -> {
-                if (isReplaying()) {
+                if (replaying) {
                     return;
                 }
 
@@ -774,7 +777,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         sellLabel.setText("$" + tower.getSellPrice());
         sellLabel.setOnMouseClicked(mouseEvent -> {
-            if (isReplaying()) {
+            if (replaying) {
                 return;
             }
 
@@ -860,7 +863,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 towerTypeVBox.getStyleClass().add("tower-upgrade-box");
                 towerTypeVBox.getChildren().addAll(imageView, label);
                 towerTypeVBox.setOnMouseClicked(mouseEvent -> {
-                    if (isReplaying()) {
+                    if (replaying) {
                         return;
                     }
 
@@ -940,7 +943,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             worldSimulationExecutor.shutdown();
         }
 
-        if (isReplaying()) {
+        if (replaying) {
             return;
         }
 
@@ -957,10 +960,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
             resultsPopupGridPane.setVisible(true);
         });
-    }
-
-    private boolean isReplaying() {
-        return replay != null;
     }
 
     private void bindUppercase(Text text) {
