@@ -195,9 +195,15 @@ public class ConnectionManager {
 
     public void closeSocketConnection() {
         try {
-            session.close();
+            if (session != null) {
+                session.close();
+            }
+
+            if (webSocketClient != null) {
+                webSocketClient.stop();
+            }
+
             socketAdapter = null;
-            webSocketClient.stop();
         } catch (Exception e) {
             e.printStackTrace();
         }
