@@ -112,6 +112,23 @@ public class SceneManager {
     }
 
     /**
+     * Loads .fxml file from the resources by specified filename and returns its root as Parent.
+     *
+     * @param fxmlFileName .fxml filename.
+     * @return root of .fxml file.
+     */
+    public Parent loadFXML(String fxmlFileName) {
+        try {
+            return new FXMLLoader(getClass().getResource(FXML_DIRECTORY + fxmlFileName)).load();
+        } catch (IOException e) {
+            new AlertBuilder()
+                .setHeaderText(LAYOUT_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
+                .build().showAndWait();
+            return null;
+        }
+    }
+
+    /**
      * Creates new MenuController and switches the scene to a menu.
      */
     public void switchToMenu() {

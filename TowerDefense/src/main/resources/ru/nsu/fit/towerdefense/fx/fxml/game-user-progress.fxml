@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import java.net.URL?>
+<GridPane styleClass="user-progress-grid-pane" xmlns="http://javafx.com/javafx/11.0.1">
+    <stylesheets>
+        <URL value="@../css/main.css" />
+        <URL value="@../css/icons.css" />
+        <URL value="@../css/game.css" />
+    </stylesheets>
+    <columnConstraints>
+        <ColumnConstraints hgrow="NEVER" />
+        <ColumnConstraints hgrow="NEVER" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="NEVER" />
+        <RowConstraints vgrow="NEVER" />
+        <RowConstraints vgrow="NEVER" />
+    </rowConstraints>
+    <HBox GridPane.columnSpan="2">
+        <Label></Label>
+    </HBox>
+    <HBox GridPane.rowIndex="1">
+        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
+        <Label>0</Label>
+    </HBox>
+    <HBox GridPane.rowIndex="1" GridPane.columnIndex="1">
+        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="money-progress-icon" />
+        <Label>200</Label>
+    </HBox>
+    <HBox GridPane.rowIndex="2">
+        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="health-progress-icon" />
+        <Label>100</Label>
+    </HBox>
+    <HBox GridPane.rowIndex="2" GridPane.columnIndex="1">
+        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="enemy-progress-icon" />
+        <Label>0</Label>
+    </HBox>
+</GridPane>

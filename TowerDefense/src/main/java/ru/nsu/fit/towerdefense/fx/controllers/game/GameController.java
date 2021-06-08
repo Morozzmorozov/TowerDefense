@@ -59,6 +59,7 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -82,6 +83,7 @@ import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.RENDER_WORLD_ERROR_HE
 public class GameController implements Controller, WorldObserver, WorldRendererObserver, ClickVisitor, ServerMessageListener {
 
     private static final String FXML_FILE_NAME = "game.fxml";
+    private static final String USER_PROGRESS_FXML_FILE_NAME = "game-user-progress.fxml";
     private static final int FRAMES_PER_SECOND = 60;
     private static final int DELTA_TIME = 1000 / FRAMES_PER_SECOND;
     private static final DecimalFormat DECIMAL_FORMAT =
@@ -158,6 +160,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     @FXML private VBox roadSideVBox;
 
+    @FXML private HBox usersProgressHBox;
+    @FXML private HBox userProgressHBox;
     @FXML private Label researchLabel;
     @FXML private Label healthLabel;
     @FXML private Label enemyLabel;
@@ -216,6 +220,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private final boolean replaying;
     private final String userName;
 
+    private Map<String, List<Label>> playerNameToLabelsMap;
     private Map<Tower.Mode, Node> towerModeToUiNodeMap;
 
     private State state;
@@ -237,7 +242,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         this.sceneManager = sceneManager;
         this.connectionManager = connectionManager;
         this.snapshotFile = snapshotFile;
-        this.playerNames = multiplayer ? playerNames : List.of(userName);
+        this.playerNames = multiplayer ?
+            playerNames.stream().sorted().collect(Collectors.toList()) :
+            List.of(userName);
 
         state = State.PLAYING;
         speed = multiplayer ? 1 : 0;
@@ -299,7 +306,32 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         baseInitialHealthLabel.setText(baseInitialHealth + "");
 
-        if (!multiplayer) {
+        if (multiplayer) {
+            playerNameToLabelsMap = new HashMap<>();
+            for (String playerName : playerNames) {
+                GridPane gridPane =
+                    (GridPane) sceneManager.loadFXML(USER_PROGRESS_FXML_FILE_NAME);
+
+                List<Label> labels = new ArrayList<>();
+
+                labels.add((Label) ((HBox) gridPane.getChildren().get(0)).getChildren().get(0));
+                for (int i = 1; i < 5; i++) {
+                    labels.add((Label) ((HBox) gridPane.getChildren().get(i)).getChildren().get(1));
+                }
+
+                playerNameToLabelsMap.put(playerName, labels);
+
+                labels.get(0).setText(playerName);
+
+                usersProgressHBox.getChildren().add(gridPane);
+            }
+
+            usersProgressHBox.setVisible(true);
+            usersProgressHBox.setManaged(true);
+        } else {
+            userProgressHBox.setVisible(true);
+            userProgressHBox.setManaged(true);
+
             controlsHBox.setVisible(true);
             controlsHBox.setManaged(true);
 
@@ -386,10 +418,20 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         try {
             worldRenderer.render();
 
-            researchLabel.setText(worldControl.getResearchPoints(userName) + "");
-            moneyLabel.setText(worldControl.getMoney(userName) + "");
-            healthLabel.setText(worldControl.getBaseHealth() + "");
-            enemyLabel.setText(worldControl.getEnemiesKilled(userName) + "");
+            if (multiplayer) {
+                for (String playerName : playerNames) {
+                    List<Label> labels = playerNameToLabelsMap.get(playerName);
+                    labels.get(1).setText(worldControl.getResearchPoints(playerName) + "");
+                    labels.get(2).setText(worldControl.getMoney(playerName) + "");
+                    labels.get(3).setText(worldControl.getBaseHealth() + "");
+                    labels.get(4).setText(worldControl.getEnemiesKilled(playerName) + "");
+                }
+            } else {
+                researchLabel.setText(worldControl.getResearchPoints(userName) + "");
+                moneyLabel.setText(worldControl.getMoney(userName) + "");
+                healthLabel.setText(worldControl.getBaseHealth() + "");
+                enemyLabel.setText(worldControl.getEnemiesKilled(userName) + "");
+            }
             long ticksTillNextWave = worldControl.getTicksTillNextWave();
             if (ticksTillNextWave > 0) {
                 nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));

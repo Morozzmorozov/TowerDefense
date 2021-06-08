@@ -266,13 +266,22 @@
     <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
             <ColumnConstraints hgrow="NEVER" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="NEVER" />
+        </rowConstraints>
+        <HBox fx:id="usersProgressHBox" visible="false" managed="false" styleClass="progress-box" />
+    </GridPane>
+    <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" />
             <ColumnConstraints hgrow="ALWAYS" />
             <ColumnConstraints hgrow="NEVER" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints vgrow="NEVER" />
         </rowConstraints>
-        <HBox styleClass="progress-box">
+        <HBox fx:id="userProgressHBox" visible="false" managed="false" styleClass="progress-box">
             <HBox>
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
                 <Label fx:id="researchLabel">0</Label>
