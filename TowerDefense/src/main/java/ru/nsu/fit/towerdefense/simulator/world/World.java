@@ -75,7 +75,7 @@ public class World {
 
     tick = oldWorld.tick;
 
-
+    scienceEarned = oldWorld.scienceEarned;
   }
 
   public World(SerializableWorld world) {
@@ -108,6 +108,7 @@ public class World {
   public Map<Integer, Wave> waveMap = new HashMap<>();
   public Map<String, Integer> moneyMap = new HashMap<>();
   private long tick = 0;
+  private int scienceEarned = 0; // todo give it to players + maybe divide between players
 
   public int getKilledEnemies() {
     return killedEnemies;
@@ -246,6 +247,14 @@ public class World {
         return new WorldIterator();
       }
     };*/
+  }
+
+  public int getScienceEarned() {
+    return scienceEarned;
+  }
+
+  public void setScienceEarned(int scienceEarned) {
+    this.scienceEarned = scienceEarned;
   }
 
   private class WorldIterator implements Iterator<Renderable> {

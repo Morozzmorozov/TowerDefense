@@ -52,7 +52,7 @@ public class WorldControl implements ServerSimulator {
   protected World world;
   protected int wavesDefeated = 0;
   protected boolean isReplay = false;
-  protected int scienceEarned = 0;
+  //protected int scienceEarned = 0;
 
   private final EventContainer eventContainer = new EventContainer();
   private final StateContainer stateContainer = new StateContainer(50);
@@ -294,7 +294,7 @@ public class WorldControl implements ServerSimulator {
   }
 
   public int getResearchPoints(String player) {
-    return scienceEarned; // todo for each player
+    return world.getScienceEarned();
   }
 
   public int getBaseHealth() {
@@ -370,7 +370,7 @@ public class WorldControl implements ServerSimulator {
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
       wavesDefeated++;
-      scienceEarned += gameMap.getScienceReward();
+      world.setScienceEarned(world.getScienceEarned() + gameMap.getScienceReward());
       if (!isReplay) {
         UserMetaData.addResearchPoints(gameMap.getScienceReward());
       }
