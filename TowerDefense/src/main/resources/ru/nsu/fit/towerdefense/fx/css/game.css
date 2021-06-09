@@ -122,6 +122,14 @@
     -fx-background-color: linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
 }
 
+.user-progress-grid-pane {
+    -fx-padding: 0 10 0 0;
+}
+
+.user-progress-grid-pane > HBox {
+    -fx-alignment: center;
+}
+
 .pause-box {
     -fx-background-color: linear-gradient(to left, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 75%, transparent 100%);
 }

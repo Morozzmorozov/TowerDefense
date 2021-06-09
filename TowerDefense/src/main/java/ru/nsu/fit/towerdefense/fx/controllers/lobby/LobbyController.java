@@ -11,7 +11,7 @@ import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
-import ru.nsu.fit.towerdefense.multiplayer.UserManager;
+import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class LobbyController implements Controller, ServerMessageListener {
     @FXML private VBox root;
 
     private final SceneManager sceneManager;
-    private final UserManager userManager;
+    private final ConnectionManager connectionManager;
 
     private final Lobby lobby = new Lobby() {{
         setLevelName("Level 1");
@@ -40,16 +40,16 @@ public class LobbyController implements Controller, ServerMessageListener {
      * Creates new LobbyController with specified SceneManager and UserManager.
      *
      * @param sceneManager scene manager.
-     * @param userManager  user manager.
+     * @param connectionManager  user manager.
      */
-    public LobbyController(SceneManager sceneManager, UserManager userManager) {
+    public LobbyController(SceneManager sceneManager, ConnectionManager connectionManager) {
         this.sceneManager = sceneManager;
-        this.userManager = userManager;
+        this.connectionManager = connectionManager;
     }
 
     @FXML
     private void initialize() {
-        userManager.setServerMessageListener(this);
+        connectionManager.setServerMessageListener(this);
         root.getChildren().add(new Label(lobby.getLevelName()));
         root.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
         for (String playerName : lobby.getPlayers()) {
@@ -59,7 +59,7 @@ public class LobbyController implements Controller, ServerMessageListener {
         readyButton.setOnAction(actionEvent -> {
             Message message = new Message();
             message.setType(Message.Type.READY);
-            userManager.sendMessage(new Gson().toJson(message));
+            connectionManager.sendMessage(new Gson().toJson(message));
         });
         root.getChildren().add(readyButton);
     }

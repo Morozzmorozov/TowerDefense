@@ -15,13 +15,12 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-public class UserManager {
+public class ConnectionManager {
 
     private static final String SITE_URI = "http://127.0.0.1:8080";
 
@@ -196,11 +195,22 @@ public class UserManager {
 
     public void closeSocketConnection() {
         try {
-            session.close();
+            if (session != null) {
+                session.close();
+            }
+
+            if (webSocketClient != null) {
+                webSocketClient.stop();
+            }
+
             socketAdapter = null;
-            webSocketClient.stop();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void dispose() {
+        closeSocketConnection();
+        // todo interrupt()
     }
 }

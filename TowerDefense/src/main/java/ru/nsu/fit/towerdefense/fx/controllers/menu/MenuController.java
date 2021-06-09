@@ -22,7 +22,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.UserMetaData;
-import ru.nsu.fit.towerdefense.multiplayer.UserManager;
+import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.replay.GameStateReader;
 import ru.nsu.fit.towerdefense.replay.Replay;
 
@@ -52,7 +52,7 @@ public class MenuController implements Controller {
     @FXML private Label researchLabel;
 
     private final SceneManager sceneManager;
-    private final UserManager userManager;
+    private final ConnectionManager connectionManager;
 
     private final ComboBox<String> comboBox;
 
@@ -60,11 +60,11 @@ public class MenuController implements Controller {
      * Creates new MenuController with specified SceneManager and UserManager.
      *
      * @param sceneManager scene manager.
-     * @param userManager  user manager.
+     * @param connectionManager  user manager.
      */
-    public MenuController(SceneManager sceneManager, UserManager userManager) {
+    public MenuController(SceneManager sceneManager, ConnectionManager connectionManager) {
         this.sceneManager = sceneManager;
-        this.userManager = userManager;
+        this.connectionManager = connectionManager;
 
         comboBox = new ComboBox<>();
     }
@@ -105,7 +105,7 @@ public class MenuController implements Controller {
             String username = usernamePassword.getKey();
             String password = usernamePassword.getValue();
 
-            Boolean loggedIn = userManager.login(username, password);
+            Boolean loggedIn = connectionManager.login(username, password);
 
             Platform.runLater(() -> {
                 if (loggedIn != null && loggedIn) {
@@ -122,7 +122,7 @@ public class MenuController implements Controller {
 
     private void logout() {
         setLoggedIn(null);
-        new Thread(userManager::logout).start();
+        new Thread(connectionManager::logout).start();
     }
 
     private void setLoggedIn(String username) {
@@ -229,19 +229,19 @@ public class MenuController implements Controller {
 
     private void startCooperativeGame(String gameMapName) {
         new Thread(() -> {
-            String lobbyId = userManager.createLobby(gameMapName);
+            String lobbyId = connectionManager.createLobby(gameMapName);
             if (lobbyId == null) {
                 System.out.println("lobbyId: " + lobbyId);
                 return;
             }
 
-            String sessionToken = userManager.joinLobby(lobbyId);
+            String sessionToken = connectionManager.joinLobby(lobbyId);
             if (sessionToken == null) {
                 System.out.println("sessionToken: " + sessionToken);
                 return;
             }
 
-            userManager.openSocketConnection(lobbyId, sessionToken);
+            connectionManager.openSocketConnection(lobbyId, sessionToken);
 
             Platform.runLater(() -> {
                 System.out.println("switchToLobby");

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
@@ -12,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -28,12 +26,13 @@ import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
+import ru.nsu.fit.towerdefense.fx.util.Snapshot;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
+import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
-import ru.nsu.fit.towerdefense.multiplayer.UserManager;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
@@ -57,12 +56,10 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -86,6 +83,7 @@ import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.RENDER_WORLD_ERROR_HE
 public class GameController implements Controller, WorldObserver, WorldRendererObserver, ClickVisitor, ServerMessageListener {
 
     private static final String FXML_FILE_NAME = "game.fxml";
+    private static final String USER_PROGRESS_FXML_FILE_NAME = "game-user-progress.fxml";
     private static final int FRAMES_PER_SECOND = 60;
     private static final int DELTA_TIME = 1000 / FRAMES_PER_SECOND;
     private static final DecimalFormat DECIMAL_FORMAT =
@@ -107,7 +105,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private AnchorPane worldAnchorPane;
 
     @FXML private StackPane gameObjectSidePane;
-    //@FXML private ImageView closeSidePaneImageView; // todo remove?
 
     @FXML private VBox platformSideVBox;
     @FXML private FlowPane buildTowerFlowPane;
@@ -163,6 +160,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     @FXML private VBox roadSideVBox;
 
+    @FXML private HBox usersProgressHBox;
+    @FXML private HBox userProgressHBox;
     @FXML private Label researchLabel;
     @FXML private Label healthLabel;
     @FXML private Label enemyLabel;
@@ -178,6 +177,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private ImageView speed2xImageView;
     @FXML private ImageView speed3xImageView;
 
+    @FXML private HBox controlsHBox;
     @FXML private HBox replayHBox;
     @FXML private ImageView skipLeftImageView;
     @FXML private ImageView skipRightImageView;
@@ -202,7 +202,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     @FXML private HBox resultsMenuHBox;
 
     private final SceneManager sceneManager;
-    private final UserManager userManager;
+    private final ConnectionManager connectionManager;
     private final File snapshotFile;
     private final List<String> playerNames;
 
@@ -210,54 +210,70 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     private final Vector2<Integer> worldSize;
     private final int baseInitialHealth;
+    private final int replayLength;
 
     private final WorldControl worldControl;
     private Camera camera;
     private WorldRenderer worldRenderer;
 
-    private Replay replay;
+    private final boolean multiplayer;
+    private final boolean replaying;
+    private final String userName;
 
+    private Map<String, List<Label>> playerNameToLabelsMap;
     private Map<Tower.Mode, Node> towerModeToUiNodeMap;
 
     private State state;
     private int speed;
     private VBox currentSideVBox;
 
-    /**
-     * Creates new GameController with specified SceneManager, GameMap and Replay.
-     *
-     * @param sceneManager scene manager.
-     * @param gameMap      game map.
-     * @param replay       replay.
-     */
-    public GameController(SceneManager sceneManager, UserManager userManager, File snapshotFile, GameMap gameMap, List<String> playerNames, Replay replay) {
+    public GameController(SceneManager sceneManager,
+                          ConnectionManager connectionManager,
+                          File snapshotFile,
+                          GameMap gameMap,
+                          List<String> playerNames,
+                          Replay replay) {
+
+        multiplayer = playerNames != null;
+        replaying = replay != null;
+
+        userName = multiplayer ? connectionManager.getUsername() : "Player";
+
         this.sceneManager = sceneManager;
-        this.userManager = userManager;
+        this.connectionManager = connectionManager;
         this.snapshotFile = snapshotFile;
-        this.playerNames = playerNames;
+        this.playerNames = multiplayer ?
+            playerNames.stream().sorted().collect(Collectors.toList()) :
+            List.of(userName);
+
+        state = State.PLAYING;
+        speed = multiplayer ? 1 : 0;
 
         worldSize = gameMap.getSize();
         baseInitialHealth = gameMap.getBaseDescription().getHealth();
+        replayLength = replaying ? replay.getReplayLength() : 0;
 
-        state = State.PLAYING;
-        speed = 1; // todo think
-
-        if (replay == null) {
-            worldControl = new WorldControl(gameMap, DELTA_TIME, this, playerNames);
-        } else {
-            this.replay = replay;
-            worldControl = new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
-        }
+        worldControl = !replaying ?
+            new WorldControl(gameMap, DELTA_TIME, this, this.playerNames) :
+            new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
     }
 
-    /**
-     * Creates new GameController with specified SceneManager and GameMap.
-     *
-     * @param sceneManager scene manager.
-     * @param gameMap      game map.
-     */
-    public GameController(SceneManager sceneManager, UserManager userManager, File snapshotFile, GameMap gameMap, List<String> playerNames) {
-        this(sceneManager, userManager, snapshotFile, gameMap, playerNames, null);
+    // single
+    public GameController(SceneManager sceneManager, ConnectionManager connectionManager,
+                          File snapshotFile, GameMap gameMap) {
+        this(sceneManager, connectionManager, snapshotFile, gameMap, null, null);
+    }
+
+    // multiplayer
+    public GameController(SceneManager sceneManager, ConnectionManager connectionManager,
+                          File snapshotFile, GameMap gameMap, List<String> playerNames) {
+        this(sceneManager, connectionManager, snapshotFile, gameMap, playerNames, null);
+    }
+
+    // replay
+    public GameController(SceneManager sceneManager, ConnectionManager connectionManager,
+                          File snapshotFile, GameMap gameMap, Replay replay) {
+        this(sceneManager, connectionManager, snapshotFile, gameMap, null, replay);
     }
 
     @FXML
@@ -290,16 +306,46 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         baseInitialHealthLabel.setText(baseInitialHealth + "");
 
-        speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
-        speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
-        speed2xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(2));
-        speed3xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(3));
+        if (multiplayer) {
+            playerNameToLabelsMap = new HashMap<>();
+            for (String playerName : playerNames) {
+                GridPane gridPane =
+                    (GridPane) sceneManager.loadFXML(USER_PROGRESS_FXML_FILE_NAME);
 
-        if (isReplaying()) {
+                List<Label> labels = new ArrayList<>();
+
+                labels.add((Label) ((HBox) gridPane.getChildren().get(0)).getChildren().get(0));
+                for (int i = 1; i < 5; i++) {
+                    labels.add((Label) ((HBox) gridPane.getChildren().get(i)).getChildren().get(1));
+                }
+
+                playerNameToLabelsMap.put(playerName, labels);
+
+                labels.get(0).setText(playerName);
+
+                usersProgressHBox.getChildren().add(gridPane);
+            }
+
+            usersProgressHBox.setVisible(true);
+            usersProgressHBox.setManaged(true);
+        } else {
+            userProgressHBox.setVisible(true);
+            userProgressHBox.setManaged(true);
+
+            controlsHBox.setVisible(true);
+            controlsHBox.setManaged(true);
+
+            speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
+            speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
+            speed2xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(2));
+            speed3xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(3));
+        }
+
+        if (replaying) {
             replayHBox.setVisible(true);
             replayHBox.setManaged(true);
 
-            replaySlider.setMax(replay.getReplayLength());
+            replaySlider.setMax(replayLength);
 
             replaySlider.setOnMousePressed(mouseEvent -> onSliderPressedOrDragged());
             replaySlider.setOnMouseDragged(mouseEvent -> onSliderPressedOrDragged());
@@ -332,15 +378,19 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private void pauseGame() {
         state = State.PAUSED;
 
-        worldSimulationExecutor.shutdown();
         pausePopupGridPane.setVisible(true);
+        if (!multiplayer) {
+            worldSimulationExecutor.shutdown();
+        }
     }
 
     private void resumeGame() {
         state = State.PLAYING;
 
         pausePopupGridPane.setVisible(false);
-        activateGame();
+        if (!multiplayer) {
+            activateGame();
+        }
     }
 
     private void activateGame() {
@@ -368,10 +418,20 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         try {
             worldRenderer.render();
 
-            researchLabel.setText(worldControl.getResearchPoints(userManager.getUsername()) + "");
-            moneyLabel.setText(worldControl.getMoney(userManager.getUsername()) + "");
-            healthLabel.setText(worldControl.getBaseHealth() + "");
-            enemyLabel.setText(worldControl.getEnemiesKilled(userManager.getUsername()) + "");
+            if (multiplayer) {
+                for (String playerName : playerNames) {
+                    List<Label> labels = playerNameToLabelsMap.get(playerName);
+                    labels.get(1).setText(worldControl.getResearchPoints(playerName) + "");
+                    labels.get(2).setText(worldControl.getMoney(playerName) + "");
+                    labels.get(3).setText(worldControl.getBaseHealth() + "");
+                    labels.get(4).setText(worldControl.getEnemiesKilled(playerName) + "");
+                }
+            } else {
+                researchLabel.setText(worldControl.getResearchPoints(userName) + "");
+                moneyLabel.setText(worldControl.getMoney(userName) + "");
+                healthLabel.setText(worldControl.getBaseHealth() + "");
+                enemyLabel.setText(worldControl.getEnemiesKilled(userName) + "");
+            }
             long ticksTillNextWave = worldControl.getTicksTillNextWave();
             if (ticksTillNextWave > 0) {
                 nextWaveTimeLabel.setText(formatWaveTime(ticksTillNextWave * DELTA_TIME));
@@ -384,7 +444,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             waveLabel.setText(worldControl.getWaveNumber() + "");
             playingTimeLabel.setText(formatPlayingTime(worldControl.getTick() * DELTA_TIME));
 
-            if (isReplaying()) {
+            if (replaying) {
                 replaySlider.setValue(worldControl.getTick());
             }
         } catch (RenderException e) {
@@ -502,19 +562,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             }
         });
 
-        if (!snapshotFile.exists()) { // todo move somewhere?
-            try {
-                File parent = snapshotFile.getParentFile();
-                if (!parent.exists() && !parent.mkdirs()) {
-                    throw new IOException("Couldn't create dir: " + parent);
-                }
-
-                WritableImage snapshot = worldWrapperStackPane.snapshot(null, null);
-                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
-                ImageIO.write(bufferedImage, "png", snapshotFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (!snapshotFile.exists()) {
+            Snapshot.make(snapshotFile, worldWrapperStackPane);
         }
     }
 
@@ -691,12 +740,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 towerTypeVBox.getStyleClass().add("tower-upgrade-box");
                 towerTypeVBox.getChildren().addAll(imageView, label);
                 towerTypeVBox.setOnMouseClicked(mouseEvent -> {
-                    if (isReplaying()) {
+                    if (replaying) {
                         return;
                     }
 
                     try {
-                        UpgradeTowerEvent event = worldControl.upgradeTower(userManager.getUsername(), tower, upgrade);
+                        UpgradeTowerEvent event = worldControl.upgradeTower(userName, tower, upgrade);
                         sendEventToServer(event);
 
                         onClicked(tower);
@@ -757,11 +806,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             Node node = entry.getValue();
 
             node.setOnMouseClicked(mouseEvent -> {
-                if (isReplaying()) {
+                if (replaying) {
                     return;
                 }
 
-                TuneTowerEvent event = worldControl.tuneTower(userManager.getUsername(), tower, mode);
+                TuneTowerEvent event = worldControl.tuneTower(userName, tower, mode);
                 sendEventToServer(event);
                 for (Node _node : towerModeToUiNodeMap.values()) {
                     _node.getStyleClass().removeIf(className -> className.equals("target-box-selected"));
@@ -774,11 +823,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         sellLabel.setText("$" + tower.getSellPrice());
         sellLabel.setOnMouseClicked(mouseEvent -> {
-            if (isReplaying()) {
+            if (replaying) {
                 return;
             }
 
-            SellTowerEvent event = worldControl.sellTower(userManager.getUsername(), tower);
+            SellTowerEvent event = worldControl.sellTower(userName, tower);
             sendEventToServer(event);
 
             TowerPlatform towerPlatform = event.getPlatform();
@@ -860,12 +909,12 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 towerTypeVBox.getStyleClass().add("tower-upgrade-box");
                 towerTypeVBox.getChildren().addAll(imageView, label);
                 towerTypeVBox.setOnMouseClicked(mouseEvent -> {
-                    if (isReplaying()) {
+                    if (replaying) {
                         return;
                     }
 
                     try {
-                        BuildTowerEvent event = worldControl.buildTower(userManager.getUsername(), towerPlatform, towerType);
+                        BuildTowerEvent event = worldControl.buildTower(userName, towerPlatform, towerType);
                         sendEventToServer(event);
 
                         Tower tower = event.getTower();
@@ -940,7 +989,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             worldSimulationExecutor.shutdown();
         }
 
-        if (isReplaying()) {
+        if (replaying) {
             return;
         }
 
@@ -959,14 +1008,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         });
     }
 
-    private boolean isReplaying() {
-        return replay != null;
-    }
-
     private void bindUppercase(Text text) {
-        text.textProperty().addListener((observable, oldValue, newValue) -> {
-            text.setText(newValue.toUpperCase());
-        });
+        text.textProperty().addListener((observable, oldValue, newValue) ->
+            text.setText(newValue.toUpperCase()));
     }
 
     private String formatWaveTime(long milliseconds) {
@@ -985,9 +1029,13 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     }
 
     private void sendEventToServer(Event event) {
+        if (!multiplayer) {
+            return;
+        }
+
         Message message = new Message();
         message.setType(Message.Type.EVENT);
         message.setSerializedEvent(event.serialize());
-        userManager.sendMessage(new Gson().toJson(message));
+        connectionManager.sendMessage(new Gson().toJson(message));
     }
 }

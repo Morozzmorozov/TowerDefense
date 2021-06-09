@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.fx;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
@@ -16,7 +17,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.menu.MenuController;
 import ru.nsu.fit.towerdefense.fx.controllers.techtree.TechTreeController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
-import ru.nsu.fit.towerdefense.multiplayer.UserManager;
+import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
@@ -39,11 +40,12 @@ public class SceneManager {
 
     private static final String DEFAULT_TITLE = "Tower Defense";
     private static final String FXML_DIRECTORY = "/ru/nsu/fit/towerdefense/fx/fxml/";
+    private static final String APP_ICON = "/ru/nsu/fit/towerdefense/fx/icons/kremlin.png";
 
     private static final KeyCodeCombination EXPAND_COMBINATION = new KeyCodeCombination(ENTER, ALT_DOWN);
 
     private final Stage stage;
-    private final UserManager userManager;
+    private final ConnectionManager connectionManager;
     private Controller controller;
 
     /**
@@ -51,9 +53,9 @@ public class SceneManager {
      *
      * @param stage JavaFX stage.
      */
-    public SceneManager(Stage stage)  {
+    public SceneManager(Stage stage, ConnectionManager connectionManager)  {
         this.stage = stage;
-        userManager = new UserManager();
+        this.connectionManager = connectionManager;
 
         initStage();
     }
@@ -61,6 +63,9 @@ public class SceneManager {
     private void initStage() {
         stage.setTitle(DEFAULT_TITLE);
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        try {
+            stage.getIcons().add(new Image(APP_ICON));
+        } catch (NullPointerException | IllegalArgumentException ignored) {}
     }
 
     /**
@@ -107,18 +112,35 @@ public class SceneManager {
     }
 
     /**
+     * Loads .fxml file from the resources by specified filename and returns its root as Parent.
+     *
+     * @param fxmlFileName .fxml filename.
+     * @return root of .fxml file.
+     */
+    public Parent loadFXML(String fxmlFileName) {
+        try {
+            return new FXMLLoader(getClass().getResource(FXML_DIRECTORY + fxmlFileName)).load();
+        } catch (IOException e) {
+            new AlertBuilder()
+                .setHeaderText(LAYOUT_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
+                .build().showAndWait();
+            return null;
+        }
+    }
+
+    /**
      * Creates new MenuController and switches the scene to a menu.
      */
     public void switchToMenu() {
-        switchScene(new MenuController(this, userManager));
+        switchScene(new MenuController(this, connectionManager));
     }
 
     public void switchToLobbies() {
-        switchScene(new LobbiesController(this, userManager));
+        switchScene(new LobbiesController(this, connectionManager));
     }
 
     public void switchToLobby() {
-        switchScene(new LobbyController(this, userManager));
+        switchScene(new LobbyController(this, connectionManager));
     }
 
     /**
@@ -129,9 +151,9 @@ public class SceneManager {
      */
     public void switchToGame(String gameMapName) {
         try {
-            switchScene(new GameController(this, userManager,
+            switchScene(new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
-                GameMetaData.getInstance().getMapDescription(gameMapName), List.of("player")));
+                GameMetaData.getInstance().getMapDescription(gameMapName)));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
@@ -141,10 +163,10 @@ public class SceneManager {
 
     public void switchToCooperativeGame(String gameMapName, List<String> playerNames) {
         try {
-            GameController gameController = new GameController(this, userManager,
+            GameController gameController = new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), playerNames);
-            userManager.setServerMessageListener(gameController);
+            connectionManager.setServerMessageListener(gameController);
             switchScene(gameController);
         } catch (NoSuchElementException e) {
             new AlertBuilder()
@@ -161,9 +183,9 @@ public class SceneManager {
      */
     public void switchToGame(String gameMapName, Replay replay) {
         try {
-            switchScene(new GameController(this, userManager,
+            switchScene(new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
-                GameMetaData.getInstance().getMapDescription(gameMapName), List.of("player"), replay));
+                GameMetaData.getInstance().getMapDescription(gameMapName), replay));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)

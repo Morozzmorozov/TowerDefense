@@ -261,8 +261,16 @@
                     </GridPane>
                 </VBox>
             </VBox>
-            <!--<ImageView fx:id="closeSidePaneImageView" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="close-side-pane, close-icon" />todo delete?-->
         </StackPane>
+    </GridPane>
+    <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="NEVER" />
+        </rowConstraints>
+        <HBox fx:id="usersProgressHBox" visible="false" managed="false" styleClass="progress-box" />
     </GridPane>
     <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
@@ -273,7 +281,7 @@
         <rowConstraints>
             <RowConstraints vgrow="NEVER" />
         </rowConstraints>
-        <HBox styleClass="progress-box">
+        <HBox fx:id="userProgressHBox" visible="false" managed="false" styleClass="progress-box">
             <HBox>
                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
                 <Label fx:id="researchLabel">0</Label>
@@ -320,7 +328,7 @@
                 <Label fx:id="nextWaveTimeLabel" styleClass="next-wave-time-label" />
                 <ImageView fx:id="waveImageView" GridPane.rowIndex="1" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="wave-progress-icon" />
                 <Label fx:id="waveLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" minWidth="-Infinity">0</Label>
-                <HBox GridPane.rowIndex="1" GridPane.columnIndex="2" styleClass="speed-box">
+                <HBox fx:id="controlsHBox" GridPane.rowIndex="1" GridPane.columnIndex="2" visible="false" managed="false" styleClass="speed-box">
                     <Label fx:id="speedLabel" minWidth="-Infinity">0x</Label>
                     <ImageView fx:id="speed0xImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="speed-0x" />
                     <ImageView fx:id="speed1xImageView" fitHeight="20.0" pickOnBounds="true" preserveRatio="true" styleClass="speed-1x" />
