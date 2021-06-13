@@ -5,7 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Session;
+import ru.nsu.fit.towerdefense.multiplayer.entities.GameSession;
 import ru.nsu.fit.towerdefense.server.Mappings;
 
 import java.io.IOException;
@@ -155,7 +155,7 @@ public class ConnectionManager {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
-                return new Gson().fromJson(response.body(), Session.class).getToken();
+                return new Gson().fromJson(response.body(), GameSession.class).getToken();
             }
 
             System.out.println("Bad status code: " + response.statusCode());

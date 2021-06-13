@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Session;
+import ru.nsu.fit.towerdefense.multiplayer.entities.GameSession;
 import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
 
 import java.io.IOException;
@@ -16,16 +16,16 @@ public class LobbyJoinServlet  extends HttpServlet {
 	{
 		try
 		{
-			Session session = new Session();
+			GameSession gameSession = new GameSession();
 			String token = LobbyManager.getInstance().createToken(req.getParameter("lobbyId"), req.getParameter("userToken"));
 			if (token == null){
 				resp.setStatus(409);
 			}
 			else
 			{
-				session.setToken(token);
+				gameSession.setToken(token);
 				resp.setStatus(200);
-				resp.getWriter().println(new Gson().toJson(session));
+				resp.getWriter().println(new Gson().toJson(gameSession));
 			}
 		}
 		catch (Exception e){
