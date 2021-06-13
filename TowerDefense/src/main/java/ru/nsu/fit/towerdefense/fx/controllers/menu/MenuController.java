@@ -41,9 +41,9 @@ public class MenuController implements Controller {
 
     @FXML private Button clearButton;
     @FXML private Button addResearchPointsButton;
-    @FXML private Button lobbiesButton;
 
     @FXML private ImageView techTreeImageView;
+    @FXML private ImageView multiplayerImageView;
     @FXML private HBox userHBox;
     @FXML private Label userLabel;
     @FXML private Label levelsLabel;
@@ -80,12 +80,11 @@ public class MenuController implements Controller {
             researchLabel.setText(UserMetaData.getResearchPoints() + "");
         });
 
-        lobbiesButton.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
-
         setLoggedIn(null);
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
         techTreeImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToTechTree());
+        multiplayerImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
 
         if (GameMetaData.getInstance().getGameMapNames().isEmpty()) {
             levelsLabel.setText("No levels");
@@ -196,6 +195,10 @@ public class MenuController implements Controller {
 
         gridPane.add(createLevelButton("cooperative-icon", "Cooperative",
             mouseEvent -> startCooperativeGame(gameMapName)), 0, 3);
+        gridPane.add(createLevelButton("competition-icon", "Competition",
+            mouseEvent -> System.out.println("competition")), 1, 3);
+        gridPane.add(createLevelButton("leaderboard-icon", "Leaders",
+            mouseEvent -> System.out.println("leaderboard")), 0, 4);
 
         return gridPane;
     }

@@ -31,22 +31,24 @@
             <RowConstraints vgrow="NEVER" />
         </rowConstraints>
         <HBox>
-            <HBox fx:id="userHBox" styleClass="user-box">
-                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="user-icon" />
-                <Label fx:id="userLabel">User</Label>
+            <HBox>
+                <ImageView fx:id="techTreeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="tech-tree-icon" />
             </HBox>
             <HBox>
-                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
                 <Label fx:id="researchLabel" />
             </HBox>
         </HBox>
         <HBox GridPane.columnIndex="2">
             <HBox>
-                <ImageView fx:id="techTreeImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="tech-tree-icon" />
+                <ImageView fx:id="multiplayerImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="multiplayer-icon" />
+            </HBox>
+            <HBox fx:id="userHBox" styleClass="user-box">
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="user-icon" />
+                <Label fx:id="userLabel">User</Label>
             </HBox>
         </HBox>
     </GridPane>
-    <Button fx:id="lobbiesButton" StackPane.alignment="TOP_CENTER">Lobbies</Button>
     <Button fx:id="clearButton" visible="false" managed="false" StackPane.alignment="BOTTOM_LEFT" style="-fx-background-color: red;">Clear saves</Button>
     <Button fx:id="addResearchPointsButton" visible="false" managed="false" StackPane.alignment="BOTTOM_RIGHT">Add 10 research points</Button>
 </StackPane>

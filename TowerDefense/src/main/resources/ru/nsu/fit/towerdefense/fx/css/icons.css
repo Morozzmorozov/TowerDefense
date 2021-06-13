@@ -90,8 +90,13 @@
     -fx-cursor: hand;
 }
 
+.multiplayer-icon {
+    -fx-image: url('../icons/multiplayer.png');
+    -fx-cursor: hand;
+}
+
 .menu-icon {
-    -fx-image: url('../icons/menu.png');
+    -fx-image: url('../icons/home-menu.png');
     -fx-cursor: hand;
 }
 
