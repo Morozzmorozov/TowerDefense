@@ -56,9 +56,7 @@ public class LobbiesController implements Controller {
                                     return;
                                 }
 
-                                connectionManager.openSocketConnection(lobby.getId(), sessionToken);
-
-                                Platform.runLater(() -> sceneManager.switchToLobby(lobby.getId()));
+                                Platform.runLater(() -> sceneManager.switchToLobby(lobby.getId(), sessionToken));
                             }).start());
                             lobbiesVBox.getChildren().add(hBox);
                         }

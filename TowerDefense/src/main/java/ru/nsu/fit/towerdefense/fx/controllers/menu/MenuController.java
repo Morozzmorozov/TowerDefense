@@ -244,11 +244,9 @@ public class MenuController implements Controller {
                 return;
             }
 
-            connectionManager.openSocketConnection(lobbyId, sessionToken);
-
             Platform.runLater(() -> {
                 System.out.println("switchToLobby");
-                sceneManager.switchToLobby(lobbyId);
+                sceneManager.switchToLobby(lobbyId, sessionToken);
             });
         }).start();
     }

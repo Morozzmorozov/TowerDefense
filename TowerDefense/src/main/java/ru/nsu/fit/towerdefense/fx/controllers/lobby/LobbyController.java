@@ -29,14 +29,18 @@ public class LobbyController implements Controller, ServerMessageListener {
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
     private final String lobbyId;
+    private final String sessionToken;
 
     private Thread lobbyThread;
     private Lobby lobby;
 
-    public LobbyController(SceneManager sceneManager, ConnectionManager connectionManager, String lobbyId) {
+    public LobbyController(SceneManager sceneManager, ConnectionManager connectionManager,
+                           String lobbyId, String sessionToken) {
+
         this.sceneManager = sceneManager;
         this.connectionManager = connectionManager;
         this.lobbyId = lobbyId;
+        this.sessionToken = sessionToken;
     }
 
     @FXML
@@ -64,6 +68,7 @@ public class LobbyController implements Controller, ServerMessageListener {
 
         lobbyThread.start();
         connectionManager.setServerMessageListener(this);
+        connectionManager.openSocketConnection(lobbyId, sessionToken);
 
         ToggleButton readyButton = new ToggleButton("Start");
         readyButton.setOnAction(actionEvent -> {
