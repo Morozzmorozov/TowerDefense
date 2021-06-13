@@ -1,6 +1,7 @@
 package ru.nsu.fit.towerdefense.multiplayer;
 
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
+import ru.nsu.fit.towerdefense.multiplayer.entities.LevelScore;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 
 import java.util.ArrayList;
@@ -33,6 +34,24 @@ public class ConnectionManagerStub extends ConnectionManager {
 
     private final List<String> players = List.of("John", "Jane", "Super Player");
 
+    private final List<LevelScore> levelScores = List.of(
+        new LevelScore() {{
+            setPlayerName("Jonh");
+            setScore(654321);
+            setTimestamp(1234567890L * 3);
+        }},
+        new LevelScore() {{
+            setPlayerName("Jane");
+            setScore(123456);
+            setTimestamp(1234567890L * 2);
+        }},
+        new LevelScore() {{
+            setPlayerName("admin");
+            setScore(222);
+            setTimestamp(1234567890L);
+        }}
+    );
+
     @Override
     public Boolean login(String username, String password) {
         super.getCredentials().setUsername(username);
@@ -63,6 +82,10 @@ public class ConnectionManagerStub extends ConnectionManager {
             setMaxPlayers(3);
             setPlayers(getRandomSubList(players));
         }};
+    }
+
+    public List<LevelScore> getLeaderboard(String gameMapName) {
+        return levelScores;
     }
 
     @Override

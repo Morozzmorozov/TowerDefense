@@ -198,7 +198,7 @@ public class MenuController implements Controller {
         gridPane.add(createLevelButton("competition-icon", "Competition",
             mouseEvent -> System.out.println("competition")), 1, 3);
         gridPane.add(createLevelButton("leaderboard-icon", "Leaders",
-            mouseEvent -> System.out.println("leaderboard")), 0, 4);
+            mouseEvent -> showLeaderboard(gameMapName)), 0, 4);
 
         return gridPane;
     }
@@ -249,6 +249,10 @@ public class MenuController implements Controller {
                 sceneManager.switchToLobby(lobbyId, sessionToken);
             });
         }).start();
+    }
+
+    private void showLeaderboard(String gameMapName) {
+        sceneManager.switchToLeaderboard(gameMapName);
     }
 
     /**
