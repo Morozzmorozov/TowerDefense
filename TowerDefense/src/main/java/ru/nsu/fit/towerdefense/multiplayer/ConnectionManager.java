@@ -27,6 +27,10 @@ public class ConnectionManager {
 
     private Credentials credentials = new Credentials();
 
+    protected Credentials getCredentials() { // todo del
+        return credentials;
+    }
+
     private WebSocketClient webSocketClient;
     private MyWebSocketAdapter socketAdapter;
     private Session session;
@@ -36,9 +40,6 @@ public class ConnectionManager {
     }
 
     public Boolean login(String username, String password) {
-        /*if (true)
-            return true; // todo delete*/
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.LOGIN_MAPPING +
@@ -71,22 +72,6 @@ public class ConnectionManager {
     }
 
     public List<Lobby> getLobbies() {
-        /*if (true)
-            return new ArrayList<>() {{ // todo delete
-                add(new Lobby() {{
-                    setId("111");
-                    setLevelName("Level 1");
-                    setMaxPlayers(2);
-                    setPlayers(List.of("John"));
-                }});
-                add(new Lobby() {{
-                    setId("222");
-                    setLevelName("Level 2");
-                    setMaxPlayers(3);
-                    setPlayers(List.of("Jane"));
-                }});
-            }};*/
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.LOBBIES_MAPPING +
@@ -112,9 +97,6 @@ public class ConnectionManager {
     }
 
     public String createLobby(String gameMapName) {
-        /*if (true)
-            return "id_123"; // todo delete*/
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.CREATE_LOBBY_MAPPING +
@@ -140,9 +122,6 @@ public class ConnectionManager {
     }
 
     public String joinLobby(String lobbyId) {
-        /*if (true)
-            return "id_123"; // todo delete*/
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.JOIN_LOBBY_MAPPING +
@@ -165,6 +144,10 @@ public class ConnectionManager {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Lobby getLobby(String token) {
+        return null; // todo
     }
 
     public void openSocketConnection(String lobbyId, String token) {
