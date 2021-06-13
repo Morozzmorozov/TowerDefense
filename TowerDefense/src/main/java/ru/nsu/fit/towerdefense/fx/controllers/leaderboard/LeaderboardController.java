@@ -16,7 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * LobbyController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a lobby scene.
+ * LeaderboardController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a leaderboard
+ * scene.
  *
  * @author Oleg Markelov
  */

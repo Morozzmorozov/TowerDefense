@@ -5,6 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
+import ru.nsu.fit.towerdefense.multiplayer.entities.EloRating;
 import ru.nsu.fit.towerdefense.multiplayer.entities.GameSession;
 import ru.nsu.fit.towerdefense.multiplayer.entities.LevelScore;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
@@ -152,6 +153,10 @@ public class ConnectionManager {
     }
 
     public List<LevelScore> getLeaderboard(String gameMapName) {
+        return null; // todo
+    }
+
+    public List<EloRating> getEloLeaderboard() {
         return null; // todo
     }
 

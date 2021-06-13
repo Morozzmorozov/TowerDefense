@@ -85,6 +85,7 @@ public class MenuController implements Controller {
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
         techTreeImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToTechTree());
+        eloRatingImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToEloRating());
         lobbiesImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
 
         if (GameMetaData.getInstance().getGameMapNames().isEmpty()) {

@@ -10,6 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
+import ru.nsu.fit.towerdefense.fx.controllers.elorating.EloRatingController;
 import ru.nsu.fit.towerdefense.fx.controllers.game.GameController;
 import ru.nsu.fit.towerdefense.fx.controllers.leaderboard.LeaderboardController;
 import ru.nsu.fit.towerdefense.fx.controllers.lobbies.LobbiesController;
@@ -142,6 +143,16 @@ public class SceneManager {
 
     public void switchToLobby(String lobbyId, String sessionToken) {
         switchScene(new LobbyController(this, connectionManager, lobbyId, sessionToken));
+    }
+
+    public void switchToEloRating() {
+        try {
+            switchScene(new EloRatingController(this, connectionManager));
+        } catch (NoSuchElementException e) {
+            new AlertBuilder()
+                .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
+                .build().showAndWait();
+        }
     }
 
     /**
