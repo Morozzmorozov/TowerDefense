@@ -41,7 +41,10 @@
         </HBox>
         <HBox GridPane.columnIndex="2">
             <HBox>
-                <ImageView fx:id="multiplayerImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="multiplayer-icon" />
+                <ImageView fx:id="eloRatingImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="elo-rating-icon" />
+            </HBox>
+            <HBox>
+                <ImageView fx:id="lobbiesImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="lobbies-icon" />
             </HBox>
             <HBox fx:id="userHBox" styleClass="user-box">
                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="user-icon" />

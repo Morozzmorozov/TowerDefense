@@ -43,7 +43,8 @@ public class MenuController implements Controller {
     @FXML private Button addResearchPointsButton;
 
     @FXML private ImageView techTreeImageView;
-    @FXML private ImageView multiplayerImageView;
+    @FXML private ImageView eloRatingImageView;
+    @FXML private ImageView lobbiesImageView;
     @FXML private HBox userHBox;
     @FXML private Label userLabel;
     @FXML private Label levelsLabel;
@@ -84,7 +85,7 @@ public class MenuController implements Controller {
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
         techTreeImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToTechTree());
-        multiplayerImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
+        lobbiesImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
 
         if (GameMetaData.getInstance().getGameMapNames().isEmpty()) {
             levelsLabel.setText("No levels");

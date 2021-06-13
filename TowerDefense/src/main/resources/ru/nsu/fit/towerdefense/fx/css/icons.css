@@ -90,7 +90,12 @@
     -fx-cursor: hand;
 }
 
-.multiplayer-icon {
+.elo-rating-icon {
+    -fx-image: url('../icons/elo-rating.png');
+    -fx-cursor: hand;
+}
+
+.lobbies-icon {
     -fx-image: url('../icons/multiplayer.png');
     -fx-cursor: hand;
 }
