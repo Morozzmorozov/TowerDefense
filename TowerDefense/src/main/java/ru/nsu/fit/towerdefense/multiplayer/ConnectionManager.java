@@ -2,10 +2,11 @@ package ru.nsu.fit.towerdefense.multiplayer;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 import ru.nsu.fit.towerdefense.multiplayer.entities.GameSession;
+import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 import ru.nsu.fit.towerdefense.server.Mappings;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class ConnectionManager {
 
     private WebSocketClient webSocketClient;
     private MyWebSocketAdapter socketAdapter;
-    private org.eclipse.jetty.websocket.api.Session session;
+    private Session session;
 
     public String getUsername() {
         return credentials.getUsername();
