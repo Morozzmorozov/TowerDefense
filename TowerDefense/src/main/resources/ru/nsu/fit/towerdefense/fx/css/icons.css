@@ -99,6 +99,14 @@
     -fx-image: url('../icons/cooperative.png');
 }
 
+.competition-icon {
+    -fx-image: url('../icons/versus.png');
+}
+
+.leaderboard-icon {
+    -fx-image: url('../icons/leaderboard.png');
+}
+
 .user-icon {
     -fx-image: url('../icons/user.png');
 }
