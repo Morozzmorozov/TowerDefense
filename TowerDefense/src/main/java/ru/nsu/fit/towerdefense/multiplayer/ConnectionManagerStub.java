@@ -56,7 +56,7 @@ public class ConnectionManagerStub extends ConnectionManager {
     }
 
     @Override
-    public Lobby getLobby(String token) {
+    public Lobby getLobby(String sessionToken) {
         return new Lobby() {{
             setId("444");
             setLevelName("Level 1_4");

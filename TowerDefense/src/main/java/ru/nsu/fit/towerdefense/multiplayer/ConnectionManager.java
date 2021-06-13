@@ -146,7 +146,7 @@ public class ConnectionManager {
         }
     }
 
-    public Lobby getLobby(String token) {
+    public Lobby getLobby(String sessionToken) {
         return null; // todo
     }
 

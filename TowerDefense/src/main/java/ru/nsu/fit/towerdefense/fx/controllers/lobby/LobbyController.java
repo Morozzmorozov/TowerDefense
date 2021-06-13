@@ -4,17 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
-import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
-
-import java.util.List;
 
 /**
  * LobbyController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a lobby scene.
@@ -26,36 +24,48 @@ public class LobbyController implements Controller, ServerMessageListener {
     private static final String FXML_FILE_NAME = "lobby.fxml";
 
     @FXML private VBox root;
+    @FXML private VBox lobbyVBox;
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
+    private final String sessionToken;
 
-    private final Lobby lobby = new Lobby() {{
-        setLevelName("Level 1");
-        setMaxPlayers(2);
-        setPlayers(List.of("admin"));
-    }};
+    private Thread lobbyThread;
+    private Lobby lobby;
 
-    /**
-     * Creates new LobbyController with specified SceneManager and UserManager.
-     *
-     * @param sceneManager scene manager.
-     * @param connectionManager  user manager.
-     */
-    public LobbyController(SceneManager sceneManager, ConnectionManager connectionManager) {
+    public LobbyController(SceneManager sceneManager, ConnectionManager connectionManager, String sessionToken) {
         this.sceneManager = sceneManager;
         this.connectionManager = connectionManager;
+        this.sessionToken = sessionToken;
     }
 
     @FXML
     private void initialize() {
+        lobbyThread = new Thread(() -> {
+            while (!Thread.interrupted()) {
+                try {
+                    lobby = connectionManager.getLobby(sessionToken);
+
+                    Platform.runLater(() -> {
+                        lobbyVBox.getChildren().clear();
+                        lobbyVBox.getChildren().add(new Label(lobby.getLevelName()));
+                        lobbyVBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
+                        for (String playerName : lobby.getPlayers()) {
+                            lobbyVBox.getChildren().add(new Label(playerName));
+                        }
+                    });
+
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+
+        lobbyThread.start();
         connectionManager.setServerMessageListener(this);
-        root.getChildren().add(new Label(lobby.getLevelName()));
-        root.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
-        for (String playerName : lobby.getPlayers()) {
-            root.getChildren().add(new Label(playerName));
-        }
-        Button readyButton = new Button("Start");
+
+        ToggleButton readyButton = new ToggleButton("Start");
         readyButton.setOnAction(actionEvent -> {
             Message message = new Message();
             message.setType(Message.Type.READY);
@@ -70,6 +80,14 @@ public class LobbyController implements Controller, ServerMessageListener {
     @Override
     public String getFXMLFileName() {
         return FXML_FILE_NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
+        lobbyThread.interrupt();
     }
 
     @Override

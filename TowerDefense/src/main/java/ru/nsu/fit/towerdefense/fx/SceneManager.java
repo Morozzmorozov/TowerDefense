@@ -139,8 +139,8 @@ public class SceneManager {
         switchScene(new LobbiesController(this, connectionManager));
     }
 
-    public void switchToLobby() {
-        switchScene(new LobbyController(this, connectionManager));
+    public void switchToLobby(String sessionToken) {
+        switchScene(new LobbyController(this, connectionManager, sessionToken));
     }
 
     /**

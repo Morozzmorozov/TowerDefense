@@ -194,7 +194,7 @@ public class MenuController implements Controller {
         //gridPane.add(createLevelButton("idle-icon", "Idle game", null), 1, 3); // todo uncomment
 
         gridPane.add(createLevelButton("cooperative-icon", "Cooperative",
-            mouseEvent -> startCooperativeGame(gameMapName)), 0, 3);
+            mouseEvent -> createCooperativeGame(gameMapName)), 0, 3);
         gridPane.add(createLevelButton("competition-icon", "Competition",
             mouseEvent -> System.out.println("competition")), 1, 3);
         gridPane.add(createLevelButton("leaderboard-icon", "Leaders",
@@ -230,17 +230,17 @@ public class MenuController implements Controller {
         return hBox;
     }
 
-    private void startCooperativeGame(String gameMapName) {
+    private void createCooperativeGame(String gameMapName) {
         new Thread(() -> {
             String lobbyId = connectionManager.createLobby(gameMapName);
             if (lobbyId == null) {
-                System.out.println("lobbyId: " + lobbyId);
+                System.out.println("lobbyId is null");
                 return;
             }
 
             String sessionToken = connectionManager.joinLobby(lobbyId);
             if (sessionToken == null) {
-                System.out.println("sessionToken: " + sessionToken);
+                System.out.println("sessionToken is null");
                 return;
             }
 
@@ -248,7 +248,7 @@ public class MenuController implements Controller {
 
             Platform.runLater(() -> {
                 System.out.println("switchToLobby");
-                sceneManager.switchToLobby();
+                sceneManager.switchToLobby(sessionToken);
             });
         }).start();
     }
