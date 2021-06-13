@@ -8,5 +8,5 @@
         <URL value="@../css/icons.css" />
         <URL value="@../css/lobbies.css"/>
     </stylesheets>
-
+    <VBox fx:id="lobbiesVBox" />
 </VBox>

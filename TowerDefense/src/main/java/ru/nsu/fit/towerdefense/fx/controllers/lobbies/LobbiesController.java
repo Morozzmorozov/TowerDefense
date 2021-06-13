@@ -22,16 +22,13 @@ public class LobbiesController implements Controller {
     private static final String FXML_FILE_NAME = "lobbies.fxml";
 
     @FXML private VBox root;
+    @FXML private VBox lobbiesVBox;
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
 
-    /**
-     * Creates new LobbiesController with specified SceneManager and UserManager.
-     *
-     * @param sceneManager scene manager.
-     * @param connectionManager  user manager.
-     */
+    private Thread lobbiesThread;
+
     public LobbiesController(SceneManager sceneManager, ConnectionManager connectionManager) {
         this.sceneManager = sceneManager;
         this.connectionManager = connectionManager;
@@ -39,31 +36,42 @@ public class LobbiesController implements Controller {
 
     @FXML
     private void initialize() {
-        new Thread(() -> {
-            List<Lobby> lobbies = connectionManager.getLobbies();
+        lobbiesThread = new Thread(() -> {
+            while (!Thread.interrupted()) {
+                try {
+                    List<Lobby> lobbies = connectionManager.getLobbies();
 
-            Platform.runLater(() -> {
-                for (Lobby lobby : lobbies) {
-                    HBox hBox = new HBox();
-                    hBox.getChildren().add(new Label(lobby.getLevelName()));
-                    hBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
-                    for (String playerName : lobby.getPlayers()) {
-                        hBox.getChildren().add(new Label(playerName));
-                    }
-                    hBox.setOnMouseClicked(mouseEvent -> new Thread(() -> {
-                        String sessionToken = connectionManager.joinLobby(lobby.getId());
-                        if (sessionToken == null) {
-                            return;
+                    Platform.runLater(() -> {
+                        lobbiesVBox.getChildren().clear();
+                        for (Lobby lobby : lobbies) {
+                            HBox hBox = new HBox();
+                            hBox.getChildren().add(new Label(lobby.getLevelName()));
+                            hBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
+                            for (String playerName : lobby.getPlayers()) {
+                                hBox.getChildren().add(new Label(playerName));
+                            }
+                            hBox.setOnMouseClicked(mouseEvent -> new Thread(() -> {
+                                String sessionToken = connectionManager.joinLobby(lobby.getId());
+                                if (sessionToken == null) {
+                                    return;
+                                }
+
+                                connectionManager.openSocketConnection(lobby.getId(), sessionToken);
+
+                                Platform.runLater(() -> sceneManager.switchToLobby(lobby.getId()));
+                            }).start());
+                            lobbiesVBox.getChildren().add(hBox);
                         }
+                    });
 
-                        connectionManager.openSocketConnection(lobby.getId(), sessionToken);
-
-                        Platform.runLater(() -> sceneManager.switchToLobby(""/*todo*/));
-                    }).start());
-                    root.getChildren().add(hBox);
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-            });
-        }).start();
+            }
+        });
+
+        lobbiesThread.start();
     }
 
     /**
@@ -72,5 +80,15 @@ public class LobbiesController implements Controller {
     @Override
     public String getFXMLFileName() {
         return FXML_FILE_NAME;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void dispose() {
+        if (lobbiesThread != null) {
+            lobbiesThread.interrupt();
+        }
     }
 }
