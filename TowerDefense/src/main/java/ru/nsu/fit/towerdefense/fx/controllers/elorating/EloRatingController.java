@@ -3,15 +3,15 @@ package ru.nsu.fit.towerdefense.fx.controllers.elorating;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.entities.EloRating;
-import ru.nsu.fit.towerdefense.multiplayer.entities.LevelScore;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,8 +24,10 @@ public class EloRatingController implements Controller {
 
     private static final String FXML_FILE_NAME = "elo-rating.fxml";
 
-    @FXML private VBox root;
+    @FXML private StackPane root;
     @FXML private VBox eloRatingVBox;
+
+    @FXML private ImageView menuImageView;
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
@@ -37,6 +39,8 @@ public class EloRatingController implements Controller {
 
     @FXML
     private void initialize() {
+        menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
+
         new Thread(() -> {
             List<EloRating> eloRatings = connectionManager.getEloLeaderboard();
 

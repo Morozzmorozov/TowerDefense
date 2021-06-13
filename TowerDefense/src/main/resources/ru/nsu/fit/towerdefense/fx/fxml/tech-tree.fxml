@@ -99,7 +99,7 @@
             </VBox>
         </StackPane>
     </GridPane>
-    <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
+    <GridPane styleClass="menu-bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
             <ColumnConstraints hgrow="NEVER" />
             <ColumnConstraints hgrow="ALWAYS" />

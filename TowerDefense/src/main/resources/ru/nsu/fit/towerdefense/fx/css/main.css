@@ -10,3 +10,12 @@ Label, Text {
     -fx-min-width: 720px;
     -fx-font-size: 20px;
 }
+
+.menu-bar-grid-pane HBox {
+    -fx-alignment: center;
+}
+
+.menu-bar-grid-pane > HBox {
+    -fx-padding: 8;
+    -fx-spacing: 12;
+}

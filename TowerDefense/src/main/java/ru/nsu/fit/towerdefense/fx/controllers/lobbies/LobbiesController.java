@@ -3,7 +3,9 @@ package ru.nsu.fit.towerdefense.fx.controllers.lobbies;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
@@ -21,8 +23,10 @@ public class LobbiesController implements Controller {
 
     private static final String FXML_FILE_NAME = "lobbies.fxml";
 
-    @FXML private VBox root;
+    @FXML private StackPane root;
     @FXML private VBox lobbiesVBox;
+
+    @FXML private ImageView menuImageView;
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
@@ -36,6 +40,8 @@ public class LobbiesController implements Controller {
 
     @FXML
     private void initialize() {
+        menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
+
         lobbiesThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {

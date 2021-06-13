@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
-<?import javafx.scene.control.Label?>
-<VBox fx:id="root" styleClass="root" xmlns="http://javafx.com/javafx/100.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="root" styleClass="root" xmlns="http://javafx.com/javafx/100.2-internal" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/main.css"/>
         <URL value="@../css/icons.css" />
         <URL value="@../css/lobby.css"/>
     </stylesheets>
-    <Label>Lobby</Label>
-    <VBox fx:id="lobbyVBox" />
-</VBox>
+    <VBox>
+        <Label>Lobby</Label>
+        <VBox fx:id="lobbyVBox" />
+    </VBox>
+    <GridPane styleClass="menu-bar-grid-pane" pickOnBounds="false">
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" />
+            <ColumnConstraints hgrow="NEVER" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints vgrow="NEVER" />
+        </rowConstraints>
+        <HBox GridPane.columnIndex="1">
+            <HBox>
+                <ImageView fx:id="menuImageView" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="menu-icon" />
+            </HBox>
+        </HBox>
+    </GridPane>
+</StackPane>

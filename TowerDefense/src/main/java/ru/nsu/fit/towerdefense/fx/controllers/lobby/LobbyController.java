@@ -6,6 +6,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
@@ -23,8 +25,10 @@ public class LobbyController implements Controller, ServerMessageListener {
 
     private static final String FXML_FILE_NAME = "lobby.fxml";
 
-    @FXML private VBox root;
+    @FXML private StackPane root;
     @FXML private VBox lobbyVBox;
+
+    @FXML private ImageView menuImageView;
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
@@ -45,6 +49,8 @@ public class LobbyController implements Controller, ServerMessageListener {
 
     @FXML
     private void initialize() {
+        menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
+
         lobbyThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
