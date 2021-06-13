@@ -248,7 +248,7 @@ public class MenuController implements Controller {
 
             Platform.runLater(() -> {
                 System.out.println("switchToLobby");
-                sceneManager.switchToLobby(sessionToken);
+                sceneManager.switchToLobby(lobbyId);
             });
         }).start();
     }

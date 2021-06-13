@@ -28,15 +28,15 @@ public class LobbyController implements Controller, ServerMessageListener {
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
-    private final String sessionToken;
+    private final String lobbyId;
 
     private Thread lobbyThread;
     private Lobby lobby;
 
-    public LobbyController(SceneManager sceneManager, ConnectionManager connectionManager, String sessionToken) {
+    public LobbyController(SceneManager sceneManager, ConnectionManager connectionManager, String lobbyId) {
         this.sceneManager = sceneManager;
         this.connectionManager = connectionManager;
-        this.sessionToken = sessionToken;
+        this.lobbyId = lobbyId;
     }
 
     @FXML
@@ -44,7 +44,7 @@ public class LobbyController implements Controller, ServerMessageListener {
         lobbyThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
-                    lobby = connectionManager.getLobby(sessionToken);
+                    lobby = connectionManager.getLobby(lobbyId);
 
                     Platform.runLater(() -> {
                         lobbyVBox.getChildren().clear();
@@ -87,7 +87,9 @@ public class LobbyController implements Controller, ServerMessageListener {
      */
     @Override
     public void dispose() {
-        lobbyThread.interrupt();
+        if (lobbyThread != null) {
+            lobbyThread.interrupt();
+        }
     }
 
     @Override
