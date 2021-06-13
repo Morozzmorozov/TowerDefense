@@ -18,18 +18,21 @@ public class ConnectionManagerStub extends ConnectionManager {
             setLevelName("Level 1");
             setMaxPlayers(2);
             setPlayers(List.of("John", "Jane"));
+            setType(Type.Cooperative);
         }},
         new Lobby() {{
             setId("222");
             setLevelName("Level 2");
             setMaxPlayers(3);
             setPlayers(List.of("admin"));
+            setType(Type.Competition);
         }},
         new Lobby() {{
             setId("333");
             setLevelName("Level 3");
             setMaxPlayers(3);
             setPlayers(List.of("Super Player", "Bad Player"));
+            setType(Type.Cooperative);
         }}
     );
 
@@ -97,6 +100,7 @@ public class ConnectionManagerStub extends ConnectionManager {
             setLevelName("Level 1_4");
             setMaxPlayers(3);
             setPlayers(getRandomSubList(players));
+            setType(Type.Cooperative);
         }};
     }
 

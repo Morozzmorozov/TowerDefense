@@ -52,6 +52,7 @@ public class LobbiesController implements Controller {
                         for (Lobby lobby : lobbies) {
                             HBox hBox = new HBox();
                             hBox.getChildren().add(new Label(lobby.getLevelName()));
+                            hBox.getChildren().add(new Label(lobby.getType().toString()));
                             hBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
                             for (String playerName : lobby.getPlayers()) {
                                 hBox.getChildren().add(new Label(playerName));

@@ -59,6 +59,7 @@ public class LobbyController implements Controller, ServerMessageListener {
                     Platform.runLater(() -> {
                         lobbyVBox.getChildren().clear();
                         lobbyVBox.getChildren().add(new Label(lobby.getLevelName()));
+                        lobbyVBox.getChildren().add(new Label(lobby.getType().toString()));
                         lobbyVBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
                         for (String playerName : lobby.getPlayers()) {
                             lobbyVBox.getChildren().add(new Label(playerName));
