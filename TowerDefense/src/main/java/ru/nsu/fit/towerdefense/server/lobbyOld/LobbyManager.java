@@ -1,8 +1,7 @@
-package ru.nsu.fit.towerdefense.server.lobby;
+package ru.nsu.fit.towerdefense.server.lobbyOld;
 
 
-import ru.nsu.fit.towerdefense.server.sockets.UserConnection;
-import ru.nsu.fit.towerdefense.server.sockets.receivers.MessageReceiver;
+import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
 
 import java.security.MessageDigest;
 import java.util.*;
@@ -81,7 +80,7 @@ public class LobbyManager {
 		}
 	}
 
-	public LobbyControl tryConnect(MessageReceiver receiver, String token, Long lobbyId)
+	public LobbyControl tryConnect(Messenger receiver, String token, Long lobbyId)
 	{
 		synchronized (lobbies.get(lobbyId))
 		{

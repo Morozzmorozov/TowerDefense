@@ -8,7 +8,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 import ru.nsu.fit.towerdefense.server.filters.AuthenticationFilter;
 import ru.nsu.fit.towerdefense.server.servlets.*;
-import ru.nsu.fit.towerdefense.server.filters.LobbyExistenceFilter;
+import ru.nsu.fit.towerdefense.server.filters.SessionExistenceFilter;
 import ru.nsu.fit.towerdefense.server.sockets.GameSocket;
 
 import java.time.Duration;
@@ -63,12 +63,12 @@ public class GameServer {
 	{
 		GameServer server = new GameServer(8080);
 		server.addFilter(Mappings.USER_FILTER_MAPPING, AuthenticationFilter.class);
-		server.addFilter(Mappings.LOBBY_MAPPING, LobbyExistenceFilter.class);
-		server.addServlet(Mappings.JOIN_LOBBY_MAPPING, LobbyJoinServlet.class);
-		server.addServlet(Mappings.LEAVE_LOBBY_MAPPING, LobbyLeaveServlet.class);
+		server.addFilter(Mappings.LOBBY_MAPPING, SessionExistenceFilter.class);
+		server.addServlet(Mappings.JOIN_LOBBY_MAPPING, SessionJoinServlet.class);
+		server.addServlet(Mappings.LEAVE_LOBBY_MAPPING, SessionLeaveServlet.class);
 		server.addServlet(Mappings.INFO_LOBBY_MAPPING, GetLobbyInfoServlet.class);
-		server.addServlet(Mappings.LOBBIES_MAPPING, GetLobbiesServlet.class);
-		server.addServlet(Mappings.CREATE_LOBBY_MAPPING, CreateLobbyServlet.class);
+		server.addServlet(Mappings.LOBBIES_MAPPING, GetSessionsServlet.class);
+		server.addServlet(Mappings.CREATE_LOBBY_MAPPING, CreateSessionServlet.class);
 		server.addServlet(Mappings.LOGIN_MAPPING, LoginServlet.class);
 
 		try

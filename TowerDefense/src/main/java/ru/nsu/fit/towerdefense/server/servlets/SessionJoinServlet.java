@@ -5,32 +5,34 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
-import ru.nsu.fit.towerdefense.server.session.SessionController;
+import ru.nsu.fit.towerdefense.multiplayer.entities.Session;
 import ru.nsu.fit.towerdefense.server.session.SessionManager;
-
 
 import java.io.IOException;
 
-public class GetLobbyInfoServlet  extends HttpServlet {
+public class SessionJoinServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		try
 		{
-			long id = Long.parseLong(req.getParameter("sessionId"));
+			Long id = Long.parseLong(req.getParameter("sessionId"));
+			String player = (String)req.getAttribute("playerName");
 
-			SessionController session = SessionManager.getInstance().getSessionById(id);
+			String token = SessionManager.getInstance().getSessionById(id).generateInviteToken(player);
 
-			//Lobby lobby = LobbyManager.getInstance().getLobbyByID(id).serialize();
 
-			if (session == null){
+
+			Session session = new Session();
+//			String token = LobbyManager.getInstance().createToken(req.getParameter("lobbyId"), req.getParameter("userToken"));
+			if (token == null){
 				resp.setStatus(409);
 			}
 			else
 			{
+				session.setToken(token);
 				resp.setStatus(200);
-				resp.getWriter().print(new Gson().toJson(session.getInfo()));
+				resp.getWriter().println(new Gson().toJson(session));
 			}
 		}
 		catch (Exception e){

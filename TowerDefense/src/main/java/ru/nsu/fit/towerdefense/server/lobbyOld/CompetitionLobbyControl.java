@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.server.lobby;
+package ru.nsu.fit.towerdefense.server.lobbyOld;
 
 import java.util.Map;
 

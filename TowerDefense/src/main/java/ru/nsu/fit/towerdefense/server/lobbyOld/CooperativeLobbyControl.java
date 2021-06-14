@@ -1,6 +1,4 @@
-package ru.nsu.fit.towerdefense.server.lobby;
-
-import java.util.List;
+package ru.nsu.fit.towerdefense.server.lobbyOld;
 
 public class CooperativeLobbyControl extends LobbyControl {
 

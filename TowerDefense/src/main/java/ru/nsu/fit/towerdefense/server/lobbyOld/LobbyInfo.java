@@ -1,12 +1,12 @@
-package ru.nsu.fit.towerdefense.server.lobby;
+package ru.nsu.fit.towerdefense.server.lobbyOld;
 
-public class Lobby {
+
+public class LobbyInfo {
     private final Long id;
     private String levelName;
     private int playersNumber;
 
-
-    public Lobby(long id){
+    public LobbyInfo(long id){
         this.id = id;
     }
 

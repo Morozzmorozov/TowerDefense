@@ -2,15 +2,18 @@ package ru.nsu.fit.towerdefense.server.sockets.receivers;
 
 import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
-import ru.nsu.fit.towerdefense.server.lobby.LobbyControl;
+import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyControl;
+import ru.nsu.fit.towerdefense.server.session.SessionController;
 import ru.nsu.fit.towerdefense.server.sockets.UserConnection;
 
-public class EventReceiver implements MessageReceiver {
+public class EventMessenger implements Messenger {
 
-	private LobbyControl lobby;
+	private SessionController session;
 	private UserConnection owner;
+	private String player;
 
-	public EventReceiver() {
+	public EventMessenger(String player) {
+		this.player = player;
 	}
 
 	@Override
@@ -28,7 +31,7 @@ public class EventReceiver implements MessageReceiver {
 	@Override
 	public void disconnect()
 	{
-		lobby.connectedUserLeaves(this);
+		session.disconnectPlayer(player);
 	}
 
 	private void parseEvent(String message)
@@ -36,14 +39,14 @@ public class EventReceiver implements MessageReceiver {
 		Message message1 = new Gson().fromJson(message, Message.class);
 		switch (message1.getType())
 		{
-			case READY -> {System.out.println("Got switch ready message!"); lobby.switchReady(this);}
-			case EVENT -> {System.out.println("Got event message!"); lobby.sendEvent(message1.getSerializedEvent());}
+			case READY -> {System.out.println("Got switch ready message!"); session.switchReady(player);}
+			case EVENT -> {System.out.println("Got event message!"); session.receiveGameEvent(message1.getSerializedEvent(), player);}
 			default -> {}
 		}
 	}
 
-	public void setLobby(LobbyControl lobby) {
-		this.lobby = lobby;
+	public void setSession(SessionController session) {
+		this.session = session;
 	}
 
 	public void setOwner(UserConnection connection)

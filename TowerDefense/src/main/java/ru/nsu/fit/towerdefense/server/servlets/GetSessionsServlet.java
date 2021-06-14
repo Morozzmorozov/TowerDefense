@@ -7,8 +7,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
-import ru.nsu.fit.towerdefense.server.lobby.LobbyControl;
-import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
+import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyControl;
+import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyManager;
+import ru.nsu.fit.towerdefense.server.session.SessionController;
+import ru.nsu.fit.towerdefense.server.session.SessionManager;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,16 +18,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @WebServlet("/lobbies")
-public class GetLobbiesServlet extends HttpServlet {
+public class GetSessionsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		resp.setStatus(200);
 
-		var lobbies = LobbyManager.getInstance().getLobbies();
+		var sessions = SessionManager.getInstance().getActiveSessions();/*LobbyManager.getInstance().getLobbies();*/
 		PrintWriter writer = resp.getWriter();
 
-		List<Lobby> list = lobbies.stream().map(LobbyControl::serialize).collect(Collectors.toList());
+		List<Lobby> list = sessions.stream().map(SessionController::getInfo).collect(Collectors.toList());
 
 		writer.print(new Gson().toJson(list));
 
