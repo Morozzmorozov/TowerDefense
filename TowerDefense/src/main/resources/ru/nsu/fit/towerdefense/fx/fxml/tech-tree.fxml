@@ -110,8 +110,12 @@
         </rowConstraints>
         <HBox>
             <HBox>
-                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
                 <Label fx:id="researchLabel" />
+            </HBox>
+            <HBox>
+                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="multiplayer-progress-icon" />
+                <Label fx:id="multiplayerLabel" />
             </HBox>
         </HBox>
         <HBox GridPane.columnIndex="2">

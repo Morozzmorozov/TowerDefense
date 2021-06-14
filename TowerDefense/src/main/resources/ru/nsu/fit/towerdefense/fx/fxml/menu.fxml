@@ -38,6 +38,10 @@
                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="research-progress-icon" />
                 <Label fx:id="researchLabel" />
             </HBox>
+            <HBox>
+                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" styleClass="multiplayer-progress-icon" />
+                <Label fx:id="multiplayerLabel" />
+            </HBox>
         </HBox>
         <HBox GridPane.columnIndex="2">
             <HBox>
@@ -53,5 +57,6 @@
         </HBox>
     </GridPane>
     <Button fx:id="clearButton" visible="false" managed="false" StackPane.alignment="BOTTOM_LEFT" style="-fx-background-color: red;">Clear saves</Button>
-    <Button fx:id="addResearchPointsButton" visible="false" managed="false" StackPane.alignment="BOTTOM_RIGHT">Add 10 research points</Button>
+    <Button fx:id="addResearchPointsButton" visible="false" managed="false" StackPane.alignment="BOTTOM_CENTER">Add 10 research points</Button>
+    <Button fx:id="addMultiplayerPointsButton" visible="false" managed="false" StackPane.alignment="BOTTOM_RIGHT">Add 10 multiplayer points</Button>
 </StackPane>

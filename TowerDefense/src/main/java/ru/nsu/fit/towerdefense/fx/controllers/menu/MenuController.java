@@ -41,6 +41,7 @@ public class MenuController implements Controller {
 
     @FXML private Button clearButton;
     @FXML private Button addResearchPointsButton;
+    @FXML private Button addMultiplayerPointsButton;
 
     @FXML private ImageView techTreeImageView;
     @FXML private ImageView eloRatingImageView;
@@ -51,6 +52,7 @@ public class MenuController implements Controller {
     @FXML private FlowPane levelsFlowPane;
 
     @FXML private Label researchLabel;
+    @FXML private Label multiplayerLabel;
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
@@ -75,15 +77,21 @@ public class MenuController implements Controller {
         clearButton.setOnMouseClicked(mouseEvent -> {
             UserMetaData.clear();
             researchLabel.setText(UserMetaData.getResearchPoints() + "");
+            multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
         });
         addResearchPointsButton.setOnMouseClicked(mouseEvent -> {
             UserMetaData.addResearchPoints(10);
             researchLabel.setText(UserMetaData.getResearchPoints() + "");
         });
+        addMultiplayerPointsButton.setOnMouseClicked(mouseEvent -> {
+            UserMetaData.addMultiplayerPoints(10);
+            multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
+        });
 
         setLoggedIn(null);
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
+        multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
         techTreeImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToTechTree());
         eloRatingImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToEloRating());
         lobbiesImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
@@ -276,6 +284,8 @@ public class MenuController implements Controller {
                 clearButton.setVisible(true);
                 addResearchPointsButton.setManaged(true);
                 addResearchPointsButton.setVisible(true);
+                addMultiplayerPointsButton.setManaged(true);
+                addMultiplayerPointsButton.setVisible(true);
             }
         });
 
@@ -285,6 +295,8 @@ public class MenuController implements Controller {
                 clearButton.setVisible(false);
                 addResearchPointsButton.setManaged(false);
                 addResearchPointsButton.setVisible(false);
+                addMultiplayerPointsButton.setManaged(false);
+                addMultiplayerPointsButton.setVisible(false);
             }
         });
     }

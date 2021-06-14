@@ -6,6 +6,10 @@
     -fx-image: url('../icons/star.png');
 }
 
+.multiplayer-progress-icon {
+    -fx-image: url('../icons/gold.png');
+}
+
 .money-progress-icon {
     -fx-image: url('../icons/money.png');
 }

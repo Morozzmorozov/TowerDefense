@@ -55,6 +55,7 @@ public class TechTreeController implements Controller {
     @FXML private AnchorPane worldAnchorPane;
 
     @FXML private Label researchLabel;
+    @FXML private Label multiplayerLabel;
 
     @FXML private ImageView menuImageView;
 
@@ -94,6 +95,7 @@ public class TechTreeController implements Controller {
         menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
+        multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
 
         camera = new Camera(worldWrapperStackPane, worldAnchorPane,
             sceneManager.getStageSize(), GameMetaData.getInstance().getTechTree().getSize());
@@ -244,6 +246,7 @@ public class TechTreeController implements Controller {
                     UserMetaData.subtractResearchPoints(research.getCost());
 
                     researchLabel.setText(UserMetaData.getResearchPoints() + "");
+                    // todo multiplayerLabel
                     drawTechTree();
 
                     researchBuyLabel.setText("Researched");

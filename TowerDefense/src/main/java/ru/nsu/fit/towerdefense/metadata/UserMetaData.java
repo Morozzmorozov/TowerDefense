@@ -8,6 +8,7 @@ import java.util.prefs.Preferences;
 public class UserMetaData {
 
     private static final String RESEARCH_POINTS_KEY = "researchPoints";
+    private static final String MULTIPLAYER_POINTS_KEY = "multiplayerPoints";
 
     private static final Preferences PREFERENCES = Preferences.userRoot().node(UserMetaData.class.getName());
 
@@ -25,6 +26,22 @@ public class UserMetaData {
 
     public static void addResearchPoints(int researchPoints) {
         PREFERENCES.putInt(RESEARCH_POINTS_KEY, getResearchPoints() + researchPoints);
+    }
+
+    public static int getMultiplayerPoints() {
+        return PREFERENCES.getInt(MULTIPLAYER_POINTS_KEY, 0);
+    }
+
+    public static void setMultiplayerPoints(int multiplayerPoints) {
+        PREFERENCES.putInt(MULTIPLAYER_POINTS_KEY, multiplayerPoints);
+    }
+
+    public static void subtractMultiplayerPoints(int multiplayerPoints) {
+        PREFERENCES.putInt(MULTIPLAYER_POINTS_KEY, getMultiplayerPoints() - multiplayerPoints);
+    }
+
+    public static void addMultiplayerPoints(int multiplayerPoints) {
+        PREFERENCES.putInt(MULTIPLAYER_POINTS_KEY, getMultiplayerPoints() + multiplayerPoints);
     }
 
     public static List<String> getUnlockedResearchNames(List<String> availableResearchNames) {
