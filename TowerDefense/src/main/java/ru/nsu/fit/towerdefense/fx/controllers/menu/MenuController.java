@@ -39,10 +39,6 @@ public class MenuController implements Controller {
 
     private static final String FXML_FILE_NAME = "menu.fxml";
 
-    @FXML private Button clearButton;
-    @FXML private Button addResearchPointsButton;
-    @FXML private Button addMultiplayerPointsButton;
-
     @FXML private ImageView techTreeImageView;
     @FXML private ImageView eloRatingImageView;
     @FXML private ImageView lobbiesImageView;
@@ -74,20 +70,6 @@ public class MenuController implements Controller {
 
     @FXML
     private void initialize() {
-        clearButton.setOnMouseClicked(mouseEvent -> {
-            UserMetaData.clear();
-            researchLabel.setText(UserMetaData.getResearchPoints() + "");
-            multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
-        });
-        addResearchPointsButton.setOnMouseClicked(mouseEvent -> {
-            UserMetaData.addResearchPoints(10);
-            researchLabel.setText(UserMetaData.getResearchPoints() + "");
-        });
-        addMultiplayerPointsButton.setOnMouseClicked(mouseEvent -> {
-            UserMetaData.addMultiplayerPoints(10);
-            multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
-        });
-
         setLoggedIn(null);
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
@@ -271,34 +253,6 @@ public class MenuController implements Controller {
     @Override
     public String getFXMLFileName() {
         return FXML_FILE_NAME;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void runAfterSceneSet() {
-        sceneManager.getScene().setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode().equals(CONTROL)) {
-                clearButton.setManaged(true);
-                clearButton.setVisible(true);
-                addResearchPointsButton.setManaged(true);
-                addResearchPointsButton.setVisible(true);
-                addMultiplayerPointsButton.setManaged(true);
-                addMultiplayerPointsButton.setVisible(true);
-            }
-        });
-
-        sceneManager.getScene().setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode().equals(CONTROL)) {
-                clearButton.setManaged(false);
-                clearButton.setVisible(false);
-                addResearchPointsButton.setManaged(false);
-                addResearchPointsButton.setVisible(false);
-                addMultiplayerPointsButton.setManaged(false);
-                addMultiplayerPointsButton.setVisible(false);
-            }
-        });
     }
 
     /**

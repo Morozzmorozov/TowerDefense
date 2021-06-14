@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -39,6 +40,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static javafx.scene.input.KeyCode.CONTROL;
+
 /**
  * TechTreeController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a tech tree
  * scene.
@@ -50,6 +53,10 @@ public class TechTreeController implements Controller {
     private static final String FXML_FILE_NAME = "tech-tree.fxml";
     private static final DecimalFormat DECIMAL_FORMAT =
         new DecimalFormat("#.##", new DecimalFormatSymbols() {{setDecimalSeparator('.');}});
+
+    @FXML private Button clearButton;
+    @FXML private Button addResearchPointsButton;
+    @FXML private Button addMultiplayerPointsButton;
 
     @FXML private StackPane worldWrapperStackPane;
     @FXML private AnchorPane worldAnchorPane;
@@ -92,6 +99,20 @@ public class TechTreeController implements Controller {
 
     @FXML
     private void initialize() {
+        clearButton.setOnMouseClicked(mouseEvent -> {
+            UserMetaData.clear();
+            researchLabel.setText(UserMetaData.getResearchPoints() + "");
+            multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
+        });
+        addResearchPointsButton.setOnMouseClicked(mouseEvent -> {
+            UserMetaData.addResearchPoints(10);
+            researchLabel.setText(UserMetaData.getResearchPoints() + "");
+        });
+        addMultiplayerPointsButton.setOnMouseClicked(mouseEvent -> {
+            UserMetaData.addMultiplayerPoints(10);
+            multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
+        });
+
         menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
@@ -319,6 +340,17 @@ public class TechTreeController implements Controller {
      */
     @Override
     public void runAfterSceneSet() {
+        sceneManager.getScene().setOnKeyPressed(keyEvent -> {
+            if (keyEvent.getCode().equals(CONTROL)) {
+                clearButton.setManaged(true);
+                clearButton.setVisible(true);
+                addResearchPointsButton.setManaged(true);
+                addResearchPointsButton.setVisible(true);
+                addMultiplayerPointsButton.setManaged(true);
+                addMultiplayerPointsButton.setVisible(true);
+            }
+        });
+
         sceneManager.getScene().setOnScroll(scrollEvent -> {
             if (scrollEvent.getDeltaY() == 0) {
                 return;
