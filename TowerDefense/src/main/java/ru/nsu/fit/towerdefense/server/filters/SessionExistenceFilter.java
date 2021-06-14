@@ -20,7 +20,7 @@ public class SessionExistenceFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
 		HttpServletRequest req = (HttpServletRequest)request;
-		String id = req.getParameter("sessionId");
+		String id = req.getParameter("lobbyId");
 		Long lId = Long.parseLong(id);
  		if (!SessionManager.getInstance().isSessionExists(lId)){
 			((HttpServletResponse)response).setStatus(400);

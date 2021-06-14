@@ -19,7 +19,7 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
-
+		System.out.println("AuthFilter");
 		HttpServletRequest req = (HttpServletRequest) request;
 		String login = req.getParameter("username");
 		String password = req.getParameter("password");

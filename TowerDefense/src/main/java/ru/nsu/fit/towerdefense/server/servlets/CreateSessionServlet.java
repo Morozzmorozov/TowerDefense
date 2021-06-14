@@ -22,6 +22,7 @@ public class CreateSessionServlet extends HttpServlet {
 		String gameType = req.getParameter("gameType");
 		String player = (String)req.getAttribute("playerName");
 		if (levelName == null) levelName = "Level 1_4";
+		if (gameType == null) gameType = "COOPERATIVE";
 		resp.setStatus(200);
 		String id = "" + SessionManager.getInstance().createSession(SessionInfo.GameType.valueOf(gameType), levelName, player);
 

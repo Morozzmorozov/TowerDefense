@@ -22,6 +22,7 @@ public class SessionCreationFilter implements Filter {
 		String player = (String)req.getAttribute("playerName");
 		if (PlayerManager.getInstance().isConnected(player))
 		{
+			System.out.println("Player is connected!");
 			((HttpServletResponse)response).setStatus(403);
 		}
 		else

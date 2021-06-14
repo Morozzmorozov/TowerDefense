@@ -12,13 +12,13 @@ import ru.nsu.fit.towerdefense.server.session.SessionManager;
 
 import java.io.IOException;
 
-public class GetLobbyInfoServlet  extends HttpServlet {
+public class GetSessionInfoServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		try
 		{
-			long id = Long.parseLong(req.getParameter("sessionId"));
+			long id = Long.parseLong(req.getParameter("lobbyId"));
 
 			SessionController session = SessionManager.getInstance().getSessionById(id);
 
@@ -34,6 +34,7 @@ public class GetLobbyInfoServlet  extends HttpServlet {
 			}
 		}
 		catch (Exception e){
+			System.out.println(e.getMessage());
 			resp.setStatus(500);
 		}
 	}

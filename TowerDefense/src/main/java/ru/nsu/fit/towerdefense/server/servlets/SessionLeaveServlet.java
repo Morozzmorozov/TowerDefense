@@ -14,7 +14,7 @@ public class SessionLeaveServlet extends HttpServlet {
 	{
 		try
 		{
-			Long id = Long.parseLong(req.getParameter("sessionId"));
+			Long id = Long.parseLong(req.getParameter("lobbyId"));
 			String player = (String)req.getAttribute("playerName");
 
 			SessionManager.getInstance().getSessionById(id).disconnectPlayer(player);
@@ -24,6 +24,7 @@ public class SessionLeaveServlet extends HttpServlet {
 			resp.getWriter().println("{ \"status\" : \"success\"}");
 		}
 		catch (Exception e){
+			System.out.println(e.getMessage());
 			resp.setStatus(500);
 		}
 	}

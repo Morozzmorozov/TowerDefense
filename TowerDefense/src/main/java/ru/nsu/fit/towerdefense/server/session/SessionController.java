@@ -90,7 +90,7 @@ public class SessionController {
 	{
 		if (info.getType() == SessionInfo.GameType.COOPERATIVE)
 		{
-			controller = new CooperativeGame(info.getLevel(), info.getPlayers());
+			controller = new CooperativeGame(info.getLevel(), info.getPlayers(), this);
 		}
 		else
 		{
@@ -137,7 +137,7 @@ public class SessionController {
 	{
 		connections.get(player).sendMessage(message);
 	}
-
+	public void sendMessageToAll(String message) {connections.values().forEach(e -> e.sendMessage(message));}
 	public Lobby getInfo()
 	{
 		Lobby lobby = new Lobby();
