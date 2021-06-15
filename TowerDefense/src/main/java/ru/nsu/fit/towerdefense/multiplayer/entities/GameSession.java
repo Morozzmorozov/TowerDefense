@@ -1,6 +1,7 @@
 package ru.nsu.fit.towerdefense.multiplayer.entities;
 
-public class Session {
+public class GameSession {
+
     private String token;
 
     public String getToken() {

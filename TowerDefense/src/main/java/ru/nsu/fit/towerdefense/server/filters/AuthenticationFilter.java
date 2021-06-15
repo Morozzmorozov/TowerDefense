@@ -4,7 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.nsu.fit.towerdefense.server.database.UserManager;
-import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
+import ru.nsu.fit.towerdefense.server.players.PlayerManager;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
-
+		System.out.println("AuthFilter");
 		HttpServletRequest req = (HttpServletRequest) request;
 		String login = req.getParameter("username");
 		String password = req.getParameter("password");
@@ -28,9 +28,18 @@ public class AuthenticationFilter implements Filter {
 		{
 			chain.doFilter(req, response);
 		}
-		else if (userToken != null && UserManager.getInstance().tokenExists(userToken))
+		else if (userToken != null)
 		{
-			chain.doFilter(req, response);
+			String player = PlayerManager.getInstance().getPlayerByToken(userToken);
+			if (player != null)
+			{
+				req.setAttribute("playerName", player);
+				chain.doFilter(req, response);
+			}
+			else
+			{
+				((HttpServletResponse) response).setStatus(401);
+			}
 		}
 		else
 		{

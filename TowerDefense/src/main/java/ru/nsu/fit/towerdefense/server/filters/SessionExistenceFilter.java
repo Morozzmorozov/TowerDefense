@@ -3,11 +3,12 @@ package ru.nsu.fit.towerdefense.server.filters;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
+import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyManager;
+import ru.nsu.fit.towerdefense.server.session.SessionManager;
 
 import java.io.IOException;
 
-public class LobbyExistenceFilter implements Filter {
+public class SessionExistenceFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException
@@ -21,7 +22,7 @@ public class LobbyExistenceFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest)request;
 		String id = req.getParameter("lobbyId");
 		Long lId = Long.parseLong(id);
- 		if (!LobbyManager.getInstance().isLobbyExists(lId)){
+ 		if (!SessionManager.getInstance().isSessionExists(lId)){
 			((HttpServletResponse)response).setStatus(400);
 		}
 		else

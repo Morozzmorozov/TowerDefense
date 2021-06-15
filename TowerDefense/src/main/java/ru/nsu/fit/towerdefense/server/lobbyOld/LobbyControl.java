@@ -1,12 +1,11 @@
-package ru.nsu.fit.towerdefense.server.lobby;
+package ru.nsu.fit.towerdefense.server.lobbyOld;
 
 import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.server.database.UserManager;
-import ru.nsu.fit.towerdefense.server.sockets.receivers.MessageReceiver;
-import ru.nsu.fit.towerdefense.simulator.ServerSimulator;
+import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.events.Event;
@@ -27,12 +26,12 @@ public class LobbyControl
 
     private static final int AWAITINGLIMIT = 10;
     private static final int TIMEOUT = 30000 * 100;
-    private final Lobby lobby;
+    private final LobbyInfo lobby;
     private final HashSet<String> joinedTokens;
     private final HashSet<String> awaitingTokens;
 
-    private final HashMap<MessageReceiver, String> userToToken;
-    private final HashMap<String, MessageReceiver> tokenToUser;
+    private final HashMap<Messenger, String> userToToken;
+    private final HashMap<String, Messenger> tokenToUser;
 
     private final HashMap<String, String> tokenToName;
     private final HashMap<String, String> nameToToken;
@@ -48,7 +47,7 @@ public class LobbyControl
 
     public LobbyControl(long id, String levelName)
     {
-        lobby = new Lobby(id);
+        lobby = new LobbyInfo(id);
         joinedTokens = new HashSet<>();
         awaitingTokens = new HashSet<>();
         userToToken = new HashMap<>();
@@ -161,7 +160,7 @@ public class LobbyControl
         return joinedTokens.size();
     }
 
-    public void connectedUserLeaves(MessageReceiver receiver)
+    public void connectedUserLeaves(Messenger receiver)
     {
         String token = userToToken.get(receiver);
 
@@ -169,7 +168,7 @@ public class LobbyControl
         tokenToUser.remove(token, receiver);
     }
 
-    public void switchReady(MessageReceiver receiver) {
+    public void switchReady(Messenger receiver) {
         if (currentState == State.PREGAME)
         {
             String token = userToToken.get(receiver);
@@ -239,7 +238,7 @@ public class LobbyControl
         }
     }
 
-    public boolean addMessageReceiver(String token, MessageReceiver receiver)
+    public boolean addMessageReceiver(String token, Messenger receiver)
     {
         synchronized (this)
         {

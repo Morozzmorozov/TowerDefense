@@ -3,6 +3,7 @@ package ru.nsu.fit.towerdefense.fx;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.ConnectionManagerStub;
 
 /**
  * TowerDefenseApplication is a game made with JavaFX.
@@ -32,7 +33,8 @@ public class TowerDefenseApplication extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        connectionManager = new ConnectionManager();
+//        connectionManager = new ConnectionManager();
+        connectionManager = new ConnectionManagerStub(); // todo replace
         sceneManager = new SceneManager(primaryStage, connectionManager);
         sceneManager.switchToMenu();
         primaryStage.show();

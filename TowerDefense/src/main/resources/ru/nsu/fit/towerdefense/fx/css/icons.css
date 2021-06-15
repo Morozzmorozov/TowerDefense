@@ -6,6 +6,10 @@
     -fx-image: url('../icons/star.png');
 }
 
+.multiplayer-progress-icon {
+    -fx-image: url('../icons/gold.png');
+}
+
 .money-progress-icon {
     -fx-image: url('../icons/money.png');
 }
@@ -90,13 +94,31 @@
     -fx-cursor: hand;
 }
 
+.elo-rating-icon {
+    -fx-image: url('../icons/elo-rating.png');
+    -fx-cursor: hand;
+}
+
+.lobbies-icon {
+    -fx-image: url('../icons/multiplayer.png');
+    -fx-cursor: hand;
+}
+
 .menu-icon {
-    -fx-image: url('../icons/menu.png');
+    -fx-image: url('../icons/home-menu.png');
     -fx-cursor: hand;
 }
 
 .cooperative-icon {
     -fx-image: url('../icons/cooperative.png');
+}
+
+.competition-icon {
+    -fx-image: url('../icons/versus.png');
+}
+
+.leaderboard-icon {
+    -fx-image: url('../icons/leaderboard.png');
 }
 
 .user-icon {

@@ -39,17 +39,16 @@ public class MenuController implements Controller {
 
     private static final String FXML_FILE_NAME = "menu.fxml";
 
-    @FXML private Button clearButton;
-    @FXML private Button addResearchPointsButton;
-    @FXML private Button lobbiesButton;
-
     @FXML private ImageView techTreeImageView;
+    @FXML private ImageView eloRatingImageView;
+    @FXML private ImageView lobbiesImageView;
     @FXML private HBox userHBox;
     @FXML private Label userLabel;
     @FXML private Label levelsLabel;
     @FXML private FlowPane levelsFlowPane;
 
     @FXML private Label researchLabel;
+    @FXML private Label multiplayerLabel;
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
@@ -71,21 +70,13 @@ public class MenuController implements Controller {
 
     @FXML
     private void initialize() {
-        clearButton.setOnMouseClicked(mouseEvent -> {
-            UserMetaData.clear();
-            researchLabel.setText(UserMetaData.getResearchPoints() + "");
-        });
-        addResearchPointsButton.setOnMouseClicked(mouseEvent -> {
-            UserMetaData.addResearchPoints(10);
-            researchLabel.setText(UserMetaData.getResearchPoints() + "");
-        });
-
-        lobbiesButton.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
-
         setLoggedIn(null);
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
+        multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
         techTreeImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToTechTree());
+        eloRatingImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToEloRating());
+        lobbiesImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToLobbies());
 
         if (GameMetaData.getInstance().getGameMapNames().isEmpty()) {
             levelsLabel.setText("No levels");
@@ -195,7 +186,11 @@ public class MenuController implements Controller {
         //gridPane.add(createLevelButton("idle-icon", "Idle game", null), 1, 3); // todo uncomment
 
         gridPane.add(createLevelButton("cooperative-icon", "Cooperative",
-            mouseEvent -> startCooperativeGame(gameMapName)), 0, 3);
+            mouseEvent -> createCooperativeGame(gameMapName)), 0, 3);
+        gridPane.add(createLevelButton("competition-icon", "Competition",
+            mouseEvent -> System.out.println("competition")), 1, 3);
+        gridPane.add(createLevelButton("leaderboard-icon", "Leaders",
+            mouseEvent -> showLeaderboard(gameMapName)), 0, 4);
 
         return gridPane;
     }
@@ -227,27 +222,29 @@ public class MenuController implements Controller {
         return hBox;
     }
 
-    private void startCooperativeGame(String gameMapName) {
+    private void createCooperativeGame(String gameMapName) {
         new Thread(() -> {
             String lobbyId = connectionManager.createLobby(gameMapName);
             if (lobbyId == null) {
-                System.out.println("lobbyId: " + lobbyId);
+                System.out.println("lobbyId is null");
                 return;
             }
 
             String sessionToken = connectionManager.joinLobby(lobbyId);
             if (sessionToken == null) {
-                System.out.println("sessionToken: " + sessionToken);
+                System.out.println("sessionToken is null");
                 return;
             }
 
-            connectionManager.openSocketConnection(lobbyId, sessionToken);
-
             Platform.runLater(() -> {
                 System.out.println("switchToLobby");
-                sceneManager.switchToLobby();
+                sceneManager.switchToLobby(lobbyId, sessionToken);
             });
         }).start();
+    }
+
+    private void showLeaderboard(String gameMapName) {
+        sceneManager.switchToLeaderboard(gameMapName);
     }
 
     /**
@@ -256,30 +253,6 @@ public class MenuController implements Controller {
     @Override
     public String getFXMLFileName() {
         return FXML_FILE_NAME;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void runAfterSceneSet() {
-        sceneManager.getScene().setOnKeyPressed(keyEvent -> {
-            if (keyEvent.getCode().equals(CONTROL)) {
-                clearButton.setManaged(true);
-                clearButton.setVisible(true);
-                addResearchPointsButton.setManaged(true);
-                addResearchPointsButton.setVisible(true);
-            }
-        });
-
-        sceneManager.getScene().setOnKeyReleased(keyEvent -> {
-            if (keyEvent.getCode().equals(CONTROL)) {
-                clearButton.setManaged(false);
-                clearButton.setVisible(false);
-                addResearchPointsButton.setManaged(false);
-                addResearchPointsButton.setVisible(false);
-            }
-        });
     }
 
     /**

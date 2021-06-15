@@ -2,18 +2,16 @@ package ru.nsu.fit.towerdefense.server.sockets.receivers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ru.nsu.fit.towerdefense.server.lobby.LobbyControl;
-import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
+import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyManager;
 import ru.nsu.fit.towerdefense.server.sockets.ConnectionsManager;
 import ru.nsu.fit.towerdefense.server.sockets.UserConnection;
 
-import java.util.Collections;
 
-public class UnauthorisedReceiver implements MessageReceiver {
+public class UnauthorisedMessenger implements Messenger {
 
 	private UserConnection owner;
 
-	public UnauthorisedReceiver(UserConnection owner){
+	public UnauthorisedMessenger(UserConnection owner){
 		this.owner = owner;
 		owner.setReceiver(this);
 	}

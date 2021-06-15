@@ -1,17 +1,14 @@
 package ru.nsu.fit.towerdefense.server.servlets;
 
-import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
-import ru.nsu.fit.towerdefense.server.database.UserManager;
-import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
+import ru.nsu.fit.towerdefense.server.players.PlayerManager;
 
 import java.io.IOException;
 
-public class LoginServlet  extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
@@ -26,7 +23,7 @@ public class LoginServlet  extends HttpServlet {
 				return;
 			}
 
-			String token = UserManager.getInstance().validate(login, password);
+			String token = PlayerManager.getInstance().validate(login, password);
 			if (token == null)
 			{
 				resp.setStatus(401);
@@ -38,6 +35,7 @@ public class LoginServlet  extends HttpServlet {
 			}
 		}
 		catch (Exception e){
+			System.out.println(e.getMessage());
 			resp.setStatus(500);
 		}
 	}

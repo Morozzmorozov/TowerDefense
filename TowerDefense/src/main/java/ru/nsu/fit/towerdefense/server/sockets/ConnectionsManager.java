@@ -1,8 +1,10 @@
 package ru.nsu.fit.towerdefense.server.sockets;
 
-import ru.nsu.fit.towerdefense.server.lobby.LobbyControl;
-import ru.nsu.fit.towerdefense.server.lobby.LobbyManager;
-import ru.nsu.fit.towerdefense.server.sockets.receivers.EventReceiver;
+import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyControl;
+import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyManager;
+import ru.nsu.fit.towerdefense.server.session.SessionController;
+import ru.nsu.fit.towerdefense.server.session.SessionManager;
+import ru.nsu.fit.towerdefense.server.sockets.receivers.EventMessenger;
 
 
 public class ConnectionsManager {
@@ -23,16 +25,18 @@ public class ConnectionsManager {
 		socket.setOwner(connection);
 	}
 
-	public boolean upgradeConnection(UserConnection connection, String token, Long lobbyId)
+	public boolean upgradeConnection(UserConnection connection, String token, Long sessionId)
 	{
-		EventReceiver receiver = new EventReceiver();
-		LobbyControl control;
 
-		if ((control = LobbyManager.getInstance().tryConnect(receiver, token, lobbyId)) != null)
+		SessionController controller;
+		if ((controller = SessionManager.getInstance().getSessionById(sessionId)) != null)
 		{
-			receiver.setLobby(control);
-			receiver.setOwner(connection);
-			connection.setReceiver(receiver);
+			String player = controller.getPlayerByToken(token);
+			if (player == null) return false;
+			EventMessenger messenger = new EventMessenger(player);
+			messenger.setSession(controller);
+			messenger.setOwner(connection);
+			controller.connect(messenger, token);
 			return true;
 		}
 		return false;

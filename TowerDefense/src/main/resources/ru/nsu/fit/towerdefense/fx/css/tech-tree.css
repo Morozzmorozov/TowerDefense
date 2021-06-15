@@ -29,15 +29,6 @@
     -fx-alignment: center;
 }
 
-.bar-grid-pane HBox {
-    -fx-alignment: center;
-}
-
-.bar-grid-pane > HBox {
-    -fx-padding: 8;
-    -fx-spacing: 12;
-}
-
 .side-bar {
     -fx-padding: 50 10 10 10;
     -fx-spacing: 20;

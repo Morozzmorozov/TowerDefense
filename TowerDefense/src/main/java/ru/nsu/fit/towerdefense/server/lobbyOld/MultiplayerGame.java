@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.server.lobby;
+package ru.nsu.fit.towerdefense.server.lobbyOld;
 
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.simulator.ServerSimulator;

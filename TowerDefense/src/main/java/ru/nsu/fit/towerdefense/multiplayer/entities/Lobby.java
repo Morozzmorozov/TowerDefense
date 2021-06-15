@@ -4,10 +4,13 @@ import java.util.List;
 
 public class Lobby {
 
+    public enum Type { Cooperative, Competition }
+
     private String id;
     private List<String> players;
     private int maxPlayers;
     private String levelName;
+    private Type type;
 
     public String getId() {
         return id;
@@ -39,5 +42,13 @@ public class Lobby {
 
     public void setLevelName(String levelName) {
         this.levelName = levelName;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }

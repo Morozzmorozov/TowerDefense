@@ -10,7 +10,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
+import ru.nsu.fit.towerdefense.fx.controllers.elorating.EloRatingController;
 import ru.nsu.fit.towerdefense.fx.controllers.game.GameController;
+import ru.nsu.fit.towerdefense.fx.controllers.leaderboard.LeaderboardController;
 import ru.nsu.fit.towerdefense.fx.controllers.lobbies.LobbiesController;
 import ru.nsu.fit.towerdefense.fx.controllers.lobby.LobbyController;
 import ru.nsu.fit.towerdefense.fx.controllers.menu.MenuController;
@@ -139,8 +141,18 @@ public class SceneManager {
         switchScene(new LobbiesController(this, connectionManager));
     }
 
-    public void switchToLobby() {
-        switchScene(new LobbyController(this, connectionManager));
+    public void switchToLobby(String lobbyId, String sessionToken) {
+        switchScene(new LobbyController(this, connectionManager, lobbyId, sessionToken));
+    }
+
+    public void switchToEloRating() {
+        try {
+            switchScene(new EloRatingController(this, connectionManager));
+        } catch (NoSuchElementException e) {
+            new AlertBuilder()
+                .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
+                .build().showAndWait();
+        }
     }
 
     /**
@@ -168,6 +180,16 @@ public class SceneManager {
                 GameMetaData.getInstance().getMapDescription(gameMapName), playerNames);
             connectionManager.setServerMessageListener(gameController);
             switchScene(gameController);
+        } catch (NoSuchElementException e) {
+            new AlertBuilder()
+                .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)
+                .build().showAndWait();
+        }
+    }
+
+    public void switchToLeaderboard(String gameMapName) {
+        try {
+            switchScene(new LeaderboardController(this, connectionManager, gameMapName));
         } catch (NoSuchElementException e) {
             new AlertBuilder()
                 .setHeaderText(MAP_LOADING_ERROR_HEADER).setException(e).setOwner(stage)

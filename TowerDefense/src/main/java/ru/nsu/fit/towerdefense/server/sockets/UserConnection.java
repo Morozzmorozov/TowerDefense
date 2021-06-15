@@ -1,22 +1,22 @@
 package ru.nsu.fit.towerdefense.server.sockets;
 
-import ru.nsu.fit.towerdefense.server.sockets.receivers.MessageReceiver;
-import ru.nsu.fit.towerdefense.server.sockets.receivers.UnauthorisedReceiver;
+import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
+import ru.nsu.fit.towerdefense.server.sockets.receivers.UnauthorisedMessenger;
 
 public class UserConnection
 {
 
 	private GameSocket socket;
-	private MessageReceiver receiver;
+	private Messenger receiver;
 
 	public UserConnection(GameSocket socket)
 	{
 		this.socket = socket;
 		this.socket.setOwner(this);
-		this.receiver = new UnauthorisedReceiver(this);
+		this.receiver = new UnauthorisedMessenger(this);
 	}
 
-	public void setReceiver(MessageReceiver receiver){
+	public void setReceiver(Messenger receiver){
 		this.receiver = receiver;
 	}
 
