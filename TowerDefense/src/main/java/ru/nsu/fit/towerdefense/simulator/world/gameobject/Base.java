@@ -10,13 +10,15 @@ public class Base extends GameObject implements Renderable {
   private final Vector2<Integer> position;
 
   public Base(Base oldBase) {
+    super(oldBase.id);
     health = oldBase.health;
     image = oldBase.image;
     position = new Vector2<>(oldBase.position);
   }
 
   public Base(int health, String image,
-      Vector2<Integer> position) {
+      Vector2<Integer> position, int id) {
+    super(id);
     this.health = health;
     this.image = image;
     this.position = position;

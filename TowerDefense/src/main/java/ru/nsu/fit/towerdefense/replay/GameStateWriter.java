@@ -100,7 +100,7 @@ public class GameStateWriter {
 				if (x.isDead()) continue;
 				writer.writeCharacters(tab.substring(0, 2));
 				writer.writeStartElement("Enemy");
-				writer.writeAttribute("EnemyId", x.getId().toString());
+				writer.writeAttribute("EnemyId", Integer.toString(x.getId()));
 				writer.writeAttribute("Health", Integer.toString(x.getHealth()));
 				writer.writeAttribute("PosX", Double.toString(x.getPosition().getX()));
 				writer.writeAttribute("PosY", Double.toString(x.getPosition().getY()));
@@ -146,7 +146,7 @@ public class GameStateWriter {
 			{
 				writer.writeCharacters(tab.substring(0, 2));
 				writer.writeStartElement("Tower");
-				writer.writeAttribute("TowerId", x.getId().toString());
+				writer.writeAttribute("TowerId", Integer.toString(x.getId()));
 				writer.writeAttribute("Type", x.getType().getTypeName());
 				writer.writeAttribute("PosX", Double.toString(x.getPosition().getX()));
 				writer.writeAttribute("PosY", Double.toString(x.getPosition().getY()));
@@ -156,7 +156,7 @@ public class GameStateWriter {
 				writer.writeAttribute("SellPrice", Integer.toString(x.getSellPrice()));
 				String target = "";
 				if (x.getTarget() != null && !x.getTarget().isDead())
-					target = x.getTarget().getId().toString();
+					target = Integer.toString(x.getTarget().getId());
 				else
 					target = "None";
 				writer.writeAttribute("TargetId", target);
@@ -169,10 +169,10 @@ public class GameStateWriter {
 				if (x.getRemainingRange() <= 0.0) continue;
 				writer.writeCharacters(tab.substring(0, 2));
 				writer.writeStartElement("Projectile");
-				writer.writeAttribute("ProjectileId", x.getId().toString());
+				writer.writeAttribute("ProjectileId", Integer.toString(x.getId()));
 				String target = "";
 				if (x.getTarget() != null && !x.getTarget().isDead())
-					target = x.getTarget().getId().toString();
+					target = Integer.toString(x.getTarget().getId());
 				else
 					target = "None";
 				writer.writeAttribute("TargetId", target);
@@ -278,7 +278,7 @@ public class GameStateWriter {
 		{
 			writer.writeCharacters(tab.substring(0, 2));
 			writer.writeStartElement("RemoveEnemy");
-			writer.writeAttribute("EnemyId", enemy.getId().toString());
+			writer.writeAttribute("EnemyId", Integer.toString(enemy.getId()));
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));
 		}
@@ -296,7 +296,7 @@ public class GameStateWriter {
 		{
 			writer.writeCharacters(tab.substring(0, 2));
 			writer.writeStartElement("RemoveProjectile");
-			writer.writeAttribute("ProjectileId", projectile.getId().toString());
+			writer.writeAttribute("ProjectileId", Integer.toString(projectile.getId()));
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));
 		}
@@ -314,7 +314,7 @@ public class GameStateWriter {
 		{
 			writer.writeCharacters(tab.substring(0, 2));
 			writer.writeStartElement("SwitchMode");
-			writer.writeAttribute("TowerId", tower.getId().toString());
+			writer.writeAttribute("TowerId", Integer.toString(tower.getId()));
 			writer.writeAttribute("Mode", newMode.name());
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));
@@ -333,7 +333,7 @@ public class GameStateWriter {
 		{
 			writer.writeCharacters(tab.substring(0, 2));
 			writer.writeStartElement("DealDamage");
-			writer.writeAttribute("EnemyId", enemy.getId().toString());
+			writer.writeAttribute("EnemyId", Integer.toString(enemy.getId()));
 			writer.writeAttribute("Damage", Integer.toString(damage));
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));
@@ -388,7 +388,7 @@ public class GameStateWriter {
 		{
 			writer.writeCharacters(tab.substring(0, 2));
 			writer.writeStartElement("Apply");
-			writer.writeAttribute("Id", enemy.getId().toString());
+			writer.writeAttribute("Id", Integer.toString(enemy.getId()));
 			writer.writeAttribute("Effect", effectName);
 			writer.writeEndElement();
 			writer.writeCharacters(System.getProperty("line.separator"));

@@ -1,19 +1,17 @@
 package ru.nsu.fit.towerdefense.simulator.world.gameobject;
 
-import java.util.UUID;
-
 public class GameObject {
-  protected UUID id;
+  protected int id;
 
-  public GameObject() {
-    id = UUID.randomUUID();
+  public GameObject(int id) {
+    this.id = id;
   }
 
-  public UUID getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(UUID id) {
+  public void setId(int id) {
     this.id = id;
   }
 }

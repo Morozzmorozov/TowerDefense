@@ -25,11 +25,12 @@ public class Projectile extends GameObject implements Renderable {
     this.owner = owner;
   }
 
-  public Projectile() {
-
+  public Projectile(int id) {
+    super(id);
   }
 
   public Projectile(Projectile oldProjectile, Enemy target) {
+    super(oldProjectile.id);
     this.target = target;
     remainingRange = oldProjectile.remainingRange;
     type = oldProjectile.type;
@@ -125,7 +126,8 @@ public class Projectile extends GameObject implements Renderable {
     this.position = position;
   }
 
-  public Projectile(Enemy target, float range, ProjectileType type, Vector2<Double> position, Vector2<Double> velocity, Tower parent) {
+  public Projectile(Enemy target, float range, ProjectileType type, Vector2<Double> position, Vector2<Double> velocity, Tower parent, int id) {
+    super(id);
     remainingRange = range;
     this.target = target;
     this.type = type;

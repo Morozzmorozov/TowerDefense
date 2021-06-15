@@ -24,13 +24,13 @@ public class GameStateWriterTest {
 		ArrayList<Tower> tower = new ArrayList<>();
 		ArrayList<Projectile> projectiles = new ArrayList<>();
 		GameMetaData metaData = GameMetaData.getInstance();
-		Base base = new Base(100, "",new Vector2<Integer>(1, 1));
+		Base base = new Base(100, "",new Vector2<Integer>(1, 1), 0);
 		EnemyType goblin = metaData.getEnemyType("Goblin");
 		TowerType archer = metaData.getTowerType("Archer");
 		Wave wave = new Wave();
 		wave.setNumber(0);
-		enemies.add(new Enemy(goblin, 0, new Vector2<Double>(10.0, 10.0), 5));
-		tower.add(new Tower());
+		enemies.add(new Enemy(goblin, 0, new Vector2<Double>(10.0, 10.0), 5, 0));
+		tower.add(new Tower(0));
 
 		tower.get(0).setType(archer);
 		tower.get(0).setCooldown(20);
@@ -57,13 +57,13 @@ public class GameStateWriterTest {
 		ArrayList<Tower> tower = new ArrayList<>();
 		ArrayList<Projectile> projectiles = new ArrayList<>();
 		GameMetaData metaData = GameMetaData.getInstance();
-		Base base = new Base(100, "",new Vector2<Integer>(1, 1));
+		Base base = new Base(100, "",new Vector2<Integer>(1, 1), 0);
 		EnemyType goblin = metaData.getEnemyType("Goblin");
 		TowerType archer = metaData.getTowerType("Archer");
 		Wave wave = new Wave();
 		wave.setNumber(0);
 //		enemies.add(new Enemy(goblin, wave, new Vector2<Double>(10.0, 10.0), 5));
-		tower.add(new Tower());
+		tower.add(new Tower(0));
 
 		tower.get(0).setType(archer);
 		tower.get(0).setCooldown(20);

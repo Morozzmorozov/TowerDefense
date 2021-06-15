@@ -6,12 +6,14 @@ public class TowerPlatform extends GameObject implements Renderable {
   private final Vector2<Integer> position;
   private final String image;
 
-  public TowerPlatform(Vector2<Integer> position, String image) {
+  public TowerPlatform(Vector2<Integer> position, String image, int id) {
+    super(id);
     this.position = position;
     this.image = image;
   }
 
   public TowerPlatform(TowerPlatform oldPlatform) {
+    super(oldPlatform.id);
     position = new Vector2<>(oldPlatform.position);
     image = oldPlatform.image;
   }

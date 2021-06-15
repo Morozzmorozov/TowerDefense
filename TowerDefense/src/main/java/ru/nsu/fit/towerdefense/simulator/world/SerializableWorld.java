@@ -18,6 +18,7 @@ import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.GameObject;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Portal;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.RoadTile;
@@ -80,6 +81,8 @@ public class SerializableWorld {
         serializableWorld.idwaveMap.put(Integer.parseInt(entry.getKey()), effect);
       }
 
+      // possibly id map
+
       return serializableWorld;
     }
   }
@@ -119,7 +122,10 @@ public class SerializableWorld {
   private Map<Integer, Integer> waveMap = new HashMap<>();
   private Map<String, Integer> moneyMap;
 
-  public World generateWorld() {
+  private Map<String, Integer> playerCurrentTowerIdMap = new HashMap<>();
+  private int currentEnemyId = 0;
+
+  public World generateWorld(World oldWorld) {
     World world = new World();
     world.setKilledEnemies(killedEnemies);
     world.setCountdown(countdown);
@@ -127,14 +133,23 @@ public class SerializableWorld {
     world.setTick(tick);
     world.setScienceEarned(scienceEarned);
 
-    world.setBase(new Base(base.health, base.image, new Vector2<>(base.x, base.y)));
+    world.setBase(oldWorld.getBase());
 
     world.setEnemies(enemies.stream().map(id -> idenemyMap.get(id).getEnemy()).collect(Collectors.toList()));
-    world.setTowers(towers.stream().map(id -> idtowerMap.get(id).getTower()).collect(Collectors.toList()));
+    world.setTowers(towers.stream().map(id -> {
+      var serializableTower = idtowerMap.get(id);
+      var optTower = world.getTowers().stream().filter(tower -> tower.getId() == serializableTower.idInWorld && tower.getOwner().equals(serializableTower.owner))
+          .findFirst();
+      if (optTower.isPresent()) {
+        return serializableTower.getTower(optTower.get());
+      } else {
+        return serializableTower.getTower();
+      }
+    }).collect(Collectors.toList()));
     world.setProjectiles(projectiles.stream().map(id -> idprojectileMap.get(id).getProjectile()).collect(Collectors.toList()));
-    world.setTowerPlatforms(towerPlatforms.stream().map(id -> idplatformMap.get(id).getTowerPlatform()).collect(Collectors.toList()));
-    world.setRoadTiles(roadTiles.stream().map(id -> idroadTileMap.get(id).getRoadTile()).collect(Collectors.toList()));
-    world.setPortals(portals.stream().map(id -> idportalMap.get(id).getPortal()).collect(Collectors.toList()));
+    world.setTowerPlatforms(oldWorld.getTowerPlatforms());
+    world.setRoadTiles(oldWorld.getRoadTiles());
+    world.setPortals(oldWorld.getPortals());
 
     world.setCurrentWave(idwaveMap.get(currentWave).getWave());
     world.waveMap = new HashMap<>();
@@ -235,9 +250,11 @@ public class SerializableWorld {
 
   static class SerializableEntity {
     int id;
+    int idInWorld;
     transient SerializableWorld serializableWorld;
-    SerializableEntity(Object object, SerializableWorld serializableWorld) {
+    SerializableEntity(Object object, SerializableWorld serializableWorld, int idInWorld) {
       id = serializableWorld.currentId++;
+      this.idInWorld = idInWorld;
       serializableWorld.idMap.put(object, id);
       this.serializableWorld = serializableWorld;
     }
@@ -252,7 +269,7 @@ public class SerializableWorld {
         return enemy;
       }
       Enemy enemy = new Enemy(GameMetaData.getInstance().getEnemyType(type), waveNumber,
-          new Vector2<>(x, y), moneyReward);
+          new Vector2<>(x, y), moneyReward, idInWorld);
 
       enemy.setHealth(health);
       enemy.setVelocity(velocity);
@@ -273,7 +290,7 @@ public class SerializableWorld {
     }
 
     SerializableEnemy(Enemy enemy, SerializableWorld serializableWorld) {
-      super(enemy, serializableWorld);
+      super(enemy, serializableWorld, enemy.getId());
       health = enemy.getHealth();
       type = enemy.getType().getTypeName();
       velocity = enemy.getVelocity();
@@ -318,11 +335,11 @@ public class SerializableWorld {
       if (tower != null) {
         return tower;
       }
-      Tower tower = new Tower();
+      Tower tower = new Tower(idInWorld);
       tower.setType(GameMetaData.getInstance().getTowerType(towerType));
       tower.setCooldown(cooldown);
       tower.setRotation(rotation);
-      System.out.println(enemyId);
+    //  System.out.println(enemyId);
       if (serializableWorld.idenemyMap.containsKey(enemyId) && !serializableWorld.idenemyMap.get(enemyId).isDead) {
         tower.setTarget(serializableWorld.idenemyMap.get(enemyId).getEnemy());
       }
@@ -335,7 +352,7 @@ public class SerializableWorld {
     }
 
     SerializableTower(Tower tower, SerializableWorld serializableWorld) {
-      super(tower, serializableWorld);
+      super(tower, serializableWorld, tower.getId());
       towerType = tower.getType().getTypeName();
       cooldown = tower.getCooldown();
       rotation = tower.getRotation();
@@ -353,6 +370,23 @@ public class SerializableWorld {
       mode = tower.getMode();
       sellPrice = tower.getSellPrice();
       owner = tower.getOwner();
+    }
+
+    Tower getTower(Tower tower) {
+      tower.setOwner(owner);
+      tower.setPosition(new Vector2<>(x, y));
+      tower.setRotation(rotation);
+      tower.setSellPrice(sellPrice);
+      tower.setCooldown(cooldown);
+      tower.setMode(mode);
+      tower.setType(GameMetaData.getInstance().getTowerType(towerType));
+      if (serializableWorld.idenemyMap.containsKey(enemyId) && !serializableWorld.idenemyMap.get(enemyId).isDead) {
+        tower.setTarget(serializableWorld.idenemyMap.get(enemyId).getEnemy());
+      } else {
+        tower.setTarget(null);
+      }
+      this.tower = tower; // just in case
+      return tower;
     }
 
     String towerType; //TowerType type;
@@ -375,7 +409,7 @@ public class SerializableWorld {
       if (projectile != null) {
         return projectile;
       }
-      Projectile projectile = new Projectile();
+      Projectile projectile = new Projectile(idInWorld);
       if (serializableWorld.idenemyMap.containsKey(enemyId)) {
         projectile.setTarget(serializableWorld.idenemyMap.get(enemyId).getEnemy());
       }
@@ -395,7 +429,7 @@ public class SerializableWorld {
     }
 
     SerializableProjectile(Projectile projectile, SerializableWorld serializableWorld) {
-      super(projectile, serializableWorld);
+      super(projectile, serializableWorld, projectile.getId());
       if (projectile.getTarget() != null && !projectile.getTarget().isDead()) {
         if (serializableWorld.idMap.containsKey(projectile.getTarget())) {
           enemyId = serializableWorld.idMap.get(projectile.getTarget());
@@ -448,13 +482,13 @@ public class SerializableWorld {
       if (towerPlatform != null) {
         return towerPlatform;
       }
-      TowerPlatform towerPlatform = new TowerPlatform(new Vector2<>(x, y), image);
+      TowerPlatform towerPlatform = new TowerPlatform(new Vector2<>(x, y), image, idInWorld);
       this.towerPlatform = towerPlatform;
       return towerPlatform;
     }
 
     SerializableTowerPlatform(TowerPlatform towerPlatform, SerializableWorld serializableWorld) {
-      super(towerPlatform, serializableWorld);
+      super(towerPlatform, serializableWorld, towerPlatform.getId());
       x = towerPlatform.getCell().getX();
       y = towerPlatform.getCell().getY();
       image = towerPlatform.getImageName();
@@ -472,11 +506,11 @@ public class SerializableWorld {
       if (roadTile != null) {
         return roadTile;
       }
-      roadTile = new RoadTile(image, new Vector2<>(x, y));
+      roadTile = new RoadTile(image, new Vector2<>(x, y), idInWorld);
       return roadTile;
     }
     SerializableRoadTile(RoadTile roadTile, SerializableWorld serializableWorld) {
-      super(roadTile, serializableWorld);
+      super(roadTile, serializableWorld, roadTile.getId());
       x = roadTile.getCell().getX();
       y = roadTile.getCell().getY();
       image = roadTile.getImageName();
@@ -494,11 +528,11 @@ public class SerializableWorld {
       if (portal != null) {
         return portal;
       }
-      portal = new Portal(image, new Vector2<>(x, y));
+      portal = new Portal(image, new Vector2<>(x, y), idInWorld);
       return portal;
     }
     SerializablePortal(Portal portal, SerializableWorld serializableWorld) {
-      super(portal, serializableWorld);
+      super(portal, serializableWorld, portal.getId());
       x = portal.getCell().getX();
       y = portal.getCell().getY();
       image = portal.getImageName();
@@ -526,7 +560,7 @@ public class SerializableWorld {
     }
 
     SerializableWave(Wave wave, SerializableWorld serializableWorld) {
-      super(wave, serializableWorld);
+      super(wave, serializableWorld, 0);
       number = wave.getNumber();
       remainingEnemiesCount = wave.getRemainingEnemiesCount();
       currentEnemyNumber = wave.getCurrentEnemyNumber();
@@ -545,11 +579,11 @@ public class SerializableWorld {
       if (base != null) {
         return base;
       }
-      base = new Base(health, image, new Vector2<>(x, y));
+      base = new Base(health, image, new Vector2<>(x, y), idInWorld);
       return base;
     }
     SerializableBase(Base base, SerializableWorld serializableWorld) {
-      super(base, serializableWorld);
+      super(base, serializableWorld, base.getId());
       health = base.getHealth();
       image = base.getImageName();
       x = base.getCell().getX();
@@ -577,13 +611,13 @@ public class SerializableWorld {
       } else {
         enemy = null;
       }
-      effect = new Effect(enemy, GameMetaData.getInstance().getEffectType(effectType), owner);
+      effect = new Effect(enemy, GameMetaData.getInstance().getEffectType(effectType), owner, idInWorld);
       effect.setRemainingTicks(remainingTicks);
       return effect;
     }
 
     SerializableEffect(Effect effect, SerializableWorld serializableWorld) {
-      super(effect, serializableWorld);
+      super(effect, serializableWorld, effect.getId());
       if (effect.getHost() != null && !effect.getHost().isDead()) {
         if (serializableWorld.idMap.containsKey(effect.getHost())) {
           host = serializableWorld.idMap.get(effect.getHost());
@@ -603,5 +637,9 @@ public class SerializableWorld {
     String effectType; //EffectType type;
     int remainingTicks;
     String owner;
+  }
+
+  public long getTick() {
+    return tick;
   }
 }
