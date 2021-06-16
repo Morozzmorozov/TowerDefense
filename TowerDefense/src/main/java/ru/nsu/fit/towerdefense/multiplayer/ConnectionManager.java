@@ -155,8 +155,29 @@ public class ConnectionManager {
         }
     }
 
-    public SLobby getLobby(String sessionToken) {
-        return null; // todo
+    public SLobby getLobby(String lobbyId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(SITE_URI + Mappings.INFO_LOBBY_MAPPING +
+                    "?userToken=" + credentials.getUserToken() +
+                    "&sessionId=" + lobbyId))
+                .timeout(Duration.of(15, SECONDS))
+                .build();
+
+            HttpResponse<String> response = HttpClient.newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                return new Gson().fromJson(response.body(), SLobby.class);
+            }
+
+            System.out.println("Bad status code: " + response.statusCode());
+            return null;
+        } catch (URISyntaxException | IOException | InterruptedException | JsonSyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<SLevelScore> getLeaderboard(String gameMapName) {
@@ -167,7 +188,7 @@ public class ConnectionManager {
         return null; // todo
     }
 
-    public void openSocketConnection(String lobbyId, String token) {
+    public void openSocketConnection(SGameSession gameSession) {
         try {
             webSocketClient = new WebSocketClient();
             webSocketClient.setIdleTimeout(Duration.ofDays(10));
@@ -176,7 +197,7 @@ public class ConnectionManager {
             socketAdapter = new MyWebSocketAdapter();
             session = webSocketClient.connect(socketAdapter, URI.create("ws://localhost:8080/game")).get();
 
-            socketAdapter.sendMessage("{\"Token\": \"" + token + "\", \"lobbyId\" : " + lobbyId + "}");
+            socketAdapter.sendMessage(new Gson().toJson(gameSession));
         } catch (Exception e) {
             e.printStackTrace();
         }

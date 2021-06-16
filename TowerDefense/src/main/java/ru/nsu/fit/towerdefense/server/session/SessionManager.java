@@ -62,7 +62,7 @@ public class SessionManager {
 
 	public boolean isSessionExists(Long sessionId)
 	{
-		return activeSessions.contains(sessionId);
+		return activeSessions.containsKey(sessionId);
 	}
 
 }

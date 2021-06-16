@@ -14,6 +14,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 
 /**
@@ -32,8 +33,7 @@ public class LobbyController implements Controller, ServerMessageListener {
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
-    private final String lobbyId;
-    private final String sessionToken;
+    private final SGameSession gameSession;
 
     private Thread lobbyThread;
     private SLobby lobby;
@@ -43,8 +43,9 @@ public class LobbyController implements Controller, ServerMessageListener {
 
         this.sceneManager = sceneManager;
         this.connectionManager = connectionManager;
-        this.lobbyId = lobbyId;
-        this.sessionToken = sessionToken;
+        gameSession = new SGameSession();
+        gameSession.setSessionId(lobbyId);
+        gameSession.setSessionToken(sessionToken);
     }
 
     @FXML
@@ -54,7 +55,12 @@ public class LobbyController implements Controller, ServerMessageListener {
         lobbyThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
-                    lobby = connectionManager.getLobby(lobbyId);
+                    System.out.println("AAA");
+                    lobby = connectionManager.getLobby(gameSession.getSessionId());
+                    if (lobby == null) {
+                        System.out.println("lobby is null");
+                        break;
+                    }
 
                     Platform.runLater(() -> {
                         lobbyVBox.getChildren().clear();
@@ -75,7 +81,7 @@ public class LobbyController implements Controller, ServerMessageListener {
 
         lobbyThread.start();
         connectionManager.setServerMessageListener(this);
-        connectionManager.openSocketConnection(lobbyId, sessionToken);
+        connectionManager.openSocketConnection(gameSession);
 
         ToggleButton readyButton = new ToggleButton("Start");
         readyButton.setOnAction(actionEvent -> {

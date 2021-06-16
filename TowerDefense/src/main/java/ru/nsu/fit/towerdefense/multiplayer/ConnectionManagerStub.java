@@ -98,7 +98,7 @@ public class ConnectionManagerStub extends ConnectionManager {
     }
 
     @Override
-    public SLobby getLobby(String sessionToken) {
+    public SLobby getLobby(String lobbyId) {
         return new SLobby() {{
             setId("444");
             setLevelName("Level 1_4");
@@ -117,7 +117,7 @@ public class ConnectionManagerStub extends ConnectionManager {
     }
 
     @Override
-    public void openSocketConnection(String lobbyId, String token) {}
+    public void openSocketConnection(SGameSession gameSession) {}
 
     @Override
     public void sendMessage(String message) {}
