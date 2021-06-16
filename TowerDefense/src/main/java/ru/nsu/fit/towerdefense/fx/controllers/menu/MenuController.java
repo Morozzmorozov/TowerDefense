@@ -162,35 +162,7 @@ public class MenuController implements Controller {
             mouseEvent -> sceneManager.switchToGame(gameMapName)), 0, 2);
         //gridPane.add(createLevelButton("skip-right-icon", "Resume", null), 1, 2); // todo uncomment
         gridPane.add(createLevelButton(false, "camera-icon", "View replay",
-            mouseEvent -> {
-                comboBox.getItems().clear();
-                comboBox.getItems().addAll(GameStateReader.getInstance().getReplays(gameMapName));
-                comboBox.getSelectionModel().selectFirst();
-
-                Alert alert = new AlertBuilder()
-                    .setAlertType(Alert.AlertType.CONFIRMATION)
-                    .setButtons(ButtonType.OK, ButtonType.CANCEL)
-                    .setHeaderText("Select a replay:")
-                    .setContent(new HBox() {{
-                        setStyle("-fx-alignment: center;");
-                        getChildren().add(comboBox);
-                    }})
-                    .setOwner(sceneManager.getWindowOwner())
-                    .build();
-
-                alert.showAndWait();
-                if (alert.getResult() == ButtonType.OK) {
-                    Replay replay = GameStateReader.getInstance().readReplay(gameMapName, comboBox.getValue());
-                    if (replay != null) {
-                        sceneManager.switchToGame(gameMapName, replay);
-                    } else {
-                        new AlertBuilder()
-                            .setHeaderText("Replay is null!")
-                            .setOwner(sceneManager.getWindowOwner())
-                            .build().showAndWait();
-                    }
-                }
-            }), 1, 2); // todo change to 0, 3
+            mouseEvent -> showReplayChooserDialog(gameMapName)), 1, 2); // todo change to 0, 3
         //gridPane.add(createLevelButton("idle-icon", "Idle game", null), 1, 3); // todo uncomment
 
         gridPane.add(createLevelButton(true, "cooperative-icon", "Cooperative",
@@ -233,6 +205,36 @@ public class MenuController implements Controller {
         }
 
         return hBox;
+    }
+
+    private void showReplayChooserDialog(String gameMapName) {
+        comboBox.getItems().clear();
+        comboBox.getItems().addAll(GameStateReader.getInstance().getReplays(gameMapName));
+        comboBox.getSelectionModel().selectFirst();
+
+        Alert alert = new AlertBuilder()
+            .setAlertType(Alert.AlertType.CONFIRMATION)
+            .setButtons(ButtonType.OK, ButtonType.CANCEL)
+            .setHeaderText("Select a replay:")
+            .setContent(new HBox() {{
+                setStyle("-fx-alignment: center;");
+                getChildren().add(comboBox);
+            }})
+            .setOwner(sceneManager.getWindowOwner())
+            .build();
+
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.OK) {
+            Replay replay = GameStateReader.getInstance().readReplay(gameMapName, comboBox.getValue());
+            if (replay != null) {
+                sceneManager.switchToGame(gameMapName, replay);
+            } else {
+                new AlertBuilder()
+                    .setHeaderText("Replay is null!")
+                    .setOwner(sceneManager.getWindowOwner())
+                    .build().showAndWait();
+            }
+        }
     }
 
     private void createCooperativeGame(String gameMapName) {
