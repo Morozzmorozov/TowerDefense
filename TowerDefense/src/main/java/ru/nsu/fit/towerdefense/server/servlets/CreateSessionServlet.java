@@ -14,7 +14,7 @@ import java.io.IOException;
 public class CreateSessionServlet extends HttpServlet {
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		String levelName = (String)req.getAttribute("param_levelName");
 		String gameType = (String)req.getAttribute("param_gameType");
