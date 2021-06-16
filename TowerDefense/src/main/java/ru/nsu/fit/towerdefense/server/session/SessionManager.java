@@ -1,5 +1,7 @@
 package ru.nsu.fit.towerdefense.server.session;
 
+import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,15 +24,18 @@ public class SessionManager {
 		return instance;
 	}
 
-	public synchronized long createSession(SessionInfo.GameType type, String level, String owner)
+	public synchronized SGameSession createSession(SessionInfo.GameType type, String level, String owner)
 	{
 		SessionController controller = new SessionController(sessionId, type, level);
-		controller.addOwner(owner);
+		String token = controller.addOwner(owner);
 		long id = sessionId;
 		activeSessions.put(sessionId, controller);
 		sessionId++;
 		if (sessionId <= 0) sessionId = 1L;
-		return id;
+		SGameSession session = new SGameSession();
+		session.setSessionId("" + id);
+		session.setSessionToken(token);
+		return session;
 	}
 
 	public List<SessionController> getActiveSessions()

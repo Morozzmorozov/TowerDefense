@@ -127,9 +127,14 @@ public class SessionController {
 	}
 
 
-	public void disconnectPlayer(String player)
+	public synchronized boolean disconnectPlayer(String player)
 	{
-		connections.remove(player);
+		if (connections.containsKey(player))
+		{
+			connections.remove(player);
+			return true;
+		}
+		else return false;
 	}
 
 

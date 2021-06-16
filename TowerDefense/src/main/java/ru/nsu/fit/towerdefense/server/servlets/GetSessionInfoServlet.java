@@ -18,9 +18,7 @@ public class GetSessionInfoServlet extends HttpServlet {
 		try
 		{
 			long id = Long.parseLong(req.getParameter("sessionId"));
-
 			SessionController session = SessionManager.getInstance().getSessionById(id);
-
 			if (session == null){
 				resp.setStatus(409);
 			}

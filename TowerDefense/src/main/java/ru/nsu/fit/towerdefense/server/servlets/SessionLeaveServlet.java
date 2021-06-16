@@ -17,11 +17,14 @@ public class SessionLeaveServlet extends HttpServlet {
 			Long id = Long.parseLong(req.getParameter("sessionId"));
 			String player = (String)req.getAttribute("playerName");
 
-			SessionManager.getInstance().getSessionById(id).disconnectPlayer(player);
-
-//			LobbyManager.getInstance().leaveLobby(Long.parseLong(req.getParameter("lobbyId")), req.getParameter("token"), req.getParameter("userToken"));
-			resp.setStatus(200);
-			resp.getWriter().println("{ \"status\" : \"success\"}");
+			if (SessionManager.getInstance().getSessionById(id).disconnectPlayer(player))
+			{
+				resp.setStatus(200);
+			}
+			else
+			{
+				resp.setStatus(401);
+			}
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());
