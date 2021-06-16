@@ -155,6 +155,32 @@ public class ConnectionManager {
         }
     }
 
+    public boolean leaveLobby(String sessionId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(SITE_URI + Mappings.LEAVE_LOBBY_MAPPING +
+                    "?userToken=" + credentials.getUserToken() +
+                    "&sessionId=" + sessionId))
+                .POST(HttpRequest.BodyPublishers.ofString(""))
+                .timeout(Duration.of(15, SECONDS))
+                .build();
+
+            HttpResponse<String> response = HttpClient.newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                return true;
+            }
+
+            System.out.println("Bad status code: " + response.statusCode());
+            return false;
+        } catch (URISyntaxException | IOException | InterruptedException | JsonSyntaxException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public SLobby getLobby(String lobbyId) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
