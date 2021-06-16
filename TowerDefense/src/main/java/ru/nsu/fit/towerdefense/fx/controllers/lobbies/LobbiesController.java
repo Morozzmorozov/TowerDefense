@@ -11,6 +11,7 @@ import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 
 import java.util.List;
 
@@ -54,8 +55,10 @@ public class LobbiesController implements Controller {
                             hBox.getChildren().add(new Label(lobby.getLevelName()));
                             hBox.getChildren().add(new Label(lobby.getGameType().toString()));
                             hBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
-                            for (String playerName : lobby.getPlayers()) {
-                                hBox.getChildren().add(new Label(playerName));
+                            for (SPlayer player : lobby.getPlayers()) {
+                                hBox.getChildren().add(new Label(player.getName()));
+                                hBox.getChildren().add(new Label(player.getEloRating() + ""));
+                                hBox.getChildren().add(new Label(player.getReady() ? "Yes" : "No"));
                             }
                             hBox.setOnMouseClicked(mouseEvent -> new Thread(() -> {
                                 String sessionToken = connectionManager.joinLobby(lobby.getId());

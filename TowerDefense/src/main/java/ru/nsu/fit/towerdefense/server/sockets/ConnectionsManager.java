@@ -1,7 +1,5 @@
 package ru.nsu.fit.towerdefense.server.sockets;
 
-import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyControl;
-import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyManager;
 import ru.nsu.fit.towerdefense.server.session.SessionController;
 import ru.nsu.fit.towerdefense.server.session.SessionManager;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.EventMessenger;

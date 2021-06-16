@@ -16,6 +16,7 @@ import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 
 /**
  * LobbyController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a lobby scene.
@@ -66,8 +67,10 @@ public class LobbyController implements Controller, ServerMessageListener {
                         lobbyVBox.getChildren().add(new Label(lobby.getLevelName()));
                         lobbyVBox.getChildren().add(new Label(lobby.getGameType().toString()));
                         lobbyVBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
-                        for (String playerName : lobby.getPlayers()) {
-                            lobbyVBox.getChildren().add(new Label(playerName));
+                        for (SPlayer player : lobby.getPlayers()) {
+                            lobbyVBox.getChildren().add(new Label(player.getName()));
+                            lobbyVBox.getChildren().add(new Label(player.getEloRating() + ""));
+                            lobbyVBox.getChildren().add(new Label(player.getReady() ? "Yes" : "No"));
                         }
                     });
 

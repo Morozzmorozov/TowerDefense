@@ -18,7 +18,7 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
-		System.out.println("AuthFilter");
+//		System.out.println("AuthFilter");
 		HttpServletRequest req = (HttpServletRequest) request;
 		String login = (String)req.getAttribute("param_username");
 		String password = (String)req.getAttribute("param_password");
@@ -26,7 +26,7 @@ public class AuthenticationFilter implements Filter {
 		if (login != null && password != null)
 		{
 			chain.doFilter(req, response);
-			System.out.println("User filtered!");
+//			System.out.println("User filtered!");
 		}
 		else if (userToken != null)
 		{

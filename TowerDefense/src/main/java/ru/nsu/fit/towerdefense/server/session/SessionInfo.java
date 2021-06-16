@@ -32,6 +32,7 @@ public class SessionInfo {
 
 	public SessionInfo(long id, GameType type, String level)
 	{
+		userInfo = new HashMap<>();
 		this.id = id;
 		this.levelName = level;
 		this.level = GameMetaData.getInstance().getMapDescription(level);

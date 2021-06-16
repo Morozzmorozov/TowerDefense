@@ -5,6 +5,7 @@ import ru.nsu.fit.towerdefense.multiplayer.entities.SEloRating;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLevelScore;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,26 +19,70 @@ public class ConnectionManagerStub extends ConnectionManager {
             setId("111");
             setLevelName("Level 1");
             setMaxPlayers(2);
-            setPlayers(List.of("John", "Jane"));
+            setPlayers(List.of(
+                new SPlayer() {{
+                    setName("John");
+                    setReady(true);
+                    setEloRating(1899);
+                }},
+                new SPlayer() {{
+                    setName("Jane");
+                    setReady(false);
+                    setEloRating(1378);
+                }}
+            ));
             setGameType(GameType.COOPERATIVE);
         }},
         new SLobby() {{
             setId("222");
             setLevelName("Level 2");
             setMaxPlayers(3);
-            setPlayers(List.of("admin"));
+            setPlayers(List.of(
+                new SPlayer() {{
+                    setName("admin");
+                    setReady(false);
+                    setEloRating(1002);
+                }}
+            ));
             setGameType(GameType.COOPERATIVE);
         }},
         new SLobby() {{
             setId("333");
             setLevelName("Level 3");
             setMaxPlayers(3);
-            setPlayers(List.of("Super Player", "Bad Player"));
+            setPlayers(List.of(
+                new SPlayer() {{
+                    setName("Super Player");
+                    setReady(true);
+                    setEloRating(2000);
+                }},
+                new SPlayer() {{
+                    setName("Bad Player");
+                    setReady(false);
+                    setEloRating(789);
+                }}
+            ));
             setGameType(GameType.COOPERATIVE);
         }}
     );
 
-    private final List<String> players = List.of("John", "Jane", "Super Player");
+    private final List<SPlayer> players = List.of(
+        new SPlayer() {{
+            setName("John");
+            setReady(true);
+            setEloRating(1899);
+        }},
+        new SPlayer() {{
+            setName("Jane");
+            setReady(false);
+            setEloRating(1378);
+        }},
+        new SPlayer() {{
+            setName("Super Player");
+            setReady(true);
+            setEloRating(2000);
+        }}
+    );
 
     private final List<SLevelScore> levelScores = List.of(
         new SLevelScore() {{
