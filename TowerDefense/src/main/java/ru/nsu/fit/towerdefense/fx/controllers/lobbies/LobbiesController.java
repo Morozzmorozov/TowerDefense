@@ -60,6 +60,7 @@ public class LobbiesController implements Controller {
                             hBox.setOnMouseClicked(mouseEvent -> new Thread(() -> {
                                 String sessionToken = connectionManager.joinLobby(lobby.getId());
                                 if (sessionToken == null) {
+                                    System.out.println("sessionToken is null");
                                     return;
                                 }
 

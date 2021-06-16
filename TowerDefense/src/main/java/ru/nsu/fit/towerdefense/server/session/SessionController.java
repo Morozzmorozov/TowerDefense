@@ -84,6 +84,8 @@ public class SessionController {
 
 	public void connect(Messenger messenger, String token)
 	{
+		System.out.println("acceptInvite");
+		info.acceptInvite(token, info.getInvitedPlayerByToken(token));
 		connections.put(token, messenger);
 	}
 

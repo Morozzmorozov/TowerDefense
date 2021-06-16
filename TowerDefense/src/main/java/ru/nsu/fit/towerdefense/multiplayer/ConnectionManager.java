@@ -144,7 +144,7 @@ public class ConnectionManager {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
-                return new Gson().fromJson(response.body(), SGameSession.class).getSessionToken();
+                return response.body();
             }
 
             System.out.println("Bad status code: " + response.statusCode());
