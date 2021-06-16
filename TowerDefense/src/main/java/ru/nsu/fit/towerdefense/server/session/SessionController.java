@@ -157,4 +157,10 @@ public class SessionController {
 		return lobby;
 	}
 
+	public boolean isTokenValid(String token)
+	{
+		return info.isTokenValid(token);
+	}
+
+
 }

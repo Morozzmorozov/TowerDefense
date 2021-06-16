@@ -193,4 +193,8 @@ public class SessionInfo {
 		return levelName;
 	}
 
+	public synchronized boolean isTokenValid(String token)
+	{
+		return tokenToUser.containsKey(token) || inviteTokens.containsKey(token);
+	}
 }

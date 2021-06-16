@@ -2,7 +2,11 @@ package ru.nsu.fit.towerdefense.server.sockets.receivers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyManager;
+import ru.nsu.fit.towerdefense.server.session.SessionController;
+import ru.nsu.fit.towerdefense.server.session.SessionManager;
 import ru.nsu.fit.towerdefense.server.sockets.ConnectionsManager;
 import ru.nsu.fit.towerdefense.server.sockets.UserConnection;
 
@@ -22,28 +26,32 @@ public class UnauthorisedMessenger implements Messenger {
 		ObjectMapper mapper = new ObjectMapper();
 		try
 		{
-			JsonNode node = mapper.readValue(message, JsonNode.class);
-			Long lobbyId = node.get("lobbyId").asLong();
-			String token = node.get("Token").asText();
+			SGameSession session = new Gson().fromJson(message, SGameSession.class);
 
-			if (LobbyManager.getInstance().isTokenValid(lobbyId, token))
+			Long sessionId = Long.valueOf(session.getSessionId());
+
+
+			if (!SessionManager.getInstance().isSessionExists(sessionId))
 			{
-				if (ConnectionsManager.getInstance().upgradeConnection(owner, token, lobbyId))
+				owner.sendMessage("{\"status\" : \"can't connect\"}");
+				return;
+			}
+
+			SessionController controller = SessionManager.getInstance().getSessionById(sessionId);
+
+			if (controller.isTokenValid(session.getSessionToken()))
+			{
+				if (ConnectionsManager.getInstance().upgradeConnection(owner, session.getSessionToken(), sessionId))
 				{
-					owner.sendMessage("{\"status\" : \"Connected\"}");
-				}
-				else
-				{
-					owner.sendMessage("{\"status\" : \"Can't connect\"}");
+					owner.sendMessage("{\"status\" : \"connected\"}");
+					return;
 				}
 			}
-			else
-			{
-				owner.sendMessage("{\"status\" : \"Can't connect\"}");
-			}
+			owner.sendMessage("{\"status\" : \"can't connect\"}");
+			return;
 		}
 		catch (Exception e){
-			owner.sendMessage("{\"status\" : \"Invalid message\"}");
+			owner.sendMessage("{\"status\" : \"invalid message\"}");
 		}
 	}
 
