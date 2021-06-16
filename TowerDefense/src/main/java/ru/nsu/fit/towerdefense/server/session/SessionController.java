@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 import ru.nsu.fit.towerdefense.server.players.PlayerManager;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
 import ru.nsu.fit.towerdefense.simulator.events.Event;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class SessionController {
 
@@ -23,6 +25,7 @@ public class SessionController {
 	private ConcurrentHashMap<String, Object> ready;
 	private GameController controller;
 	private Thread gameThread;
+
 
 
 	public SessionController(long id, GameType type, String level)
@@ -95,7 +98,7 @@ public class SessionController {
 	{
 		if (info.getType() == GameType.COOPERATIVE)
 		{
-			controller = new CooperativeGame(info.getLevel(), info.getPlayers(), this);
+			controller = new CooperativeGame(info.getLevel(), info.getPlayers().stream().map(SPlayer::getName).collect(Collectors.toList()), this);
 		}
 		else
 		{
@@ -113,21 +116,11 @@ public class SessionController {
 
 	public void switchReady(String player)
 	{
-		if (ready.contains(player))
+		info.switchReady(player);
+
+		if (info.canStart())
 		{
-			ready.remove(player);
-		}
-		else
-		{
-			ready.put(player, player);
-			if (ready.size() == info.getPlayersNumber())
-			{
-				Message message = new Message();
-				message.setType(Message.Type.START);
-				message.setPlayerNames(info.getPlayers());
-				sendMessageToAll(new Gson().toJson(message));
-				runGame();
-			}
+			runGame();
 		}
 	}
 

@@ -7,7 +7,7 @@ import java.util.List;
 public class SLobby {
 
     private String id;
-    private List<String> players;
+    private List<SPlayer> players;
     private int maxPlayers;
     private String levelName;
     private GameType gameType;
@@ -20,11 +20,11 @@ public class SLobby {
         this.id = id;
     }
 
-    public List<String> getPlayers() {
+    public List<SPlayer> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<String> players) {
+    public void setPlayers(List<SPlayer> players) {
         this.players = players;
     }
 

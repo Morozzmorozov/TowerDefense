@@ -3,6 +3,8 @@ package ru.nsu.fit.towerdefense.server.session;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.GameType;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
+import ru.nsu.fit.towerdefense.server.database.PlayersDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,9 +18,10 @@ public class SessionInfo {
 	private GameType type;
 	private String owner;
 
-
 	private int playersNumber;
+	private int readyCnt;
 
+	private HashMap<String, SPlayer> userInfo;
 	private HashMap<String, String> tokenToUser;
 	private HashMap<String, String> userToToken;
 
@@ -38,6 +41,7 @@ public class SessionInfo {
 		inviteTokens = new HashMap<>();
 		userToToken = new HashMap<>();
 		invitePlayers = new HashMap<>();
+		readyCnt = 0;
 	}
 
 	public void setLevel(String level) {
@@ -96,10 +100,13 @@ public class SessionInfo {
 		{
 			if (tokenToUser.size() < playersNumber && !tokenToUser.containsKey(token) && inviteTokens.containsKey(token))
 			{
+				SPlayer info = PlayersDatabase.getInstance().getPlayerInfo(user);
+
 				inviteTokens.remove(token, user);
 				invitePlayers.remove(user, token);
 				tokenToUser.put(token, user);
 				userToToken.put(user, token);
+				userInfo.put(user, info);
 				if (tokenToUser.size() == playersNumber)
 				{
 					invitePlayers.clear();
@@ -134,6 +141,7 @@ public class SessionInfo {
 		tokenToUser.remove(token, player);
 		invitePlayers.remove(player, token);
 		inviteTokens.remove(token, player);
+		userInfo.remove(player);
 	}
 
 	public String getActiveToken(String player)
@@ -142,11 +150,11 @@ public class SessionInfo {
 	}
 	public String getInviteToken(String player) { return invitePlayers.get(player);}
 
-	public List<String> getPlayers()
+	public List<SPlayer> getPlayers()
 	{
 		synchronized (this)
 		{
-			return new ArrayList<>(userToToken.keySet());
+			return new ArrayList<>(userInfo.values());
 		}
 	}
 
@@ -196,5 +204,22 @@ public class SessionInfo {
 	public synchronized boolean isTokenValid(String token)
 	{
 		return tokenToUser.containsKey(token) || inviteTokens.containsKey(token);
+	}
+
+	public void switchReady(String player)
+	{
+		SPlayer info = userInfo.get(player);
+		if (info != null)
+		{
+			if (info.getReady()) readyCnt--;
+			else readyCnt++;
+
+			info.setReady(!info.getReady());
+		}
+	}
+
+	public boolean canStart()
+	{
+		return readyCnt == playersNumber;
 	}
 }

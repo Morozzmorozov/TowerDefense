@@ -1,5 +1,7 @@
 package ru.nsu.fit.towerdefense.server.database;
 
+import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
+
 import java.security.MessageDigest;
 import java.sql.*;
 
@@ -150,5 +152,14 @@ public class PlayersDatabase {
 			}
 			return 1;
 		}
+	}
+
+	public SPlayer getPlayerInfo(String player)
+	{
+		SPlayer playerInfo = new SPlayer();
+		playerInfo.setEloRating(1500);
+		playerInfo.setName(player);
+		playerInfo.setReady(false);
+		return playerInfo;
 	}
 }
