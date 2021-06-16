@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.multiplayer.entities;
 
-public class LevelScore {
+public class SLevelScore {
 
     private String playerName;
     private Integer score;

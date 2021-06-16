@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.server.session.SessionController;
 import ru.nsu.fit.towerdefense.server.session.SessionManager;
 
@@ -23,7 +23,7 @@ public class GetSessionsServlet extends HttpServlet {
 		var sessions = SessionManager.getInstance().getActiveSessions();/*LobbyManager.getInstance().getLobbies();*/
 		PrintWriter writer = resp.getWriter();
 
-		List<Lobby> list = sessions.stream().map(SessionController::getInfo).collect(Collectors.toList());
+		List<SLobby> list = sessions.stream().map(SessionController::getInfo).collect(Collectors.toList());
 
 		writer.print(new Gson().toJson(list));
 

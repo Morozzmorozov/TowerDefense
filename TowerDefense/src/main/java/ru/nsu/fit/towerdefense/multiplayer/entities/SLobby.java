@@ -2,7 +2,7 @@ package ru.nsu.fit.towerdefense.multiplayer.entities;
 
 import java.util.List;
 
-public class Lobby {
+public class SLobby {
 
     public enum Type { Cooperative, Competition }
 

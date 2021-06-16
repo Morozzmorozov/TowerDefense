@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.multiplayer.entities;
 
-public class EloRating {
+public class SEloRating {
 
     private String playerName;
     private Integer rating;

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.server.database.UserManager;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
@@ -75,9 +76,9 @@ public class LobbyControl
     }
 
 
-    public ru.nsu.fit.towerdefense.multiplayer.entities.Lobby serialize()
+    public SLobby serialize()
     {
-        ru.nsu.fit.towerdefense.multiplayer.entities.Lobby lobby = new ru.nsu.fit.towerdefense.multiplayer.entities.Lobby();
+        SLobby lobby = new SLobby();
         lobby.setId(Long.toString(getId()));
         lobby.setLevelName(getLevelName());
         lobby.setMaxPlayers(getPlayersNumber());

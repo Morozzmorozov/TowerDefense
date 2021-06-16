@@ -14,7 +14,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 
 /**
  * LobbyController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a lobby scene.
@@ -36,7 +36,7 @@ public class LobbyController implements Controller, ServerMessageListener {
     private final String sessionToken;
 
     private Thread lobbyThread;
-    private Lobby lobby;
+    private SLobby lobby;
 
     public LobbyController(SceneManager sceneManager, ConnectionManager connectionManager,
                            String lobbyId, String sessionToken) {

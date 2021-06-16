@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.server.session.SessionInfo;
 import ru.nsu.fit.towerdefense.server.session.SessionManager;
 
@@ -26,7 +26,7 @@ public class CreateSessionServlet extends HttpServlet {
 
 //		String id = LobbyManager.getInstance().createLobby(levelName);
 
-		Lobby lobby = new Lobby();
+		SLobby lobby = new SLobby();
 		lobby.setId(id);
 
 		resp.getWriter().println(new Gson().toJson(lobby));

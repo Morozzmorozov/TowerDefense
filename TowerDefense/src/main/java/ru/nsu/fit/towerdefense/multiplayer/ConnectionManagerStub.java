@@ -1,9 +1,9 @@
 package ru.nsu.fit.towerdefense.multiplayer;
 
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
-import ru.nsu.fit.towerdefense.multiplayer.entities.EloRating;
-import ru.nsu.fit.towerdefense.multiplayer.entities.LevelScore;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SEloRating;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLevelScore;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,22 +12,22 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ConnectionManagerStub extends ConnectionManager {
 
-    private final List<Lobby> lobbies = List.of(
-        new Lobby() {{
+    private final List<SLobby> lobbies = List.of(
+        new SLobby() {{
             setId("111");
             setLevelName("Level 1");
             setMaxPlayers(2);
             setPlayers(List.of("John", "Jane"));
             setType(Type.Cooperative);
         }},
-        new Lobby() {{
+        new SLobby() {{
             setId("222");
             setLevelName("Level 2");
             setMaxPlayers(3);
             setPlayers(List.of("admin"));
             setType(Type.Competition);
         }},
-        new Lobby() {{
+        new SLobby() {{
             setId("333");
             setLevelName("Level 3");
             setMaxPlayers(3);
@@ -38,34 +38,34 @@ public class ConnectionManagerStub extends ConnectionManager {
 
     private final List<String> players = List.of("John", "Jane", "Super Player");
 
-    private final List<LevelScore> levelScores = List.of(
-        new LevelScore() {{
+    private final List<SLevelScore> levelScores = List.of(
+        new SLevelScore() {{
             setPlayerName("Jonh");
             setScore(654321);
             setTimestamp(1234567890L * 3);
         }},
-        new LevelScore() {{
+        new SLevelScore() {{
             setPlayerName("Jane");
             setScore(123456);
             setTimestamp(1234567890L * 2);
         }},
-        new LevelScore() {{
+        new SLevelScore() {{
             setPlayerName("admin");
             setScore(222);
             setTimestamp(1234567890L);
         }}
     );
 
-    private final List<EloRating> eloRatings = List.of(
-        new EloRating() {{
+    private final List<SEloRating> eloRatings = List.of(
+        new SEloRating() {{
             setPlayerName("John");
             setRating(1899);
         }},
-        new EloRating() {{
+        new SEloRating() {{
             setPlayerName("Jane");
             setRating(1378);
         }},
-        new EloRating() {{
+        new SEloRating() {{
             setPlayerName("admin");
             setRating(1002);
         }}
@@ -79,7 +79,7 @@ public class ConnectionManagerStub extends ConnectionManager {
     }
 
     @Override
-    public List<Lobby> getLobbies() {
+    public List<SLobby> getLobbies() {
         return getRandomSubList(lobbies);
     }
 
@@ -94,8 +94,8 @@ public class ConnectionManagerStub extends ConnectionManager {
     }
 
     @Override
-    public Lobby getLobby(String sessionToken) {
-        return new Lobby() {{
+    public SLobby getLobby(String sessionToken) {
+        return new SLobby() {{
             setId("444");
             setLevelName("Level 1_4");
             setMaxPlayers(3);
@@ -104,11 +104,11 @@ public class ConnectionManagerStub extends ConnectionManager {
         }};
     }
 
-    public List<LevelScore> getLeaderboard(String gameMapName) {
+    public List<SLevelScore> getLeaderboard(String gameMapName) {
         return levelScores;
     }
 
-    public List<EloRating> getEloLeaderboard() {
+    public List<SEloRating> getEloLeaderboard() {
         return eloRatings;
     }
 

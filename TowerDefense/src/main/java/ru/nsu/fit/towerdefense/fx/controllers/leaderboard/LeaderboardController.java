@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
-import ru.nsu.fit.towerdefense.multiplayer.entities.LevelScore;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLevelScore;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -45,10 +45,10 @@ public class LeaderboardController implements Controller {
     @FXML
     private void initialize() {
         new Thread(() -> {
-            List<LevelScore> levelScores = connectionManager.getLeaderboard(gameMapName);
+            List<SLevelScore> levelScores = connectionManager.getLeaderboard(gameMapName);
 
             Platform.runLater(() -> {
-                for (LevelScore levelScore : levelScores) {
+                for (SLevelScore levelScore : levelScores) {
                     HBox hBox = new HBox();
                     hBox.getChildren().add(new Label(levelScore.getPlayerName()));
                     hBox.getChildren().add(new Label(levelScore.getScore() + ""));

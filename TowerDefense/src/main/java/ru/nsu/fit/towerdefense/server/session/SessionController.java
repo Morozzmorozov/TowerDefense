@@ -1,6 +1,6 @@
 package ru.nsu.fit.towerdefense.server.session;
 
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.server.players.PlayerManager;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
 import ru.nsu.fit.towerdefense.simulator.events.Event;
@@ -138,9 +138,9 @@ public class SessionController {
 		connections.get(player).sendMessage(message);
 	}
 	public void sendMessageToAll(String message) {connections.values().forEach(e -> e.sendMessage(message));}
-	public Lobby getInfo()
+	public SLobby getInfo()
 	{
-		Lobby lobby = new Lobby();
+		SLobby lobby = new SLobby();
 		lobby.setPlayers(info.getPlayers());
 		lobby.setMaxPlayers(info.getPlayersNumber());
 		lobby.setLevelName(info.getLevelName());

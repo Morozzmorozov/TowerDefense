@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
-import ru.nsu.fit.towerdefense.multiplayer.entities.EloRating;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SEloRating;
 
 import java.util.List;
 
@@ -42,11 +42,11 @@ public class EloRatingController implements Controller {
         menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         new Thread(() -> {
-            List<EloRating> eloRatings = connectionManager.getEloLeaderboard();
+            List<SEloRating> eloRatings = connectionManager.getEloLeaderboard();
 
             Platform.runLater(() -> {
                 for (int i = 0; i < eloRatings.size(); i++) {
-                    EloRating eloRating = eloRatings.get(i);
+                    SEloRating eloRating = eloRatings.get(i);
                     HBox hBox = new HBox();
                     hBox.getChildren().add(new Label(i + 1 + ""));
                     hBox.getChildren().add(new Label(eloRating.getPlayerName()));

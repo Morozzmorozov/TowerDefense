@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 
 import java.util.List;
 
@@ -45,11 +45,11 @@ public class LobbiesController implements Controller {
         lobbiesThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
-                    List<Lobby> lobbies = connectionManager.getLobbies();
+                    List<SLobby> lobbies = connectionManager.getLobbies();
 
                     Platform.runLater(() -> {
                         lobbiesVBox.getChildren().clear();
-                        for (Lobby lobby : lobbies) {
+                        for (SLobby lobby : lobbies) {
                             HBox hBox = new HBox();
                             hBox.getChildren().add(new Label(lobby.getLevelName()));
                             hBox.getChildren().add(new Label(lobby.getType().toString()));
