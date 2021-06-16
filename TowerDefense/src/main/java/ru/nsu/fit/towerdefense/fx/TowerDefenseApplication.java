@@ -33,8 +33,8 @@ public class TowerDefenseApplication extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-//        connectionManager = new ConnectionManager();
-        connectionManager = new ConnectionManagerStub(); // todo replace
+        connectionManager = new ConnectionManager();
+//        connectionManager = new ConnectionManagerStub(); // todo del
         sceneManager = new SceneManager(primaryStage, connectionManager);
         sceneManager.switchToMenu();
         primaryStage.show();
