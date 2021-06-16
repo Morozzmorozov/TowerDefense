@@ -2,18 +2,13 @@ package ru.nsu.fit.towerdefense.server.session;
 
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class SessionInfo {
-
-	public enum GameType
-	{
-		COOPERATIVE,
-		COMPETITIVE
-	}
 
 	private GameMap level;
 	private String levelName;

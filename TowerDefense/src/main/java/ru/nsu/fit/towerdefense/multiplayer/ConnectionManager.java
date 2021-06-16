@@ -108,7 +108,7 @@ public class ConnectionManager {
                 .uri(new URI(SITE_URI + Mappings.CREATE_LOBBY_MAPPING +
                     "?userToken=" + credentials.getUserToken() +
                     "&levelName=" + encode(gameMapName) +
-                    "&gameType=" + SLobby.Type.COOPERATIVE)) // todo
+                    "&gameType=" + GameType.COOPERATIVE)) // todo
                 .POST(HttpRequest.BodyPublishers.ofString(""))
                 .timeout(Duration.of(15, SECONDS))
                 .build();

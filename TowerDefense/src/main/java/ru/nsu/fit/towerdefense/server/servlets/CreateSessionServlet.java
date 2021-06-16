@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import ru.nsu.fit.towerdefense.server.session.SessionInfo;
 import ru.nsu.fit.towerdefense.server.session.SessionManager;
@@ -22,7 +23,7 @@ public class CreateSessionServlet extends HttpServlet {
 		if (levelName == null) levelName = "Level 1_4";
 		if (gameType == null) gameType = "COOPERATIVE";
 		resp.setStatus(201);
-		SGameSession session = SessionManager.getInstance().createSession(SessionInfo.GameType.valueOf(gameType), levelName, player);
+		SGameSession session = SessionManager.getInstance().createSession(GameType.valueOf(gameType), levelName, player);
 		resp.getWriter().println(new Gson().toJson(session));
 	}
 }

@@ -19,21 +19,21 @@ public class ConnectionManagerStub extends ConnectionManager {
             setLevelName("Level 1");
             setMaxPlayers(2);
             setPlayers(List.of("John", "Jane"));
-            setType(Type.COOPERATIVE);
+            setGameType(GameType.COOPERATIVE);
         }},
         new SLobby() {{
             setId("222");
             setLevelName("Level 2");
             setMaxPlayers(3);
             setPlayers(List.of("admin"));
-            setType(Type.COMPETITION);
+            setGameType(GameType.COOPERATIVE);
         }},
         new SLobby() {{
             setId("333");
             setLevelName("Level 3");
             setMaxPlayers(3);
             setPlayers(List.of("Super Player", "Bad Player"));
-            setType(Type.COOPERATIVE);
+            setGameType(GameType.COOPERATIVE);
         }}
     );
 
@@ -104,7 +104,7 @@ public class ConnectionManagerStub extends ConnectionManager {
             setLevelName("Level 1_4");
             setMaxPlayers(3);
             setPlayers(getRandomSubList(players));
-            setType(Type.COOPERATIVE);
+            setGameType(GameType.COOPERATIVE);
         }};
     }
 

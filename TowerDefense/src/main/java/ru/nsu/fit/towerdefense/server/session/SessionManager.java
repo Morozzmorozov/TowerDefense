@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.server.session;
 
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class SessionManager {
 		return instance;
 	}
 
-	public synchronized SGameSession createSession(SessionInfo.GameType type, String level, String owner)
+	public synchronized SGameSession createSession(GameType type, String level, String owner)
 	{
 		SessionController controller = new SessionController(sessionId, type, level);
 		String token = controller.addOwner(owner);

@@ -1,5 +1,6 @@
 package ru.nsu.fit.towerdefense.server.session;
 
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.server.players.PlayerManager;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
@@ -22,7 +23,7 @@ public class SessionController {
 	private Thread gameThread;
 
 
-	public SessionController(long id, SessionInfo.GameType type, String level)
+	public SessionController(long id, GameType type, String level)
 	{
 		info = new SessionInfo(id, type, level);
 		connections = new HashMap<>();
@@ -88,7 +89,7 @@ public class SessionController {
 
 	public void runGame()
 	{
-		if (info.getType() == SessionInfo.GameType.COOPERATIVE)
+		if (info.getType() == GameType.COOPERATIVE)
 		{
 			controller = new CooperativeGame(info.getLevel(), info.getPlayers(), this);
 		}
@@ -150,6 +151,7 @@ public class SessionController {
 		lobby.setMaxPlayers(info.getPlayersNumber());
 		lobby.setLevelName(info.getLevelName());
 		lobby.setId("" + info.getId());
+		lobby.setGameType(info.getType());
 		return lobby;
 	}
 

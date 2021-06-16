@@ -1,16 +1,16 @@
 package ru.nsu.fit.towerdefense.multiplayer.entities;
 
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
+
 import java.util.List;
 
 public class SLobby {
-
-    public enum Type {COOPERATIVE, COMPETITION}
 
     private String id;
     private List<String> players;
     private int maxPlayers;
     private String levelName;
-    private Type type;
+    private GameType gameType;
 
     public String getId() {
         return id;
@@ -44,11 +44,11 @@ public class SLobby {
         this.levelName = levelName;
     }
 
-    public Type getType() {
-        return type;
+    public GameType getGameType() {
+        return gameType;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
     }
 }

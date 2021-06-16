@@ -55,7 +55,6 @@ public class LobbyController implements Controller, ServerMessageListener {
         lobbyThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
-                    System.out.println("AAA");
                     lobby = connectionManager.getLobby(gameSession.getSessionId());
                     if (lobby == null) {
                         System.out.println("lobby is null");
@@ -65,7 +64,7 @@ public class LobbyController implements Controller, ServerMessageListener {
                     Platform.runLater(() -> {
                         lobbyVBox.getChildren().clear();
                         lobbyVBox.getChildren().add(new Label(lobby.getLevelName()));
-                        lobbyVBox.getChildren().add(new Label(lobby.getType().toString()));
+                        lobbyVBox.getChildren().add(new Label(lobby.getGameType().toString()));
                         lobbyVBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
                         for (String playerName : lobby.getPlayers()) {
                             lobbyVBox.getChildren().add(new Label(playerName));
