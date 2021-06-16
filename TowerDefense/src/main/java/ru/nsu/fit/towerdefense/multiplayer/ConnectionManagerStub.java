@@ -2,6 +2,7 @@ package ru.nsu.fit.towerdefense.multiplayer;
 
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SEloRating;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLevelScore;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 
@@ -18,21 +19,21 @@ public class ConnectionManagerStub extends ConnectionManager {
             setLevelName("Level 1");
             setMaxPlayers(2);
             setPlayers(List.of("John", "Jane"));
-            setType(Type.Cooperative);
+            setType(Type.COOPERATIVE);
         }},
         new SLobby() {{
             setId("222");
             setLevelName("Level 2");
             setMaxPlayers(3);
             setPlayers(List.of("admin"));
-            setType(Type.Competition);
+            setType(Type.COMPETITION);
         }},
         new SLobby() {{
             setId("333");
             setLevelName("Level 3");
             setMaxPlayers(3);
             setPlayers(List.of("Super Player", "Bad Player"));
-            setType(Type.Cooperative);
+            setType(Type.COOPERATIVE);
         }}
     );
 
@@ -84,8 +85,11 @@ public class ConnectionManagerStub extends ConnectionManager {
     }
 
     @Override
-    public String createLobby(String gameMapName) {
-        return "id_123";
+    public SGameSession createLobby(String gameMapName) {
+        return new SGameSession() {{
+            setSessionId("id_123");
+            setSessionId("token_123");
+        }};
     }
 
     @Override
@@ -100,7 +104,7 @@ public class ConnectionManagerStub extends ConnectionManager {
             setLevelName("Level 1_4");
             setMaxPlayers(3);
             setPlayers(getRandomSubList(players));
-            setType(Type.Cooperative);
+            setType(Type.COOPERATIVE);
         }};
     }
 

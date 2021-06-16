@@ -24,6 +24,7 @@ import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.UserMetaData;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import ru.nsu.fit.towerdefense.replay.GameStateReader;
 import ru.nsu.fit.towerdefense.replay.Replay;
 
@@ -239,21 +240,15 @@ public class MenuController implements Controller {
 
     private void createCooperativeGame(String gameMapName) {
         new Thread(() -> {
-            String lobbyId = connectionManager.createLobby(gameMapName);
-            if (lobbyId == null) {
-                System.out.println("lobbyId is null");
-                return;
-            }
-
-            String sessionToken = connectionManager.joinLobby(lobbyId);
-            if (sessionToken == null) {
-                System.out.println("sessionToken is null");
+            SGameSession gameSession = connectionManager.createLobby(gameMapName);
+            if (gameSession == null) {
+                System.out.println("gameSession is null");
                 return;
             }
 
             Platform.runLater(() -> {
                 System.out.println("switchToLobby");
-                sceneManager.switchToLobby(lobbyId, sessionToken);
+                sceneManager.switchToLobby(gameSession.getSessionId(), gameSession.getSessionToken());
             });
         }).start();
     }

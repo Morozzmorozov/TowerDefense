@@ -12,11 +12,14 @@ import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.server.Mappings;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
@@ -99,13 +102,14 @@ public class ConnectionManager {
         }
     }
 
-    public String createLobby(String gameMapName) {
+    public SGameSession createLobby(String gameMapName) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.CREATE_LOBBY_MAPPING +
                     "?userToken=" + credentials.getUserToken() +
-                    "&levelName=" + gameMapName +
-                    "&gameType=" + SLobby.Type.Cooperative)) // todo
+                    "&levelName=" + encode(gameMapName) +
+                    "&gameType=" + SLobby.Type.COOPERATIVE)) // todo
+                .POST(HttpRequest.BodyPublishers.ofString(""))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
 
@@ -114,7 +118,7 @@ public class ConnectionManager {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
-                return new Gson().fromJson(response.body(), SLobby.class).getId();
+                return new Gson().fromJson(response.body(), SGameSession.class);
             }
 
             System.out.println("Bad status code: " + response.statusCode());
@@ -208,5 +212,9 @@ public class ConnectionManager {
     public void dispose() {
         closeSocketConnection();
         // todo interrupt()
+    }
+
+    private String encode(String str) throws UnsupportedEncodingException {
+        return URLEncoder.encode(str, StandardCharsets.UTF_8.toString());
     }
 }

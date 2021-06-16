@@ -4,7 +4,7 @@ import java.util.List;
 
 public class SLobby {
 
-    public enum Type { Cooperative, Competition }
+    public enum Type {COOPERATIVE, COMPETITION}
 
     private String id;
     private List<String> players;
