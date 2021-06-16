@@ -36,6 +36,7 @@ public class ConnectionsManager {
 			EventMessenger messenger = new EventMessenger(player);
 			messenger.setSession(controller);
 			messenger.setOwner(connection);
+			connection.setReceiver(messenger);
 			controller.connect(messenger, token);
 			return true;
 		}

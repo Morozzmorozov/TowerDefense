@@ -79,8 +79,8 @@ public class LobbyController implements Controller, ServerMessageListener {
         });
 
         lobbyThread.start();
-        connectionManager.setServerMessageListener(this);
         connectionManager.openSocketConnection(gameSession);
+        connectionManager.setServerMessageListener(this);
 
         ToggleButton readyButton = new ToggleButton("Start");
         readyButton.setOnAction(actionEvent -> {

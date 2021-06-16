@@ -1,6 +1,8 @@
 package ru.nsu.fit.towerdefense.server.session;
 
+import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.multiplayer.GameType;
+import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.server.players.PlayerManager;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
@@ -122,7 +124,7 @@ public class SessionController {
 				Message message = new Message();
 				message.setType(Message.Type.START);
 				message.setPlayerNames(info.getPlayers());
-				sendMessageToAll(message.toString());
+				sendMessageToAll(new Gson().toJson(message));
 				runGame();
 			}
 		}
