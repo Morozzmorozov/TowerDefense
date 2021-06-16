@@ -135,6 +135,7 @@ public class ConnectionManager {
                 .uri(new URI(SITE_URI + Mappings.JOIN_LOBBY_MAPPING +
                     "?userToken=" + credentials.getUserToken() +
                     "&sessionId=" + sessionId))
+                .POST(HttpRequest.BodyPublishers.ofString(""))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
 
