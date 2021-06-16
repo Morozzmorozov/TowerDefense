@@ -137,7 +137,7 @@ public class SessionController {
 
 	public synchronized boolean disconnectPlayer(String player)
 	{
-		if (connections.containsKey(player))
+		if (connections.containsKey(getActiveToken(player)))
 		{
 			connections.remove(player);
 			return true;
