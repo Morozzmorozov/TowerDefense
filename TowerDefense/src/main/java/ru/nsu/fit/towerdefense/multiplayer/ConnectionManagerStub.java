@@ -93,7 +93,7 @@ public class ConnectionManagerStub extends ConnectionManager {
     }
 
     @Override
-    public String joinLobby(String lobbyId) {
+    public String joinLobby(String sessionId) {
         return "token_123";
     }
 

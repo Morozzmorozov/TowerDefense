@@ -129,12 +129,12 @@ public class ConnectionManager {
         }
     }
 
-    public String joinLobby(String lobbyId) {
+    public String joinLobby(String sessionId) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.JOIN_LOBBY_MAPPING +
                     "?userToken=" + credentials.getUserToken() +
-                    "&lobbyId=" + lobbyId))
+                    "&sessionId=" + sessionId))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
 
