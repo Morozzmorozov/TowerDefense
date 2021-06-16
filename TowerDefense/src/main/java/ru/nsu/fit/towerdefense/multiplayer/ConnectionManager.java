@@ -5,10 +5,10 @@ import com.google.gson.JsonSyntaxException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
-import ru.nsu.fit.towerdefense.multiplayer.entities.EloRating;
-import ru.nsu.fit.towerdefense.multiplayer.entities.GameSession;
-import ru.nsu.fit.towerdefense.multiplayer.entities.LevelScore;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SEloRating;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLevelScore;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.server.Mappings;
 
 import java.io.IOException;
@@ -47,6 +47,7 @@ public class ConnectionManager {
                 .uri(new URI(SITE_URI + Mappings.LOGIN_MAPPING +
                     "?username=" + username +
                     "&password=" + password))
+                .POST(HttpRequest.BodyPublishers.ofString(""))
                 .timeout(Duration.of(15, SECONDS))
                 .build();
 
@@ -73,7 +74,7 @@ public class ConnectionManager {
         credentials = new Credentials();
     }
 
-    public List<Lobby> getLobbies() {
+    public List<SLobby> getLobbies() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.LOBBIES_MAPPING +
@@ -86,7 +87,7 @@ public class ConnectionManager {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
-                Lobby[] lobbies = new Gson().fromJson(response.body(), Lobby[].class);
+                SLobby[] lobbies = new Gson().fromJson(response.body(), SLobby[].class);
                 return Arrays.asList(lobbies);
             }
 
@@ -102,8 +103,9 @@ public class ConnectionManager {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.CREATE_LOBBY_MAPPING +
-                    "?userToken=" + credentials.getUserToken()/* +
-                    "&levelName=" + gameMapName*/))
+                    "?userToken=" + credentials.getUserToken() +
+                    "&levelName=" + gameMapName +
+                    "&gameType=" + SLobby.Type.Cooperative)) // todo
                 .timeout(Duration.of(15, SECONDS))
                 .build();
 
@@ -112,7 +114,7 @@ public class ConnectionManager {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
-                return new Gson().fromJson(response.body(), Lobby.class).getId();
+                return new Gson().fromJson(response.body(), SLobby.class).getId();
             }
 
             System.out.println("Bad status code: " + response.statusCode());
@@ -137,7 +139,7 @@ public class ConnectionManager {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() >= 200 && response.statusCode() < 300) {
-                return new Gson().fromJson(response.body(), GameSession.class).getToken();
+                return new Gson().fromJson(response.body(), SGameSession.class).getSessionToken();
             }
 
             System.out.println("Bad status code: " + response.statusCode());
@@ -148,15 +150,15 @@ public class ConnectionManager {
         }
     }
 
-    public Lobby getLobby(String sessionToken) {
+    public SLobby getLobby(String sessionToken) {
         return null; // todo
     }
 
-    public List<LevelScore> getLeaderboard(String gameMapName) {
+    public List<SLevelScore> getLeaderboard(String gameMapName) {
         return null; // todo
     }
 
-    public List<EloRating> getEloLeaderboard() {
+    public List<SEloRating> getEloLeaderboard() {
         return null; // todo
     }
 
