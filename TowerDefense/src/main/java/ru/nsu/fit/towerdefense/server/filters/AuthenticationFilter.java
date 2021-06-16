@@ -3,7 +3,6 @@ package ru.nsu.fit.towerdefense.server.filters;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.server.database.UserManager;
 import ru.nsu.fit.towerdefense.server.players.PlayerManager;
 
 import java.io.IOException;
@@ -21,12 +20,13 @@ public class AuthenticationFilter implements Filter {
 	{
 		System.out.println("AuthFilter");
 		HttpServletRequest req = (HttpServletRequest) request;
-		String login = req.getParameter("username");
-		String password = req.getParameter("password");
-		String userToken = req.getParameter("userToken");
+		String login = (String)req.getAttribute("param_username");
+		String password = (String)req.getAttribute("param_password");
+		String userToken = (String)req.getAttribute("param_userToken");
 		if (login != null && password != null)
 		{
 			chain.doFilter(req, response);
+			System.out.println("User filtered!");
 		}
 		else if (userToken != null)
 		{
@@ -34,6 +34,7 @@ public class AuthenticationFilter implements Filter {
 			if (player != null)
 			{
 				req.setAttribute("playerName", player);
+				System.out.println("User filtered!");
 				chain.doFilter(req, response);
 			}
 			else

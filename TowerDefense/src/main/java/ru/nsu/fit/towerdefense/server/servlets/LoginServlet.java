@@ -14,16 +14,16 @@ public class LoginServlet extends HttpServlet {
 	{
 		try
 		{
-			String login = req.getParameter("username");
-			String password = req.getParameter("password");
+			String username = (String)req.getAttribute("param_username");
+			String password = (String)req.getAttribute("param_password");
 
-			if (login == null || password == null)
+			if (username == null || password == null)
 			{
 				resp.setStatus(401);
 				return;
 			}
 
-			String token = PlayerManager.getInstance().validate(login, password);
+			String token = PlayerManager.getInstance().validate(username, password);
 			if (token == null)
 			{
 				resp.setStatus(401);

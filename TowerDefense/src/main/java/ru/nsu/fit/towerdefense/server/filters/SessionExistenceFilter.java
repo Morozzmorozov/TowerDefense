@@ -3,7 +3,6 @@ package ru.nsu.fit.towerdefense.server.filters;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyManager;
 import ru.nsu.fit.towerdefense.server.session.SessionManager;
 
 import java.io.IOException;
@@ -20,7 +19,7 @@ public class SessionExistenceFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
 		HttpServletRequest req = (HttpServletRequest)request;
-		String id = req.getParameter("lobbyId");
+		String id = (String)req.getAttribute("param_sessionId");
 		Long lId = Long.parseLong(id);
  		if (!SessionManager.getInstance().isSessionExists(lId)){
 			((HttpServletResponse)response).setStatus(400);

@@ -15,16 +15,16 @@ public class RegisterServlet extends HttpServlet {
 	{
 		try
 		{
-			String login = req.getParameter("username");
-			String password = req.getParameter("password");
+			String username = (String)req.getAttribute("param_username");
+			String password = (String)req.getAttribute("param_password");
 
-			if (login == null || password == null)
+			if (username == null || password == null)
 			{
 				resp.setStatus(401);
 				return;
 			}
 
-			int t = PlayersDatabase.getInstance().register(login, password);
+			int t = PlayersDatabase.getInstance().register(username, password);
 			if (t == 1) resp.setStatus(400);
 			else resp.setStatus(201);
 		}

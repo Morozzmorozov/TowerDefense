@@ -16,7 +16,7 @@ public class SessionJoinServlet extends HttpServlet {
 	{
 		try
 		{
-			Long id = Long.parseLong(req.getParameter("lobbyId"));
+			Long id = Long.parseLong((String)req.getAttribute("param_sessionId"));
 			String player = (String)req.getAttribute("playerName");
 
 			String token = SessionManager.getInstance().getSessionById(id).generateInviteToken(player);

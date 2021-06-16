@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
-import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.server.session.SessionInfo;
 import ru.nsu.fit.towerdefense.server.session.SessionManager;
 
@@ -15,10 +14,10 @@ import java.io.IOException;
 public class CreateSessionServlet extends HttpServlet {
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		String levelName = req.getParameter("levelName");
-		String gameType = req.getParameter("gameType");
+		String levelName = (String)req.getAttribute("param_levelName");
+		String gameType = (String)req.getAttribute("param_gameType");
 		String player = (String)req.getAttribute("playerName");
 		if (levelName == null) levelName = "Level 1_4";
 		if (gameType == null) gameType = "COOPERATIVE";
