@@ -45,6 +45,15 @@ public class SessionInfo {
 		readyCnt = 0;
 	}
 
+	public void disconnectPlayer(String player) {
+		String token = userToToken.get(player);
+		userToToken.remove(player);
+		userInfo.remove(player);
+		tokenToUser.remove(token);
+		invitePlayers.remove(player);
+		inviteTokens.remove(token);
+	}
+
 	public void setLevel(String level) {
 		this.levelName = level;
 		this.level = GameMetaData.getInstance().getMapDescription(level);

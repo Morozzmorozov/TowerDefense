@@ -140,6 +140,7 @@ public class SessionController {
 		if (connections.containsKey(getActiveToken(player)))
 		{
 			connections.remove(player);
+			info.disconnectPlayer(player);
 			return true;
 		}
 		else return false;

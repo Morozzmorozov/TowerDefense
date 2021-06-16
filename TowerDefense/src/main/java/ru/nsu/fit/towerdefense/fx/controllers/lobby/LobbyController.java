@@ -51,7 +51,10 @@ public class LobbyController implements Controller, ServerMessageListener {
 
     @FXML
     private void initialize() {
-        menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
+        menuImageView.setOnMouseClicked(mouseEvent -> new Thread(() -> {
+            connectionManager.leaveLobby(lobby.getId());
+            Platform.runLater(sceneManager::switchToMenu);
+        }).start());
 
         lobbyThread = new Thread(() -> {
             while (!Thread.interrupted()) {

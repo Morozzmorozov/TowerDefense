@@ -34,7 +34,7 @@ public class AuthenticationFilter implements Filter {
 			if (player != null)
 			{
 				req.setAttribute("playerName", player);
-				System.out.println("User filtered!");
+//				System.out.println("User filtered!");
 				chain.doFilter(req, response);
 			}
 			else
