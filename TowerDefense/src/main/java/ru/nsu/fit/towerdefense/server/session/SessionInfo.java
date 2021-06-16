@@ -223,4 +223,10 @@ public class SessionInfo {
 	{
 		return readyCnt == playersNumber;
 	}
+	
+	public void setOwnerInfo(String owner)
+	{
+		SPlayer info = PlayersDatabase.getInstance().getPlayerInfo(owner);
+		userInfo.put(owner, info);
+	}
 }

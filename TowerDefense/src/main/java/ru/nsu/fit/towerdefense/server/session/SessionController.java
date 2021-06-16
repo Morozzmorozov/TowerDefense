@@ -41,6 +41,7 @@ public class SessionController {
 		info.addActiveToken(owner, token);
 		PlayerManager.getInstance().addGameToken(token, owner, info.getId());
 		info.setOwner(owner);
+		info.setOwnerInfo(owner);
 		return token;
 	}
 
