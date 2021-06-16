@@ -117,6 +117,14 @@ public class SessionController {
 		else
 		{
 			ready.put(player, player);
+			if (ready.size() == info.getPlayersNumber())
+			{
+				Message message = new Message();
+				message.setType(Message.Type.START);
+				message.setPlayerNames(info.getPlayers());
+				sendMessageToAll(message.toString());
+				runGame();
+			}
 		}
 	}
 
