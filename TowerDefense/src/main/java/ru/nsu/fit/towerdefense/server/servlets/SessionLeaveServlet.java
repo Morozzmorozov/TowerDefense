@@ -10,11 +10,11 @@ import java.io.IOException;
 
 public class SessionLeaveServlet extends HttpServlet {
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		try
 		{
-			Long id = Long.parseLong(req.getParameter("lobbyId"));
+			Long id = Long.parseLong(req.getParameter("sessionId"));
 			String player = (String)req.getAttribute("playerName");
 
 			SessionManager.getInstance().getSessionById(id).disconnectPlayer(player);

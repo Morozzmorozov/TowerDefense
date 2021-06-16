@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
 import ru.nsu.fit.towerdefense.server.session.SessionController;
 import ru.nsu.fit.towerdefense.server.session.SessionManager;
 
@@ -18,11 +17,9 @@ public class GetSessionInfoServlet extends HttpServlet {
 	{
 		try
 		{
-			long id = Long.parseLong(req.getParameter("lobbyId"));
+			long id = Long.parseLong(req.getParameter("sessionId"));
 
 			SessionController session = SessionManager.getInstance().getSessionById(id);
-
-			//Lobby lobby = LobbyManager.getInstance().getLobbyByID(id).serialize();
 
 			if (session == null){
 				resp.setStatus(409);

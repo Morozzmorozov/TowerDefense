@@ -6,6 +6,7 @@ import jakarta.servlet.Servlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
+import ru.nsu.fit.towerdefense.server.database.PlayersDatabase;
 import ru.nsu.fit.towerdefense.server.filters.AuthenticationFilter;
 import ru.nsu.fit.towerdefense.server.filters.SessionCreationFilter;
 import ru.nsu.fit.towerdefense.server.servlets.*;
@@ -62,6 +63,9 @@ public class GameServer {
 
 	public static void main(String[] args)
 	{
+
+		var t = PlayersDatabase.getInstance();
+		//if (true) return;
 		GameServer server = new GameServer(8080);
 		server.addFilter(Mappings.USER_FILTER_MAPPING, AuthenticationFilter.class);
 		server.addFilter(Mappings.LOBBY_MAPPING, SessionExistenceFilter.class);
@@ -72,6 +76,7 @@ public class GameServer {
 		server.addServlet(Mappings.LOBBIES_MAPPING, GetSessionsServlet.class);
 		server.addServlet(Mappings.CREATE_LOBBY_MAPPING, CreateSessionServlet.class);
 		server.addServlet(Mappings.LOGIN_MAPPING, LoginServlet.class);
+		server.addServlet(Mappings.REGISTER_MAPPING, RegisterServlet.class);
 
 		try
 		{

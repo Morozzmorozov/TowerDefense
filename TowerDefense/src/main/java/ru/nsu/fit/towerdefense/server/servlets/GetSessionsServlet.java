@@ -2,13 +2,10 @@ package ru.nsu.fit.towerdefense.server.servlets;
 
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.nsu.fit.towerdefense.multiplayer.entities.Lobby;
-import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyControl;
-import ru.nsu.fit.towerdefense.server.lobbyOld.LobbyManager;
 import ru.nsu.fit.towerdefense.server.session.SessionController;
 import ru.nsu.fit.towerdefense.server.session.SessionManager;
 
@@ -17,7 +14,6 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/lobbies")
 public class GetSessionsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException

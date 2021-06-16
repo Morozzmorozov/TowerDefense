@@ -1,5 +1,7 @@
 package ru.nsu.fit.towerdefense.server.players;
 
+import ru.nsu.fit.towerdefense.server.database.PlayersDatabase;
+
 import java.security.MessageDigest;
 import java.util.Base64;
 import java.util.HashMap;
@@ -73,14 +75,9 @@ public class PlayerManager {
 	}
 
 
-	private boolean isValid(String name, String password)
-	{
-		return true;
-	}
-
 	public String validate(String name, String password)
 	{
-		if (isValid(name, password))
+		if (PlayersDatabase.getInstance().validate(name, password) == 0)
 		{
 			if (!nameToPlayers.containsKey(name))
 			{
