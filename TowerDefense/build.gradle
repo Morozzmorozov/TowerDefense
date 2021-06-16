@@ -29,6 +29,8 @@ dependencies {
     implementation group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '11.0.2'
     implementation 'org.eclipse.jetty.websocket:websocket-jetty-server:11.0.2'
     implementation 'org.eclipse.jetty.websocket:websocket-jetty-client:11.0.2'
+// https://mvnrepository.com/artifact/org.postgresql/postgresql
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
 }
 
 mainClassName = 'ru.nsu.fit.towerdefense.fx.Main'
