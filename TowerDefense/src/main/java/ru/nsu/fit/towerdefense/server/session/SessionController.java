@@ -102,6 +102,7 @@ public class SessionController {
 
 		}
 		gameThread = new Thread(() -> controller.run());
+		gameThread.start();
 	}
 
 	public void receiveGameEvent(String eventMessage, String player)
