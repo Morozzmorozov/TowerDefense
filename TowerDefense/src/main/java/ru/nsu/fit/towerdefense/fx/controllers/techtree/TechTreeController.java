@@ -22,8 +22,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import ru.nsu.fit.towerdefense.fx.Images;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
-import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.Camera;
+import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.exceptions.RenderException;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
@@ -31,7 +31,6 @@ import ru.nsu.fit.towerdefense.metadata.UserMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.techtree.Research;
-import ru.nsu.fit.towerdefense.util.Vector2;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -391,69 +390,5 @@ public class TechTreeController implements Controller {
         text.textProperty().addListener((observable, oldValue, newValue) -> {
             text.setText(newValue.toUpperCase());
         });
-    }
-
-    // ----- Stubs -----
-
-    private static class MyTechTree {
-
-        private Vector2<Integer> size;
-        private List<MyResearch> researches;
-
-        public MyTechTree(Vector2<Integer> size, List<MyResearch> researches) {
-            this.size = size;
-            this.researches = researches;
-        }
-
-        public Vector2<Integer> getSize() {
-            return size;
-        }
-
-        public List<MyResearch> getResearches() {
-            return researches;
-        }
-    }
-
-    private static class MyResearch {
-
-        private String name;
-        private String info;
-        private String image;
-        private int cost;
-        private Vector2<Integer> position;
-        private Vector2<Integer> size;
-
-        public MyResearch(String name, String info, String image, int cost, Vector2<Integer> position, Vector2<Integer> size) {
-            this.name = name;
-            this.info = info;
-            this.image = image;
-            this.cost = cost;
-            this.position = position;
-            this.size = size;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getInfo() {
-            return info;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public int getCost() {
-            return cost;
-        }
-
-        public Vector2<Integer> getPosition() {
-            return position;
-        }
-
-        public Vector2<Integer> getSize() {
-            return size;
-        }
     }
 }
