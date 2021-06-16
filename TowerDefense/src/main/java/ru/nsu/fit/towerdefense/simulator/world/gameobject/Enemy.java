@@ -21,7 +21,8 @@ public class Enemy extends GameObject implements Renderable {
   private List<Effect> effects = new ArrayList<>();
   private Map<String, Integer> damageMap = new HashMap<>();
 
-  public Enemy(EnemyType type, int waveNumber, Vector2<Double> position, int moneyReward) {
+  public Enemy(EnemyType type, int waveNumber, Vector2<Double> position, int moneyReward, int id) {
+    super(id);
     this.type = type;
     this.waveNumber = waveNumber;
     this.position = position;
@@ -31,6 +32,7 @@ public class Enemy extends GameObject implements Renderable {
   }
 
   public Enemy(Enemy oldEnemy) {
+    super(oldEnemy.id);
     health = oldEnemy.health;
     type = oldEnemy.type;
     velocity = oldEnemy.velocity;

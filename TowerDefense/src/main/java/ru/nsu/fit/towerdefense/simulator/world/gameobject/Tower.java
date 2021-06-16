@@ -5,11 +5,12 @@ import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 
 public class Tower extends GameObject implements Renderable {
 
-  public Tower() {
-
+  public Tower(int id) {
+    super(id);
   }
 
   public Tower(Tower oldTower, Enemy target) {
+    super(oldTower.id);
     type = oldTower.type;
     cooldown = oldTower.cooldown;
     rotation = oldTower.rotation;

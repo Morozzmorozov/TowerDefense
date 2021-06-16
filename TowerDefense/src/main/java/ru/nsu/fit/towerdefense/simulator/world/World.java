@@ -25,9 +25,9 @@ public class World {
     return new Gson().toJson(new SerializableWorld(this));
   }
 
-  public static World deserialize(String json) {
+  public static SerializableWorld deserialize(String json) {
     Gson gson = new GsonBuilder().registerTypeAdapter(SerializableWorld.class, new SerializableWorld.WorldDeserializer()).create();
-    return gson.fromJson(json, SerializableWorld.class).generateWorld();
+    return gson.fromJson(json, SerializableWorld.class);
   }
 
   public World() {
@@ -76,6 +76,9 @@ public class World {
     tick = oldWorld.tick;
 
     scienceEarned = oldWorld.scienceEarned;
+
+    currentEnemyId = oldWorld.getCurrentEnemyId();
+    playerCurrentTowerIdMap = new HashMap<>(oldWorld.playerCurrentTowerIdMap);
   }
 
   public World(SerializableWorld world) {
@@ -109,6 +112,19 @@ public class World {
   public Map<String, Integer> moneyMap = new HashMap<>();
   private long tick = 0;
   private int scienceEarned = 0; // todo give it to players + maybe divide between players
+
+  private Map<String, Integer> playerCurrentTowerIdMap = new HashMap<>();
+  private int currentEnemyId = 0;
+
+
+  public Map<String, Integer> getPlayerCurrentTowerIdMap() {
+    return playerCurrentTowerIdMap;
+  }
+
+  public void setPlayerCurrentTowerIdMap(
+      Map<String, Integer> playerCurrentTowerIdMap) {
+    this.playerCurrentTowerIdMap = playerCurrentTowerIdMap;
+  }
 
   public int getKilledEnemies() {
     return killedEnemies;
@@ -287,5 +303,13 @@ public class World {
       }
       throw new NoSuchElementException();
     }
+  }
+
+  public int getCurrentEnemyId() {
+    return currentEnemyId;
+  }
+
+  public void setCurrentEnemyId(int currentEnemyId) {
+    this.currentEnemyId = currentEnemyId;
   }
 }

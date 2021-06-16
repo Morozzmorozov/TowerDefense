@@ -1,11 +1,12 @@
 package ru.nsu.fit.towerdefense.fx.controllers.menu;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -28,8 +29,6 @@ import ru.nsu.fit.towerdefense.replay.Replay;
 
 import java.io.File;
 
-import static javafx.scene.input.KeyCode.CONTROL;
-
 /**
  * MenuController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a menu scene.
  *
@@ -49,6 +48,8 @@ public class MenuController implements Controller {
 
     @FXML private Label researchLabel;
     @FXML private Label multiplayerLabel;
+
+    private final BooleanProperty loggedIn = new SimpleBooleanProperty(false);
 
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
@@ -70,7 +71,12 @@ public class MenuController implements Controller {
 
     @FXML
     private void initialize() {
-        setLoggedIn(null);
+        setLoggedIn(connectionManager.getUsername());
+
+        lobbiesImageView.visibleProperty().bind(loggedIn);
+        lobbiesImageView.managedProperty().bind(loggedIn);
+        eloRatingImageView.visibleProperty().bind(loggedIn);
+        eloRatingImageView.managedProperty().bind(loggedIn);
 
         researchLabel.setText(UserMetaData.getResearchPoints() + "");
         multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
@@ -118,9 +124,11 @@ public class MenuController implements Controller {
 
     private void setLoggedIn(String username) {
         if (username != null) {
+            loggedIn.set(true);
             userLabel.setText(username);
             userHBox.setOnMouseClicked(mouseEvent -> logout());
         } else {
+            loggedIn.set(false);
             userLabel.setText("User");
             userHBox.setOnMouseClicked(mouseEvent -> showLoginDialog());
         }
@@ -150,10 +158,10 @@ public class MenuController implements Controller {
         GridPane.setColumnSpan(imageView, 2);
         gridPane.add(imageView, 0, 1);
 
-        gridPane.add(createLevelButton("resume-icon", "New game",
+        gridPane.add(createLevelButton(false, "resume-icon", "New game",
             mouseEvent -> sceneManager.switchToGame(gameMapName)), 0, 2);
         //gridPane.add(createLevelButton("skip-right-icon", "Resume", null), 1, 2); // todo uncomment
-        gridPane.add(createLevelButton("camera-icon", "View replay",
+        gridPane.add(createLevelButton(false, "camera-icon", "View replay",
             mouseEvent -> {
                 comboBox.getItems().clear();
                 comboBox.getItems().addAll(GameStateReader.getInstance().getReplays(gameMapName));
@@ -185,11 +193,11 @@ public class MenuController implements Controller {
             }), 1, 2); // todo change to 0, 3
         //gridPane.add(createLevelButton("idle-icon", "Idle game", null), 1, 3); // todo uncomment
 
-        gridPane.add(createLevelButton("cooperative-icon", "Cooperative",
+        gridPane.add(createLevelButton(true, "cooperative-icon", "Cooperative",
             mouseEvent -> createCooperativeGame(gameMapName)), 0, 3);
-        gridPane.add(createLevelButton("competition-icon", "Competition",
+        gridPane.add(createLevelButton(true, "competition-icon", "Competition",
             mouseEvent -> System.out.println("competition")), 1, 3);
-        gridPane.add(createLevelButton("leaderboard-icon", "Leaders",
+        gridPane.add(createLevelButton(true, "leaderboard-icon", "Leaders",
             mouseEvent -> showLeaderboard(gameMapName)), 0, 4);
 
         return gridPane;
@@ -202,7 +210,7 @@ public class MenuController implements Controller {
         }};
     }
 
-    private HBox createLevelButton(String imageStyleClass, String labelText,
+    private HBox createLevelButton(boolean bindWithLoggedIn, String imageStyleClass, String labelText,
                                    EventHandler<? super MouseEvent> mouseEvent)
     {
         HBox hBox = new HBox();
@@ -218,6 +226,11 @@ public class MenuController implements Controller {
         Label label = new Label(labelText);
 
         hBox.getChildren().addAll(imageView, label);
+
+        if (bindWithLoggedIn) {
+            hBox.visibleProperty().bind(loggedIn);
+            hBox.managedProperty().bind(loggedIn);
+        }
 
         return hBox;
     }

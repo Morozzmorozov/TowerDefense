@@ -119,7 +119,7 @@ public class WorldControl implements ServerSimulator {
     for (Vector2<Integer> position : gameMap.getPositions().getPositions()) {
       Vector2<Integer> coordinates = new Vector2<>(position);
       world.getTowerPlatforms()
-          .add(new TowerPlatform(coordinates, "platform.png")); // todo image name
+          .add(new TowerPlatform(coordinates, "platform.png", 0)); // todo image name
     }
 
     Wave wave = new Wave();
@@ -136,14 +136,14 @@ public class WorldControl implements ServerSimulator {
 
     Base base = new Base(gameMap.getBaseDescription().getHealth(),
         gameMap.getBaseDescription().getImage(),
-        new Vector2<>(gameMap.getBaseDescription().getPosition()));
+        new Vector2<>(gameMap.getBaseDescription().getPosition()), 0);
     world.setBase(base);
 
     for (int i = 0; i < gameMap.getRoads().getRoadCount(); ++i) {
       List<Vector2<Double>> road = gameMap.getRoads().getRoad(i);
 
       world.getPortals().add(new Portal("portal.png", new Vector2<>(
-          (int) Math.round(road.get(0).getX()), (int) Math.round(road.get(0).getY()))));
+          (int) Math.round(road.get(0).getX()), (int) Math.round(road.get(0).getY())), 0));
 
       for (int j = 0; j < road.size() - 1; ++j) { // all nodes except last
         int x1 = (int) Math.round(road.get(j).getX());
@@ -162,7 +162,7 @@ public class WorldControl implements ServerSimulator {
               }
             }
             if (newTileNeeded) {
-              world.getRoadTiles().add(new RoadTile("road.png", new Vector2<>(x1, y)));
+              world.getRoadTiles().add(new RoadTile("road.png", new Vector2<>(x1, y), 0));
             }
           }
         } else if (y1 == y2) { // horizontal
@@ -176,7 +176,7 @@ public class WorldControl implements ServerSimulator {
               }
             }
             if (newTileNeeded) {
-              world.getRoadTiles().add(new RoadTile("road.png", new Vector2<>(x, y1)));
+              world.getRoadTiles().add(new RoadTile("road.png", new Vector2<>(x, y1), 0));
             }
           }
         }
@@ -193,17 +193,17 @@ public class WorldControl implements ServerSimulator {
     stateContainer.putState(world);
   }
 
-  public void updateWorld(World world) {
+  public void updateWorld(SerializableWorld serializableWorld) {
     synchronized(this) {
-      if (world.getTick() < latestInputStateTick) {
+      if (serializableWorld.getTick() < latestInputStateTick) {
         return;
       }
-      long oldTick = this.world.getTick();
-      this.world = world;
-      while(this.world.getTick() < oldTick) {
+      long oldTick = world.getTick();
+      world = serializableWorld.generateWorld(world);
+      while(world.getTick() < oldTick) {
         simulateTick();
       }
-      latestInputStateTick = world.getTick();
+      latestInputStateTick = serializableWorld.getTick();
     }
   }
 
@@ -499,7 +499,7 @@ public class WorldControl implements ServerSimulator {
           if (existingEffect.isPresent()) {
             existingEffect.get().setRemainingTicks(effectType.getDuration());
           } else {
-            enemy.getEffects().add(new Effect(enemy, effectType, projectile.getOwner()));
+            enemy.getEffects().add(new Effect(enemy, effectType, projectile.getOwner(), 0));
           }
         }
 
@@ -687,7 +687,7 @@ public class WorldControl implements ServerSimulator {
               Projectile projectile = new Projectile(
                   tower.getTarget(), tower.getType().getRange(), projectileType,
                   new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
-                  direction, tower);
+                  direction, tower, 0); // todo id
               projectile.setParentPosition(new Vector2<>(tower.getPosition()));
               projectile.setOwner(tower.getOwner());
               projectile.setRotation(
@@ -705,7 +705,7 @@ public class WorldControl implements ServerSimulator {
               Projectile projectile = new Projectile(null, tower.getType().getRange(),
                   projectileType,
                   new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
-                  new Vector2<>(0d, 0d), tower);
+                  new Vector2<>(0d, 0d), tower, 0); // todo id
               projectile.setOwner(tower.getOwner());
               projectile.setFireType(FireType.OMNIDIRECTIONAL);
               projectile.setScale(0);
@@ -734,7 +734,9 @@ public class WorldControl implements ServerSimulator {
             Vector2<Double> coordinates = new Vector2<>(spawnPosition);
             enemy = new Enemy(
                 GameMetaData.getInstance().getEnemyType(enemies.getType()),
-                world.getCurrentWaveNumber(), coordinates, enemies.getMoneyReward());
+                world.getCurrentWaveNumber(), coordinates, enemies.getMoneyReward(),
+                world.getCurrentEnemyId());
+            world.setCurrentEnemyId(world.getCurrentEnemyId() + 1);
             for (Vector2<Double> position : gameMap.getRoads()
                 .getRoad(enemies.getSpawnPosition())) {
               enemy.getTrajectory().add(new Vector2<>(position));

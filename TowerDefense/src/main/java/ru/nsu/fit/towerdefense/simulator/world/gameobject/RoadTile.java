@@ -7,12 +7,14 @@ public class RoadTile extends GameObject implements Renderable {
   private final Vector2<Integer> position;
 
   public RoadTile(RoadTile oldTile) {
+    super(oldTile.id);
     image = oldTile.image;
     position = new Vector2<>(oldTile.position);
   }
 
   public RoadTile(String image,
-      Vector2<Integer> position) {
+      Vector2<Integer> position, int id) {
+    super(id);
     this.image = image;
     this.position = position;
   }

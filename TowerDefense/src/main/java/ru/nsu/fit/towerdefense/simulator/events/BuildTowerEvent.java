@@ -66,7 +66,12 @@ public class BuildTowerEvent implements Event {
       throw new GameplayException("The tower is not yet researched");
     }
     world.setMoney(player, world.getMoney(player) - towerType.getPrice());
-    tower = new Tower();
+    if (!world.getPlayerCurrentTowerIdMap().containsKey(player)) {
+      world.getPlayerCurrentTowerIdMap().put(player, 0);
+    }
+    int id = world.getPlayerCurrentTowerIdMap().get(player);
+    tower = new Tower(id);
+    world.getPlayerCurrentTowerIdMap().put(player, id + 1);
     tower.setPosition(new Vector2<>(x, y));
     tower.setType(towerType);
     tower.setRotation(0);

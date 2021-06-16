@@ -17,7 +17,8 @@ public class Effect extends GameObject implements Renderable {
     this.owner = owner;
   }
 
-  public Effect(Enemy host, EffectType type, String owner) {
+  public Effect(Enemy host, EffectType type, String owner, int id) {
+    super(id);
     this.host = host;
     this.type = type;
     remainingTicks = type.getDuration();
@@ -25,6 +26,7 @@ public class Effect extends GameObject implements Renderable {
   }
 
   public Effect(Effect oldEffect, Enemy host) {
+    super(oldEffect.id);
     this.host = host;
     this.type = oldEffect.type;
     this.remainingTicks = oldEffect.remainingTicks;

@@ -8,11 +8,13 @@ public class Portal extends GameObject implements Renderable {
   private final Vector2<Integer> position;
 
   public Portal(Portal oldPortal) {
+    super(oldPortal.id);
     image = oldPortal.image;
     position = new Vector2<>(oldPortal.position);
   }
 
-  public Portal(String image, Vector2<Integer> position) {
+  public Portal(String image, Vector2<Integer> position, int id) {
+    super(id);
     this.image = image;
     this.position = position;
   }
