@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class RegisterServlet extends HttpServlet {
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		try
 		{
@@ -25,7 +25,8 @@ public class RegisterServlet extends HttpServlet {
 			}
 
 			int t = PlayersDatabase.getInstance().register(login, password);
-			resp.getWriter().println(t);
+			if (t == 1) resp.setStatus(400);
+			else resp.setStatus(201);
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());

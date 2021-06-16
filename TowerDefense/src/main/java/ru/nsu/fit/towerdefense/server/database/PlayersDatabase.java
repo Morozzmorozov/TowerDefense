@@ -141,14 +141,14 @@ public class PlayersDatabase {
 				pst.setString(1, user);
 				pst.setString(2, sHash);
 				int t = pst.executeUpdate();
-
-				System.out.println(t);
+				return 0;
+//				System.out.println(t);
 			}
 			catch (Exception e)
 			{
 				System.out.println(e.getMessage());
 			}
-			return 3;
+			return 1;
 		}
 	}
 }
