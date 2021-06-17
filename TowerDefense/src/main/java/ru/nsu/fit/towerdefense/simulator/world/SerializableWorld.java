@@ -138,7 +138,7 @@ public class SerializableWorld {
     world.setEnemies(enemies.stream().map(id -> idenemyMap.get(id).getEnemy()).collect(Collectors.toList()));
     world.setTowers(towers.stream().map(id -> {
       var serializableTower = idtowerMap.get(id);
-      var optTower = world.getTowers().stream().filter(tower -> tower.getId() == serializableTower.idInWorld && tower.getOwner().equals(serializableTower.owner))
+      var optTower = oldWorld.getTowers().stream().filter(tower -> tower.getId() == serializableTower.idInWorld && tower.getOwner().equals(serializableTower.owner))
           .findFirst();
       if (optTower.isPresent()) {
         return serializableTower.getTower(optTower.get());
