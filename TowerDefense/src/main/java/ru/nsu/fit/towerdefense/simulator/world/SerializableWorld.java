@@ -167,6 +167,10 @@ public class SerializableWorld {
     }
 
     world.moneyMap = new HashMap<>(moneyMap);
+
+    world.setCurrentEnemyId(currentEnemyId);
+
+    world.setPlayerCurrentTowerIdMap(playerCurrentTowerIdMap);
     return world;
   }
 
@@ -255,6 +259,8 @@ public class SerializableWorld {
 
     moneyMap = new HashMap<>(world.moneyMap);
 
+    currentEnemyId = world.getCurrentEnemyId();
+    playerCurrentTowerIdMap = new HashMap<>(world.getPlayerCurrentTowerIdMap());
   }
 
   static class SerializableEntity {
