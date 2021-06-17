@@ -66,12 +66,12 @@ public class PlayerManager {
 	{
 		PlayerInfo info = nameToPlayers.get(player);
 		info.setGameToken(token);
-		info.setLobbyId(lobbyId);
+		info.setSessionId(lobbyId);
 	}
 
 	public boolean isConnected(String player)
 	{
-		return nameToPlayers.get(player).getLobbyId() != -1;
+		return nameToPlayers.get(player).getSessionId() != -1;
 	}
 
 

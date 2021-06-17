@@ -106,6 +106,8 @@ public class GameMetaData {
         return names;
     }
 
+
+
     public Collection<String> getTowerNames()
     {
         File file = null;
@@ -490,6 +492,20 @@ public class GameMetaData {
                 builder.setPlayersNumber(node.get("Players").asInt());
             }
 
+            if (node.get("PlayerPositions") != null)
+            {
+                List<List<Integer>> t = new ArrayList<>();
+                for (var x : node.get("PlayerPositions"))
+                {
+                    List<Integer> t1 = new ArrayList<>();
+                    for (var y : x)
+                    {
+                        t1.add(y.asInt());
+                    }
+                    t.add(t1);
+                }
+                builder.setPlayerPlatforms(t);
+            }
 
             RoadDescription road = readRoads(node.get("Roads"));
             builder.setRoads(road);

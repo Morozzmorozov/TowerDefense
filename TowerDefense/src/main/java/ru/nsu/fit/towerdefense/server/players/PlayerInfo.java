@@ -4,7 +4,7 @@ public class PlayerInfo {
 	private String name;
 	private String authToken = null;
 	private String gameToken = null;
-	private Long lobbyId = -1L;
+	private Long sessionId = -1L;
 
 	public PlayerInfo(String name)
 	{
@@ -21,9 +21,9 @@ public class PlayerInfo {
 		this.gameToken = gameToken;
 	}
 
-	public void setLobbyId(Long lobbyId)
+	public void setSessionId(Long lobbyId)
 	{
-		this.lobbyId = lobbyId;
+		this.sessionId = lobbyId;
 	}
 
 	public String getName()
@@ -31,9 +31,9 @@ public class PlayerInfo {
 		return name;
 	}
 
-	public Long getLobbyId()
+	public Long getSessionId()
 	{
-		return lobbyId;
+		return sessionId;
 	}
 
 	public String getAuthToken()

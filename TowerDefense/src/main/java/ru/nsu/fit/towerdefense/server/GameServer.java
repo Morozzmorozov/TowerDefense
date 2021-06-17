@@ -6,6 +6,7 @@ import jakarta.servlet.Servlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
+import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.server.database.PlayersDatabase;
 import ru.nsu.fit.towerdefense.server.filters.AuthenticationFilter;
 import ru.nsu.fit.towerdefense.server.filters.ParamCleanupFilter;
@@ -64,9 +65,6 @@ public class GameServer {
 
 	public static void main(String[] args)
 	{
-
-		var t = PlayersDatabase.getInstance();
-		//if (true) return;
 		GameServer server = new GameServer(8080);
 		server.addFilter(Mappings.USER_FILTER_MAPPING, ParamCleanupFilter.class);
 		server.addFilter(Mappings.USER_FILTER_MAPPING, AuthenticationFilter.class);

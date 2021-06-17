@@ -39,7 +39,7 @@ public class EventMessenger implements Messenger {
 		switch (message1.getType())
 		{
 			case READY -> {System.out.println("Got switch ready message!"); session.switchReady(player);}
-			case EVENT -> {System.out.println("Got event message!"); session.receiveGameEvent(message1.getSerializedEvent(), player);}
+			case EVENT -> {System.out.println("Got event message!"); session.receiveGameEvent(message1.getSerializedEvent(), player); session.sendMessageToAll(message);}
 			default -> {}
 		}
 	}
