@@ -4,6 +4,8 @@ import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 
 import java.security.MessageDigest;
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PlayersDatabase {
 
@@ -77,6 +79,35 @@ public class PlayersDatabase {
 		{
 			System.out.println(e.getMessage());
 		}
+		try
+		{
+			Statement st = connection.createStatement();
+			int result = st.executeUpdate("CREATE DOMAIN ratingValue AS INT " +
+					                              "CHECK (VALUE >= 0 AND VALUE < 10000)");
+
+
+
+
+			result = st.executeUpdate("CREATE TABLE rating (login VARCHAR(10) PRIMARY KEY, rating ratingValue);");
+			//st.executeUpdate("INSERT INTO credentials");
+			ResultSet res =  st.executeQuery("SELECT login FROM credentials");
+			List<String> users = new LinkedList<>();
+			while (res.next())
+			{
+				users.add(res.getString(1));
+			}
+			for (var x : users)
+			{
+				PreparedStatement pst = connection.prepareStatement("INSERT INTO rating VALUES (?, ?)");
+				pst.setString(1, x);
+				pst.setInt(2, 1500);
+				pst.executeUpdate();
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
 
 	}
 
@@ -139,9 +170,15 @@ public class PlayersDatabase {
 
 				String sHash = bytesToHex(hash);
 
-				PreparedStatement pst = connection.prepareStatement("INSERT INTO credentials VALUES(?, ?)");
+				PreparedStatement pst = connection.prepareStatement("BEGIN;" +
+						                                                "INSERT INTO credentials VALUES(?, ?);" +
+						                                                "INSERT INTO rating VALUES(?, ?);" +
+						                                                "COMMIT;");
 				pst.setString(1, user);
 				pst.setString(2, sHash);
+				pst.setString(3, user);
+				pst.setInt(1, 1500);
+
 				int t = pst.executeUpdate();
 				return 0;
 //				System.out.println(t);
@@ -154,10 +191,44 @@ public class PlayersDatabase {
 		}
 	}
 
+	public void updateRating(String user, int newRating)
+	{
+		try
+		{
+			PreparedStatement pst = connection.prepareStatement("BEGIN;" +
+					                                                "UPDATE rating SET rating = ? WHERE login = ?;" +
+					                                                "COMMIT;");
+			pst.setInt(1,newRating);
+			pst.setString(2, user);
+			pst.executeUpdate();
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public int getRating(String user)
+	{
+		try
+		{
+			PreparedStatement pst = connection.prepareStatement("SELECT rating FROM rating WHERE login = ?");
+			pst.setString(1, user);
+			ResultSet res = pst.executeQuery();
+			res.next();
+			return res.getInt(1)
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			return 1500;
+		}
+	}
+
 	public SPlayer getPlayerInfo(String player)
 	{
 		SPlayer playerInfo = new SPlayer();
-		playerInfo.setEloRating(1500);
+		playerInfo.setEloRating(getRating(player));
 		playerInfo.setName(player);
 		playerInfo.setReady(false);
 		return playerInfo;
