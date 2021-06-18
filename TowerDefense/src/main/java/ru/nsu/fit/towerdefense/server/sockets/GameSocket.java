@@ -50,4 +50,8 @@ public class GameSocket extends WebSocketAdapter {
 		this.owner = owner;
 	}
 
+	public void close()
+	{
+		getSession().close();
+	}
 }

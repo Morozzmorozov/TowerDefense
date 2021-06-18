@@ -31,4 +31,5 @@ public class UserConnection
 
 	public void disconnect() {receiver.disconnect();}
 
+	public void close() {socket.close();}
 }

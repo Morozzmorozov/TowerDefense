@@ -21,12 +21,12 @@ public class SessionInfo {
 	private int playersNumber;
 	private int readyCnt;
 
-	private HashMap<String, SPlayer> userInfo;
-	private HashMap<String, String> tokenToUser;
-	private HashMap<String, String> userToToken;
+	private final HashMap<String, SPlayer> userInfo;
+	private final HashMap<String, String> tokenToUser;
+	private final HashMap<String, String> userToToken;
 
-	private HashMap<String, String> inviteTokens;
-	private HashMap<String, String> invitePlayers;
+	private final HashMap<String, String> inviteTokens;
+	private final HashMap<String, String> invitePlayers;
 
 	private final long id;
 
@@ -46,12 +46,15 @@ public class SessionInfo {
 	}
 
 	public void disconnectPlayer(String player) {
-		String token = userToToken.get(player);
-		userToToken.remove(player);
-		userInfo.remove(player);
-		tokenToUser.remove(token);
-		invitePlayers.remove(player);
-		inviteTokens.remove(token);
+		synchronized (this)
+		{
+			String token = userToToken.get(player);
+			userToToken.remove(player);
+			userInfo.remove(player);
+			tokenToUser.remove(token);
+			invitePlayers.remove(player);
+			inviteTokens.remove(token);
+		}
 	}
 
 	public void setLevel(String level) {

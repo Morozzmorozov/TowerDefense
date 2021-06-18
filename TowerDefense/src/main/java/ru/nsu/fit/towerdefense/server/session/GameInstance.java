@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GameInstance {
 
-	private WorldControl control;
+	private final WorldControl control;
 
 	public GameInstance(GameMap map, List<String> players)
 	{
