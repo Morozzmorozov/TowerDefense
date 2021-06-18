@@ -30,14 +30,18 @@
         <Label>0</Label>
     </HBox>
     <HBox GridPane.rowIndex="1" GridPane.columnIndex="1">
+        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="multiplayer-progress-icon" />
+        <Label>0</Label>
+    </HBox>
+    <HBox GridPane.rowIndex="2" GridPane.columnSpan="2">
         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="money-progress-icon" />
         <Label>200</Label>
     </HBox>
-    <HBox GridPane.rowIndex="2">
+    <HBox GridPane.rowIndex="3">
         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="health-progress-icon" />
         <Label>100</Label>
     </HBox>
-    <HBox GridPane.rowIndex="2" GridPane.columnIndex="1">
+    <HBox GridPane.rowIndex="3" GridPane.columnIndex="1">
         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="enemy-progress-icon" />
         <Label>0</Label>
     </HBox>

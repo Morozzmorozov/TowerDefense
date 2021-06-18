@@ -325,7 +325,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 List<Label> labels = new ArrayList<>();
 
                 labels.add((Label) ((HBox) gridPane.getChildren().get(0)).getChildren().get(0));
-                for (int i = 1; i < 5; i++) {
+                for (int i = 1; i < 6; i++) {
                     labels.add((Label) ((HBox) gridPane.getChildren().get(i)).getChildren().get(1));
                 }
 
@@ -434,9 +434,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 for (String playerName : playerNames) {
                     List<Label> labels = playerNameToLabelsMap.get(playerName);
                     labels.get(1).setText(worldControl.getResearchPoints(playerName) + "");
-                    labels.get(2).setText(worldControl.getMoney(playerName) + "");
-                    labels.get(3).setText(worldControl.getBaseHealth() + "");
-                    labels.get(4).setText(worldControl.getEnemiesKilled(playerName) + "");
+                    labels.get(2).setText(worldControl.getMultiplayerPoints() + "");
+                    labels.get(3).setText(worldControl.getMoney(playerName) + "");
+                    labels.get(4).setText(worldControl.getBaseHealth() + "");
+                    labels.get(5).setText(worldControl.getEnemiesKilled(playerName) + "");
                 }
             } else {
                 researchLabel.setText(worldControl.getResearchPoints(userName) + "");
