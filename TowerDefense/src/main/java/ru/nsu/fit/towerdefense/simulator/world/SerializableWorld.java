@@ -141,14 +141,16 @@ public class SerializableWorld {
     world.getBase().setHealth(base.health);
 
     world.setEnemies(enemies.stream().map(id -> {
-      idenemyMap.get(id).getEnemy();
+      /*idenemyMap.get(id).getEnemy();
       var serializableEnemy = idenemyMap.get(id);
       var optEnemy = oldWorld.getEnemies().stream().filter(enemy -> enemy != null && enemy.getId() == serializableEnemy.id).findFirst();
       if (optEnemy.isPresent()) {
         return serializableEnemy.getEnemy(optEnemy.get());
       } else {
         return serializableEnemy.getEnemy();
-      }
+      }*/
+
+      return idenemyMap.get(id).getEnemy();
     }).collect(Collectors.toList()));
     world.setTowers(towers.stream().map(id -> {
       var serializableTower = idtowerMap.get(id);
@@ -671,7 +673,7 @@ public class SerializableWorld {
         } else {
           var sEnemy = new SerializableEnemy(effect.getHost(), serializableWorld);
           host = sEnemy.id;
-          serializableWorld.idenemyMap.put(sEnemy.id, sEnemy);
+          serializableWorld.idenemyMap.put(sEnemy.idInWorld, sEnemy);
         }
       }
       effectType = effect.getType().getName();
