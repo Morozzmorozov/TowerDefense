@@ -1,4 +1,4 @@
-package ru.nsu.fit.towerdefense.server.session;
+package ru.nsu.fit.towerdefense.server.session.gamecontrollers;
 
 import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.simulator.world.SerializableWorld;
@@ -10,4 +10,5 @@ public interface GameController {
 	SerializableWorld getGameState(String owner);
 
 	void run();
+	void playerDisconnect(String player);
 }
