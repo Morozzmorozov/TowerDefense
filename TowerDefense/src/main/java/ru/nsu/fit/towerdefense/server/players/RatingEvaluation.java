@@ -2,6 +2,7 @@ package ru.nsu.fit.towerdefense.server.players;
 
 import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SResult;
+import ru.nsu.fit.towerdefense.server.database.PlayersDatabase;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,26 +11,32 @@ public class RatingEvaluation {
 
 	private static final int K = 20;
 
-	public static void evaluate(List<SPlayer> players, List<SResult> results)
+	public static void evaluate(List<SPlayer> players)
 	{
-		HashMap<String, Double> deltas = new HashMap<>();
-		for (int i = 0; i < players.size(); i++)
+
+		if (players.size() % 2 == 1)
 		{
-			deltas.put(players.get(i).getName(), 0.0);
-		}
-		for (int i = 0; i < players.size(); i++)
-		{
-			var x = players.get(i);
-			for (int j = 0; j < players.size(); j++)
+			int p = players.size() / 2 - 1, q = p + 2;
+			int cnt = 5;
+			while (p > 0)
 			{
-				var y = players.get(j);
-				if (x == y) continue;
-				double Ea = 1.0/(1 + Math.pow(10, (y.getEloRating() - x.getEloRating()) / 400.0));
-				//double delta = K * (results.get(i) - Ea);
+				PlayersDatabase.getInstance().updateRating(players.get(p).getName(), players.get(p).getEloRating() - cnt);
+				PlayersDatabase.getInstance().updateRating(players.get(q).getName(), players.get(q).getEloRating() + cnt);
+				cnt += 5;
+				p--;
 			}
 		}
-		//for
+		else
+		{
+			int p = players.size() / 2, q = p + 1;
+			int cnt = 5;
+			while (p > 0)
+			{
+				PlayersDatabase.getInstance().updateRating(players.get(p).getName(), players.get(p).getEloRating() - cnt);
+				PlayersDatabase.getInstance().updateRating(players.get(q).getName(), players.get(q).getEloRating() + cnt);
+				cnt += 5;
+				p--;
+			}
+		}
 	}
-
-
 }

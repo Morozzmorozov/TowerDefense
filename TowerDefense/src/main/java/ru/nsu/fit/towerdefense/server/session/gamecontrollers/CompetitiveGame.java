@@ -3,13 +3,16 @@ package ru.nsu.fit.towerdefense.server.session.gamecontrollers;
 import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SResult;
+import ru.nsu.fit.towerdefense.server.players.RatingEvaluation;
 import ru.nsu.fit.towerdefense.server.session.GameInstance;
 import ru.nsu.fit.towerdefense.server.session.SessionController;
 import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.world.SerializableWorld;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -114,6 +117,31 @@ public class CompetitiveGame implements GameController {
 			}
 			tick++;
 		}
+		List<SPlayer> players = new ArrayList<>();
+		for (var x : winners)
+		{
+			for (var y : controller.getInfo().getPlayers())
+			{
+				if (y.getName().equals(x))
+				{
+					players.add(y);
+					break;
+				}
+			}
+		}
+		Collections.reverse(losers);
+		for (var x : losers)
+		{
+			for (var y : controller.getInfo().getPlayers())
+			{
+				if (y.getName().equals(x))
+				{
+					players.add(y);
+					break;
+				}
+			}
+		}
+		RatingEvaluation.evaluate(players);
 	}
 
 }
