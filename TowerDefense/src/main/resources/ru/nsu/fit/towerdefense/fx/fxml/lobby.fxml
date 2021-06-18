@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -17,12 +18,14 @@
     </stylesheets>
     <VBox styleClass="content">
         <Label styleClass="content-header">Lobby</Label>
-        <VBox fx:id="lobbyVBox"></VBox>
-        <!--<GridPane fx:id="lobbyGridPane" styleClass="content-table">
+        <Label fx:id="leveLabel" />
+        <ToggleButton fx:id="readyToggleButton">Ready</ToggleButton>
+        <GridPane fx:id="playersGridPane" styleClass="content-table">
             <HBox><Label>№</Label></HBox>
             <HBox GridPane.columnIndex="1"><Label>Name</Label></HBox>
-            <HBox GridPane.columnIndex="2"><Label>Rating</Label></HBox>
-        </GridPane>-->
+            <HBox GridPane.columnIndex="2"><Label>Elo Rating</Label></HBox>
+            <HBox GridPane.columnIndex="3"><Label>Ready</Label></HBox>
+        </GridPane>
     </VBox>
     <GridPane styleClass="menu-bar-grid-pane" pickOnBounds="false">
         <columnConstraints>

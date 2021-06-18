@@ -21,7 +21,6 @@ public class MyWebSocketAdapter extends WebSocketAdapter {
 
     @Override
     public void onWebSocketText(String message) {
-        System.out.println("received: " + message); // todo del
         if (serverMessageListener != null) {
             serverMessageListener.onServerMessageReceived(message);
         }

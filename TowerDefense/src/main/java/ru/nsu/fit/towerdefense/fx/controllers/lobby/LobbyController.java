@@ -8,12 +8,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.ServerMessageListener;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
@@ -29,8 +30,9 @@ public class LobbyController implements Controller, ServerMessageListener {
     private static final String FXML_FILE_NAME = "lobby.fxml";
 
     @FXML private StackPane root;
-    @FXML private VBox lobbyVBox;
-//    @FXML private GridPane lobbyGridPane;
+    @FXML private Label leveLabel;
+    @FXML private ToggleButton readyToggleButton;
+    @FXML private GridPane playersGridPane;
 
     @FXML private ImageView menuImageView;
 
@@ -58,7 +60,7 @@ public class LobbyController implements Controller, ServerMessageListener {
             Platform.runLater(sceneManager::switchToMenu);
         }).start());
 
-//        int lobbyGridPaneColumnsNumber = lobbyGridPane.getChildren().size();
+        drawLobby(lobby);
         lobbyThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
@@ -68,19 +70,7 @@ public class LobbyController implements Controller, ServerMessageListener {
                         break;
                     }
 
-                    Platform.runLater(() -> {
-//                        lobbyGridPane.getChildren().subList(lobbyGridPaneColumnsNumber,
-//                            lobbyGridPane.getChildren().size()).clear();
-                        lobbyVBox.getChildren().clear();
-                        lobbyVBox.getChildren().add(new Label(lobby.getLevelName()));
-                        lobbyVBox.getChildren().add(new Label(lobby.getGameType().toString()));
-                        lobbyVBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
-                        for (SPlayer player : lobby.getPlayers()) {
-                            lobbyVBox.getChildren().add(new Label(player.getName()));
-                            lobbyVBox.getChildren().add(new Label(player.getEloRating() + ""));
-                            lobbyVBox.getChildren().add(new Label(player.getReady() ? "Yes" : "No"));
-                        }
-                    });
+                    drawLobby(lobby);
 
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -93,13 +83,11 @@ public class LobbyController implements Controller, ServerMessageListener {
         connectionManager.openSocketConnection(gameSession);
         connectionManager.setServerMessageListener(this);
 
-        ToggleButton readyButton = new ToggleButton("Start");
-        readyButton.setOnAction(actionEvent -> {
+        readyToggleButton.setOnAction(actionEvent -> {
             Message message = new Message();
             message.setType(Message.Type.READY);
             connectionManager.sendMessage(new Gson().toJson(message));
         });
-        root.getChildren().add(readyButton);
     }
 
     /**
@@ -144,5 +132,23 @@ public class LobbyController implements Controller, ServerMessageListener {
         } catch (JsonSyntaxException e) {
             System.err.println("json parsing error: " + messageStr);
         }
+    }
+
+    private void drawLobby(SLobby lobby) {
+        Platform.runLater(() -> {
+            leveLabel.setText(lobby.getLevelName() + " (" + GameType.capitalize(lobby.getGameType()) +
+                ") - " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers());
+
+            playersGridPane.getChildren().subList(playersGridPane.getColumnCount(),
+                playersGridPane.getChildren().size()).clear();
+
+            for (int i = 0; i < lobby.getPlayers().size(); i++) {
+                SPlayer player = lobby.getPlayers().get(i);
+                playersGridPane.add(new HBox(new Label(i + 1 + "")), 0, i + 1);
+                playersGridPane.add(new HBox(new Label(player.getName())), 1, i + 1);
+                playersGridPane.add(new HBox(new Label(player.getEloRating() + "")), 2, i + 1);
+                playersGridPane.add(new HBox(new Label(player.getReady() ? "Yes" : "No")), 3, i + 1);
+            }
+        });
     }
 }
