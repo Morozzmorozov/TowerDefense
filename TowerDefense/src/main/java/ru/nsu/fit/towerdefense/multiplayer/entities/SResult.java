@@ -2,11 +2,20 @@ package ru.nsu.fit.towerdefense.multiplayer.entities;
 
 public class SResult {
 
+    String playerName;
     int researchPoints;
     int multiplayerPoints;
     int money;
     int baseHealth;
     int enemiesKilled;
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 
     public int getResearchPoints() {
         return researchPoints;
