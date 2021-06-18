@@ -170,12 +170,12 @@ public class GameMap {
 
     public List<Vector2<Integer>> getBuildingPositions(int playerId)
     {
-        List<Vector2<Integer>> positions = new ArrayList<>();
+        List<Vector2<Integer>> positions1 = new ArrayList<>();
         for (var x : playersPlatform.get(playerId))
         {
-            positions.add(positions.get(x));
+            positions1.add(positions.getPositions().get(x));
         }
-        return positions;
+        return positions1;
     }
 
     public boolean isCooperativeAvailable()
