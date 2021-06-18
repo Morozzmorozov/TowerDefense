@@ -755,7 +755,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         return;
                     }
 
-                    if (isClientPlatform(tower)) {
+                    if (!isClientPlatform(tower)) {
                         showTowerPlatformError();
                         return;
                     }
@@ -840,6 +840,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         sellLabel.setText("$" + tower.getSellPrice());
         sellLabel.setOnMouseClicked(mouseEvent -> {
             if (replaying) {
+                return;
+            }
+
+            if (!isClientPlatform(tower)) {
+                showTowerPlatformError();
                 return;
             }
 
