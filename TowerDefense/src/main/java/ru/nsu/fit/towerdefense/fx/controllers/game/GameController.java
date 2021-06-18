@@ -219,6 +219,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private final boolean multiplayer;
     private final boolean replaying;
     private final String userName;
+    private final List<Vector2<Integer>> clientPlatformPositions;
 
     private Map<String, List<Label>> playerNameToLabelsMap;
     private Map<Tower.Mode, Node> towerModeToUiNodeMap;
@@ -245,6 +246,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         this.playerNames = multiplayer ?
             playerNames.stream().sorted().collect(Collectors.toList()) :
             List.of(userName);
+
+        clientPlatformPositions = multiplayer ?
+            gameMap.getBuildingPositions(playerNames.indexOf(userName)) :
+            null;
 
         state = State.PLAYING;
         speed = multiplayer ? 1 : 0;
@@ -750,6 +755,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         return;
                     }
 
+                    if (isClientPlatform(tower)) {
+                        showTowerPlatformError();
+                        return;
+                    }
+
                     try {
                         UpgradeTowerEvent event = worldControl.upgradeTower(userName, tower, upgrade);
                         sendEventToServer(event);
@@ -919,6 +929,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         return;
                     }
 
+                    if (!isClientPlatform(towerPlatform)) {
+                        showTowerPlatformError();
+                        return;
+                    }
+
                     try {
                         BuildTowerEvent event = worldControl.buildTower(userName, towerPlatform, towerType);
                         sendEventToServer(event);
@@ -1029,6 +1044,24 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         if (Math.abs(a - b) < 0.01d) return 0;
         if (a > b) return 1;
         return -1;
+    }
+
+    private boolean isClientPlatform(Renderable renderable) {
+        return clientPlatformPositions != null && clientPlatformPositions.stream().anyMatch(
+            clientPlatformPosition -> equals(clientPlatformPosition, renderable.getPosition()));
+    }
+
+    private boolean equals(Vector2<Integer> v1, Vector2<Double> v2) {
+        return v1.getX().equals((int) Math.round(v2.getX())) && v1.getY().equals((int) Math.round(v2.getY()));
+    }
+
+    private void showTowerPlatformError() {
+        new AlertBuilder()
+            .setAlertType(AlertType.INFORMATION)
+            .setHeaderText("You cannot control other players' tower platforms")
+            .setContentText("")
+            .setOwner(sceneManager.getWindowOwner())
+            .build().showAndWait();
     }
 
     protected void sendEventToServer(Event event) {
