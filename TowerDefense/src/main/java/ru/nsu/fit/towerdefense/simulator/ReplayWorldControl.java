@@ -1,45 +1,36 @@
 package ru.nsu.fit.towerdefense.simulator;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import ru.nsu.fit.towerdefense.metadata.GameMetaData;
-import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.FireType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
-import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
-import ru.nsu.fit.towerdefense.replay.EventRecord;
 import ru.nsu.fit.towerdefense.replay.Replay;
-import ru.nsu.fit.towerdefense.replay.WorldState;
-import ru.nsu.fit.towerdefense.simulator.world.Wave;
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
-import ru.nsu.fit.towerdefense.util.Vector2;
+import ru.nsu.fit.towerdefense.simulator.events.Event;
+import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
+import ru.nsu.fit.towerdefense.simulator.world.World;
 
 public class ReplayWorldControl extends WorldControl {
 
-  private Replay replay;
+  private final Replay replayPlayback;
 
-  private int currentWorldStateIndex = 0;
-
-  private Map<Integer, EventRecord> idEventMap = new HashMap<>();
-
-  public ReplayWorldControl(GameMap gameMap, int deltaTime, WorldObserver observer, Replay replay) {
-    super(gameMap, deltaTime, observer, List.of("player")); // todo fix
-    this.replay = replay;
-    isReplay = true;
-
-    for (var event : replay.getEventRecords()) {
-      idEventMap.put(event.getId(), event);
-    }
+  public ReplayWorldControl(GameMap gameMap, int deltaTime, WorldObserver observer,
+      Replay replayPlayback) {
+    super(gameMap, deltaTime, observer, List.of("Player")); // todo fix
+    this.replayPlayback = replayPlayback;
   }
 
   @Override
   public void simulateTick() {
-    skipToTick((int) getTick());
+    synchronized (this) {
+      if (replayPlayback.getEvents().get((int) world.getTick()) != null) {
+        for (Event event : replayPlayback.getEvents().get((int) world.getTick())) {
+          try {
+            event.fire(world);
+          } catch (GameplayException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+      super.simulateTick();
+    }
   }
 
   /**
@@ -48,25 +39,49 @@ public class ReplayWorldControl extends WorldControl {
    * @param tickIndex the tick before the desired state
    */
   public void skipToTick(int tickIndex) {
-    int worldStateIndex = tickIndex / replay.getTickRate();
-    if (!(worldStateIndex == currentWorldStateIndex && tickIndex >= getTick())) {
-      if (replay.getWorldStates().size() > worldStateIndex) {
-        setWorldState(
-            replay.getWorldStates().get(worldStateIndex)); // move to state after tick No. tickIndex
+    synchronized (this) {
+      int targetPivotTick =
+          tickIndex / replayPlayback.getStateRate() * replayPlayback.getStateRate();
+      int currentPivotTick =
+          (int) world.getTick() / replayPlayback.getStateRate() * replayPlayback.getStateRate();
+
+      if (tickIndex <= world.getTick() || targetPivotTick != currentPivotTick) {
+        world = replayPlayback.getStates().get(targetPivotTick).generateWorld(world);
       }
-      currentWorldStateIndex = worldStateIndex;
-      world.setTick(worldStateIndex * replay.getTickRate() + 1);
-    }
-    while (getTick() != tickIndex + 1) {
-      super.simulateTick();
-      fireEvents(
-          getTick() - 1); // we want to access events that happened at the tick we have now simulated
+
+      while (world.getTick() < tickIndex) {
+        simulateTick();
+      }
     }
   }
 
-  private void setWorldState(WorldState state) {
+  @Override
+  protected void saveStateToReplay() {
+    // ignore
   }
 
-  private void fireEvents(long tickIndex) {
+  @Override
+  protected void addRewards(int scienceReward, int multiplayerReward) {
+    // ignore
+  }
+
+  @Override
+  protected void saveEventToReplay(Event event) {
+    // ignore
+  }
+
+  @Override
+  protected void saveReplay() {
+    // ignore
+  }
+
+  @Override
+  protected void simulateForNewEvents(long from) throws GameplayException {
+    // ignore
+  }
+
+  @Override
+  protected void putState(World world) {
+    // ignore
   }
 }

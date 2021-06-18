@@ -18,7 +18,6 @@ import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
-import ru.nsu.fit.towerdefense.simulator.world.gameobject.GameObject;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Portal;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.RoadTile;
@@ -142,7 +141,7 @@ public class SerializableWorld {
     world.setEnemies(enemies.stream().map(id -> {
       idenemyMap.get(id).getEnemy();
       var serializableEnemy = idenemyMap.get(id);
-      var optEnemy = oldWorld.getEnemies().stream().filter(enemy -> enemy.getId() == serializableEnemy.id).findFirst();
+      var optEnemy = oldWorld.getEnemies().stream().filter(enemy -> enemy != null && enemy.getId() == serializableEnemy.id).findFirst();
       if (optEnemy.isPresent()) {
         return serializableEnemy.getEnemy(optEnemy.get());
       } else {

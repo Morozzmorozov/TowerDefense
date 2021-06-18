@@ -135,7 +135,7 @@ public class WorldRenderer {
      * @throws RenderException if no image was found for this renderable.
      */
     public void add(Renderable renderable) throws RenderException {
-        if (!renderableToGameNodeMap.containsKey(renderable)) {
+        if (!renderableToGameNodeMap.containsKey(renderable) && renderable != null) {
             ImageView imageView =
                 new ImageView(Images.getInstance().getImage(renderable.getImageName()));
 

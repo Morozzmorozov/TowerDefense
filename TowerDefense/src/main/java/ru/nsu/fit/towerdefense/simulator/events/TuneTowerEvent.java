@@ -1,7 +1,6 @@
 package ru.nsu.fit.towerdefense.simulator.events;
 
 import com.google.gson.Gson;
-import ru.nsu.fit.towerdefense.replay.GameStateWriter;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower.Mode;
@@ -60,6 +59,6 @@ public class TuneTowerEvent implements Event {
     }
     tower.setMode(towerMode);
     tower.setTarget(null);
-    GameStateWriter.getInstance().switchMode(tower, towerMode);
+    //GameStateWriter.getInstance().switchMode(tower, towerMode);
   }
 }

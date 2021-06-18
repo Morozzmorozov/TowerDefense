@@ -1,6 +1,7 @@
 package ru.nsu.fit.towerdefense.simulator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,8 @@ import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.Upgrade;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.metadata.map.WaveDescription;
 import ru.nsu.fit.towerdefense.metadata.map.WaveEnemies;
-import ru.nsu.fit.towerdefense.replay.GameStateWriter;
+import ru.nsu.fit.towerdefense.replay.Replay;
+import ru.nsu.fit.towerdefense.replay.ReplayManager;
 import ru.nsu.fit.towerdefense.simulator.events.BuildTowerEvent;
 import ru.nsu.fit.towerdefense.simulator.events.Event;
 import ru.nsu.fit.towerdefense.simulator.events.SellTowerEvent;
@@ -33,6 +35,7 @@ import ru.nsu.fit.towerdefense.simulator.world.gameobject.Effect;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Portal;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Projectile;
+import ru.nsu.fit.towerdefense.simulator.world.gameobject.Renderable;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.RoadTile;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.TowerPlatform;
@@ -51,13 +54,14 @@ public class WorldControl implements ServerSimulator {
   protected final WorldObserver worldObserver;
   protected World world;
 //  protected int wavesDefeated = 0;
-  protected boolean isReplay = false;
   //protected int scienceEarned = 0;
 
   private final EventContainer eventContainer = new EventContainer();
   private final StateContainer stateContainer = new StateContainer(50);
 
   private long latestInputStateTick = -1;
+
+  private Replay replay;
 
   private static class EventContainer {
     private final Map<Long, List<Event>> eventMap = new HashMap<>();
@@ -183,14 +187,16 @@ public class WorldControl implements ServerSimulator {
       }
     }
 
-    GameMetaData.getInstance().getGameMapNames().stream()
+/*    GameMetaData.getInstance().getGameMapNames().stream()
         .dropWhile(name -> GameMetaData.getInstance().getMapDescription(name) != gameMap)
         .findFirst()
         .ifPresent(name -> GameStateWriter.getInstance().startNewReplay(DEBUG_TICK_RATE, name));
 
-    GameStateWriter.getInstance().newFrame();
+    GameStateWriter.getInstance().newFrame();*/
 
     stateContainer.putState(world);
+
+    replay = new Replay(60);
   }
 
   public void updateWorld(SerializableWorld serializableWorld) {
@@ -204,6 +210,10 @@ public class WorldControl implements ServerSimulator {
         simulateTick();
       }
       latestInputStateTick = serializableWorld.getTick();
+      System.out.println("Update");
+      for (var e : world.getEnemies()) {
+        System.out.println(e.getId());
+      }
     }
   }
 
@@ -211,6 +221,7 @@ public class WorldControl implements ServerSimulator {
   public void submitEvent(Event event) {
     synchronized (this) {
       eventContainer.putEvent(event);
+      saveEventToReplay(event);
       if (event.getFrameNumber() <= world.getTick()) {
         try {
           simulateForNewEvents(event.getFrameNumber());
@@ -238,6 +249,7 @@ public class WorldControl implements ServerSimulator {
       SellTowerEvent event = new SellTowerEvent(getTick() + 1, tower, playerName);
       event.fire(world);
       eventContainer.putEvent(event);
+      saveEventToReplay(event);
       return event;
     }
   }
@@ -249,6 +261,7 @@ public class WorldControl implements ServerSimulator {
       var event = new BuildTowerEvent((int) getTick(), towerPlatform, towerType, playerName);
       event.fire(world);
       eventContainer.putEvent(event);
+      saveEventToReplay(event);
       return event;
     }
   }
@@ -259,6 +272,7 @@ public class WorldControl implements ServerSimulator {
       var event = new UpgradeTowerEvent(upgrade, tower, getTick(), playerName);
       event.fire(world);
       eventContainer.putEvent(event);
+      saveEventToReplay(event);
       return event;
     }
   }
@@ -277,6 +291,7 @@ public class WorldControl implements ServerSimulator {
       var event = new TuneTowerEvent(getTick(), towerMode, tower, playerName);
       event.fire(world);
       eventContainer.putEvent(event);
+      saveEventToReplay(event);
       return event;
     }
   }
@@ -289,8 +304,10 @@ public class WorldControl implements ServerSimulator {
     }
   }
 
-  public World getWorld() {
-    return world;
+  public Collection<Renderable> getRenderables() {
+    synchronized (this) {
+      return world.getRenderables();
+    }
   }
 
   public int getResearchPoints(String player) {
@@ -324,7 +341,7 @@ public class WorldControl implements ServerSimulator {
     return world.getWavesDefeated();
   }
 
-  private void simulateForNewEvents(long from) throws GameplayException {
+  protected void simulateForNewEvents(long from) throws GameplayException {
     long tick = world.getTick();
     world = stateContainer.getLatestState(from);
 
@@ -333,26 +350,18 @@ public class WorldControl implements ServerSimulator {
     }
   }
 
-
   public void simulateTick() {
     synchronized (this) {
+      saveStateToReplay();
+
       towerSequence();
       projectileSequence();
       enemySequence();
       spawnSequence();
 
-      /*GameStateWriter.getInstance()
-          .fullCopy(world.getEnemies(), world.getTowers(), world.getProjectiles(),
-              world.getBase(), world.getMoney("player"), world.getCurrentWaveNumber(),
-              world.getCurrentWave().getCurrentEnemyNumber(),
-              world.getCountdown(), scienceEarned, enemiesKilled); // todo remake replays for multiplayer
-      GameStateWriter.getInstance().endFrame();
-
-      GameStateWriter.getInstance().newFrame();*/
-
       world.setTick(world.getTick() + 1);
 
-      stateContainer.putState(world);
+      putState(world);
 
       for (var event : eventContainer.getEvents(world.getTick())) {
         try {
@@ -371,17 +380,15 @@ public class WorldControl implements ServerSimulator {
     if (wave.getRemainingEnemiesCount() == 0) {
       world.setWavesDefeated(world.getWavesDefeated() + 1);
       world.setScienceEarned(world.getScienceEarned() + gameMap.getScienceReward());
-      if (!isReplay) {
-        UserMetaData.addResearchPoints(gameMap.getScienceReward()); // todo fix race condition
-        UserMetaData.addMultiplayerPoints(gameMap.getMultiplayerPoints());
-      }
+      addRewards(gameMap.getScienceReward(), gameMap.getMultiplayerPoints());
+
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy)
           && world.getEnemies().size() == 1))
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
-        GameStateWriter.getInstance().endFrame();
-        GameStateWriter.getInstance().close();
+
         if (worldObserver != null) {
           worldObserver.onVictory(); // todo fix temporary solution
+          saveReplay();
         }
       }
     }
@@ -433,6 +440,7 @@ public class WorldControl implements ServerSimulator {
               .add(projectile.getPosition(), Vector2.multiply(deltaTime, projectile.getVelocity()));
           for (Enemy enemy : world.getEnemies()) {
             // Collision checking
+            if (enemy == null) continue;
             Vector2<Double> oldVectorToEnemy = Vector2
                 .subtract(enemy.getPosition(), projectile.getPosition());
             Vector2<Double> pathVector = Vector2.subtract(newPosition, projectile.getPosition());
@@ -468,6 +476,7 @@ public class WorldControl implements ServerSimulator {
               .min(projectile.getRemainingRange() * 2, projectile.getType().getSpeed() * 2);
 
           for (Enemy enemy : world.getEnemies()) {
+            if (enemy == null) continue;
             double distanceToEnemy = Vector2
                 .distance(projectile.getParentPosition(), enemy.getPosition());
             if (distanceToEnemy >= projectile.getScale() / 2 && distanceToEnemy < newScale / 2) {
@@ -527,7 +536,7 @@ public class WorldControl implements ServerSimulator {
   private void enemySequence() {
     List<Enemy> removedEnemies = new ArrayList<>();
     for (Enemy enemy : world.getEnemies()) {
-      if (enemy.isDead()) {
+      if (enemy == null || enemy.isDead()) {
         continue;
       }
 
@@ -559,10 +568,9 @@ public class WorldControl implements ServerSimulator {
 
         if (world.getBase().getHealth() <= 0) {
           removedEnemies.add(enemy);
-          GameStateWriter.getInstance().endFrame();
-          GameStateWriter.getInstance().close();
           if (worldObserver != null) {
             worldObserver.onDefeat(); // todo fix temporary solution
+            saveReplay();
           }
         } else {
           removedEnemies.add(enemy); // not sure if I should leave this
@@ -610,7 +618,7 @@ public class WorldControl implements ServerSimulator {
         tower.setTarget(null);
         // finds the closest enemy for now
         List<Enemy> candidates = world.getEnemies().stream()
-            .filter((enemy -> Vector2.distance(tower.getPosition(), enemy.getPosition()) <= tower
+            .filter((enemy -> enemy != null && Vector2.distance(tower.getPosition(), enemy.getPosition()) <= tower
                 .getType().getRange()))
             .collect(Collectors.toList());
         if (candidates.isEmpty()) {
@@ -815,4 +823,32 @@ public class WorldControl implements ServerSimulator {
   }
 
 
+  // --------------
+
+  protected void saveStateToReplay() {
+    if (getTick() % 60 == 0) {
+      replay.submitState(world.getSerializableWorld());
+    }
+  }
+
+  protected void addRewards(int scienceReward, int multiplayerReward) {
+    UserMetaData.addResearchPoints(scienceReward); // todo fix race condition
+    UserMetaData.addMultiplayerPoints(multiplayerReward);
+  }
+
+  protected void saveEventToReplay(Event event) {
+    replay.submitEvent(event);
+  }
+
+  protected void saveReplay() {
+    replay.setLength((int)world.getTick());
+    GameMetaData.getInstance().getGameMapNames().stream()
+        .dropWhile(name -> GameMetaData.getInstance().getMapDescription(name) != gameMap)
+        .findFirst()
+        .ifPresent(name -> ReplayManager.saveReplay(replay, name));
+  }
+
+  protected void putState(World world) {
+    stateContainer.putState(world);
+  }
 }

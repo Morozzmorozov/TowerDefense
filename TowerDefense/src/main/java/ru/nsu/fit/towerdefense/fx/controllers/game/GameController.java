@@ -256,7 +256,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         worldSize = gameMap.getSize();
         baseInitialHealth = gameMap.getBaseDescription().getHealth();
-        replayLength = replaying ? replay.getReplayLength() : 0;
+        replayLength = replaying ? replay.getLength() : 0;
 
         worldControl = !replaying ?
             new WorldControl(gameMap, DELTA_TIME, this, this.playerNames) :
@@ -369,7 +369,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         resultsMenuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         try {
-            worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
+            worldRenderer.update(new HashSet<>(worldControl.getRenderables()));
             renderAll();
         } catch (RenderException e) {
             handleRenderException(e);
@@ -407,7 +407,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 }
 
                 if (speed != 0) {
-                    worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
+                    worldRenderer.update(new HashSet<>(worldControl.getRenderables()));
                 }
 
                 Platform.runLater(this::renderAll);
@@ -490,7 +490,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private void onSliderReleased() {
         try {
             ((ReplayWorldControl) worldControl).skipToTick((int) replaySlider.getValue());
-            worldRenderer.update(new HashSet<>(worldControl.getWorld().getRenderables()));
+            worldRenderer.update(new HashSet<>(worldControl.getRenderables()));
             renderAll();
         } catch (RenderException e) {
             handleRenderException(e);

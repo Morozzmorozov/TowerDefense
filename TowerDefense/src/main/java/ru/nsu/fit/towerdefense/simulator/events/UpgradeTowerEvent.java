@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType.Upgrade;
-import ru.nsu.fit.towerdefense.replay.GameStateWriter;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.simulator.world.World;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Tower;
@@ -97,7 +96,7 @@ public class UpgradeTowerEvent implements Event {
     for (int i = 0; i < world.getTowerPlatforms().size(); ++i) {
       TowerPlatform platform = world.getTowerPlatforms().get(i);
       if (Vector2.distance(platform.getPosition(), tower.getPosition()) < EPS) {
-        GameStateWriter.getInstance().upgradeTower(i, upgrade.getName()); // todo ask about platform
+        //GameStateWriter.getInstance().upgradeTower(i, upgrade.getName()); // todo ask about platform
         break;
       }
     }
