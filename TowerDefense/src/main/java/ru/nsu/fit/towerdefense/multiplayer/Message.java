@@ -1,19 +1,20 @@
 package ru.nsu.fit.towerdefense.multiplayer;
 
+import ru.nsu.fit.towerdefense.multiplayer.entities.SResult;
+
 import java.util.List;
 
 public class Message {
 
     public enum Type {
-        READY, START, EVENT, STATE, RESULT
+        READY, START, EVENT, STATE, RESULTS
     }
 
     private Type type;
     private List<String> playerNames;
     private String serializedEvent;
     private String serializedWorld;
-    private String serializedResult;
-    private List<String> serializedResults;
+    private List<SResult> results;
 
     public Type getType() {
         return type;
@@ -47,19 +48,11 @@ public class Message {
         this.serializedWorld = serializedWorld;
     }
 
-    public String getSerializedResult() {
-        return serializedResult;
+    public List<SResult> getResults() {
+        return results;
     }
 
-    public void setSerializedResult(String serializedResult) {
-        this.serializedResult = serializedResult;
-    }
-
-    public List<String> getSerializedResults() {
-        return serializedResults;
-    }
-
-    public void setSerializedResults(List<String> serializedResults) {
-        this.serializedResults = serializedResults;
+    public void setResults(List<SResult> results) {
+        this.results = results;
     }
 }

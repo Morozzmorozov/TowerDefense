@@ -40,7 +40,7 @@ public class EventMessenger implements Messenger {
 		{
 			case READY -> {System.out.println("Got switch ready message!"); session.switchReady(player);}
 			case EVENT -> {System.out.println("Got event message!"); session.receiveGameMessage(message1, player);}
-			case RESULT-> {System.out.println("Got result message!"); session.receiveGameMessage(message1, player);}
+			case RESULTS -> {System.out.println("Got result message!"); session.receiveGameMessage(message1, player);}
 			default -> {}
 		}
 	}
