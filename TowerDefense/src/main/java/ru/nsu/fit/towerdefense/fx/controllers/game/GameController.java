@@ -1028,7 +1028,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         return -1;
     }
 
-    private void sendEventToServer(Event event) {
+    protected void sendEventToServer(Event event) {
         if (!multiplayer) {
             return;
         }

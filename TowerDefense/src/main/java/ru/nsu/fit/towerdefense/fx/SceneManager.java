@@ -12,6 +12,7 @@ import javafx.stage.Window;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.elorating.EloRatingController;
 import ru.nsu.fit.towerdefense.fx.controllers.game.GameController;
+import ru.nsu.fit.towerdefense.fx.controllers.game.LaggingGameController;
 import ru.nsu.fit.towerdefense.fx.controllers.leaderboard.LeaderboardController;
 import ru.nsu.fit.towerdefense.fx.controllers.lobbies.LobbiesController;
 import ru.nsu.fit.towerdefense.fx.controllers.lobby.LobbyController;
@@ -175,7 +176,11 @@ public class SceneManager {
 
     public void switchToCooperativeGame(String gameMapName, List<String> playerNames) {
         try {
-            GameController gameController = new GameController(this, connectionManager,
+            GameController gameController = Main.LAG ?
+            new LaggingGameController(this, connectionManager,
+                new File(".\\levelsnapshots\\" + gameMapName + ".png"),
+                GameMetaData.getInstance().getMapDescription(gameMapName), playerNames) :
+            new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), playerNames);
             connectionManager.setServerMessageListener(gameController);
