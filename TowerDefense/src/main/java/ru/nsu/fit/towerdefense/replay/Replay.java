@@ -15,18 +15,6 @@ public class Replay {
 
   public String serialize() {
     return new Gson().toJson(this);
-/*    Gson gson = new Gson();
-    JsonObject jsonObject = new JsonObject();
-    jsonObject.addProperty("stateRate", stateRate);
-    jsonObject.addProperty("length", length);
-
-    Map<Integer, String> sStates = new HashMap<>();
-
-    Map<Integer, List<Event>> sEvents = new HashMap<>();
-
-    jsonObject.add("states", gson.toJsonTree(states));
-
-    */
   }
 
   public Replay(Reader json) {
@@ -36,8 +24,6 @@ public class Replay {
     length = jsonObject.get("length").getAsInt();
 
     for (var entry : jsonObject.get("states").getAsJsonObject().entrySet()) {
-      var o = entry.getValue().getAsJsonObject();
-      var s = World.deserialize(new Gson().toJson(o));
       states.put(Integer.parseInt(entry.getKey()), World.deserialize(new Gson().toJson(entry.getValue().getAsJsonObject())));
     }
 
