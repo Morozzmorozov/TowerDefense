@@ -169,7 +169,7 @@ public class SessionController {
 
 	public void sendMessage(String message, String player)
 	{
-		connections.get(player).sendMessage(message);
+		connections.get(getActiveToken(player)).sendMessage(message);
 	}
 	public void sendMessageToAll(String message) {connections.values().forEach(e -> e.sendMessage(message));}
 	public SLobby getInfo()
