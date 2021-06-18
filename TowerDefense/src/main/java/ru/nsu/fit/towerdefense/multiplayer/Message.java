@@ -13,6 +13,7 @@ public class Message {
     private String serializedEvent;
     private String serializedWorld;
     private String serializedResult;
+    private List<String> serializedResults;
 
     public Type getType() {
         return type;
@@ -52,5 +53,13 @@ public class Message {
 
     public void setSerializedResult(String serializedResult) {
         this.serializedResult = serializedResult;
+    }
+
+    public List<String> getSerializedResults() {
+        return serializedResults;
+    }
+
+    public void setSerializedResults(List<String> serializedResults) {
+        this.serializedResults = serializedResults;
     }
 }
