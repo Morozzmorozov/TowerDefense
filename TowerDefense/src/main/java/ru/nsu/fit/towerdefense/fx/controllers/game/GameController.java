@@ -581,6 +581,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         sceneManager.getScene().setOnMouseDragged(null);
         sceneManager.getScene().setOnMouseReleased(null);
         sceneManager.getScene().setOnKeyPressed(null);
+
+        if (multiplayer) {
+            connectionManager.dispose();
+        }
     }
 
     /**

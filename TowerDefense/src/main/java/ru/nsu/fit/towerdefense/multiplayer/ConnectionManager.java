@@ -162,7 +162,7 @@ public class ConnectionManager {
 
     public boolean leaveLobby() {
         if (gameSession == null) {
-            System.out.println("You are not in lobby (game)");
+            System.out.println("leaveLobby(): you are not in lobby (game)");
             return false;
         }
 
@@ -303,10 +303,12 @@ public class ConnectionManager {
         try {
             if (session != null) {
                 session.close();
+                session = null;
             }
 
             if (webSocketClient != null) {
                 webSocketClient.stop();
+                webSocketClient = null;
             }
 
             socketAdapter = null;
@@ -316,7 +318,7 @@ public class ConnectionManager {
     }
 
     public void dispose() {
-        leaveLobby();
+        new Thread(this::leaveLobby).start();
         closeSocketConnection();
         // todo interrupt() ???
     }
