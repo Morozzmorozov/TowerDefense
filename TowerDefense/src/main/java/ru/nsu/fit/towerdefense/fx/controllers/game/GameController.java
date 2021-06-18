@@ -825,6 +825,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     return;
                 }
 
+                if (!worldControl.isClientPlatform(tower)) {
+                    showTowerPlatformError();
+                    return;
+                }
+
                 TuneTowerEvent event = worldControl.tuneTower(userName, tower, mode);
                 sendEventToServer(event);
                 for (Node _node : towerModeToUiNodeMap.values()) {
