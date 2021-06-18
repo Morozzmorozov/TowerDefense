@@ -66,4 +66,8 @@ public class Vector2<T> {
   public static Vector2<Double> multiply(double a, Vector2<Double> v) {
     return new Vector2<>(a * v.getX(), a * v.getY());
   }
+
+  public static boolean equals(Vector2<Integer> v1, Vector2<Double> v2) {
+    return v1.getX().equals((int) Math.round(v2.getX())) && v1.getY().equals((int) Math.round(v2.getY()));
+  }
 }

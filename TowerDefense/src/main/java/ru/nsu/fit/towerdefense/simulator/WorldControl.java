@@ -43,6 +43,8 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class WorldControl implements ServerSimulator {
 
+  private final List<Vector2<Integer>> clientPlatformPositions;
+
   public static final int DEBUG_MONEY = 600;
   public static final float SELL_MULTIPLIER = 0.4f;
   public static final double EPS = 1e-12;
@@ -113,17 +115,23 @@ public class WorldControl implements ServerSimulator {
     }
   }
 
-  public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver, List<String> players) {
+  public WorldControl(GameMap gameMap, int deltaTime, WorldObserver worldObserver,
+      List<String> players, List<Vector2<Integer>> clientPlatformPositions) {
     this.gameMap = gameMap;
     this.deltaTime = deltaTime;
     this.worldObserver = worldObserver;
+    this.clientPlatformPositions = clientPlatformPositions;
 
     world = new World();
 
     for (Vector2<Integer> position : gameMap.getPositions().getPositions()) {
       Vector2<Integer> coordinates = new Vector2<>(position);
+      var platform = new TowerPlatform(coordinates, "platform.png", 0); // todo image name
       world.getTowerPlatforms()
-          .add(new TowerPlatform(coordinates, "platform.png", 0)); // todo image name
+          .add(platform);
+      if (isClientPlatform(platform)) {
+        platform.setImage("platform2.png");
+      }
     }
 
     Wave wave = new Wave();
@@ -818,6 +826,10 @@ public class WorldControl implements ServerSimulator {
     }
   }
 
+  public boolean isClientPlatform(Renderable renderable) {
+    return clientPlatformPositions != null && clientPlatformPositions.stream().anyMatch(
+        clientPlatformPosition -> Vector2.equals(clientPlatformPosition, renderable.getPosition()));
+  }
 
   // --------------
 
@@ -847,4 +859,7 @@ public class WorldControl implements ServerSimulator {
   protected void putState(World world) {
     stateContainer.putState(world);
   }
+
+
+
 }

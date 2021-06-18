@@ -4,7 +4,7 @@ import ru.nsu.fit.towerdefense.util.Vector2;
 
 public class TowerPlatform extends GameObject implements Renderable {
   private final Vector2<Integer> position;
-  private final String image;
+  private String image;
 
   public TowerPlatform(Vector2<Integer> position, String image, int id) {
     super(id);
@@ -48,5 +48,9 @@ public class TowerPlatform extends GameObject implements Renderable {
   @Override
   public void accept(ClickVisitor visitor) {
     visitor.onClicked(this);
+  }
+
+  public void setImage(String image) {
+    this.image = image;
   }
 }

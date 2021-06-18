@@ -219,7 +219,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private final boolean multiplayer;
     private final boolean replaying;
     private final String userName;
-    private final List<Vector2<Integer>> clientPlatformPositions;
 
     private Map<String, List<Label>> playerNameToLabelsMap;
     private Map<Tower.Mode, Node> towerModeToUiNodeMap;
@@ -247,7 +246,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             playerNames.stream().sorted().collect(Collectors.toList()) :
             List.of(userName);
 
-        clientPlatformPositions = multiplayer ?
+        List<Vector2<Integer>> clientPlatformPositions = multiplayer ?
             gameMap.getBuildingPositions(playerNames.indexOf(userName)) :
             null;
 
@@ -259,7 +258,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         replayLength = replaying ? replay.getLength() : 0;
 
         worldControl = !replaying ?
-            new WorldControl(gameMap, DELTA_TIME, this, this.playerNames) :
+            new WorldControl(gameMap, DELTA_TIME, this, this.playerNames, clientPlatformPositions) :
             new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
     }
 
@@ -755,7 +754,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         return;
                     }
 
-                    if (!isClientPlatform(tower)) {
+                    if (!worldControl.isClientPlatform(tower)) {
                         showTowerPlatformError();
                         return;
                     }
@@ -843,7 +842,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                 return;
             }
 
-            if (!isClientPlatform(tower)) {
+            if (!worldControl.isClientPlatform(tower)) {
                 showTowerPlatformError();
                 return;
             }
@@ -934,7 +933,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         return;
                     }
 
-                    if (!isClientPlatform(towerPlatform)) {
+                    if (!worldControl.isClientPlatform(towerPlatform)) {
                         showTowerPlatformError();
                         return;
                     }
@@ -1049,15 +1048,6 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         if (Math.abs(a - b) < 0.01d) return 0;
         if (a > b) return 1;
         return -1;
-    }
-
-    private boolean isClientPlatform(Renderable renderable) {
-        return clientPlatformPositions != null && clientPlatformPositions.stream().anyMatch(
-            clientPlatformPosition -> equals(clientPlatformPosition, renderable.getPosition()));
-    }
-
-    private boolean equals(Vector2<Integer> v1, Vector2<Double> v2) {
-        return v1.getX().equals((int) Math.round(v2.getX())) && v1.getY().equals((int) Math.round(v2.getY()));
     }
 
     private void showTowerPlatformError() {

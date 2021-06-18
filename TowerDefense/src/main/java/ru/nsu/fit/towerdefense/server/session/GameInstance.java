@@ -13,7 +13,7 @@ public class GameInstance {
 
 	public GameInstance(GameMap map, List<String> players)
 	{
-		control = new WorldControl(map, 1000/60, null, players);
+		control = new WorldControl(map, 1000/60, null, players, null);
 	}
 
 	public void doStep()

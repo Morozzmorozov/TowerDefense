@@ -13,7 +13,7 @@ public class ReplayWorldControl extends WorldControl {
 
   public ReplayWorldControl(GameMap gameMap, int deltaTime, WorldObserver observer,
       Replay replayPlayback) {
-    super(gameMap, deltaTime, observer, replayPlayback.getPlayers());
+    super(gameMap, deltaTime, observer, replayPlayback.getPlayers(), null);
     this.replayPlayback = replayPlayback;
   }
 
