@@ -152,6 +152,10 @@ public class GameMap {
         return scienceReward;
     }
 
+    public Integer getMultiplayerPoints() {
+        return multiplayerPoints;
+    }
+
     public Iterator<WaveDescription> getDescriptionIterator() {
         return descriptionIterator;
     }
