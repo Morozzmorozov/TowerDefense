@@ -4,14 +4,14 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
-import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class LobbiesController implements Controller {
     private static final String FXML_FILE_NAME = "lobbies.fxml";
 
     @FXML private StackPane root;
-    @FXML private VBox lobbiesVBox;
+    @FXML private GridPane lobbiesGridPane;
 
     @FXML private ImageView menuImageView;
 
@@ -43,33 +43,25 @@ public class LobbiesController implements Controller {
     private void initialize() {
         menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
+        int lobbiesGridPaneColumnsNumber = lobbiesGridPane.getChildren().size();
         lobbiesThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
                     List<SLobby> lobbies = connectionManager.getLobbies();
 
                     Platform.runLater(() -> {
-                        lobbiesVBox.getChildren().clear();
-                        for (SLobby lobby : lobbies) {
-                            HBox hBox = new HBox();
-                            hBox.getChildren().add(new Label(lobby.getLevelName()));
-                            hBox.getChildren().add(new Label(lobby.getGameType().toString()));
-                            hBox.getChildren().add(new Label("Players: " + lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
-                            for (SPlayer player : lobby.getPlayers()) {
-                                hBox.getChildren().add(new Label(player.getName()));
-                                hBox.getChildren().add(new Label(player.getEloRating() + ""));
-                                hBox.getChildren().add(new Label(player.getReady() ? "Yes" : "No"));
-                            }
-                            hBox.setOnMouseClicked(mouseEvent -> new Thread(() -> {
-                                String sessionToken = connectionManager.joinLobby(lobby.getId());
-                                if (sessionToken == null) {
-                                    System.out.println("sessionToken is null");
-                                    return;
-                                }
-
-                                Platform.runLater(() -> sceneManager.switchToLobby(lobby.getId(), sessionToken));
-                            }).start());
-                            lobbiesVBox.getChildren().add(hBox);
+                        lobbiesGridPane.getChildren().subList(lobbiesGridPaneColumnsNumber,
+                            lobbiesGridPane.getChildren().size()).clear();
+                        for (int i = 0; i < lobbies.size(); i++) {
+                            SLobby lobby = lobbies.get(i);
+                            lobbiesGridPane.add(new HBox(new Label(i + 1 + "")), 0, i + 1);
+                            lobbiesGridPane.add(new HBox(new Label(lobby.getLevelName())), 1, i + 1);
+                            lobbiesGridPane.add(new HBox(
+                                new Label(capitalize(lobby.getGameType()))), 2, i + 1);
+                            lobbiesGridPane.add(new HBox(new Label(
+                                lobby.getPlayers().get(0).getName())), 3, i + 1);
+                            lobbiesGridPane.add(new HBox(new Label(
+                                lobby.getPlayers().size() + "/" + lobby.getMaxPlayers())), 4, i + 1);
                         }
                     });
 
@@ -99,5 +91,10 @@ public class LobbiesController implements Controller {
         if (lobbiesThread != null) {
             lobbiesThread.interrupt();
         }
+    }
+
+    private String capitalize(GameType gameType) {
+        String gameTypeLowered = gameType.toString().toLowerCase();
+        return gameTypeLowered.substring(0, 1).toUpperCase() + gameTypeLowered.substring(1);
     }
 }

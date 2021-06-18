@@ -15,9 +15,15 @@
         <URL value="@../css/icons.css" />
         <URL value="@../css/lobbies.css"/>
     </stylesheets>
-    <VBox>
-        <Label>Lobbies</Label>
-        <VBox fx:id="lobbiesVBox" />
+    <VBox styleClass="content">
+        <Label styleClass="content-header">Lobbies</Label>
+        <GridPane fx:id="lobbiesGridPane" styleClass="content-table">
+            <HBox><Label>№</Label></HBox>
+            <HBox GridPane.columnIndex="1"><Label>Level Name</Label></HBox>
+            <HBox GridPane.columnIndex="2"><Label>Game Type</Label></HBox>
+            <HBox GridPane.columnIndex="3"><Label>Host</Label></HBox>
+            <HBox GridPane.columnIndex="4"><Label>Players</Label></HBox>
+        </GridPane>
     </VBox>
     <GridPane styleClass="menu-bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
