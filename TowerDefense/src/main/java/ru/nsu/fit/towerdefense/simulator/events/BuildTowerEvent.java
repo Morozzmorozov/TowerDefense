@@ -3,7 +3,6 @@ package ru.nsu.fit.towerdefense.simulator.events;
 import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
-import ru.nsu.fit.towerdefense.replay.GameStateWriter;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
 import ru.nsu.fit.towerdefense.simulator.exceptions.GameplayException;
 import ru.nsu.fit.towerdefense.simulator.world.World;

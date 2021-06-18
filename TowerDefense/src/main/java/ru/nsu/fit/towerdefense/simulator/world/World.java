@@ -26,7 +26,9 @@ public class World {
   }
 
   public static SerializableWorld deserialize(String json) {
-    Gson gson = new GsonBuilder().registerTypeAdapter(SerializableWorld.class, new SerializableWorld.WorldDeserializer()).create();
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapter(SerializableWorld.class, new SerializableWorld.WorldDeserializer())
+        .create();
     return gson.fromJson(json, SerializableWorld.class);
   }
 
@@ -63,7 +65,6 @@ public class World {
     }
 
     moneyMap = new HashMap<>(oldWorld.moneyMap);
-
 
     towers = oldWorld.towers.stream().map(tower -> {
       var e = tower.getTarget();
@@ -255,7 +256,6 @@ public class World {
   }
 
   public Collection<Renderable> getRenderables() {
-    // todo resolve conflict with Collection
     List<Renderable> renderables = new ArrayList<>();
     renderables.addAll(roadTiles);
     renderables.addAll(towerPlatforms);
@@ -265,16 +265,18 @@ public class World {
     renderables.addAll(projectiles);
     renderables.addAll(portals);
     for (Enemy enemy : enemies) {
+      if (enemy == null) continue;
       renderables.addAll(enemy.getEffects());
     }
     return renderables;
+  }
     /*return new Iterable<Renderable>() {
       @Override
       public Iterator<Renderable> iterator() {
         return new WorldIterator();
       }
     };*/
-  }
+
 
   public int getScienceEarned() {
     return scienceEarned;
@@ -282,38 +284,6 @@ public class World {
 
   public void setScienceEarned(int scienceEarned) {
     this.scienceEarned = scienceEarned;
-  }
-
-  private class WorldIterator implements Iterator<Renderable> {
-
-    private List<Iterator<? extends Renderable>> iterators;
-
-    public WorldIterator() {
-      iterators = new ArrayList<>();
-      iterators.add(enemies.iterator());
-      iterators.add(projectiles.iterator());
-      iterators.add(towers.iterator());
-    }
-
-    @Override
-    public boolean hasNext() {
-      for (Iterator<? extends Renderable> iterator : iterators) {
-        if (iterator.hasNext()) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    @Override
-    public Renderable next() {
-      for (Iterator<? extends Renderable> iterator : iterators) {
-        if (iterator.hasNext()) {
-          return iterator.next();
-        }
-      }
-      throw new NoSuchElementException();
-    }
   }
 
   public int getCurrentEnemyId() {

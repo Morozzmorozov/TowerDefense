@@ -25,10 +25,10 @@ import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.UserMetaData;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
-import ru.nsu.fit.towerdefense.replay.GameStateReader;
 import ru.nsu.fit.towerdefense.replay.Replay;
 
 import java.io.File;
+import ru.nsu.fit.towerdefense.replay.ReplayManager;
 
 /**
  * MenuController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a menu scene.
@@ -214,7 +214,11 @@ public class MenuController implements Controller {
 
     private void showReplayChooserDialog(String gameMapName) {
         comboBox.getItems().clear();
-        comboBox.getItems().addAll(GameStateReader.getInstance().getReplays(gameMapName));
+        //comboBox.getItems().addAll(GameStateReader.getInstance().getReplays(gameMapName));
+        var replays = ReplayManager.getReplays(gameMapName);
+        if (replays != null) {
+            comboBox.getItems().addAll(replays);
+        }
         comboBox.getSelectionModel().selectFirst();
 
         Alert alert = new AlertBuilder()
@@ -230,7 +234,8 @@ public class MenuController implements Controller {
 
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
-            Replay replay = GameStateReader.getInstance().readReplay(gameMapName, comboBox.getValue());
+            //Replay replay = GameStateReader.getInstance().readReplay(gameMapName, comboBox.getValue());
+            Replay replay = ReplayManager.readReplay(gameMapName, comboBox.getValue());
             if (replay != null) {
                 sceneManager.switchToGame(gameMapName, replay);
             } else {
