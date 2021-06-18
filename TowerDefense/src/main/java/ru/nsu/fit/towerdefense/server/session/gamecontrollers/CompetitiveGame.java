@@ -114,15 +114,7 @@ public class CompetitiveGame implements GameController {
 //				message.setType(Message.Type.RESULT);
 //				message.setSerializedResults(players1.stream().map(gson::toJson).collect(Collectors.toList()));
 //				controller.sendMessageToAll(gson.toJson(message));
-				try
-				{
-					Thread.sleep(17);
-				}
-				catch (Exception e)
-				{
-				}
 			}
-
 			if (tick == 1)
 			{
 				for (var x : instances.entrySet())
@@ -144,6 +136,13 @@ public class CompetitiveGame implements GameController {
 			}
 			tick++;
 			if (tick == 60) tick = 0;
+			try
+			{
+				Thread.sleep(17);
+			}
+			catch (Exception e)
+			{
+			}
 		}
 		List<SPlayer> players = new ArrayList<>();
 		for (var x : winners)
