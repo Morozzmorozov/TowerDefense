@@ -206,6 +206,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private final ConnectionManager connectionManager;
     private final File snapshotFile;
     private final List<String> playerNames;
+    private final GameType gameType;
 
     private ScheduledExecutorService worldSimulationExecutor;
 
@@ -244,11 +245,13 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         this.sceneManager = sceneManager;
         this.connectionManager = connectionManager;
         this.snapshotFile = snapshotFile;
-        this.playerNames = multiplayer ?
+        this.gameType = gameType;
+
+        this.playerNames = multiplayer && gameType == GameType.COOPERATIVE ?
             playerNames.stream().sorted().collect(Collectors.toList()) :
             List.of(userName);
 
-        List<Vector2<Integer>> clientPlatformPositions = multiplayer ?
+        List<Vector2<Integer>> clientPlatformPositions = multiplayer && gameType == GameType.COOPERATIVE ?
             gameMap.getBuildingPositions(playerNames.indexOf(userName)) :
             null;
 
@@ -313,7 +316,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         baseInitialHealthLabel.setText(baseInitialHealth + "");
 
-        if (multiplayer) {
+        if (multiplayer && gameType == GameType.COOPERATIVE) {
             playerNameToLabelsMap = new HashMap<>();
             for (String playerName : playerNames) {
                 GridPane gridPane =
@@ -425,7 +428,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         try {
             worldRenderer.render();
 
-            if (multiplayer) {
+            if (multiplayer && gameType == GameType.COOPERATIVE) {
                 for (String playerName : playerNames) {
                     List<Label> labels = playerNameToLabelsMap.get(playerName);
                     labels.get(1).setText(worldControl.getResearchPoints(playerName) + "");
