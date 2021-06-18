@@ -65,6 +65,7 @@ public class GameServer {
 
 	public static void main(String[] args)
 	{
+		var t = GameMetaData.getInstance().getMapDescription("Level 1_4");
 		GameServer server = new GameServer(8080);
 		server.addFilter(Mappings.USER_FILTER_MAPPING, ParamCleanupFilter.class);
 		server.addFilter(Mappings.USER_FILTER_MAPPING, AuthenticationFilter.class);
