@@ -388,6 +388,7 @@ public class WorldControl implements ServerSimulator {
     if (wave.getRemainingEnemiesCount() == 0) {
       world.setWavesDefeated(world.getWavesDefeated() + 1);
       world.setScienceEarned(world.getScienceEarned() + gameMap.getScienceReward());
+      world.setMultiplayerMoneyEarned(world.getMultiplayerMoneyEarned() + gameMap.getMultiplayerPoints());
       addRewards(gameMap.getScienceReward(), gameMap.getMultiplayerPoints());
 
       if ((world.getEnemies().isEmpty() || (world.getEnemies().contains(enemy)
