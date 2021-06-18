@@ -21,6 +21,7 @@ import ru.nsu.fit.towerdefense.fx.controllers.techtree.TechTreeController;
 import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.util.Vector2;
 
@@ -174,15 +175,15 @@ public class SceneManager {
         }
     }
 
-    public void switchToCooperativeGame(String gameMapName, List<String> playerNames) {
+    public void switchToMultiplayerGame(String gameMapName, List<String> playerNames, GameType gameType) {
         try {
             GameController gameController = TowerDefenseApplication.LAG ?
             new LaggingGameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
-                GameMetaData.getInstance().getMapDescription(gameMapName), playerNames) :
+                GameMetaData.getInstance().getMapDescription(gameMapName), playerNames, gameType) :
             new GameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
-                GameMetaData.getInstance().getMapDescription(gameMapName), playerNames);
+                GameMetaData.getInstance().getMapDescription(gameMapName), playerNames, gameType);
             connectionManager.setServerMessageListener(gameController);
             switchScene(gameController);
         } catch (NoSuchElementException e) {
