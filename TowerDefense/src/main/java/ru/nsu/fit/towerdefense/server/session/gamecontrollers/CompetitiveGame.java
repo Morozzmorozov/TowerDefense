@@ -61,9 +61,14 @@ public class CompetitiveGame implements GameController {
 	@Override
 	public void sendMessage(String player, Message message)
 	{
-		if (message.getType() == Message.Type.RESULT)
+		if (message.getType() == Message.Type.EVENT)
 		{
-			latestResults.put(player, new Gson().fromJson(message.getSerializedResult(), SResult.class));
+			if (instances.containsKey(player))
+			{
+				Event event = Event.deserialize(message.getSerializedEvent());
+				instances.get(player).addEvent(event);
+			}
+//			latestResults.put(player, new Gson().fromJson(message.getSerializedResult(), SResult.class));
 		}
 		else
 		{
