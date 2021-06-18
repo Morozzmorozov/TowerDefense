@@ -225,13 +225,17 @@ public class TechTreeController implements Controller {
         HBox hBox = new HBox();
         hBox.getStyleClass().add("research-price");
 
+        boolean researchPoints = research.getMultiplayerCost() == 0;
+
         ImageView priceImageView = new ImageView();
-        priceImageView.getStyleClass().add("research-progress-icon");
+        priceImageView.getStyleClass().add(
+            researchPoints ? "research-progress-icon" : "multiplayer-progress-icon");
         priceImageView.setFitHeight(fontSize);
         priceImageView.setPickOnBounds(true);
         priceImageView.setPreserveRatio(true);
 
-        Label priceLabel = new Label(research.getCost() + "");
+        Label priceLabel = new Label((researchPoints ?
+            research.getCost() : research.getMultiplayerCost()) + "");
         priceLabel.setFont(new Font(fontSize));
 
         hBox.getChildren().addAll(priceImageView, priceLabel);
@@ -266,24 +270,44 @@ public class TechTreeController implements Controller {
             researchBuyLabel.setText("Research");
             researchBuyHBox.setStyle("-fx-background-color: firebrick;");
             researchBuyHBox.setOnMouseClicked(mouseEvent -> {
-                if (UserMetaData.getResearchPoints() >= research.getCost()) {
-                    GameMetaData.getInstance().getTechTree().unlock(research.getName());
-                    UserMetaData.subtractResearchPoints(research.getCost());
+                if (research.getMultiplayerCost() == 0) {
+                    if (UserMetaData.getResearchPoints() >= research.getCost()) {
+                        GameMetaData.getInstance().getTechTree().unlock(research.getName());
+                        UserMetaData.subtractResearchPoints(research.getCost());
 
-                    researchLabel.setText(UserMetaData.getResearchPoints() + "");
-                    // todo multiplayerLabel
-                    drawTechTree();
+                        researchLabel.setText(UserMetaData.getResearchPoints() + "");
+                        drawTechTree();
 
-                    researchBuyLabel.setText("Researched");
-                    researchBuyHBox.setStyle("-fx-background-color: green;");
-                    researchBuyHBox.setOnMouseClicked(null);
+                        researchBuyLabel.setText("Researched");
+                        researchBuyHBox.setStyle("-fx-background-color: green;");
+                        researchBuyHBox.setOnMouseClicked(null);
+                    } else {
+                        new AlertBuilder()
+                            .setAlertType(Alert.AlertType.INFORMATION)
+                            .setHeaderText("Not enough research points")
+                            .setContentText("")
+                            .setOwner(sceneManager.getWindowOwner())
+                            .build().showAndWait();
+                    }
                 } else {
-                    new AlertBuilder()
-                        .setAlertType(Alert.AlertType.INFORMATION)
-                        .setHeaderText("Not enough research points")
-                        .setContentText("")
-                        .setOwner(sceneManager.getWindowOwner())
-                        .build().showAndWait();
+                    if (UserMetaData.getMultiplayerPoints() >= research.getMultiplayerCost()) {
+                        GameMetaData.getInstance().getTechTree().unlock(research.getName());
+                        UserMetaData.subtractMultiplayerPoints(research.getMultiplayerCost());
+
+                        multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
+                        drawTechTree();
+
+                        researchBuyLabel.setText("Researched");
+                        researchBuyHBox.setStyle("-fx-background-color: green;");
+                        researchBuyHBox.setOnMouseClicked(null);
+                    } else {
+                        new AlertBuilder()
+                            .setAlertType(Alert.AlertType.INFORMATION)
+                            .setHeaderText("Not enough multiplayer points")
+                            .setContentText("")
+                            .setOwner(sceneManager.getWindowOwner())
+                            .build().showAndWait();
+                    }
                 }
             });
         } else {

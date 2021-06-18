@@ -75,6 +75,10 @@ public class Research {
 		return cost;
 	}
 
+	public int getMultiplayerCost() {
+		return multiplayerCost;
+	}
+
 	public String getName()
 	{
 		return name;
