@@ -77,6 +77,7 @@ public class GameServer {
 		server.addServlet(Mappings.CREATE_LOBBY_MAPPING, CreateSessionServlet.class);
 		server.addServlet(Mappings.LOGIN_MAPPING, LoginServlet.class);
 		server.addServlet(Mappings.REGISTER_MAPPING, RegisterServlet.class);
+		server.addServlet(Mappings.ELO_LEADERBOARD_MAPPING, EloRatingServlet.class);
 
 		try
 		{

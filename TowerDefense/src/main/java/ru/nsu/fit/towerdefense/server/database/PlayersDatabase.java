@@ -1,6 +1,7 @@
 package ru.nsu.fit.towerdefense.server.database;
 
 import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
+import ru.nsu.fit.towerdefense.server.database.entities.EloRating;
 
 import java.security.MessageDigest;
 import java.sql.*;
@@ -233,4 +234,34 @@ public class PlayersDatabase {
 		playerInfo.setReady(false);
 		return playerInfo;
 	}
+
+
+	public List<EloRating> getRatingLeaderboard(int from, int to)
+	{
+		try
+		{
+			PreparedStatement statement = connection.prepareStatement("WITH tmp AS " +
+					                                                      "(SELECT ROW_NUMBER() OVER (ORDER BY rating DESC) AS RowNum, rating.* FROM rating) " +
+					                                                      "SELECT * FROM tmp " +
+					                                                      "WHERE ? <= RowNum AND RowNum < ? ");
+			ResultSet set = statement.executeQuery();
+			List<EloRating> ratings = new LinkedList<>();
+			while (set.next())
+			{
+				EloRating rating = new EloRating();
+				rating.setRating(set.getInt(3));
+				rating.setUser(set.getString(2));
+				rating.setRatingId(set.getLong(1));
+				ratings.add(rating);
+			}
+			return ratings;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+
+
 }
