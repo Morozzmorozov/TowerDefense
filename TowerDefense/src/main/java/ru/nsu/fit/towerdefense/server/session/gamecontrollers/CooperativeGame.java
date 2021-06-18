@@ -44,6 +44,7 @@ public class CooperativeGame implements GameController {
 		{
 			Event event = Event.deserialize(message.getSerializedEvent());
 			instance.addEvent(event);
+			controller.sendMessageToAll(new Gson().toJson(message));
 		}
 		else
 		{

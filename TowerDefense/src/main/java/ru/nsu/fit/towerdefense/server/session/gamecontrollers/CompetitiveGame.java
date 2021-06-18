@@ -9,6 +9,7 @@ import ru.nsu.fit.towerdefense.server.players.RatingEvaluation;
 import ru.nsu.fit.towerdefense.server.session.GameInstance;
 import ru.nsu.fit.towerdefense.server.session.SessionController;
 import ru.nsu.fit.towerdefense.simulator.WorldObserver;
+import ru.nsu.fit.towerdefense.simulator.events.Event;
 import ru.nsu.fit.towerdefense.simulator.world.SerializableWorld;
 
 import java.util.ArrayList;
