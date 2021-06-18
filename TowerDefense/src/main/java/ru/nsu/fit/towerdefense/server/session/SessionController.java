@@ -148,7 +148,7 @@ public class SessionController {
 //			System.out.println("2");
 			connections.remove(token);
 //			System.out.println("3");
-			info.disconnectPlayer(token);
+			info.disconnectPlayer(player);
 //			System.out.println("4");
 			if (controller != null)
 			{
