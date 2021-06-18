@@ -34,6 +34,7 @@ import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SResult;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldControl;
@@ -205,7 +206,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private final SceneManager sceneManager;
     private final ConnectionManager connectionManager;
     private final File snapshotFile;
-    private final List<String> playerNames;
+    private List<String> playerNames;
     private final GameType gameType;
 
     private ScheduledExecutorService worldSimulationExecutor;
@@ -265,6 +266,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         worldControl = !replaying ?
             new WorldControl(gameMap, DELTA_TIME, this, this.playerNames, clientPlatformPositions) :
             new ReplayWorldControl(gameMap, DELTA_TIME, this, replay);
+
+        if (multiplayer && gameType == GameType.COMPETITIVE) {
+            this.playerNames = playerNames.stream().sorted().collect(Collectors.toList());
+        }
     }
 
     // single
@@ -316,7 +321,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         baseInitialHealthLabel.setText(baseInitialHealth + "");
 
-        if (multiplayer && gameType == GameType.COOPERATIVE) {
+        if (multiplayer) {
             playerNameToLabelsMap = new HashMap<>();
             for (String playerName : playerNames) {
                 GridPane gridPane =
@@ -341,9 +346,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         } else {
             userProgressHBox.setVisible(true);
             userProgressHBox.setManaged(true);
-        }
 
-        if (!multiplayer) {
             controlsHBox.setVisible(true);
             controlsHBox.setManaged(true);
 
@@ -706,6 +709,23 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     Platform.runLater(() -> worldControl.updateWorld(World.deserialize(message.getSerializedWorld())));
+                }
+                case RESULTS -> {
+                    if (message.getResults() == null) {
+                        System.err.println("results is null");
+                        return;
+                    }
+
+                    Platform.runLater(() -> {
+                        for (SResult result : message.getResults()) {
+                            List<Label> labels = playerNameToLabelsMap.get(result.getPlayerName());
+                            labels.get(1).setText(result.getResearchPoints() + "");
+                            labels.get(2).setText(result.getMultiplayerPoints() + "");
+                            labels.get(3).setText(result.getMoney() + "");
+                            labels.get(4).setText(result.getBaseHealth() + "");
+                            labels.get(5).setText(result.getEnemiesKilled() + "");
+                        }
+                    });
                 }
                 default -> System.out.println("default");
             }
