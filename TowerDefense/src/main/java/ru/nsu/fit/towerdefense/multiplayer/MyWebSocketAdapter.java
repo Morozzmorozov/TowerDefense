@@ -14,9 +14,7 @@ public class MyWebSocketAdapter extends WebSocketAdapter {
 
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
-        System.out.println("onWebSocketClose");
-        System.out.println(statusCode);
-        System.out.println(reason);
+        System.out.println("onWebSocketClose: statusCode - " + statusCode + ", reason - " + reason);
     }
 
     @Override

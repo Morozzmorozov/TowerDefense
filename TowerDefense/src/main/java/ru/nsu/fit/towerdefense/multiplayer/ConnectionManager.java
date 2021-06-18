@@ -39,9 +39,14 @@ public class ConnectionManager {
     private WebSocketClient webSocketClient;
     private MyWebSocketAdapter socketAdapter;
     private Session session;
+    private SGameSession gameSession;
 
     public String getUsername() {
         return credentials.getUsername();
+    }
+
+    public SGameSession getGameSession() {
+        return gameSession;
     }
 
     public Boolean login(String username, String password) {
@@ -155,7 +160,15 @@ public class ConnectionManager {
         }
     }
 
-    public boolean leaveLobby(String sessionId) {
+    public boolean leaveLobby() {
+        if (gameSession == null) {
+            System.out.println("You are not in lobby (game)");
+            return false;
+        }
+
+        String sessionId = gameSession.getSessionId();
+        gameSession = null;
+
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.LEAVE_LOBBY_MAPPING +
@@ -267,6 +280,8 @@ public class ConnectionManager {
             session = webSocketClient.connect(socketAdapter, URI.create("ws://localhost:8080/game")).get();
 
             socketAdapter.sendMessage(new Gson().toJson(gameSession));
+
+            this.gameSession = gameSession;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -301,8 +316,9 @@ public class ConnectionManager {
     }
 
     public void dispose() {
+        leaveLobby();
         closeSocketConnection();
-        // todo interrupt()
+        // todo interrupt() ???
     }
 
     private String encode(String str) throws UnsupportedEncodingException {
