@@ -1,8 +1,11 @@
-package ru.nsu.fit.towerdefense.server.session;
+package ru.nsu.fit.towerdefense.server.session.gamecontrollers;
 
 import com.google.gson.Gson;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
+import ru.nsu.fit.towerdefense.server.session.GameInstance;
+import ru.nsu.fit.towerdefense.server.session.SessionController;
+import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.events.Event;
 import ru.nsu.fit.towerdefense.simulator.world.SerializableWorld;
 
@@ -12,10 +15,24 @@ public class CooperativeGame implements GameController {
 
 	private GameInstance instance;
 	private SessionController controller;
+	private boolean isRunning = true;
 
 	public CooperativeGame(GameMap map, List<String> players, SessionController controller)
 	{
-		instance = new GameInstance(map, players);
+		instance = new GameInstance(map, players, new WorldObserver() {
+
+			@Override
+			public void onDefeat()
+			{
+				isRunning = false;
+			}
+
+			@Override
+			public void onVictory()
+			{
+				isRunning = false;
+			}
+		});
 		this.controller = controller;
 	}
 
@@ -40,12 +57,19 @@ public class CooperativeGame implements GameController {
 		return instance.serialize();
 	}
 
+
+	@Override
+	public void playerDisconnect(String player)
+	{
+
+	}
+
 	@Override
 	public void run()
 	{
 		int tick = 0;
 
-		while (true)
+		while (isRunning)
 		{
 			tick ++;
 			instance.doStep();
@@ -66,5 +90,6 @@ public class CooperativeGame implements GameController {
 			}
 		}
 	}
+
 
 }
