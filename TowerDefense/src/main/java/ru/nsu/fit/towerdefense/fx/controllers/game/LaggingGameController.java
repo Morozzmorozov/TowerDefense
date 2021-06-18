@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.simulator.events.Event;
 
 import java.io.File;
@@ -12,8 +13,8 @@ import java.util.List;
 public class LaggingGameController extends GameController {
 
     public LaggingGameController(SceneManager sceneManager, ConnectionManager connectionManager,
-                                 File snapshotFile, GameMap gameMap, List<String> playerNames) {
-        super(sceneManager, connectionManager, snapshotFile, gameMap, playerNames, null);
+                                 File snapshotFile, GameMap gameMap, List<String> playerNames, GameType gameType) {
+        super(sceneManager, connectionManager, snapshotFile, gameMap, playerNames, null, gameType);
     }
 
     @Override

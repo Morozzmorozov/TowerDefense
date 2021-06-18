@@ -14,7 +14,7 @@ public class GameInstance{
 
 	public GameInstance(GameMap map, List<String> players, WorldObserver observer)
 	{
-		control = new WorldControl(map, 1000/60, observer, players);
+		control = new WorldControl(map, 1000/60, observer, players, null);
 	}
 
 	public void doStep()
