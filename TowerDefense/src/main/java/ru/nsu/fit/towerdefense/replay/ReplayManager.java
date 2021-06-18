@@ -65,7 +65,6 @@ public class ReplayManager {
 
     try (var fileWriter = new FileWriter(file)) {
       fileWriter.write(replay.serialize());
-      System.out.println(replay.serialize());
       //new Gson().toJson(replay, fileWriter);
     } catch (IOException e) {
       e.printStackTrace();
