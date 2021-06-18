@@ -13,7 +13,7 @@ public class RatingEvaluation {
 
 	public static void evaluate(List<SPlayer> players)
 	{
-
+		System.out.println("evaluate");
 		if (players.size() % 2 == 1)
 		{
 			int p = players.size() / 2 - 1, q = p + 2;
@@ -28,7 +28,7 @@ public class RatingEvaluation {
 		}
 		else
 		{
-			int p = players.size() / 2, q = p + 1;
+			int p = players.size() / 2 - 1, q = p + 1;
 			int cnt = 5;
 			while (p > 0)
 			{

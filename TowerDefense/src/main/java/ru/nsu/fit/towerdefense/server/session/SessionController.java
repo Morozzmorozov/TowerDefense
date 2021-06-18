@@ -152,7 +152,7 @@ public class SessionController {
 //			System.out.println("4");
 			if (controller != null)
 			{
-				controller.playerDisconnect(token);
+				controller.playerDisconnect(player);
 			}
 //			System.out.println("5");
 			PlayerManager.getInstance().disconnect(player);
