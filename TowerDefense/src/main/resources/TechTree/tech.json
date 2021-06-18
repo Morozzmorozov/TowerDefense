@@ -28,12 +28,21 @@
             "Image" : "rocket_launcher.png",
             "Types" : ["Rocket Launcher"],
             "Cost" : 25
+        },
+        {
+            "Name" : "Elite Tech",
+            "Info" : "This technology is available to those who play multiplayer games",
+            "Image" : "castle.png",
+            "Types" : [],
+            "Cost": 0,
+            "MultiplayerCost": 20
         }
     ],
     "Dependencies" : [
         ["Basic Cannons", "Chemistry"],
         ["Basic Cannons", "Big Cannons"],
         ["Chemistry", "Future Tech"],
-        ["Big Cannons", "Future Tech"]
+        ["Big Cannons", "Future Tech"],
+        ["Basic Cannons", "Elite Tech"]
     ]
 }
