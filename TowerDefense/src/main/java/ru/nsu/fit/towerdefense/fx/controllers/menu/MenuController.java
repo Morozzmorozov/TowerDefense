@@ -24,11 +24,12 @@ import ru.nsu.fit.towerdefense.fx.util.AlertBuilder;
 import ru.nsu.fit.towerdefense.metadata.GameMetaData;
 import ru.nsu.fit.towerdefense.metadata.UserMetaData;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import ru.nsu.fit.towerdefense.replay.Replay;
+import ru.nsu.fit.towerdefense.replay.ReplayManager;
 
 import java.io.File;
-import ru.nsu.fit.towerdefense.replay.ReplayManager;
 
 /**
  * MenuController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a menu scene.
@@ -167,13 +168,13 @@ public class MenuController implements Controller {
         //gridPane.add(createLevelButton("idle-icon", "Idle game", null), 1, 3); // todo uncomment
 
         HBox cooperativeHBox = createLevelButton(true, "cooperative-icon", "Cooperative",
-            mouseEvent -> createCooperativeGame(gameMapName));
+            mouseEvent -> createMultiplayerGame(gameMapName, GameType.COOPERATIVE));
         cooperativeHBox.setDisable(
             !GameMetaData.getInstance().getMapDescription(gameMapName).isCooperativeAvailable());
         gridPane.add(cooperativeHBox, 0, 3);
 
         gridPane.add(createLevelButton(true, "competition-icon", "Competition",
-            mouseEvent -> System.out.println("competition")), 1, 3);
+            mouseEvent -> createMultiplayerGame(gameMapName, GameType.COMPETITIVE)), 1, 3);
         gridPane.add(createLevelButton(true, "leaderboard-icon", "Leaders",
             mouseEvent -> showLeaderboard(gameMapName)), 0, 4);
 
@@ -214,7 +215,6 @@ public class MenuController implements Controller {
 
     private void showReplayChooserDialog(String gameMapName) {
         comboBox.getItems().clear();
-        //comboBox.getItems().addAll(GameStateReader.getInstance().getReplays(gameMapName));
         var replays = ReplayManager.getReplays(gameMapName);
         if (replays != null) {
             comboBox.getItems().addAll(replays);
@@ -234,7 +234,6 @@ public class MenuController implements Controller {
 
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
-            //Replay replay = GameStateReader.getInstance().readReplay(gameMapName, comboBox.getValue());
             Replay replay = ReplayManager.readReplay(gameMapName, comboBox.getValue());
             if (replay != null) {
                 sceneManager.switchToGame(gameMapName, replay);
@@ -247,9 +246,9 @@ public class MenuController implements Controller {
         }
     }
 
-    private void createCooperativeGame(String gameMapName) {
+    private void createMultiplayerGame(String gameMapName, GameType gameType) {
         new Thread(() -> {
-            SGameSession gameSession = connectionManager.createLobby(gameMapName);
+            SGameSession gameSession = connectionManager.createLobby(gameMapName, gameType);
             if (gameSession == null) {
                 System.out.println("gameSession is null");
                 return;

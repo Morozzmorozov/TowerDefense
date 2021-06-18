@@ -130,7 +130,7 @@ public class ConnectionManagerStub extends ConnectionManager {
     }
 
     @Override
-    public SGameSession createLobby(String gameMapName) {
+    public SGameSession createLobby(String gameMapName, GameType gameType) {
         return new SGameSession() {{
             setSessionId("id_123");
             setSessionId("token_123");
