@@ -129,7 +129,7 @@ public class WorldControl implements ServerSimulator {
       var platform = new TowerPlatform(coordinates, "platform.png", 0); // todo image name
       world.getTowerPlatforms()
           .add(platform);
-      if (isClientPlatform(platform)) {
+      if (!isClientPlatform(platform)) {
         platform.setImage("platform2.png");
       }
     }
