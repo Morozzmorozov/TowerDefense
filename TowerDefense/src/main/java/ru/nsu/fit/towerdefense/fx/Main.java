@@ -10,21 +10,12 @@ package ru.nsu.fit.towerdefense.fx;
  */
 public class Main {
 
-    public static boolean LAG = false;
-
     /**
      * Launches TowerDefenseApplication calling its main() method.
      *
      * @param args command-line options.
      */
     public static void main(String[] args) {
-        for (String arg : args) {
-            if (arg.equals("lag")) {
-                LAG = true;
-                break;
-            }
-        }
-        System.out.println(LAG ? "lagging" : "no lagging");
         TowerDefenseApplication.main(args);
     }
 }

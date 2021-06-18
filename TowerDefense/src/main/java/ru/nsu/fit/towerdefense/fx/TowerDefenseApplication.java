@@ -3,7 +3,6 @@ package ru.nsu.fit.towerdefense.fx;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
-import ru.nsu.fit.towerdefense.multiplayer.ConnectionManagerStub;
 
 /**
  * TowerDefenseApplication is a game made with JavaFX.
@@ -11,6 +10,9 @@ import ru.nsu.fit.towerdefense.multiplayer.ConnectionManagerStub;
  * @author Oleg Markelov
  */
 public class TowerDefenseApplication extends Application {
+
+    public static String USER = "1";
+    public static boolean LAG = false;
 
     private SceneManager sceneManager;
     private ConnectionManager connectionManager;
@@ -21,6 +23,20 @@ public class TowerDefenseApplication extends Application {
      * @param args command-line options.
      */
     public static void main(String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            try {
+                if (args[i].equals("-l") || args[i].equals("--lag")) {
+                    LAG = true;
+                } else if (args[i].equals("-u") || args[i].equals("-user")) {
+                    USER = args[i+1];
+                }
+            } catch (IndexOutOfBoundsException e) {
+                System.err.println("Bad arguments syntax");
+            }
+        }
+        System.out.println("User: " + USER);
+        System.out.println("lagging is " + (LAG ? "ON" : "OFF"));
+
         launch(args);
     }
 
