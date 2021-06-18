@@ -43,25 +43,41 @@ public class LobbiesController implements Controller {
     private void initialize() {
         menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
-        int lobbiesGridPaneColumnsNumber = lobbiesGridPane.getChildren().size();
         lobbiesThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
                     List<SLobby> lobbies = connectionManager.getLobbies();
 
                     Platform.runLater(() -> {
-                        lobbiesGridPane.getChildren().subList(lobbiesGridPaneColumnsNumber,
+                        lobbiesGridPane.getChildren().subList(lobbiesGridPane.getColumnCount(),
                             lobbiesGridPane.getChildren().size()).clear();
                         for (int i = 0; i < lobbies.size(); i++) {
                             SLobby lobby = lobbies.get(i);
-                            lobbiesGridPane.add(new HBox(new Label(i + 1 + "")), 0, i + 1);
-                            lobbiesGridPane.add(new HBox(new Label(lobby.getLevelName())), 1, i + 1);
-                            lobbiesGridPane.add(new HBox(
-                                new Label(capitalize(lobby.getGameType()))), 2, i + 1);
-                            lobbiesGridPane.add(new HBox(new Label(
-                                lobby.getPlayers().get(0).getName())), 3, i + 1);
-                            lobbiesGridPane.add(new HBox(new Label(
-                                lobby.getPlayers().size() + "/" + lobby.getMaxPlayers())), 4, i + 1);
+
+                            HBox hBox1 = new HBox(new Label(i + 1 + ""));
+                            hBox1.getStyleClass().add("clickable");
+                            hBox1.setOnMouseClicked(mouseEvent -> goToLobby(lobby));
+                            lobbiesGridPane.add(hBox1, 0, i + 1);
+
+                            HBox hBox2 = new HBox(new Label(lobby.getLevelName()));
+                            hBox2.getStyleClass().add("clickable");
+                            hBox2.setOnMouseClicked(mouseEvent -> goToLobby(lobby));
+                            lobbiesGridPane.add(hBox2, 1, i + 1);
+
+                            HBox hBox3 = new HBox(new Label(capitalize(lobby.getGameType())));
+                            hBox3.getStyleClass().add("clickable");
+                            hBox3.setOnMouseClicked(mouseEvent -> goToLobby(lobby));
+                            lobbiesGridPane.add(hBox3, 2, i + 1);
+
+                            HBox hBox4 = new HBox(new Label(lobby.getPlayers().get(0).getName()));
+                            hBox4.getStyleClass().add("clickable");
+                            hBox4.setOnMouseClicked(mouseEvent -> goToLobby(lobby));
+                            lobbiesGridPane.add(hBox4, 3, i + 1);
+
+                            HBox hBox5 = new HBox(new Label(lobby.getPlayers().size() + "/" + lobby.getMaxPlayers()));
+                            hBox5.getStyleClass().add("clickable");
+                            hBox5.setOnMouseClicked(mouseEvent -> goToLobby(lobby));
+                            lobbiesGridPane.add(hBox5, 4, i + 1);
                         }
                     });
 
@@ -91,6 +107,18 @@ public class LobbiesController implements Controller {
         if (lobbiesThread != null) {
             lobbiesThread.interrupt();
         }
+    }
+
+    private void goToLobby(SLobby lobby) {
+        new Thread(() -> {
+            String sessionToken = connectionManager.joinLobby(lobby.getId());
+            if (sessionToken == null) {
+                System.out.println("sessionToken is null");
+                return;
+            }
+
+            Platform.runLater(() -> sceneManager.switchToLobby(lobby.getId(), sessionToken));
+        }).start();
     }
 
     private String capitalize(GameType gameType) {
