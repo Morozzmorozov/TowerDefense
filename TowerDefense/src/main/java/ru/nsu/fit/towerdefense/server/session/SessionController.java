@@ -103,16 +103,15 @@ public class SessionController {
 		}
 		else
 		{
-
+			controller = new CompetitiveGame(info.getLevel(), info.getPlayers().stream().map(SPlayer::getName).collect(Collectors.toList()), this);
 		}
 		gameThread = new Thread(() -> controller.run());
 		gameThread.start();
 	}
 
-	public void receiveGameEvent(String eventMessage, String player)
+	public void receiveGameMessage(Message message, String player)
 	{
-		Event event = Event.deserialize(eventMessage);
-		controller.sendEvent(player, event);
+		controller.sendMessage(player, message);
 	}
 
 	public void switchReady(String player)

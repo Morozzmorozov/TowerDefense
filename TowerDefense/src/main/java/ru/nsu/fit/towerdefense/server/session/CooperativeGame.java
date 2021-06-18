@@ -21,9 +21,17 @@ public class CooperativeGame implements GameController {
 
 
 	@Override
-	public void sendEvent(String player, Event event)
+	public void sendMessage(String player, Message message)
 	{
-		instance.addEvent(event);
+		if (message.getType() == Message.Type.EVENT)
+		{
+			Event event = Event.deserialize(message.getSerializedEvent());
+			instance.addEvent(event);
+		}
+		else
+		{
+			System.out.println("Can't handle message: " + new Gson().toJson(message));
+		}
 	}
 
 	@Override
