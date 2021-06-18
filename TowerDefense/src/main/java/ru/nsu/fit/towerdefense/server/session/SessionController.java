@@ -121,6 +121,10 @@ public class SessionController {
 
 		if (info.canStart())
 		{
+			Message message = new Message();
+			message.setType(Message.Type.START);
+			message.setPlayerNames(info.getPlayers().stream().map(SPlayer::getName).collect(Collectors.toList()));
+			sendMessageToAll(new Gson().toJson(message));
 			runGame();
 		}
 	}
