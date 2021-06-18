@@ -4,9 +4,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
@@ -25,7 +25,7 @@ public class EloRatingController implements Controller {
     private static final String FXML_FILE_NAME = "elo-rating.fxml";
 
     @FXML private StackPane root;
-    @FXML private VBox eloRatingVBox;
+    @FXML private GridPane eloRatingGridPane;
 
     @FXML private ImageView menuImageView;
 
@@ -47,11 +47,9 @@ public class EloRatingController implements Controller {
             Platform.runLater(() -> {
                 for (int i = 0; i < eloRatings.size(); i++) {
                     SEloRating eloRating = eloRatings.get(i);
-                    HBox hBox = new HBox();
-                    hBox.getChildren().add(new Label(i + 1 + ""));
-                    hBox.getChildren().add(new Label(eloRating.getPlayerName()));
-                    hBox.getChildren().add(new Label(eloRating.getRating() + ""));
-                    eloRatingVBox.getChildren().add(hBox);
+                    eloRatingGridPane.add(new HBox(new Label(i + 1 + "")), 0, i + 1);
+                    eloRatingGridPane.add(new HBox(new Label(eloRating.getPlayerName())), 1, i + 1);
+                    eloRatingGridPane.add(new HBox(new Label(eloRating.getRating() + "")), 2, i + 1);
                 }
             });
         }).start();

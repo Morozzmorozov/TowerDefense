@@ -11,6 +11,29 @@ Label, Text {
     -fx-font-size: 20px;
 }
 
+.content {
+    -fx-alignment: top-center;
+    -fx-padding: 50 20 0 20;
+    -fx-spacing: 20;
+}
+
+.content-header {
+    -fx-font-size: 30;
+    -fx-font-weight: bold;
+}
+
+.content-table {
+    -fx-alignment: top-center;
+}
+
+.content-table > HBox {
+    -fx-alignment: center;
+    -fx-padding: 0 20;
+    -fx-border-style: solid inside;
+    -fx-border-width: 1;
+    -fx-border-color: rgba(255, 255, 255, 0.35);
+}
+
 .menu-bar-grid-pane HBox {
     -fx-alignment: center;
 }

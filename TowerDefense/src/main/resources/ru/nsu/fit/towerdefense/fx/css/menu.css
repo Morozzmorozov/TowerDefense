@@ -7,17 +7,6 @@
     -fx-cursor: hand;
 }
 
-.content {
-    -fx-alignment: top-center;
-    -fx-padding: 50 20 0 20;
-    -fx-spacing: 20;
-}
-
-.header {
-    -fx-font-size: 30;
-    -fx-font-weight: bold;
-}
-
 .levels-flow-pane {
     -fx-hgap: 20;
     -fx-vgap: 20;

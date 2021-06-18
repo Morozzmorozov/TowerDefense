@@ -15,9 +15,13 @@
         <URL value="@../css/icons.css" />
         <URL value="@../css/elo-rating.css"/>
     </stylesheets>
-    <VBox>
-        <Label>ELO rating</Label>
-        <VBox fx:id="eloRatingVBox" />
+    <VBox styleClass="content">
+        <Label styleClass="content-header">Elo rating</Label>
+        <GridPane fx:id="eloRatingGridPane" styleClass="content-table">
+            <HBox><Label>№</Label></HBox>
+            <HBox GridPane.columnIndex="1"><Label>Name</Label></HBox>
+            <HBox GridPane.columnIndex="2"><Label>Rating</Label></HBox>
+        </GridPane>
     </VBox>
     <GridPane styleClass="menu-bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
