@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
@@ -29,6 +30,7 @@ public class LobbyController implements Controller, ServerMessageListener {
 
     @FXML private StackPane root;
     @FXML private VBox lobbyVBox;
+//    @FXML private GridPane lobbyGridPane;
 
     @FXML private ImageView menuImageView;
 
@@ -56,6 +58,7 @@ public class LobbyController implements Controller, ServerMessageListener {
             Platform.runLater(sceneManager::switchToMenu);
         }).start());
 
+//        int lobbyGridPaneColumnsNumber = lobbyGridPane.getChildren().size();
         lobbyThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
@@ -66,6 +69,8 @@ public class LobbyController implements Controller, ServerMessageListener {
                     }
 
                     Platform.runLater(() -> {
+//                        lobbyGridPane.getChildren().subList(lobbyGridPaneColumnsNumber,
+//                            lobbyGridPane.getChildren().size()).clear();
                         lobbyVBox.getChildren().clear();
                         lobbyVBox.getChildren().add(new Label(lobby.getLevelName()));
                         lobbyVBox.getChildren().add(new Label(lobby.getGameType().toString()));

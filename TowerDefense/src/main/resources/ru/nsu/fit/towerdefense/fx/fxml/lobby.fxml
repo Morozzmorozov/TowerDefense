@@ -15,9 +15,14 @@
         <URL value="@../css/icons.css" />
         <URL value="@../css/lobby.css"/>
     </stylesheets>
-    <VBox>
-        <Label>Lobby</Label>
-        <VBox fx:id="lobbyVBox" />
+    <VBox styleClass="content">
+        <Label styleClass="content-header">Lobby</Label>
+        <VBox fx:id="lobbyVBox"></VBox>
+        <!--<GridPane fx:id="lobbyGridPane" styleClass="content-table">
+            <HBox><Label>№</Label></HBox>
+            <HBox GridPane.columnIndex="1"><Label>Name</Label></HBox>
+            <HBox GridPane.columnIndex="2"><Label>Rating</Label></HBox>
+        </GridPane>-->
     </VBox>
     <GridPane styleClass="menu-bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
