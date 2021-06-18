@@ -60,7 +60,6 @@ public class LobbyController implements Controller, ServerMessageListener {
             Platform.runLater(sceneManager::switchToMenu);
         }).start());
 
-        drawLobby(lobby);
         lobbyThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
