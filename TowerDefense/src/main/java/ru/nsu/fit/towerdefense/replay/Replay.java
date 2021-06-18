@@ -35,6 +35,10 @@ public class Replay {
       }
       events.put(Integer.parseInt(entry.getKey()), list);
     }
+
+    for (var entry : jsonObject.get("players").getAsJsonArray()) {
+      players.add(entry.getAsString());
+    }
   }
 
   private int stateRate;
@@ -42,6 +46,8 @@ public class Replay {
   private Map<Integer, SerializableWorld> states = new HashMap<>();
 
   private Map<Integer, List<Event>> events = new HashMap<>();
+
+  private List<String> players = new ArrayList<>();
 
   public void submitEvent(Event event) {
     if (!events.containsKey((int)event.getFrameNumber())) {
@@ -54,8 +60,9 @@ public class Replay {
     states.put((int)world.getTick(), world);
   }
 
-  public Replay(int stateRate) {
+  public Replay(int stateRate, List<String> players) {
     this.stateRate = stateRate;
+    this.players = new ArrayList<>(players);
   }
 
   public int getLength() {
@@ -78,5 +85,11 @@ public class Replay {
     return events;
   }
 
+  public List<String> getPlayers() {
+    return players;
+  }
 
+  public void setPlayers(List<String> players) {
+    this.players = players;
+  }
 }

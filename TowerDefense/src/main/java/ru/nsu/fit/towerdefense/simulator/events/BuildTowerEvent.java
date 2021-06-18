@@ -62,7 +62,7 @@ public class BuildTowerEvent implements Event {
       throw new GameplayException("Not enough money to build the tower");
     }
     if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(towerType.getTypeName())) {
-      throw new GameplayException("The tower is not yet researched");
+      throw new GameplayException("The tower is not yet researched"); // todo remove this for replays
     }
     world.setMoney(player, world.getMoney(player) - towerType.getPrice());
     if (!world.getPlayerCurrentTowerIdMap().containsKey(player)) {

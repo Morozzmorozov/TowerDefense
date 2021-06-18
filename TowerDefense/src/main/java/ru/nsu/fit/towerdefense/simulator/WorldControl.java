@@ -196,7 +196,7 @@ public class WorldControl implements ServerSimulator {
 
     stateContainer.putState(world);
 
-    replay = new Replay(60);
+    replay = new Replay(60, players);
   }
 
   public void updateWorld(SerializableWorld serializableWorld) {
