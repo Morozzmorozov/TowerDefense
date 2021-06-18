@@ -42,6 +42,10 @@ public class GameMap {
             }
             this.playersPlatform.add(t);
         }
+        else
+        {
+            this.playersPlatform = playersPlatform;
+        }
     }
 
     public static class Builder
