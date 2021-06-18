@@ -177,7 +177,7 @@ public class PlayersDatabase {
 				pst.setString(1, user);
 				pst.setString(2, sHash);
 				pst.setString(3, user);
-				pst.setInt(1, 1500);
+				pst.setInt(4, 1500);
 
 				int t = pst.executeUpdate();
 				return 0;
