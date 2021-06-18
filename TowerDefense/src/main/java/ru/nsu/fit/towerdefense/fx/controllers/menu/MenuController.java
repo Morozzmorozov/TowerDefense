@@ -165,7 +165,7 @@ public class MenuController implements Controller {
         gridPane.add(createLevelButton(false, "camera-icon", "View replay",
             mouseEvent -> showReplayChooserDialog(gameMapName)), 1, 2); // todo change to 0, 3
         //gridPane.add(createLevelButton("idle-icon", "Idle game", null), 1, 3); // todo uncomment
-        System.out.print(gameMapName + ": ");//todo del
+
         HBox cooperativeHBox = createLevelButton(true, "cooperative-icon", "Cooperative",
             mouseEvent -> createCooperativeGame(gameMapName));
         cooperativeHBox.setDisable(
