@@ -8,6 +8,7 @@ import ru.nsu.fit.towerdefense.multiplayer.entities.SResult;
 import ru.nsu.fit.towerdefense.server.players.RatingEvaluation;
 import ru.nsu.fit.towerdefense.server.session.GameInstance;
 import ru.nsu.fit.towerdefense.server.session.SessionController;
+import ru.nsu.fit.towerdefense.simulator.WorldControl;
 import ru.nsu.fit.towerdefense.simulator.WorldObserver;
 import ru.nsu.fit.towerdefense.simulator.events.Event;
 import ru.nsu.fit.towerdefense.simulator.world.SerializableWorld;
@@ -24,9 +25,8 @@ public class CompetitiveGame implements GameController {
 	private HashMap<String, GameInstance> instances; //TODO: make session validation on server side
 	private SessionController controller;
 
-	private ConcurrentHashMap<String, SResult> latestResults;
 	private List<String> players;
-
+	private HashMap<String, SResult> result;
 
 	List<String> winners;
 	List<String> losers;
@@ -40,6 +40,7 @@ public class CompetitiveGame implements GameController {
 		//players.forEach(e -> latestResults.put(e, new SResult()));
 		losers = new ArrayList<>();
 		winners = new ArrayList<>();
+		result = new HashMap<>();
 		players.forEach(e->instances.put(e, new GameInstance(map, players, new WorldObserver() {
 
 			@Override
@@ -121,7 +122,28 @@ public class CompetitiveGame implements GameController {
 				{
 				}
 			}
+
+			if (tick == 1)
+			{
+				for (var x : instances.entrySet())
+				{
+					WorldControl world = x.getValue().getWorld();
+					SResult cur = new SResult();
+					cur.setBaseHealth(world.getBaseHealth());
+					cur.setEnemiesKilled(world.getEnemiesKilled(x.getKey()));
+					cur.setMoney(world.getMoney(x.getKey()));
+					cur.setMultiplayerPoints(world.getMultiplayerPoints());
+					cur.setPlayerName(x.getKey());
+					cur.setResearchPoints(world.getResearchPoints(x.getKey()));
+					result.put(x.getKey(), cur);
+				}
+				Message message = new Message();
+				message.setType(Message.Type.RESULTS);
+				message.setResults(new ArrayList<>(result.values()));
+				controller.sendMessageToAll(gson.toJson(message));
+			}
 			tick++;
+			if (tick == 60) tick = 0;
 		}
 		List<SPlayer> players = new ArrayList<>();
 		for (var x : winners)

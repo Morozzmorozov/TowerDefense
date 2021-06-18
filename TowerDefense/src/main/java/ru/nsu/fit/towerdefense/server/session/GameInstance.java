@@ -32,5 +32,6 @@ public class GameInstance{
 		return control.getState();
 	}
 
+	public WorldControl getWorld() { return control; }
 
 }
