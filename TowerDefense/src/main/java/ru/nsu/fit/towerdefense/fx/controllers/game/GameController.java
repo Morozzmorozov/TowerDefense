@@ -341,7 +341,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         } else {
             userProgressHBox.setVisible(true);
             userProgressHBox.setManaged(true);
+        }
 
+        if (!multiplayer) {
             controlsHBox.setVisible(true);
             controlsHBox.setManaged(true);
 
