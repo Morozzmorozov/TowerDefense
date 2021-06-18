@@ -678,7 +678,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                     }
 
                     System.out.println("onServerMessageReceived EVENT: " + message.getSerializedEvent());
-                    Platform.runLater(() -> worldControl.submitEvent(Event.deserialize(message.getSerializedEvent())));
+                    Event event = Event.deserialize(message.getSerializedEvent());
+                    if (!event.getPlayer().equals(connectionManager.getUsername())) {
+                        Platform.runLater(() -> worldControl.submitEvent(event));
+                    }
                 }
                 case STATE -> {
                     if (message.getSerializedWorld() == null) {
