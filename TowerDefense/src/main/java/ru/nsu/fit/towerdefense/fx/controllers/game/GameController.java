@@ -714,6 +714,17 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         }
     }
 
+    protected void sendEventToServer(Event event) {
+        if (!multiplayer) {
+            return;
+        }
+
+        Message message = new Message();
+        message.setType(Message.Type.EVENT);
+        message.setSerializedEvent(event.serialize());
+        connectionManager.sendMessage(new Gson().toJson(message));
+    }
+
     private void updateEnemySideBar(Enemy enemy) {
         enemyNameText.setText(enemy.getType().getTypeName());
         enemyDisplayInfoText.setText(enemy.getType().getDisplayInfo());
@@ -1071,16 +1082,5 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             .setContentText("")
             .setOwner(sceneManager.getWindowOwner())
             .build().showAndWait();
-    }
-
-    protected void sendEventToServer(Event event) {
-        if (!multiplayer) {
-            return;
-        }
-
-        Message message = new Message();
-        message.setType(Message.Type.EVENT);
-        message.setSerializedEvent(event.serialize());
-        connectionManager.sendMessage(new Gson().toJson(message));
     }
 }
