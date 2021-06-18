@@ -681,9 +681,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                         return;
                     }
 
-                    System.out.println("onServerMessageReceived EVENT: " + message.getSerializedEvent());
                     Event event = Event.deserialize(message.getSerializedEvent());
-                    if (!event.getPlayer().equals(connectionManager.getUsername())) {
+                    if (!event.getPlayer().equals(userName)) {
                         Platform.runLater(() -> worldControl.submitEvent(event));
                     }
                 }
@@ -1003,12 +1002,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         state = State.FINISHED;
 
         Platform.runLater(() -> {
-            if (win) {
-                resultsHeaderLabel.setText("You win!");
-            }
-
+            resultsHeaderLabel.setText(win ? "You win!" : "Game over");
             resultsWavesLabel.setText(worldControl.getWavesDefeated() + "");
-            resultsEnemyLabel.setText(enemyLabel.getText());
+            resultsEnemyLabel.setText(worldControl.getEnemiesKilled(userName) + "");
             resultsTimeLabel.setText(playingTimeLabel.getText());
 
             resultsPopupGridPane.setVisible(true);
