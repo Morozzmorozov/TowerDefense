@@ -1,5 +1,7 @@
 package ru.nsu.fit.towerdefense.metadata;
 
+import ru.nsu.fit.towerdefense.fx.TowerDefenseApplication;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
@@ -7,8 +9,8 @@ import java.util.prefs.Preferences;
 
 public class UserMetaData {
 
-    private static final String RESEARCH_POINTS_KEY = "researchPoints";
-    private static final String MULTIPLAYER_POINTS_KEY = "multiplayerPoints";
+    private static final String RESEARCH_POINTS_KEY = TowerDefenseApplication.USER + "researchPoints";
+    private static final String MULTIPLAYER_POINTS_KEY = TowerDefenseApplication.USER + "multiplayerPoints";
 
     private static final Preferences PREFERENCES = Preferences.userRoot().node(UserMetaData.class.getName());
 
@@ -48,7 +50,7 @@ public class UserMetaData {
         List<String> unlockedResearchNames = new ArrayList<>();
 
         for (String availableResearchName : availableResearchNames) {
-            if (PREFERENCES.getBoolean(availableResearchName, false)) {
+            if (isResearched(availableResearchName)) {
                 unlockedResearchNames.add(availableResearchName);
             }
         }
@@ -57,11 +59,11 @@ public class UserMetaData {
     }
 
     public static boolean isResearched(String researchName) {
-        return PREFERENCES.getBoolean(researchName, false);
+        return PREFERENCES.getBoolean(TowerDefenseApplication.USER + researchName, false);
     }
 
     public static void saveResearch(String researchName) {
-        PREFERENCES.putBoolean(researchName, true);
+        PREFERENCES.putBoolean(TowerDefenseApplication.USER + researchName, true);
     }
 
     // ----- Debug -----

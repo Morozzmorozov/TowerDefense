@@ -16,14 +16,15 @@ import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.util.Pair;
+import ru.nsu.fit.towerdefense.fx.TowerDefenseApplication;
 
 import java.util.function.Consumer;
 import java.util.prefs.Preferences;
 
 public class LoginDialog {
 
-    private static final String USERNAME_KEY = "username";
-    private static final String PASSWORD_KEY = "password";
+    private static final String USERNAME_KEY = TowerDefenseApplication.USER + "username";
+    private static final String PASSWORD_KEY = TowerDefenseApplication.USER + "password";
     private static final Preferences PREFERENCES = Preferences.userRoot().node(LoginDialog.class.getName());
     private static final Color ERROR_COLOR = Color.MAROON;
 
