@@ -45,6 +45,7 @@ public class PlayerManager {
 				authTokenToPlayer.remove(info.getAuthToken());
 			}
 			authTokenToPlayer.put(token, info);
+			info.setAuthToken(token);
 			return token;
 		}
 		catch (Exception e)
@@ -74,7 +75,7 @@ public class PlayerManager {
 
 	public boolean isConnected(String player)
 	{
-		return nameToPlayers.get(player).getSessionId() != -1;
+		return nameToPlayers.get(player).getSessionId() != -1L;
 	}
 
 

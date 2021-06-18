@@ -14,6 +14,7 @@ public class LoginServlet extends HttpServlet {
 	{
 		try
 		{
+//			System.out.println("Trying to login");
 			String username = (String)req.getAttribute("param_username");
 			String password = (String)req.getAttribute("param_password");
 
@@ -22,7 +23,7 @@ public class LoginServlet extends HttpServlet {
 				resp.setStatus(401);
 				return;
 			}
-
+//			System.out.println("Going to validate");
 			String token = PlayerManager.getInstance().validate(username, password);
 			if (token == null)
 			{

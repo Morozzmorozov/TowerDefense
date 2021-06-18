@@ -20,13 +20,16 @@ public class SessionCreationFilter implements Filter {
 	{
 		HttpServletRequest req = (HttpServletRequest) request;
 		String player = (String)req.getAttribute("playerName");
+//		System.out.println("Checking person!");
 		if (PlayerManager.getInstance().isConnected(player))
 		{
-			System.out.println("Player is connected!");
+//			System.out.println("FAil!");
+//			System.out.println("Player is connected!");
 			((HttpServletResponse)response).setStatus(403);
 		}
 		else
 		{
+//			System.out.println("Ok!");
 			chain.doFilter(req, response);
 		}
 	}

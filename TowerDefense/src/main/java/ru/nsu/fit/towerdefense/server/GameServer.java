@@ -11,6 +11,7 @@ import ru.nsu.fit.towerdefense.server.database.PlayersDatabase;
 import ru.nsu.fit.towerdefense.server.filters.AuthenticationFilter;
 import ru.nsu.fit.towerdefense.server.filters.ParamCleanupFilter;
 import ru.nsu.fit.towerdefense.server.filters.SessionCreationFilter;
+import ru.nsu.fit.towerdefense.server.players.PlayerManager;
 import ru.nsu.fit.towerdefense.server.servlets.*;
 import ru.nsu.fit.towerdefense.server.filters.SessionExistenceFilter;
 import ru.nsu.fit.towerdefense.server.sockets.GameSocket;
@@ -65,6 +66,9 @@ public class GameServer {
 
 	public static void main(String[] args)
 	{
+		PlayersDatabase.getInstance();
+		PlayerManager.getInstance();
+		System.out.println("Database connected!");
 		GameServer server = new GameServer(8080);
 		server.addFilter(Mappings.USER_FILTER_MAPPING, ParamCleanupFilter.class);
 		server.addFilter(Mappings.USER_FILTER_MAPPING, AuthenticationFilter.class);

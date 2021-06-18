@@ -142,14 +142,21 @@ public class SessionController {
 	{
 		if (connections.containsKey(getActiveToken(player)))
 		{
-			connections.get(player).close();
-			connections.remove(player);
-			info.disconnectPlayer(player);
+			String token = getActiveToken(player);
+//			System.out.println("1");
+			connections.get(token).close();
+//			System.out.println("2");
+			connections.remove(token);
+//			System.out.println("3");
+			info.disconnectPlayer(token);
+//			System.out.println("4");
 			if (controller != null)
 			{
-				controller.playerDisconnect(player);
+				controller.playerDisconnect(token);
 			}
+//			System.out.println("5");
 			PlayerManager.getInstance().disconnect(player);
+//			System.out.println("6");
 			if (info.getConnectedPlayers() == 0)
 			{
 				SessionManager.getInstance().removeSession(this);

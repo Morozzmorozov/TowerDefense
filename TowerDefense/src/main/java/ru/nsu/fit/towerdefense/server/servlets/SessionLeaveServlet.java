@@ -17,6 +17,7 @@ public class SessionLeaveServlet extends HttpServlet {
 			Long id = Long.parseLong((String)req.getAttribute("param_sessionId"));
 			String player = (String)req.getAttribute("playerName");
 
+
 			if (SessionManager.getInstance().getSessionById(id).disconnectPlayer(player))
 			{
 				resp.setStatus(200);
