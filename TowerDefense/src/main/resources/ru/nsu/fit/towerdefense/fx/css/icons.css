@@ -124,3 +124,7 @@
 .user-icon {
     -fx-image: url('../icons/user.png');
 }
+
+.spinner-icon {
+    -fx-image: url('../icons/spinner.gif');
+}

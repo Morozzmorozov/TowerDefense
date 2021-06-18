@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
@@ -34,6 +36,7 @@ import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
+import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SResult;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
@@ -181,6 +184,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     @FXML private HBox controlsHBox;
     @FXML private HBox replayHBox;
+    @FXML private HBox disconnectHBox;
     @FXML private ImageView skipLeftImageView;
     @FXML private ImageView skipRightImageView;
     @FXML private Slider replaySlider;
@@ -210,6 +214,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private final GameType gameType;
 
     private ScheduledExecutorService worldSimulationExecutor;
+    private ScheduledExecutorService disconnectCheckerExecutor;
 
     private final Vector2<Integer> worldSize;
     private final int baseInitialHealth;
@@ -222,6 +227,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
     private final boolean multiplayer;
     private final boolean replaying;
     private final String userName;
+
+    private final BooleanProperty disconnected = new SimpleBooleanProperty(false);
+    private long lastServerMessageTime;
 
     private Map<String, List<Label>> playerNameToLabelsMap;
     private Map<Tower.Mode, Node> towerModeToUiNodeMap;
@@ -391,6 +399,18 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         menuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         resultsMenuHBox.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
+
+        disconnectHBox.visibleProperty().bind(disconnected);
+        disconnectHBox.managedProperty().bind(disconnected);
+        lastServerMessageTime = System.currentTimeMillis();
+        if (multiplayer) {
+            disconnectCheckerExecutor = Executors.newSingleThreadScheduledExecutor();
+            disconnectCheckerExecutor.scheduleWithFixedDelay(() -> {
+                if (lastServerMessageTime + 3000 < System.currentTimeMillis()) {
+                    disconnected.set(true);
+                }
+            }, 1, 1, TimeUnit.SECONDS);
+        }
 
         try {
             worldRenderer.update(new HashSet<>(worldControl.getRenderables()));
@@ -606,6 +626,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
             worldSimulationExecutor.shutdownNow();
         }
 
+        if (disconnectCheckerExecutor != null) {
+            disconnectCheckerExecutor.shutdownNow();
+        }
+
         sceneManager.getScene().setOnScroll(null);
         sceneManager.getScene().setOnMousePressed(null);
         sceneManager.getScene().setOnMouseDragged(null);
@@ -697,6 +721,9 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     @Override
     public void onServerMessageReceived(String messageStr) {
+        lastServerMessageTime = System.currentTimeMillis();
+        disconnected.set(false);
+
         try {
             Message message = new Gson().fromJson(messageStr, Message.class);
             if (message.getType() == null) {

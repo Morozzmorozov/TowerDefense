@@ -308,6 +308,7 @@
         <columnConstraints>
             <ColumnConstraints hgrow="NEVER" />
             <ColumnConstraints hgrow="ALWAYS" />
+            <ColumnConstraints hgrow="NEVER" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints vgrow="ALWAYS" />
@@ -341,6 +342,12 @@
                     <Slider fx:id="replaySlider" focusTraversable="false" />
                 </HBox>
             </GridPane>
+        </HBox>
+        <HBox fx:id="disconnectHBox" styleClass="disconnect-box" GridPane.rowIndex="2" GridPane.columnIndex="2">
+            <HBox>
+                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" styleClass="spinner-icon" />
+                <Label styleClass="disconnect-label">Waiting for internet connection...</Label>
+            </HBox>
         </HBox>
     </GridPane>
     <GridPane fx:id="pausePopupGridPane" visible="false" styleClass="popup-grid-pane">

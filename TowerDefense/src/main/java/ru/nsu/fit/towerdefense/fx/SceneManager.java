@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.fx.controllers.elorating.EloRatingController;
+import ru.nsu.fit.towerdefense.fx.controllers.game.DisconnectingGameController;
 import ru.nsu.fit.towerdefense.fx.controllers.game.GameController;
 import ru.nsu.fit.towerdefense.fx.controllers.game.LaggingGameController;
 import ru.nsu.fit.towerdefense.fx.controllers.leaderboard.LeaderboardController;
@@ -177,7 +178,11 @@ public class SceneManager {
 
     public void switchToMultiplayerGame(String gameMapName, List<String> playerNames, GameType gameType) {
         try {
-            GameController gameController = TowerDefenseApplication.LAG ?
+            GameController gameController = TowerDefenseApplication.DISCONNECT ?
+            new DisconnectingGameController(this, connectionManager,
+                new File(".\\levelsnapshots\\" + gameMapName + ".png"),
+                GameMetaData.getInstance().getMapDescription(gameMapName), playerNames, gameType) :
+                TowerDefenseApplication.LAG ?
             new LaggingGameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), playerNames, gameType) :
