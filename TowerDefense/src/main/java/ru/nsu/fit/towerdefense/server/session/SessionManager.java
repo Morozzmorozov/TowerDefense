@@ -41,7 +41,7 @@ public class SessionManager {
 
 	public List<SessionController> getActiveSessions()
 	{
-		return new ArrayList<>(activeSessions.values());
+		return activeSessions.values().stream().filter(SessionController::canJoin).collect(Collectors.toList());
 	}
 
 	public void removeSession(SessionController session)
