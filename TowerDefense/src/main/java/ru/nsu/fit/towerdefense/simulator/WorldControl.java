@@ -210,10 +210,6 @@ public class WorldControl implements ServerSimulator {
         simulateTick();
       }
       latestInputStateTick = serializableWorld.getTick();
-      System.out.println("Update");
-      for (var e : world.getEnemies()) {
-        System.out.println(e.getId());
-      }
     }
   }
 
