@@ -318,6 +318,10 @@ public class WorldControl implements ServerSimulator {
     return world.getScienceEarned();
   }
 
+  public int getMultiplayerPoints() {
+    return world.getMultiplayerMoneyEarned();
+  }
+
   public int getBaseHealth() {
     return world.getBase().getHealth();
   }

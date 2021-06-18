@@ -99,6 +99,7 @@ public class SerializableWorld {
   private long tick;
   private int killedEnemies;
   private int scienceEarned;
+  private int multiplayerMoneyEarned;
 
   private Map<Integer, SerializableEffect> ideffectMap = new HashMap<>();
   private Map<Integer, SerializableEnemy> idenemyMap = new HashMap<>();
@@ -133,6 +134,7 @@ public class SerializableWorld {
     world.setCurrentWaveNumber(currentWaveNumber);
     world.setTick(tick);
     world.setScienceEarned(scienceEarned);
+    world.setMultiplayerMoneyEarned(multiplayerMoneyEarned);
 
     world.setBase(oldWorld.getBase());
 
@@ -186,6 +188,7 @@ public class SerializableWorld {
     currentWaveNumber = world.getCurrentWaveNumber();
     tick = world.getTick();
     scienceEarned = world.getScienceEarned();
+    multiplayerMoneyEarned = world.getMultiplayerMoneyEarned();
 
     for (Enemy enemy : world.getEnemies()) {
       if (idMap.containsKey(enemy)) {

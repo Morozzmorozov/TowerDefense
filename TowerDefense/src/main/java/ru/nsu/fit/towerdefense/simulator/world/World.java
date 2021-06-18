@@ -82,6 +82,8 @@ public class World {
     playerCurrentTowerIdMap = new HashMap<>(oldWorld.playerCurrentTowerIdMap);
 
     wavesDefeated = oldWorld.getWavesDefeated();
+
+    multiplayerMoneyEarned = oldWorld.getMultiplayerMoneyEarned();
   }
 
   public World(SerializableWorld world) {
@@ -120,6 +122,8 @@ public class World {
   private int currentEnemyId = 0;
 
   private int wavesDefeated;
+
+  private int multiplayerMoneyEarned = 0;
 
   public int getWavesDefeated() {
     return wavesDefeated;
@@ -292,5 +296,13 @@ public class World {
 
   public void setCurrentEnemyId(int currentEnemyId) {
     this.currentEnemyId = currentEnemyId;
+  }
+
+  public int getMultiplayerMoneyEarned() {
+    return multiplayerMoneyEarned;
+  }
+
+  public void setMultiplayerMoneyEarned(int multiplayerMoneyEarned) {
+    this.multiplayerMoneyEarned = multiplayerMoneyEarned;
   }
 }
