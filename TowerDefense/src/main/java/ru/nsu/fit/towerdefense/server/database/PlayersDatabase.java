@@ -216,7 +216,7 @@ public class PlayersDatabase {
 			pst.setString(1, user);
 			ResultSet res = pst.executeQuery();
 			res.next();
-			return res.getInt(1)
+			return res.getInt(1);
 		}
 		catch (Exception e)
 		{

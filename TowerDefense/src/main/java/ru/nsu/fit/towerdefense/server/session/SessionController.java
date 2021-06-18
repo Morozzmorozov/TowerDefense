@@ -1,6 +1,7 @@
 package ru.nsu.fit.towerdefense.server.session;
 
 import com.google.gson.Gson;
+import org.eclipse.jetty.websocket.api.Session;
 import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
@@ -25,8 +26,6 @@ public class SessionController {
 	private ConcurrentHashMap<String, Object> ready;
 	private GameController controller;
 	private Thread gameThread;
-
-
 
 	public SessionController(long id, GameType type, String level)
 	{
@@ -144,6 +143,10 @@ public class SessionController {
 		{
 			connections.remove(player);
 			info.disconnectPlayer(player);
+			if (info.getConnectedPlayers() == 0)
+			{
+				SessionManager.getInstance().removeSession(this);
+			}
 			return true;
 		}
 		else return false;

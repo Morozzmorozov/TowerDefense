@@ -238,4 +238,9 @@ public class SessionInfo {
 		SPlayer info = PlayersDatabase.getInstance().getPlayerInfo(owner);
 		userInfo.put(owner, info);
 	}
+
+	public int getConnectedPlayers()
+	{
+		return userInfo.size();
+	}
 }
