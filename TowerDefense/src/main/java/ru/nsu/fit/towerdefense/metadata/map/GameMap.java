@@ -10,6 +10,7 @@ import java.util.List;
 public class GameMap {
     private Vector2<Integer> size;
     private Integer scienceReward;
+    private Integer multiplayerPoints = 0;
     private Integer playersNumber = 1;
 
     private BaseDescription baseDescription;
@@ -22,7 +23,7 @@ public class GameMap {
 
     private GameMap(Vector2<Integer> size, Integer scienceReward, BaseDescription baseDescription,
                     TowerBuildingPositions positions, RoadDescription roads, List<WaveDescription> waves, int playersNumber,
-                    List<List<Integer>> playersPlatform)
+                    List<List<Integer>> playersPlatform, Integer multiplayerPoints)
     {
         this.size = size;
         this.scienceReward = scienceReward;
@@ -31,6 +32,7 @@ public class GameMap {
         this.roads = roads;
         this.waves = waves;
         descriptionIterator = waves.iterator();
+        this.multiplayerPoints = multiplayerPoints;
         this.playersNumber = playersNumber;
         if (playersPlatform == null)
         {
@@ -59,7 +61,7 @@ public class GameMap {
         private List<WaveDescription> waves;
         private int playersNumber = 1;
         private List<List<Integer>> playerPlatforms;
-
+        private int multiplayerPoints = 0;
 
         public Builder()
         {
@@ -76,6 +78,11 @@ public class GameMap {
         {
             this.size.setX(x);
             this.size.setY(y);
+        }
+
+        public void setMultiplayerPoints(int multiplayerPoints)
+        {
+            this.multiplayerPoints = multiplayerPoints;
         }
 
         public void setPlayersNumber(int number){
@@ -107,7 +114,7 @@ public class GameMap {
         }
         public GameMap build()
         {
-            return new GameMap(size, scienceReward, baseDescription, positions, roads, waves, playersNumber, playerPlatforms);
+            return new GameMap(size, scienceReward, baseDescription, positions, roads, waves, playersNumber, playerPlatforms, multiplayerPoints);
         }
     }
 

@@ -3,6 +3,7 @@
 	"SizeX" : 10,
 	"SizeY" : 10,
 	"Reward" : 15,
+	"MultiplayerPoints" : 10,
 	"Base" : {
 		"Health" : 500,
 		"PosX" : 1,

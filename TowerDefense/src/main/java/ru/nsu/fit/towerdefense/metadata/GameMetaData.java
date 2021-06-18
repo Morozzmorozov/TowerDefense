@@ -367,14 +367,18 @@ public class GameMetaData {
         String info = root.get("Info").asText();
         String image = root.get("Image").asText();
         int cost = root.get("Cost").asInt();
-
+        int multiplayerCost = 0;
+        if (root.get("MultiplayerCost") != null)
+        {
+            multiplayerCost = root.get("MultiplayerCost").asInt();
+        }
         ArrayNode node = root.get("Types").deepCopy();
         ArrayList<String> types = new ArrayList<>();
         for (var x : node)
         {
             types.add(x.asText());
         }
-        return new Research(name, info, types, cost, image);
+        return new Research(name, info, types, cost, image, multiplayerCost);
     }
 
 
@@ -505,6 +509,10 @@ public class GameMetaData {
                     t.add(t1);
                 }
                 builder.setPlayerPlatforms(t);
+            }
+            if (node.get("MultiplayerPoints") != null)
+            {
+                builder.setMultiplayerPoints(node.get("MultiplayerPoints").asInt());
             }
 
             RoadDescription road = readRoads(node.get("Roads"));

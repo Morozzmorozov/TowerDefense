@@ -16,6 +16,7 @@ public class Research {
 	private List<String> towerNames;
 
 	private int cost;
+	private int multiplayerCost = 0;
 
 	//number of researcher to unlock this
 	private int left;
@@ -25,7 +26,7 @@ public class Research {
 	private Vector2<Integer> size;
 	private Vector2<Integer> position;
 
-	public Research(String name, String info, List<String> towerNames, int cost, String image)
+	public Research(String name, String info, List<String> towerNames, int cost, String image, int multiplayerCost)
 	{
 		this.name = name;
 		this.info = info;
@@ -36,6 +37,7 @@ public class Research {
 		this.image = image;
 		size = new Vector2<>(50, 50);
 		position = new Vector2<>(0, 0);
+		this.multiplayerCost = multiplayerCost;
 	}
 
 	/**

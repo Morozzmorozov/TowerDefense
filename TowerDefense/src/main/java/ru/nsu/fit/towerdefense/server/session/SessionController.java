@@ -175,4 +175,8 @@ public class SessionController {
 	}
 
 
+	public boolean canJoin()
+	{
+		return info.getFreeSpace() > 0;
+	}
 }

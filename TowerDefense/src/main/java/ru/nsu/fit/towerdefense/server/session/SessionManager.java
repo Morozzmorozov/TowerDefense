@@ -6,6 +6,7 @@ import ru.nsu.fit.towerdefense.multiplayer.entities.SGameSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class SessionManager {
 
