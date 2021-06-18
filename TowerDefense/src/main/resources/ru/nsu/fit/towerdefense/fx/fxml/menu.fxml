@@ -17,7 +17,7 @@
         <URL value="@../css/menu.css"/>
     </stylesheets>
     <VBox styleClass="content">
-        <Label styleClass="header">Levels</Label>
+        <Label styleClass="content-header">Levels</Label>
         <FlowPane fx:id="levelsFlowPane" styleClass="levels-flow-pane" />
     </VBox>
     <GridPane styleClass="bar-grid-pane" pickOnBounds="false">
