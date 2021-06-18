@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static javafx.scene.input.KeyCode.CONTROL;
+import static ru.nsu.fit.towerdefense.fx.util.AlertBuilder.MAP_LOADING_ERROR_HEADER;
 
 /**
  * TechTreeController class is used by JavaFX in javafx.fxml.FXMLLoader for showing a tech tree
@@ -100,8 +101,12 @@ public class TechTreeController implements Controller {
     private void initialize() {
         clearButton.setOnMouseClicked(mouseEvent -> {
             UserMetaData.clear();
-            researchLabel.setText(UserMetaData.getResearchPoints() + "");
-            multiplayerLabel.setText(UserMetaData.getMultiplayerPoints() + "");
+            new AlertBuilder()
+                .setAlertType(Alert.AlertType.WARNING)
+                .setHeaderText("Saves are cleared, restart the app.")
+                .setContentText("Seriously, restart!")
+                .setOwner(sceneManager.getWindowOwner())
+                .build().showAndWait();
         });
         addResearchPointsButton.setOnMouseClicked(mouseEvent -> {
             UserMetaData.addResearchPoints(10);

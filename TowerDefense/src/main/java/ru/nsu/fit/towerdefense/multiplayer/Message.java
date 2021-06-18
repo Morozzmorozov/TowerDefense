@@ -5,14 +5,14 @@ import java.util.List;
 public class Message {
 
     public enum Type {
-        READY, START, CHOOSE_PLATFORM, EVENT, STATE
+        READY, START, EVENT, STATE, RESULT
     }
 
     private Type type;
     private List<String> playerNames;
-    private Integer platformNumber;
     private String serializedEvent;
     private String serializedWorld;
+    private String serializedResult;
 
     public Type getType() {
         return type;
@@ -30,14 +30,6 @@ public class Message {
         this.playerNames = playerNames;
     }
 
-    public Integer getPlatformNumber() {
-        return platformNumber;
-    }
-
-    public void setPlatformNumber(Integer platformNumber) {
-        this.platformNumber = platformNumber;
-    }
-
     public String getSerializedEvent() {
         return serializedEvent;
     }
@@ -52,5 +44,13 @@ public class Message {
 
     public void setSerializedWorld(String serializedWorld) {
         this.serializedWorld = serializedWorld;
+    }
+
+    public String getSerializedResult() {
+        return serializedResult;
+    }
+
+    public void setSerializedResult(String serializedResult) {
+        this.serializedResult = serializedResult;
     }
 }

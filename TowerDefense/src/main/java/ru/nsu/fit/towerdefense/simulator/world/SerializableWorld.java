@@ -135,10 +135,19 @@ public class SerializableWorld {
 
     world.setBase(oldWorld.getBase());
 
-    world.setEnemies(enemies.stream().map(id -> idenemyMap.get(id).getEnemy()).collect(Collectors.toList()));
+    world.setEnemies(enemies.stream().map(id -> {
+      idenemyMap.get(id).getEnemy();
+      var serializableEnemy = idenemyMap.get(id);
+      var optEnemy = oldWorld.getEnemies().stream().filter(enemy -> enemy.getId() == serializableEnemy.id).findFirst();
+      if (optEnemy.isPresent()) {
+        return serializableEnemy.getEnemy(optEnemy.get());
+      } else {
+        return serializableEnemy.getEnemy();
+      }
+    }).collect(Collectors.toList()));
     world.setTowers(towers.stream().map(id -> {
       var serializableTower = idtowerMap.get(id);
-      var optTower = world.getTowers().stream().filter(tower -> tower.getId() == serializableTower.idInWorld && tower.getOwner().equals(serializableTower.owner))
+      var optTower = oldWorld.getTowers().stream().filter(tower -> tower.getId() == serializableTower.idInWorld && tower.getOwner().equals(serializableTower.owner))
           .findFirst();
       if (optTower.isPresent()) {
         return serializableTower.getTower(optTower.get());
@@ -158,6 +167,10 @@ public class SerializableWorld {
     }
 
     world.moneyMap = new HashMap<>(moneyMap);
+
+    world.setCurrentEnemyId(currentEnemyId);
+
+    world.setPlayerCurrentTowerIdMap(playerCurrentTowerIdMap);
     return world;
   }
 
@@ -246,6 +259,8 @@ public class SerializableWorld {
 
     moneyMap = new HashMap<>(world.moneyMap);
 
+    currentEnemyId = world.getCurrentEnemyId();
+    playerCurrentTowerIdMap = new HashMap<>(world.getPlayerCurrentTowerIdMap());
   }
 
   static class SerializableEntity {
@@ -285,6 +300,28 @@ public class SerializableWorld {
           Collectors.toList()));
 
       enemy.setDamageMap(new HashMap<>(damageMap));
+      this.enemy = enemy;
+      return enemy;
+    }
+
+    Enemy getEnemy(Enemy enemy) {
+      // Note: there are more fields in Enemy but they are omitted due to their immutability for now
+      List<Vector2<Double>> trajectory = new ArrayList<>();
+      for (int i = 0; i < xTrajectory.size(); ++i) {
+        trajectory.add(new Vector2<>(xTrajectory.get(i), yTrajectory.get(i)));
+      }
+      enemy.setTrajectory(trajectory);
+
+      enemy.setHealth(health);
+      enemy.setVelocity(velocity);
+      enemy.setDead(isDead);
+
+      enemy.setEffects(effects.stream().map(id -> serializableWorld.ideffectMap.get(id).getEffect()).collect(
+          Collectors.toList()));
+
+      enemy.setDamageMap(new HashMap<>(damageMap));
+      enemy.setPosition(new Vector2<>(x, y));
+
       this.enemy = enemy;
       return enemy;
     }

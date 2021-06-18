@@ -165,7 +165,12 @@ public class GameMap {
 
     public boolean isCooperativeAvailable()
     {
-        return playersPlatform.size() != 1;
+        if (playersPlatform == null) {//todo del
+            System.out.println("NULL");
+        } else {
+            System.out.println(playersPlatform);
+        }
+        return playersPlatform != null && playersPlatform.size() != 1;
     }
 
    /* public void setPositions(TowerBuildingPositions positions) {
