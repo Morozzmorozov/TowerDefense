@@ -270,6 +270,10 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         if (multiplayer && gameType == GameType.COMPETITIVE) {
             this.playerNames = playerNames.stream().sorted().collect(Collectors.toList());
         }
+
+        if (replaying) {
+            this.playerNames = replay.getPlayers();
+        }
     }
 
     // single
@@ -321,7 +325,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
         baseInitialHealthLabel.setText(baseInitialHealth + "");
 
-        if (multiplayer) {
+        if (multiplayer || replaying) {
             playerNameToLabelsMap = new HashMap<>();
             for (String playerName : playerNames) {
                 GridPane gridPane =
@@ -343,6 +347,16 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
             usersProgressHBox.setVisible(true);
             usersProgressHBox.setManaged(true);
+
+            if (replaying) {
+                controlsHBox.setVisible(true);
+                controlsHBox.setManaged(true);
+
+                speed0xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(0));
+                speed1xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(1));
+                speed2xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(2));
+                speed3xImageView.setOnMouseClicked(mouseEvent -> updateSpeed(3));
+            }
         } else {
             userProgressHBox.setVisible(true);
             userProgressHBox.setManaged(true);
@@ -433,7 +447,7 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
         try {
             worldRenderer.render();
 
-            if (multiplayer && gameType == GameType.COOPERATIVE) {
+            if (multiplayer && gameType == GameType.COOPERATIVE || replaying) {
                 for (String playerName : playerNames) {
                     List<Label> labels = playerNameToLabelsMap.get(playerName);
                     labels.get(1).setText(worldControl.getResearchPoints(playerName) + "");
