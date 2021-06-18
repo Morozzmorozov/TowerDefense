@@ -107,13 +107,13 @@ public class ConnectionManager {
         }
     }
 
-    public SGameSession createLobby(String gameMapName) {
+    public SGameSession createLobby(String gameMapName, GameType gameType) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(SITE_URI + Mappings.CREATE_LOBBY_MAPPING +
                     "?userToken=" + credentials.getUserToken() +
                     "&levelName=" + encode(gameMapName) +
-                    "&gameType=" + GameType.COOPERATIVE)) // todo
+                    "&gameType=" + gameType))
                 .POST(HttpRequest.BodyPublishers.ofString(""))
                 .timeout(Duration.of(15, SECONDS))
                 .build();

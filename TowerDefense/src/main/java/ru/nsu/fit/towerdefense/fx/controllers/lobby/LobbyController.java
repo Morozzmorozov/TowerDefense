@@ -124,7 +124,8 @@ public class LobbyController implements Controller, ServerMessageListener {
                         return;
                     }
 
-                    Platform.runLater(() -> sceneManager.switchToCooperativeGame(lobby.getLevelName(), message.getPlayerNames()));
+                    Platform.runLater(() -> sceneManager.switchToMultiplayerGame(
+                        lobby.getLevelName(), message.getPlayerNames(), lobby.getGameType()));
                 }
                 default -> System.out.println("default");
             }

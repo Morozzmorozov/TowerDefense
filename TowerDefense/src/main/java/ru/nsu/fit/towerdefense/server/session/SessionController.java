@@ -1,14 +1,15 @@
 package ru.nsu.fit.towerdefense.server.session;
 
 import com.google.gson.Gson;
-import org.eclipse.jetty.websocket.api.Session;
 import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SLobby;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 import ru.nsu.fit.towerdefense.server.players.PlayerManager;
+import ru.nsu.fit.towerdefense.server.session.gamecontrollers.CompetitiveGame;
+import ru.nsu.fit.towerdefense.server.session.gamecontrollers.CooperativeGame;
+import ru.nsu.fit.towerdefense.server.session.gamecontrollers.GameController;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
-import ru.nsu.fit.towerdefense.simulator.events.Event;
 
 import java.security.MessageDigest;
 import java.util.Arrays;
@@ -144,6 +145,10 @@ public class SessionController {
 			connections.get(player).close();
 			connections.remove(player);
 			info.disconnectPlayer(player);
+			if (controller != null)
+			{
+				controller.playerDisconnect(player);
+			}
 			PlayerManager.getInstance().disconnect(player);
 			if (info.getConnectedPlayers() == 0)
 			{

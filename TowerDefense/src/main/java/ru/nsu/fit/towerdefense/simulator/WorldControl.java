@@ -827,8 +827,12 @@ public class WorldControl implements ServerSimulator {
   }
 
   public boolean isClientPlatform(Renderable renderable) {
-    return clientPlatformPositions != null && clientPlatformPositions.stream().anyMatch(
-        clientPlatformPosition -> Vector2.equals(clientPlatformPosition, renderable.getPosition()));
+    if (clientPlatformPositions == null) {
+      return true;
+    }
+
+    return clientPlatformPositions.stream().anyMatch(clientPlatformPosition ->
+        Vector2.equals(clientPlatformPosition, renderable.getPosition()));
   }
 
   // --------------

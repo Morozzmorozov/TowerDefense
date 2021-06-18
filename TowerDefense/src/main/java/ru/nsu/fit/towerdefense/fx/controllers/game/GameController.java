@@ -32,6 +32,7 @@ import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.ProjectileType;
 import ru.nsu.fit.towerdefense.metadata.gameobjecttypes.TowerType;
 import ru.nsu.fit.towerdefense.metadata.map.GameMap;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
+import ru.nsu.fit.towerdefense.multiplayer.GameType;
 import ru.nsu.fit.towerdefense.multiplayer.Message;
 import ru.nsu.fit.towerdefense.replay.Replay;
 import ru.nsu.fit.towerdefense.simulator.ReplayWorldControl;
@@ -232,7 +233,8 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
                           File snapshotFile,
                           GameMap gameMap,
                           List<String> playerNames,
-                          Replay replay) {
+                          Replay replay,
+                          GameType gameType) {
 
         multiplayer = playerNames != null;
         replaying = replay != null;
@@ -270,14 +272,15 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
     // multiplayer
     public GameController(SceneManager sceneManager, ConnectionManager connectionManager,
-                          File snapshotFile, GameMap gameMap, List<String> playerNames) {
-        this(sceneManager, connectionManager, snapshotFile, gameMap, playerNames, null);
+                          File snapshotFile, GameMap gameMap, List<String> playerNames,
+                          GameType gameType) {
+        this(sceneManager, connectionManager, snapshotFile, gameMap, playerNames, null, gameType);
     }
 
     // replay
     public GameController(SceneManager sceneManager, ConnectionManager connectionManager,
                           File snapshotFile, GameMap gameMap, Replay replay) {
-        this(sceneManager, connectionManager, snapshotFile, gameMap, null, replay);
+        this(sceneManager, connectionManager, snapshotFile, gameMap, null, replay, null);
     }
 
     @FXML
@@ -822,6 +825,11 @@ public class GameController implements Controller, WorldObserver, WorldRendererO
 
             node.setOnMouseClicked(mouseEvent -> {
                 if (replaying) {
+                    return;
+                }
+
+                if (!worldControl.isClientPlatform(tower)) {
+                    showTowerPlatformError();
                     return;
                 }
 
