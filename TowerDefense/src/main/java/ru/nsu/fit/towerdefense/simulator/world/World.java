@@ -79,6 +79,8 @@ public class World {
 
     currentEnemyId = oldWorld.getCurrentEnemyId();
     playerCurrentTowerIdMap = new HashMap<>(oldWorld.playerCurrentTowerIdMap);
+
+    wavesDefeated = oldWorld.getWavesDefeated();
   }
 
   public World(SerializableWorld world) {
@@ -116,6 +118,15 @@ public class World {
   private Map<String, Integer> playerCurrentTowerIdMap = new HashMap<>();
   private int currentEnemyId = 0;
 
+  private int wavesDefeated;
+
+  public int getWavesDefeated() {
+    return wavesDefeated;
+  }
+
+  public void setWavesDefeated(int wavesDefeated) {
+    this.wavesDefeated = wavesDefeated;
+  }
 
   public Map<String, Integer> getPlayerCurrentTowerIdMap() {
     return playerCurrentTowerIdMap;

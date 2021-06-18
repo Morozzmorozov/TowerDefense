@@ -50,7 +50,7 @@ public class WorldControl implements ServerSimulator {
   protected final int deltaTime;
   protected final WorldObserver worldObserver;
   protected World world;
-  protected int wavesDefeated = 0;
+//  protected int wavesDefeated = 0;
   protected boolean isReplay = false;
   //protected int scienceEarned = 0;
 
@@ -321,7 +321,7 @@ public class WorldControl implements ServerSimulator {
   }
 
   public int getWavesDefeated() {
-    return wavesDefeated;
+    return world.getWavesDefeated();
   }
 
   private void simulateForNewEvents(long from) throws GameplayException {
@@ -369,7 +369,7 @@ public class WorldControl implements ServerSimulator {
     Wave wave = world.getWaveByNumber(enemy.getWaveNumber());
     wave.setRemainingEnemiesCount(wave.getRemainingEnemiesCount() - 1);
     if (wave.getRemainingEnemiesCount() == 0) {
-      wavesDefeated++;
+      world.setWavesDefeated(world.getWavesDefeated() + 1);
       world.setScienceEarned(world.getScienceEarned() + gameMap.getScienceReward());
       if (!isReplay) {
         UserMetaData.addResearchPoints(gameMap.getScienceReward());

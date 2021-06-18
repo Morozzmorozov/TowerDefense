@@ -125,6 +125,8 @@ public class SerializableWorld {
   private Map<String, Integer> playerCurrentTowerIdMap = new HashMap<>();
   private int currentEnemyId = 0;
 
+  private int wavesDefeated;
+
   public World generateWorld(World oldWorld) {
     World world = new World();
     world.setKilledEnemies(killedEnemies);
@@ -134,6 +136,8 @@ public class SerializableWorld {
     world.setScienceEarned(scienceEarned);
 
     world.setBase(oldWorld.getBase());
+
+    world.getBase().setHealth(base.health);
 
     world.setEnemies(enemies.stream().map(id -> {
       idenemyMap.get(id).getEnemy();
@@ -171,6 +175,8 @@ public class SerializableWorld {
     world.setCurrentEnemyId(currentEnemyId);
 
     world.setPlayerCurrentTowerIdMap(playerCurrentTowerIdMap);
+
+    world.setWavesDefeated(wavesDefeated);
     return world;
   }
 
@@ -261,6 +267,8 @@ public class SerializableWorld {
 
     currentEnemyId = world.getCurrentEnemyId();
     playerCurrentTowerIdMap = new HashMap<>(world.getPlayerCurrentTowerIdMap());
+
+    wavesDefeated = world.getWavesDefeated();
   }
 
   static class SerializableEntity {
