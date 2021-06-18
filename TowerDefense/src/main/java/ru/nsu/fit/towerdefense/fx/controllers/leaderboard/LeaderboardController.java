@@ -45,7 +45,7 @@ public class LeaderboardController implements Controller {
     @FXML
     private void initialize() {
         new Thread(() -> {
-            List<SLevelScore> levelScores = connectionManager.getLeaderboard(gameMapName);
+            List<SLevelScore> levelScores = connectionManager.getLeaderboard(gameMapName, 0);
 
             Platform.runLater(() -> {
                 for (SLevelScore levelScore : levelScores) {

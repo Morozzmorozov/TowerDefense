@@ -153,7 +153,8 @@ public class ConnectionManagerStub extends ConnectionManager {
         }};
     }
 
-    public List<SLevelScore> getLeaderboard(String gameMapName) {
+    @Override
+    public List<SLevelScore> getLeaderboard(String gameMapName, int page) {
         return levelScores;
     }
 
