@@ -4,9 +4,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import ru.nsu.fit.towerdefense.fx.SceneManager;
 import ru.nsu.fit.towerdefense.fx.controllers.Controller;
 import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
@@ -30,7 +30,7 @@ public class LeaderboardController implements Controller {
     private static final Format DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
     @FXML private StackPane root;
-    @FXML private VBox leaderboardVBox;
+    @FXML private GridPane leaderboardGridPane;
 
     @FXML private ImageView menuImageView;
 
@@ -54,12 +54,13 @@ public class LeaderboardController implements Controller {
             List<SLevelScore> levelScores = connectionManager.getLeaderboard(gameMapName, 0);
 
             Platform.runLater(() -> {
-                for (SLevelScore levelScore : levelScores) {
-                    HBox hBox = new HBox();
-                    hBox.getChildren().add(new Label(levelScore.getPlayerName()));
-                    hBox.getChildren().add(new Label(levelScore.getScore() + ""));
-                    hBox.getChildren().add(new Label(DATE_FORMAT.format(new Date(levelScore.getTimestamp()))));
-                    leaderboardVBox.getChildren().add(hBox);
+                for (int i = 0; i < levelScores.size(); i++) {
+                    SLevelScore levelScore = levelScores.get(i);
+                    leaderboardGridPane.add(new HBox(new Label(i + 1 + "")), 0, i + 1);
+                    leaderboardGridPane.add(new HBox(new Label(levelScore.getPlayerName())), 1, i + 1);
+                    leaderboardGridPane.add(new HBox(new Label(levelScore.getScore() + "")), 2, i + 1);
+                    leaderboardGridPane.add(new HBox(new Label(
+                        DATE_FORMAT.format(new Date(levelScore.getTimestamp())))), 3, i + 1);
                 }
             });
         }).start();

@@ -15,9 +15,14 @@
         <URL value="@../css/icons.css" />
         <URL value="@../css/leaderboard.css"/>
     </stylesheets>
-    <VBox>
-        <Label>Leaderboard</Label>
-        <VBox fx:id="leaderboardVBox" />
+    <VBox styleClass="content">
+        <Label styleClass="content-header">Leaderboard</Label>
+        <GridPane fx:id="leaderboardGridPane" styleClass="content-table">
+            <HBox><Label>№</Label></HBox>
+            <HBox GridPane.columnIndex="1"><Label>Name</Label></HBox>
+            <HBox GridPane.columnIndex="2"><Label>Score</Label></HBox>
+            <HBox GridPane.columnIndex="3"><Label>Date</Label></HBox>
+        </GridPane>
     </VBox>
     <GridPane styleClass="menu-bar-grid-pane" pickOnBounds="false">
         <columnConstraints>
