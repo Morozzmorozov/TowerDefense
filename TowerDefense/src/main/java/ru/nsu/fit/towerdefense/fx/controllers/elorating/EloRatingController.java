@@ -42,7 +42,7 @@ public class EloRatingController implements Controller {
         menuImageView.setOnMouseClicked(mouseEvent -> sceneManager.switchToMenu());
 
         new Thread(() -> {
-            List<SEloRating> eloRatings = connectionManager.getEloLeaderboard();
+            List<SEloRating> eloRatings = connectionManager.getEloLeaderboard(0);
 
             Platform.runLater(() -> {
                 for (int i = 0; i < eloRatings.size(); i++) {

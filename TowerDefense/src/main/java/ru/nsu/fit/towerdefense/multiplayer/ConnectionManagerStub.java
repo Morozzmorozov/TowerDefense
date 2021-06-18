@@ -158,7 +158,8 @@ public class ConnectionManagerStub extends ConnectionManager {
         return levelScores;
     }
 
-    public List<SEloRating> getEloLeaderboard() {
+    @Override
+    public List<SEloRating> getEloLeaderboard(int page) {
         return eloRatings;
     }
 

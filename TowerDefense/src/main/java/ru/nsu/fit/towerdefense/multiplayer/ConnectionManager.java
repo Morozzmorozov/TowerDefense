@@ -232,8 +232,29 @@ public class ConnectionManager {
         }
     }
 
-    public List<SEloRating> getEloLeaderboard() {
-        return null; // todo
+    public List<SEloRating> getEloLeaderboard(int page) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(SITE_URI + Mappings.ELO_LEADERBOARD_MAPPING +
+                    "?userToken=" + credentials.getUserToken() +
+                    "&page=" + page))
+                .timeout(Duration.of(15, SECONDS))
+                .build();
+
+            HttpResponse<String> response = HttpClient.newBuilder()
+                .build()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                return Arrays.asList(new Gson().fromJson(response.body(), SEloRating[].class));
+            }
+
+            System.out.println("Bad status code: " + response.statusCode());
+            return null;
+        } catch (URISyntaxException | IOException | InterruptedException | JsonSyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void openSocketConnection(SGameSession gameSession) {
