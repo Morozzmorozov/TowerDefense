@@ -6,4 +6,5 @@ public interface Messenger {
 	void sendMessage(String message);
 
 	void disconnect();
+	void close();
 }

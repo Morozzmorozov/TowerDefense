@@ -26,8 +26,11 @@ public class PlayerManager {
 
 	public void createPlayer(String name)
 	{
-		PlayerInfo info = new PlayerInfo(name);
-		nameToPlayers.put(name, info);
+		synchronized (this)
+		{
+			PlayerInfo info = new PlayerInfo(name);
+			nameToPlayers.put(name, info);
+		}
 	}
 
 	public String generateToken(String player)
@@ -77,16 +80,27 @@ public class PlayerManager {
 
 	public String validate(String name, String password)
 	{
-		if (PlayersDatabase.getInstance().validate(name, password) == 0)
+		synchronized (this)
 		{
-			if (!nameToPlayers.containsKey(name))
+			if (PlayersDatabase.getInstance().validate(name, password) == 0)
 			{
-				createPlayer(name);
+				if (!nameToPlayers.containsKey(name))
+				{
+					createPlayer(name);
+				}
+				return generateToken(name);
 			}
-			return generateToken(name);
+			return null;
 		}
-		return null;
 	}
 
+	public void disconnect(String player)
+	{
+		synchronized(this)
+		{
+			nameToPlayers.get(player).setGameToken(null);
+			nameToPlayers.get(player).setSessionId(-1L);
+		}
+	}
 
 }

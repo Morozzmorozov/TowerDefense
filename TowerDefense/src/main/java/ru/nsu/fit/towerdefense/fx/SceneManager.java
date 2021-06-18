@@ -176,7 +176,7 @@ public class SceneManager {
 
     public void switchToCooperativeGame(String gameMapName, List<String> playerNames) {
         try {
-            GameController gameController = Main.LAG ?
+            GameController gameController = TowerDefenseApplication.LAG ?
             new LaggingGameController(this, connectionManager,
                 new File(".\\levelsnapshots\\" + gameMapName + ".png"),
                 GameMetaData.getInstance().getMapDescription(gameMapName), playerNames) :

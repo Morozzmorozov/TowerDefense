@@ -64,7 +64,7 @@ public class LobbiesController implements Controller {
                             hBox2.setOnMouseClicked(mouseEvent -> goToLobby(lobby));
                             lobbiesGridPane.add(hBox2, 1, i + 1);
 
-                            HBox hBox3 = new HBox(new Label(capitalize(lobby.getGameType())));
+                            HBox hBox3 = new HBox(new Label(GameType.capitalize(lobby.getGameType())));
                             hBox3.getStyleClass().add("clickable");
                             hBox3.setOnMouseClicked(mouseEvent -> goToLobby(lobby));
                             lobbiesGridPane.add(hBox3, 2, i + 1);
@@ -119,10 +119,5 @@ public class LobbiesController implements Controller {
 
             Platform.runLater(() -> sceneManager.switchToLobby(lobby.getId(), sessionToken));
         }).start();
-    }
-
-    private String capitalize(GameType gameType) {
-        String gameTypeLowered = gameType.toString().toLowerCase();
-        return gameTypeLowered.substring(0, 1).toUpperCase() + gameTypeLowered.substring(1);
     }
 }

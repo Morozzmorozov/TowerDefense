@@ -64,5 +64,9 @@ public class UnauthorisedMessenger implements Messenger {
 	{
 	}
 
-
+	@Override
+	public void close()
+	{
+		owner.close();
+	}
 }

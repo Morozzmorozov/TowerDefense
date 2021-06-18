@@ -54,4 +54,10 @@ public class EventMessenger implements Messenger {
 		this.owner = connection;
 	}
 
+	@Override
+	public void close()
+	{
+		owner.close();
+	}
+
 }

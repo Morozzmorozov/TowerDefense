@@ -141,8 +141,10 @@ public class SessionController {
 	{
 		if (connections.containsKey(getActiveToken(player)))
 		{
+			connections.get(player).close();
 			connections.remove(player);
 			info.disconnectPlayer(player);
+			PlayerManager.getInstance().disconnect(player);
 			if (info.getConnectedPlayers() == 0)
 			{
 				SessionManager.getInstance().removeSession(this);

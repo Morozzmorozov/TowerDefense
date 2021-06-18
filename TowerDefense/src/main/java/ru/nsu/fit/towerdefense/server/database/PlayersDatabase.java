@@ -1,9 +1,15 @@
 package ru.nsu.fit.towerdefense.server.database;
 
+import ru.nsu.fit.towerdefense.multiplayer.entities.SEloRating;
 import ru.nsu.fit.towerdefense.multiplayer.entities.SPlayer;
 
 import java.security.MessageDigest;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -233,4 +239,36 @@ public class PlayersDatabase {
 		playerInfo.setReady(false);
 		return playerInfo;
 	}
+
+
+	public List<SEloRating> getRatingLeaderboard(int from, int to)
+	{
+		try
+		{
+			PreparedStatement statement = connection.prepareStatement("WITH tmp AS " +
+					                                                      "(SELECT ROW_NUMBER() OVER (ORDER BY rating DESC) AS RowNum, rating.* FROM rating) " +
+					                                                      "SELECT * FROM tmp " +
+					                                                      "WHERE ? < RowNum AND RowNum <= ? ");
+			statement.setInt(1, from);
+			statement.setInt(2, to);
+			ResultSet set = statement.executeQuery();
+			List<SEloRating> ratings = new LinkedList<>();
+			while (set.next())
+			{
+				SEloRating rating = new SEloRating();
+				rating.setRating(set.getInt(3));
+				rating.setPlayerName(set.getString(2));
+				rating.setRatingId(set.getLong(1));
+				ratings.add(rating);
+			}
+			return ratings;
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+
+
 }

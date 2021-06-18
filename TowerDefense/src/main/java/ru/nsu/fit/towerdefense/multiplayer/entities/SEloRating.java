@@ -2,8 +2,17 @@ package ru.nsu.fit.towerdefense.multiplayer.entities;
 
 public class SEloRating {
 
+    private Long ratingId;
     private String playerName;
     private Integer rating;
+
+    public Long getRatingId() {
+        return ratingId;
+    }
+
+    public void setRatingId(Long ratingId) {
+        this.ratingId = ratingId;
+    }
 
     public String getPlayerName() {
         return playerName;
