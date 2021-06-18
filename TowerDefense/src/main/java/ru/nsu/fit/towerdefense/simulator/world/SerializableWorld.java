@@ -141,16 +141,13 @@ public class SerializableWorld {
     world.getBase().setHealth(base.health);
 
     world.setEnemies(enemies.stream().map(id -> {
-      /*idenemyMap.get(id).getEnemy();
       var serializableEnemy = idenemyMap.get(id);
-      var optEnemy = oldWorld.getEnemies().stream().filter(enemy -> enemy != null && enemy.getId() == serializableEnemy.id).findFirst();
+      var optEnemy = oldWorld.getEnemies().stream().filter(enemy -> enemy != null && enemy.getId() == serializableEnemy.idInWorld).findFirst();
       if (optEnemy.isPresent()) {
         return serializableEnemy.getEnemy(optEnemy.get());
       } else {
         return serializableEnemy.getEnemy();
-      }*/
-
-      return idenemyMap.get(id).getEnemy();
+      }
     }).collect(Collectors.toList()));
     world.setTowers(towers.stream().map(id -> {
       var serializableTower = idtowerMap.get(id);
