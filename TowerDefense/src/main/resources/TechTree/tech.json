@@ -20,7 +20,8 @@
             "Info" : "It's a raining stones",
             "Image" : "tower3.png",
             "Types" : ["Anti-Tank Cannon"],
-            "Cost" : 20
+            "Cost" : 20,
+            "MultiplayerCost": 20
         },
         {
             "Name" : "Future Tech",
@@ -28,14 +29,6 @@
             "Image" : "rocket_launcher.png",
             "Types" : ["Rocket Launcher"],
             "Cost" : 25
-        },
-        {
-            "Name" : "Elite Tech",
-            "Info" : "This technology is available to those who play multiplayer games",
-            "Image" : "castle.png",
-            "Types" : [],
-            "Cost": 0,
-            "MultiplayerCost": 20
         }
     ],
     "Dependencies" : [
