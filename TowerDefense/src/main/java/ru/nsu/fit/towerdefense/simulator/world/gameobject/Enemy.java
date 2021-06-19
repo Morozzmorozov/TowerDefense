@@ -57,8 +57,9 @@ public class Enemy extends GameObject implements Renderable {
     }
   }
 
-  public void setVelocity(float velocity) {
+  public Enemy setVelocity(float velocity) {
     this.velocity = velocity;
+    return this;
   }
 
   public void setTrajectory(
@@ -66,12 +67,14 @@ public class Enemy extends GameObject implements Renderable {
     this.trajectory = trajectory;
   }
 
-  public void setEffects(List<Effect> effects) {
+  public Enemy setEffects(List<Effect> effects) {
     this.effects = effects;
+    return this;
   }
 
-  public void setDamageMap(Map<String, Integer> damageMap) {
+  public Enemy setDamageMap(Map<String, Integer> damageMap) {
     this.damageMap = damageMap;
+    return this;
   }
 
   public Map<String, Integer> getDamageMap() {
@@ -86,16 +89,18 @@ public class Enemy extends GameObject implements Renderable {
     return position;
   }
 
-  public void setPosition(Vector2<Double> position) {
+  public Enemy setPosition(Vector2<Double> position) {
     this.position = position;
+    return this;
   }
 
   public boolean isDead() {
     return isDead;
   }
 
-  public void setDead(boolean dead) {
+  public Enemy setDead(boolean dead) {
     isDead = dead;
+    return this;
   }
 
   public int getWaveNumber() {
@@ -106,8 +111,9 @@ public class Enemy extends GameObject implements Renderable {
     return health;
   }
 
-  public void setHealth(int health) {
+  public Enemy setHealth(int health) {
     this.health = health;
+    return this;
   }
 
   public EnemyType getType() {

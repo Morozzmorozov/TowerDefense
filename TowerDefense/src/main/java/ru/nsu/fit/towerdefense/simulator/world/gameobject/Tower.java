@@ -36,28 +36,32 @@ public class Tower extends GameObject implements Renderable {
     return owner;
   }
 
-  public void setOwner(String owner) {
+  public Tower setOwner(String owner) {
     this.owner = owner;
+    return this;
   }
 
   public int getSellPrice() {
     return sellPrice;
   }
 
-  public void setSellPrice(int sellPrice) {
+  public Tower setSellPrice(int sellPrice) {
     this.sellPrice = sellPrice;
+    return this;
   }
 
   public Mode getMode() {
     return mode;
   }
 
-  public void setMode(Mode mode) {
+  public Tower setMode(Mode mode) {
     this.mode = mode;
+    return this;
   }
 
-  public void setPosition(Vector2<Integer> position) {
+  public Tower setPosition(Vector2<Integer> position) {
     this.position = position;
+    return this;
   }
 
   public Vector2<Integer> getCell() {
@@ -68,16 +72,18 @@ public class Tower extends GameObject implements Renderable {
     return target;
   }
 
-  public void setTarget(Enemy target) {
+  public Tower setTarget(Enemy target) {
     this.target = target;
+    return this;
   }
 
   public TowerType getType() {
     return type;
   }
 
-  public void setType(TowerType type) {
+  public Tower setType(TowerType type) {
     this.type = type;
+    return this;
   }
 
   @Override
@@ -85,16 +91,18 @@ public class Tower extends GameObject implements Renderable {
     return rotation;
   }
 
-  public void setRotation(double rotation) {
+  public Tower setRotation(double rotation) {
     this.rotation = rotation;
+    return this;
   }
 
   public int getCooldown() {
     return cooldown;
   }
 
-  public void setCooldown(int cooldown) {
+  public Tower setCooldown(int cooldown) {
     this.cooldown = cooldown;
+    return this;
   }
 
   @Override

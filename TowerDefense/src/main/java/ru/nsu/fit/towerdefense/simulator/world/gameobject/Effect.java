@@ -13,8 +13,9 @@ public class Effect extends GameObject implements Renderable {
     return owner;
   }
 
-  public void setOwner(String owner) {
+  public Effect setOwner(String owner) {
     this.owner = owner;
+    return this;
   }
 
   public Effect(Enemy host, EffectType type, String owner, int id) {
@@ -41,8 +42,9 @@ public class Effect extends GameObject implements Renderable {
     return remainingTicks;
   }
 
-  public void setRemainingTicks(int remainingTicks) {
+  public Effect setRemainingTicks(int remainingTicks) {
     this.remainingTicks = remainingTicks;
+    return this;
   }
 
   public EffectType getType() {

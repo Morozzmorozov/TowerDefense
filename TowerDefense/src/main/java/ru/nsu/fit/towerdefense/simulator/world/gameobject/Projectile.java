@@ -21,8 +21,9 @@ public class Projectile extends GameObject implements Renderable {
     return owner;
   }
 
-  public void setOwner(String owner) {
+  public Projectile setOwner(String owner) {
     this.owner = owner;
+    return this;
   }
 
   public Projectile(int id) {
@@ -48,44 +49,50 @@ public class Projectile extends GameObject implements Renderable {
     return fireType;
   }
 
-  public void setFireType(FireType fireType) {
+  public Projectile setFireType(FireType fireType) {
     this.fireType = fireType;
+    return this;
   }
 
   public double getRotationSpeed() {
     return rotationSpeed;
   }
 
-  public void setRotationSpeed(double rotationSpeed) {
+  public Projectile setRotationSpeed(double rotationSpeed) {
     this.rotationSpeed = rotationSpeed;
+    return this;
   }
 
   public double getScale() {
     return scale;
   }
 
-  public void setScale(double scale) {
+  public Projectile setScale(double scale) {
     this.scale = scale;
+    return this;
   }
 
   public Vector2<Double> getVelocity() {
     return velocity;
   }
 
-  public void setVelocity(Vector2<Double> velocity) {
+  public Projectile setVelocity(Vector2<Double> velocity) {
     this.velocity = velocity;
+    return this;
   }
 
-  public void setRemainingRange(float remainingRange) {
+  public Projectile setRemainingRange(float remainingRange) {
     this.remainingRange = remainingRange;
+    return this;
   }
 
   public Enemy getTarget() {
     return target;
   }
 
-  public void setTarget(Enemy target) {
+  public Projectile setTarget(Enemy target) {
     this.target = target;
+    return this;
   }
 
   public float getRemainingRange() {
@@ -101,8 +108,9 @@ public class Projectile extends GameObject implements Renderable {
     return rotation;
   }
 
-  public void setRotation(double rotation) {
+  public Projectile setRotation(double rotation) {
     this.rotation = rotation;
+    return this;
   }
 
   @Override
@@ -122,8 +130,9 @@ public class Projectile extends GameObject implements Renderable {
     return type.getImage();
   }
 
-  public void setPosition(Vector2<Double> position) {
+  public Projectile setPosition(Vector2<Double> position) {
     this.position = position;
+    return this;
   }
 
   public Projectile(Enemy target, float range, ProjectileType type, Vector2<Double> position, Vector2<Double> velocity, Tower parent, int id) {
@@ -138,8 +147,9 @@ public class Projectile extends GameObject implements Renderable {
 
   }
 
-  public void setType(ProjectileType type) {
+  public Projectile setType(ProjectileType type) {
     this.type = type;
+    return this;
   }
 
   @Override
@@ -151,8 +161,9 @@ public class Projectile extends GameObject implements Renderable {
     return parentPosition;
   }
 
-  public void setParentPosition(Vector2<Double> parentPosition) {
+  public Projectile setParentPosition(Vector2<Double> parentPosition) {
     this.parentPosition = parentPosition;
+    return this;
   }
 
   /**
