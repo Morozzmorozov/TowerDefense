@@ -35,7 +35,6 @@
         ["Basic Cannons", "Chemistry"],
         ["Basic Cannons", "Big Cannons"],
         ["Chemistry", "Future Tech"],
-        ["Big Cannons", "Future Tech"],
-        ["Basic Cannons", "Elite Tech"]
+        ["Big Cannons", "Future Tech"]
     ]
 }
