@@ -83,9 +83,9 @@ public class UpgradeTowerEvent implements Event {
     if (world.getMoney(player) < upgrade.getCost()) {
       throw new GameplayException("Not enough money to upgrade the tower");
     }
-    if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(upgrade.getName())) {
-      throw new GameplayException("The tower is not yet researched");
-    }
+//    if (!GameMetaData.getInstance().getTechTree().getIsTypeAvailable(upgrade.getName())) {
+//      throw new GameplayException("The tower is not yet researched");
+ //   }
     world.setMoney(player, world.getMoney(player) - upgrade.getCost());
     TowerType type = GameMetaData.getInstance().getTowerType(upgrade.getName());
     tower.setType(type);
