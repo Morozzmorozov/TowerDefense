@@ -12,6 +12,7 @@ import ru.nsu.fit.towerdefense.multiplayer.ConnectionManager;
 public class TowerDefenseApplication extends Application {
 
     public static String USER = "1";
+    public static boolean DISCONNECT = false;
     public static boolean LAG = false;
 
     private SceneManager sceneManager;
@@ -25,17 +26,18 @@ public class TowerDefenseApplication extends Application {
     public static void main(String[] args) {
         for (int i = 0; i < args.length; i++) {
             try {
-                if (args[i].equals("-l") || args[i].equals("--lag")) {
-                    LAG = true;
-                } else if (args[i].equals("-u") || args[i].equals("-user")) {
-                    USER = args[i+1];
+                switch (args[i]) {
+                    case "-d", "--disconnect" -> DISCONNECT = true;
+                    case "-l", "--lag" -> LAG = true;
+                    case "-u", "-user" -> USER = args[i + 1];
                 }
             } catch (IndexOutOfBoundsException e) {
-                System.err.println("Bad arguments syntax");
+                System.err.println("Bad arguments syntax: user is not provided");
             }
         }
         System.out.println("User: " + USER);
         System.out.println("lagging is " + (LAG ? "ON" : "OFF"));
+        System.out.println("disconnecting is " + (DISCONNECT ? "ON" : "OFF"));
 
         launch(args);
     }

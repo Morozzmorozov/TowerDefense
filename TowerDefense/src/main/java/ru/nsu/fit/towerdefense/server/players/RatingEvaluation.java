@@ -13,29 +13,31 @@ public class RatingEvaluation {
 
 	public static void evaluate(List<SPlayer> players)
 	{
-
+		System.out.println("evaluate " +  players.size());
 		if (players.size() % 2 == 1)
 		{
 			int p = players.size() / 2 - 1, q = p + 2;
 			int cnt = 5;
-			while (p > 0)
+			while (p >= 0)
 			{
-				PlayersDatabase.getInstance().updateRating(players.get(p).getName(), players.get(p).getEloRating() - cnt);
-				PlayersDatabase.getInstance().updateRating(players.get(q).getName(), players.get(q).getEloRating() + cnt);
+				PlayersDatabase.getInstance().updateRating(players.get(p).getName(), players.get(p).getEloRating() + cnt);
+				PlayersDatabase.getInstance().updateRating(players.get(q).getName(), players.get(q).getEloRating() - cnt);
 				cnt += 5;
 				p--;
+				q++;
 			}
 		}
 		else
 		{
-			int p = players.size() / 2, q = p + 1;
+			int p = players.size() / 2 - 1, q = p + 1;
 			int cnt = 5;
-			while (p > 0)
+			while (p >= 0)
 			{
-				PlayersDatabase.getInstance().updateRating(players.get(p).getName(), players.get(p).getEloRating() - cnt);
-				PlayersDatabase.getInstance().updateRating(players.get(q).getName(), players.get(q).getEloRating() + cnt);
+				PlayersDatabase.getInstance().updateRating(players.get(p).getName(), players.get(p).getEloRating() + cnt);
+				PlayersDatabase.getInstance().updateRating(players.get(q).getName(), players.get(q).getEloRating() - cnt);
 				cnt += 5;
 				p--;
+				q++;
 			}
 		}
 	}

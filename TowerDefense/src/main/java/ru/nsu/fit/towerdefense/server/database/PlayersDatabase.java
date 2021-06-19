@@ -204,9 +204,11 @@ public class PlayersDatabase {
 			PreparedStatement pst = connection.prepareStatement("BEGIN;" +
 					                                                "UPDATE rating SET rating = ? WHERE login = ?;" +
 					                                                "COMMIT;");
+			System.out.println("Updating " + user + " " + newRating);
 			pst.setInt(1,newRating);
 			pst.setString(2, user);
-			pst.executeUpdate();
+			int res = pst.executeUpdate();
+			System.out.println(res);
 		}
 		catch (Exception e)
 		{

@@ -175,8 +175,8 @@ public class MenuController implements Controller {
 
         gridPane.add(createLevelButton(true, "competition-icon", "Competition",
             mouseEvent -> createMultiplayerGame(gameMapName, GameType.COMPETITIVE)), 1, 3);
-        gridPane.add(createLevelButton(true, "leaderboard-icon", "Leaders",
-            mouseEvent -> showLeaderboard(gameMapName)), 0, 4);
+        //gridPane.add(createLevelButton(true, "leaderboard-icon", "Leaders",
+        //    mouseEvent -> showLeaderboard(gameMapName)), 0, 4); // todo uncomment
 
         return gridPane;
     }

@@ -27,12 +27,14 @@ public class CompetitiveGame implements GameController {
 
 	private List<String> players;
 	private HashMap<String, SResult> result;
+	private List<SPlayer> starting;
 
 	List<String> winners;
 	List<String> losers;
 
-	public CompetitiveGame(GameMap map, List<String> players, SessionController controller)
+	public CompetitiveGame(GameMap map, List<String> players, List<SPlayer> starting, SessionController controller)
 	{
+		this.starting = starting;
 		this.controller = controller;
 		//this.latestResults = new ConcurrentHashMap<>();
 		this.players = players;
@@ -147,7 +149,7 @@ public class CompetitiveGame implements GameController {
 		List<SPlayer> players = new ArrayList<>();
 		for (var x : winners)
 		{
-			for (var y : controller.getInfo().getPlayers())
+			for (var y : starting)
 			{
 				if (y.getName().equals(x))
 				{
@@ -159,7 +161,7 @@ public class CompetitiveGame implements GameController {
 		Collections.reverse(losers);
 		for (var x : losers)
 		{
-			for (var y : controller.getInfo().getPlayers())
+			for (var y : starting)
 			{
 				if (y.getName().equals(x))
 				{

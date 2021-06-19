@@ -12,9 +12,7 @@ import ru.nsu.fit.towerdefense.server.session.gamecontrollers.GameController;
 import ru.nsu.fit.towerdefense.server.sockets.receivers.Messenger;
 
 import java.security.MessageDigest;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.HashMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -103,7 +101,12 @@ public class SessionController {
 		}
 		else
 		{
-			controller = new CompetitiveGame(info.getLevel(), info.getPlayers().stream().map(SPlayer::getName).collect(Collectors.toList()), this);
+			List<SPlayer> playerList = new LinkedList<>();
+			for (var x : info.getPlayers())
+			{
+				playerList.add(x);
+			}
+			controller = new CompetitiveGame(info.getLevel(), info.getPlayers().stream().map(SPlayer::getName).collect(Collectors.toList()), playerList, this);
 		}
 		gameThread = new Thread(() -> controller.run());
 		gameThread.start();
@@ -152,7 +155,7 @@ public class SessionController {
 //			System.out.println("4");
 			if (controller != null)
 			{
-				controller.playerDisconnect(token);
+				controller.playerDisconnect(player);
 			}
 //			System.out.println("5");
 			PlayerManager.getInstance().disconnect(player);
