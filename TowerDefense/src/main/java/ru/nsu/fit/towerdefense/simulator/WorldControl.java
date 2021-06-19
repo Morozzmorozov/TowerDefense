@@ -48,22 +48,18 @@ public class WorldControl implements ServerSimulator {
   public static final int DEBUG_MONEY = 600;
   public static final float SELL_MULTIPLIER = 0.4f;
   public static final double EPS = 1e-12;
-  public static final int DEBUG_TICK_RATE = 60;
 
-  //protected long tick; // Beware: this field shows the index of the FOLLOWING frame
   protected final GameMap gameMap;
   protected final int deltaTime;
   protected final WorldObserver worldObserver;
   protected World world;
-//  protected int wavesDefeated = 0;
-  //protected int scienceEarned = 0;
 
   private final EventContainer eventContainer = new EventContainer();
   private final StateContainer stateContainer = new StateContainer(50);
 
   private long latestInputStateTick = -1;
 
-  private Replay replay;
+  private final Replay replay;
 
   private static class EventContainer {
     private final Map<Long, List<Event>> eventMap = new HashMap<>();
@@ -126,7 +122,7 @@ public class WorldControl implements ServerSimulator {
 
     for (Vector2<Integer> position : gameMap.getPositions().getPositions()) {
       Vector2<Integer> coordinates = new Vector2<>(position);
-      var platform = new TowerPlatform(coordinates, "platform.png", 0); // todo image name
+      var platform = new TowerPlatform(coordinates, "platform.png", 0);
       world.getTowerPlatforms()
           .add(platform);
       if (!isClientPlatform(platform)) {
@@ -194,13 +190,6 @@ public class WorldControl implements ServerSimulator {
         }
       }
     }
-
-/*    GameMetaData.getInstance().getGameMapNames().stream()
-        .dropWhile(name -> GameMetaData.getInstance().getMapDescription(name) != gameMap)
-        .findFirst()
-        .ifPresent(name -> GameStateWriter.getInstance().startNewReplay(DEBUG_TICK_RATE, name));
-
-    GameStateWriter.getInstance().newFrame();*/
 
     stateContainer.putState(world);
 
@@ -327,11 +316,11 @@ public class WorldControl implements ServerSimulator {
   }
 
   public int getEnemiesKilled(String player) {
-    return world.getKilledEnemies(); // todo for each player
+    return world.getKilledEnemies();
   }
 
   public int getMoney(String player) {
-    return world.getMoney(player); // todo change signature
+    return world.getMoney(player);
   }
 
   public int getWaveNumber() {
@@ -373,7 +362,7 @@ public class WorldControl implements ServerSimulator {
 
       for (var event : eventContainer.getEvents(world.getTick())) {
         try {
-          event.fire(world); // todo remove event if unable to fire (e.g. not enough money)
+          event.fire(world);
         } catch (GameplayException e) {
           e.printStackTrace();
         }
@@ -396,7 +385,7 @@ public class WorldControl implements ServerSimulator {
           && world.getCurrentWaveNumber() >= gameMap.getWaves().size()) {
 
         if (worldObserver != null) {
-          worldObserver.onVictory(); // todo fix temporary solution
+          worldObserver.onVictory();
           saveReplay();
         }
       }
@@ -444,12 +433,13 @@ public class WorldControl implements ServerSimulator {
       List<Enemy> affectedEnemies = new ArrayList<>();
 
       switch (projectile.getFireType()) {
-        case UNIDIRECTIONAL:
+        case UNIDIRECTIONAL -> {
           Vector2<Double> newPosition = Vector2
               .add(projectile.getPosition(), Vector2.multiply(deltaTime, projectile.getVelocity()));
           for (Enemy enemy : world.getEnemies()) {
             // Collision checking
-            if (enemy == null) continue;
+            if (enemy == null)
+              continue;
             Vector2<Double> oldVectorToEnemy = Vector2
                 .subtract(enemy.getPosition(), projectile.getPosition());
             Vector2<Double> pathVector = Vector2.subtract(newPosition, projectile.getPosition());
@@ -470,22 +460,19 @@ public class WorldControl implements ServerSimulator {
               break;
             }
           }
-
           projectile.setPosition(newPosition);
-
           projectile.setRemainingRange(
               projectile.getRemainingRange() - projectile.getType().getSpeed() * deltaTime);
           if (projectile.getRemainingRange() <= 0) {
             removedProjectiles.add(projectile);
           }
-
-          break;
-        case OMNIDIRECTIONAL:
+        }
+        case OMNIDIRECTIONAL -> {
           double newScale = projectile.getScale() + Math
               .min(projectile.getRemainingRange() * 2, projectile.getType().getSpeed() * 2);
-
           for (Enemy enemy : world.getEnemies()) {
-            if (enemy == null) continue;
+            if (enemy == null)
+              continue;
             double distanceToEnemy = Vector2
                 .distance(projectile.getParentPosition(), enemy.getPosition());
             if (distanceToEnemy >= projectile.getScale() / 2 && distanceToEnemy < newScale / 2) {
@@ -499,6 +486,7 @@ public class WorldControl implements ServerSimulator {
           } else {
             projectile.setScale(newScale);
           }
+        }
       }
 
       for (Enemy enemy : affectedEnemies) {
@@ -531,7 +519,6 @@ public class WorldControl implements ServerSimulator {
           for (var entry : enemy.getDamageMap().entrySet()) {
             world.setMoney(entry.getKey(), world.getMoney(entry.getKey()) + (int)Math.round(enemy.getMoneyReward() * ((double)entry.getValue() / enemy.getType().getHealth())));
           }
-        //  world.setMoney("player", world.getMoney("player") + enemy.getMoneyReward());
           enemyDeath(enemy);
           world.getEnemies().remove(enemy);
         }
@@ -578,11 +565,11 @@ public class WorldControl implements ServerSimulator {
         if (world.getBase().getHealth() <= 0) {
           removedEnemies.add(enemy);
           if (worldObserver != null) {
-            worldObserver.onDefeat(); // todo fix temporary solution
+            worldObserver.onDefeat();
             saveReplay();
           }
         } else {
-          removedEnemies.add(enemy); // not sure if I should leave this
+          removedEnemies.add(enemy);
           enemyDeath(enemy);
         }
 
@@ -705,7 +692,7 @@ public class WorldControl implements ServerSimulator {
               Projectile projectile = new Projectile(
                   tower.getTarget(), tower.getType().getRange(), projectileType,
                   new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
-                  direction, tower, 0); // todo id
+                  direction, tower, 0);
               projectile.setParentPosition(new Vector2<>(tower.getPosition()));
               projectile.setOwner(tower.getOwner());
               projectile.setRotation(
@@ -723,7 +710,7 @@ public class WorldControl implements ServerSimulator {
               Projectile projectile = new Projectile(null, tower.getType().getRange(),
                   projectileType,
                   new Vector2<>((double) tower.getCell().getX(), (double) tower.getCell().getY()),
-                  new Vector2<>(0d, 0d), tower, 0); // todo id
+                  new Vector2<>(0d, 0d), tower, 0);
               projectile.setOwner(tower.getOwner());
               projectile.setFireType(FireType.OMNIDIRECTIONAL);
               projectile.setScale(0);
@@ -840,7 +827,7 @@ public class WorldControl implements ServerSimulator {
         Vector2.equals(clientPlatformPosition, renderable.getPosition()));
   }
 
-  // --------------
+
 
   protected void saveStateToReplay() {
     if (getTick() % 60 == 0) {
@@ -849,7 +836,7 @@ public class WorldControl implements ServerSimulator {
   }
 
   protected void addRewards(int scienceReward, int multiplayerReward) {
-    UserMetaData.addResearchPoints(scienceReward); // todo fix race condition
+    UserMetaData.addResearchPoints(scienceReward);
     UserMetaData.addMultiplayerPoints(multiplayerReward);
   }
 

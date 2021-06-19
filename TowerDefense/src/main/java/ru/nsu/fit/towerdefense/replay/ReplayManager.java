@@ -10,20 +10,8 @@ import java.util.List;
 
 public class ReplayManager {
 
-  private static ReplayManager instance;
   private static final String replayDir = "./Replays/";
   private static final String saveDir = "./Saves/";
-
-  public static ReplayManager getInstance() {
-    if (instance == null) {
-      instance = new ReplayManager();
-    }
-    return instance;
-  }
-
-  private ReplayManager() {
-
-  }
 
   public static List<String> getReplays(String level) {
     String dir = replayDir + level + "/";

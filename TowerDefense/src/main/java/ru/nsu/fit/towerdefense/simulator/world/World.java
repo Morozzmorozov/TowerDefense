@@ -5,10 +5,8 @@ import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Base;
 import ru.nsu.fit.towerdefense.simulator.world.gameobject.Enemy;
@@ -86,12 +84,8 @@ public class World {
     multiplayerMoneyEarned = oldWorld.getMultiplayerMoneyEarned();
   }
 
-  public World(SerializableWorld world) {
-
-  }
-
   public SerializableWorld getSerializableWorld() {
-    return new SerializableWorld(this);// todo
+    return new SerializableWorld(this);
   }
 
   public int getCountdown() {
@@ -116,7 +110,7 @@ public class World {
   public Map<Integer, Wave> waveMap = new HashMap<>();
   public Map<String, Integer> moneyMap = new HashMap<>();
   private long tick = 0;
-  private int scienceEarned = 0; // todo give it to players + maybe divide between players
+  private int scienceEarned = 0;
 
   private Map<String, Integer> playerCurrentTowerIdMap = new HashMap<>();
   private int currentEnemyId = 0;
@@ -187,11 +181,6 @@ public class World {
 
   public void setPortals(List<Portal> portals) {
     this.portals = portals;
-  }
-
-  public void clearWaves() {
-    waveMap.clear();
-    currentWave = null;
   }
 
   public void addWave(Wave wave) {
@@ -274,13 +263,6 @@ public class World {
     }
     return renderables;
   }
-    /*return new Iterable<Renderable>() {
-      @Override
-      public Iterator<Renderable> iterator() {
-        return new WorldIterator();
-      }
-    };*/
-
 
   public int getScienceEarned() {
     return scienceEarned;
